@@ -1,13 +1,13 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { requireOnboardingStep } from "@/lib/tenant";
+import { OnboardingShell } from "@/components/onboarding/OnboardingShell";
+import { Passo7Form } from "@/components/onboarding/Passo7Form";
 
-export default function Page() {
+export default async function Passo7Page() {
+  await requireOnboardingStep(7);
+
   return (
-    <ScreenPlaceholder
-      screenId="SCREEN_38"
-      title="Onboarding — Passo 7: Primeiro produto"
-      description="Cadastro do primeiro item do cardápio para a loja não nascer vazia."
-      backHref="/onboarding/passo-6"
-      backLabel="Voltar ao passo anterior"
-    />
+    <OnboardingShell step={7} title="Cadastre seu primeiro produto" description="Assim sua loja não fica vazia quando for publicada.">
+      <Passo7Form />
+    </OnboardingShell>
   );
 }

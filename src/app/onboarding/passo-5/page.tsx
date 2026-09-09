@@ -1,13 +1,14 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { requireOnboardingStep, getBusinessHours } from "@/lib/tenant";
+import { OnboardingShell } from "@/components/onboarding/OnboardingShell";
+import { Passo5Form } from "@/components/onboarding/Passo5Form";
 
-export default function Page() {
+export default async function Passo5Page() {
+  const { supabase, restaurant } = await requireOnboardingStep(5);
+  const businessHours = await getBusinessHours(supabase, restaurant!.id);
+
   return (
-    <ScreenPlaceholder
-      screenId="SCREEN_41"
-      title="Onboarding — Passo 5: Horários de funcionamento"
-      description="Dias e turnos em que a loja recebe pedidos."
-      backHref="/onboarding/passo-4"
-      backLabel="Voltar ao passo anterior"
-    />
+    <OnboardingShell step={5} title="Horários de funcionamento" description="Configure os dias e horários em que sua loja recebe pedidos.">
+      <Passo5Form businessHours={businessHours} />
+    </OnboardingShell>
   );
 }

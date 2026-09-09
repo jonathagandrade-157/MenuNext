@@ -1,13 +1,13 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { requireOnboardingStep } from "@/lib/tenant";
+import { OnboardingShell } from "@/components/onboarding/OnboardingShell";
+import { Passo6Form } from "@/components/onboarding/Passo6Form";
 
-export default function Page() {
+export default async function Passo6Page() {
+  const { restaurant } = await requireOnboardingStep(6);
+
   return (
-    <ScreenPlaceholder
-      screenId="SCREEN_40"
-      title="Onboarding — Passo 6: Formas de pagamento"
-      description="Chave Pix, dinheiro e maquininha/cartão na entrega ou retirada."
-      backHref="/onboarding/passo-5"
-      backLabel="Voltar ao passo anterior"
-    />
+    <OnboardingShell step={6} title="Formas de pagamento" description="Selecione como seus clientes podem pagar o pedido.">
+      <Passo6Form restaurant={restaurant!} />
+    </OnboardingShell>
   );
 }

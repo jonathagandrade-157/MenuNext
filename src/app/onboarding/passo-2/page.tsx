@@ -1,13 +1,13 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { requireOnboardingStep } from "@/lib/tenant";
+import { OnboardingShell } from "@/components/onboarding/OnboardingShell";
+import { Passo2Form } from "@/components/onboarding/Passo2Form";
 
-export default function Page() {
+export default async function Passo2Page() {
+  const { restaurant } = await requireOnboardingStep(2);
+
   return (
-    <ScreenPlaceholder
-      screenId="SCREEN_44"
-      title="Onboarding — Passo 2: Endereço, CEP e confirmação no mapa"
-      description="Localização do restaurante para cálculo de área de entrega."
-      backHref="/onboarding/passo-1"
-      backLabel="Voltar ao passo anterior"
-    />
+    <OnboardingShell step={2} title="Onde fica o seu restaurante?" description="Usamos esse endereço para calcular a área de entrega.">
+      <Passo2Form restaurant={restaurant!} />
+    </OnboardingShell>
   );
 }

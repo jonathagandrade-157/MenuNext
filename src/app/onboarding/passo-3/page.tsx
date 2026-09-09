@@ -1,13 +1,13 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { requireOnboardingStep } from "@/lib/tenant";
+import { OnboardingShell } from "@/components/onboarding/OnboardingShell";
+import { Passo3Form } from "@/components/onboarding/Passo3Form";
 
-export default function Page() {
+export default async function Passo3Page() {
+  const { restaurant } = await requireOnboardingStep(3);
+
   return (
-    <ScreenPlaceholder
-      screenId="SCREEN_43"
-      title="Onboarding — Passo 3: Formas de atendimento"
-      description="Delivery, retirada no balcão ou ambos."
-      backHref="/onboarding/passo-2"
-      backLabel="Voltar ao passo anterior"
-    />
+    <OnboardingShell step={3} title="Como você atende seus clientes?" description="Selecione uma ou as duas opções.">
+      <Passo3Form restaurant={restaurant!} />
+    </OnboardingShell>
   );
 }

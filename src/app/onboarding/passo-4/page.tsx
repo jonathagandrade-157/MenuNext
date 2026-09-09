@@ -1,13 +1,13 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { requireOnboardingStep } from "@/lib/tenant";
+import { OnboardingShell } from "@/components/onboarding/OnboardingShell";
+import { Passo4Form } from "@/components/onboarding/Passo4Form";
 
-export default function Page() {
+export default async function Passo4Page() {
+  const { restaurant } = await requireOnboardingStep(4);
+
   return (
-    <ScreenPlaceholder
-      screenId="SCREEN_42"
-      title="Onboarding — Passo 4: Configuração de delivery"
-      description="Taxa fixa ou por bairro, raio de entrega e valor mínimo do pedido."
-      backHref="/onboarding/passo-3"
-      backLabel="Voltar ao passo anterior"
-    />
+    <OnboardingShell step={4} title="Configure o delivery" description="Defina a taxa e o raio de entrega do seu restaurante.">
+      <Passo4Form restaurant={restaurant!} />
+    </OnboardingShell>
   );
 }
