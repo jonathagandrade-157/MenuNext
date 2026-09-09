@@ -1,5 +1,7 @@
+import { redirect } from "next/navigation";
 import { PanelSidebar, type NavGroup } from "@/components/layout/PanelSidebar";
 import { PanelTopbar } from "@/components/layout/PanelTopbar";
+import { getAuthedUser, getMyRestaurant, getOnboardingProgress, ONBOARDING_STEP_PATHS } from "@/lib/tenant";
 
 const NAV_GROUPS: NavGroup[] = [
   {
@@ -47,12 +49,25 @@ const NAV_GROUPS: NavGroup[] = [
   },
 ];
 
-export default function PainelLayout({ children }: { children: React.ReactNode }) {
+export default async function PainelLayout({ children }: { children: React.ReactNode }) {
+  // Checagem autoritativa (não apenas o proxy): sem sessão, sem restaurante
+  // ou onboarding incompleto, o usuário não acessa o painel de verdade.
+  const { supabase, user } = await getAuthedUser();
+  if (!user) redirect("/cadastro");
+
+  const restaurant = await getMyRestaurant(supabase);
+  if (!restaurant) redirect("/onboarding/passo-1");
+
+  if (!restaurant.onboarding_completed) {
+    const progress = await getOnboardingProgress(supabase, restaurant.id);
+    redirect(ONBOARDING_STEP_PATHS[progress?.current_step ?? 1]);
+  }
+
   return (
     <div className="flex min-h-screen bg-surface">
       <PanelSidebar brandLabel="Painel do Lojista" groups={NAV_GROUPS} />
       <div className="flex flex-1 flex-col">
-        <PanelTopbar storeName="Next Burger Artesanal" storeSlug="next-burger" isOpen />
+        <PanelTopbar storeName={restaurant.name} storeSlug={restaurant.slug} isOpen={restaurant.status === "active"} />
         <div className="flex-1">{children}</div>
       </div>
     </div>

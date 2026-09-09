@@ -1,4 +1,6 @@
+import { redirect } from "next/navigation";
 import { PanelSidebar, type NavGroup } from "@/components/layout/PanelSidebar";
+import { getAuthedUser } from "@/lib/tenant";
 
 const NAV_GROUPS: NavGroup[] = [
   {
@@ -25,7 +27,13 @@ const NAV_GROUPS: NavGroup[] = [
   },
 ];
 
-export default function MasterLayout({ children }: { children: React.ReactNode }) {
+export default async function MasterLayout({ children }: { children: React.ReactNode }) {
+  // Checagem autoritativa de autenticação apenas. Este Sprint não implementa
+  // o papel MASTER de verdade (não existe esse conceito no schema ainda) —
+  // ver relatório da Sprint 1 para o que falta antes de considerar isto seguro.
+  const { user } = await getAuthedUser();
+  if (!user) redirect("/cadastro");
+
   return (
     <div className="flex min-h-screen bg-surface">
       <PanelSidebar brandLabel="Painel Master" groups={NAV_GROUPS} />

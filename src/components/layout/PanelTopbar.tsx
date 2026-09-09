@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/Badge";
+import { signOutAction } from "@/lib/actions/auth";
 
 export function PanelTopbar({
   storeName,
@@ -18,11 +19,18 @@ export function PanelTopbar({
           {isOpen ? "Loja Aberta" : "Loja Fechada"}
         </Badge>
       </div>
-      {storeSlug && (
-        <Link href={`/loja/${storeSlug}`} className="text-sm font-semibold text-primary hover:underline">
-          Ver como cliente ↗
-        </Link>
-      )}
+      <div className="flex items-center gap-4">
+        {storeSlug && (
+          <Link href={`/loja/${storeSlug}`} className="text-sm font-semibold text-primary hover:underline">
+            Ver como cliente ↗
+          </Link>
+        )}
+        <form action={signOutAction}>
+          <button type="submit" className="text-sm font-semibold text-text-muted hover:text-graphite">
+            Sair
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
