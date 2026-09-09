@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-slate-50" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MenuNext - Etapa 03: Passo 5 (Horários de Funcionamento)</title>
+<!-- Tailwind CSS v3 with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              DEFAULT: '#F95721',
+              hover: '#ea4b16',
+              light: '#FFF4EF',
+              50: '#fff7ed',
+              100: '#ffedd5',
+              500: '#f97316',
+              600: '#F95721',
+              700: '#ea4b16',
+            }
+          },
+          boxShadow: {
+            'card': '0 2px 10px -2px rgba(0, 0, 0, 0.05), 0 1px 3px -1px rgba(0, 0, 0, 0.03)',
+            'card-hover': '0 8px 24px -4px rgba(0, 0, 0, 0.08)',
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbars-and-toggles">
+    /* Estilo sutil para inputs de hora e elementos interativos */
+    input[type="time"]::-webkit-calendar-picker-indicator {
+      background: transparent;
+      bottom: 0;
+      color: transparent;
+      cursor: pointer;
+      height: auto;
+      left: 0;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: auto;
+    }
+    
+    .toggle-checkbox:checked {
+      right: 0;
+      border-color: #F95721;
+    }
+    .toggle-checkbox:checked + .toggle-label {
+      background-color: #F95721;
+    }
+  </style>
+</head>
+<body class="min-h-full font-sans antialiased text-slate-800 bg-[#FAFBFD] flex flex-col justify-between">
+<!-- BEGIN: StateSimulatorBar -->
+<aside class="w-full bg-[#1e293b] text-slate-200 text-xs py-2 px-4 border-b border-slate-700/60 sticky top-0 z-50" data-purpose="state-simulator-bar">
+<div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+<div class="flex items-center gap-2">
+<span class="text-amber-400 font-bold flex items-center gap-1">
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          SIMULAR ESTADOS DO PASSO 5:
+        </span>
+<span class="text-slate-400 hidden sm:inline">| Alterne cenários em tempo real:</span>
+</div>
+<div class="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0">
+<button class="px-2.5 py-1 rounded bg-brand/20 text-brand-100 hover:bg-brand/30 transition text-[11px] font-medium border border-brand/40" onclick="applyPreset('default')">Padrão (Almoço/Jantar)</button>
+<button class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 transition text-[11px] font-medium text-slate-300 border border-slate-700" onclick="applyPreset('all-days')">Todos os Dias</button>
+<button class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 transition text-[11px] font-medium text-slate-300 border border-slate-700" onclick="applyPreset('sunday-closed')">Domingo Fechado</button>
+<button class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 transition text-[11px] font-medium text-slate-300 border border-slate-700" onclick="applyPreset('single-shift')">Turno Único</button>
+<button class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 transition text-[11px] font-medium text-slate-300 border border-slate-700" onclick="openCopyModal('seg')">Copiar p/ Todos</button>
+<button class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 transition text-[11px] font-medium text-slate-300 border border-slate-700" id="simSaveBtn" onclick="triggerSavingSim()">Salvando...</button>
+<button class="px-2.5 py-1 rounded bg-slate-800 hover:bg-slate-700 transition text-[11px] font-medium text-slate-300 border border-slate-700" onclick="openSkipModal()">Modal Pular</button>
+</div>
+</div>
+</aside>
+<!-- END: StateSimulatorBar -->
+<!-- BEGIN: MainHeader -->
+<header class="w-full bg-white border-b border-slate-200/80 sticky top-[37px] z-40 shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+<!-- Brand & Trust Badges -->
+<div class="flex items-center gap-6">
+<a class="flex items-center gap-2 focus:outline-none" href="#">
+<div class="w-9 h-9 rounded-xl bg-[#F95721] flex items-center justify-center text-white shadow-sm shadow-[#F95721]/30">
+<!-- Chef Hat Icon -->
+<svg class="w-5 h-5 fill-current" viewbox="0 0 24 24">
+<path d="M12.0001 3C10.1501 3 8.57014 4.25 8.11014 6.01C7.45014 5.69 6.72014 5.5 5.95014 5.5C3.74014 5.5 1.95014 7.29 1.95014 9.5C1.95014 11.23 3.05014 12.69 4.60014 13.23C4.22014 13.75 4.00014 14.39 4.00014 15.08C4.00014 16.69 5.31014 18 6.92014 18H17.0801C18.6901 18 20.0001 16.69 20.0001 15.08C20.0001 14.39 19.7801 13.75 19.4001 13.23C20.9501 12.69 22.0501 11.23 22.0501 9.5C22.0501 7.29 20.2601 5.5 18.0501 5.5C17.2801 5.5 16.5501 5.69 15.8901 6.01C15.4301 4.25 13.8501 3 12.0001 3ZM6.00014 20C6.00014 20.55 6.45014 21 7.00014 21H17.0001C17.5501 21 18.0001 20.55 18.0001 20V19H6.00014V20Z"></path>
+</svg>
+</div>
+<span class="text-xl font-extrabold tracking-tight text-slate-900">Menu<span class="text-[#F95721]">Next</span></span>
+</a>
+<div class="hidden md:flex items-center gap-4 text-xs font-medium text-slate-500 border-l border-slate-200 pl-6">
+<span class="flex items-center gap-1.5 text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100 font-semibold">
+<span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Ambiente Seguro
+          </span>
+<span class="flex items-center gap-1 text-slate-400">
+            • Dados Salvos Automaticamente
+          </span>
+</div>
+</div>
+<!-- Right Login Link -->
+<div class="flex items-center gap-3">
+<span class="text-xs text-slate-500 hidden sm:inline">Já possui sua loja?</span>
+<a class="text-xs font-bold text-slate-800 hover:text-[#F95721] flex items-center gap-1 transition" href="#">
+          Entrar
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></svg>
+</a>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: StepperSection -->
+<section class="w-full bg-white border-b border-slate-200/80 py-5" data-purpose="onboarding-stepper">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+<div class="flex items-center gap-2">
+<span class="px-2.5 py-0.5 rounded-full bg-orange-100 text-[#F95721] text-xs font-bold uppercase tracking-wide">
+            Etapa 5 de 7
+          </span>
+<span class="text-sm font-bold text-slate-900">Horários de Atendimento &amp; Funcionamento</span>
+</div>
+<div class="text-xs font-medium text-slate-500">
+          Progresso Geral: <strong class="text-[#F95721] font-bold">71% Concluído</strong>
+</div>
+</div>
+<!-- Progress Indicators Grid -->
+<div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+<!-- Step 1: Restaurante (Concluído) -->
+<div class="flex items-center gap-2 p-2 rounded-lg bg-emerald-50/70 border border-emerald-200 text-emerald-800">
+<div class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+</div>
+<div class="truncate">
+<p class="text-[11px] font-bold truncate leading-tight">1. Restaurante</p>
+<p class="text-[10px] text-emerald-600 font-medium leading-none">Concluído</p>
+</div>
+</div>
+<!-- Step 2: Endereço (Concluído) -->
+<div class="flex items-center gap-2 p-2 rounded-lg bg-emerald-50/70 border border-emerald-200 text-emerald-800">
+<div class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+</div>
+<div class="truncate">
+<p class="text-[11px] font-bold truncate leading-tight">2. Endereço</p>
+<p class="text-[10px] text-emerald-600 font-medium leading-none">Concluído</p>
+</div>
+</div>
+<!-- Step 3: Atendimento (Concluído) -->
+<div class="flex items-center gap-2 p-2 rounded-lg bg-emerald-50/70 border border-emerald-200 text-emerald-800">
+<div class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+</div>
+<div class="truncate">
+<p class="text-[11px] font-bold truncate leading-tight">3. Atendimento</p>
+<p class="text-[10px] text-emerald-600 font-medium leading-none">Concluído</p>
+</div>
+</div>
+<!-- Step 4: Delivery (Concluído) -->
+<div class="flex items-center gap-2 p-2 rounded-lg bg-emerald-50/70 border border-emerald-200 text-emerald-800">
+<div class="w-5 h-5 rounded-full bg-emerald-600 text-white flex items-center justify-center shrink-0">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="3" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+</div>
+<div class="truncate">
+<p class="text-[11px] font-bold truncate leading-tight">4. Delivery</p>
+<p class="text-[10px] text-emerald-600 font-medium leading-none">Concluído</p>
+</div>
+</div>
+<!-- Step 5: Horários (EM ANDAMENTO) -->
+<div class="flex items-center gap-2 p-2 rounded-lg bg-orange-50 border-2 border-[#F95721] text-orange-950 shadow-sm ring-2 ring-orange-200/50">
+<div class="w-5 h-5 rounded-full bg-[#F95721] text-white flex items-center justify-center text-xs font-bold shrink-0">
+            5
+          </div>
+<div class="truncate">
+<p class="text-[11px] font-extrabold truncate text-orange-950 leading-tight">5. Horários</p>
+<p class="text-[10px] text-[#F95721] font-bold uppercase tracking-wider leading-none">EM ANDAMENTO</p>
+</div>
+</div>
+<!-- Step 6: Pagamentos (Pendente) -->
+<div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200/80 text-slate-500 opacity-80">
+<div class="w-5 h-5 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px] font-bold shrink-0">
+            6
+          </div>
+<div class="truncate">
+<p class="text-[11px] font-semibold truncate leading-tight">6. Pagamentos</p>
+<p class="text-[10px] text-slate-400 leading-none">Pendente</p>
+</div>
+</div>
+<!-- Step 7: 1º Produto (Pendente) -->
+<div class="flex items-center gap-2 p-2 rounded-lg bg-slate-50 border border-slate-200/80 text-slate-500 opacity-80">
+<div class="w-5 h-5 rounded-full bg-slate-200 text-slate-600 flex items-center justify-center text-[10px] font-bold shrink-0">
+            7
+          </div>
+<div class="truncate">
+<p class="text-[11px] font-semibold truncate leading-tight">7. 1º Produto</p>
+<p class="text-[10px] text-slate-400 leading-none">Pendente</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: StepperSection -->
+<!-- BEGIN: MainContent -->
+<main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
+<!-- Hero Header Title -->
+<div class="text-center max-w-2xl mx-auto mb-10">
+<h1 class="text-3xl sm:text-4xl font-extrabold text-slate-950 tracking-tight mb-2.5">
+        Quando seu restaurante funciona?
+      </h1>
+<p class="text-base text-slate-600 font-normal leading-relaxed">
+        Defina os dias e horários em que seus clientes podem fazer pedidos.
+      </p>
+<p class="text-xs text-slate-400 mt-1">
+        Você poderá alterar seus horários ou pausar pedidos a qualquer momento no painel da sua loja.
+      </p>
+</div>
+<!-- 2 Column Master Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- LEFT COLUMN: Configurations (Approx 68%) -->
+<section class="lg:col-span-8 space-y-6">
+<!-- Card: Productivity & Quick Actions -->
+<div class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/80 shadow-card flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-orange-50 text-[#F95721] flex items-center justify-center shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<h3 class="text-sm font-bold text-slate-900">Preenchimento Express</h3>
+<p class="text-xs text-slate-500">Agilize a configuração de horários da sua semana em um clique.</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-2 text-xs font-semibold rounded-lg bg-orange-50 text-[#F95721] border border-[#F95721]/30 hover:bg-[#F95721] hover:text-white transition flex items-center gap-1.5 whitespace-nowrap shadow-sm" onclick="applyExpressHours()" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+              Aplicar 11h às 23h (Todos os dias)
+            </button>
+</div>
+</div>
+<!-- Card: Weekly Schedule Configuration -->
+<div class="bg-white rounded-2xl border border-slate-200/80 shadow-card overflow-hidden">
+<div class="p-5 sm:p-6 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-50/40">
+<div>
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-slate-100 text-slate-700 text-xs font-bold flex items-center justify-center">1</span>
+<h2 class="text-base font-bold text-slate-900">Horário de Funcionamento Semanal</h2>
+</div>
+<p class="text-xs text-slate-500 mt-0.5 pl-8">Adicione intervalos como turno de almoço e turno de jantar se necessário.</p>
+</div>
+<span class="self-start sm:self-auto text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+              Horário Comercial Sugerido
+            </span>
+</div>
+<!-- Schedule Days Table / List -->
+<div class="p-4 sm:p-6 divide-y divide-slate-100" id="weeklyScheduleContainer">
+<!-- Segunda-feira -->
+<div class="py-3.5 first:pt-0 last:pb-0 flex flex-col md:flex-row md:items-center justify-between gap-3" data-day="seg">
+<div class="flex items-center justify-between md:justify-start gap-3 min-w-[150px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" onchange="toggleDay('seg', this.checked)" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#F95721]"></div>
+</label>
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-slate-900">Segunda</span>
+<span class="day-status-badge text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Aberto</span>
+</div>
+</div>
+<!-- Time Inputs Slots Container -->
+<div class="day-slots-container flex flex-wrap items-center gap-2 flex-grow justify-start md:justify-end">
+<!-- Turno 1 -->
+<div class="flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+<input class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="11:00"/>
+<span class="text-slate-400 font-medium">até</span>
+<input class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="15:00"/>
+</div>
+<!-- Turno 2 -->
+<div class="shift-2 flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+<input class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="18:00"/>
+<span class="text-slate-400 font-medium">até</span>
+<input class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="23:00"/>
+<button class="text-slate-400 hover:text-red-500 p-0.5 rounded transition ml-1" onclick="removeShift(this)" title="Remover turno" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<!-- Add shift & copy actions -->
+<button class="btn-add-shift text-xs font-semibold text-slate-600 hover:text-[#F95721] bg-white hover:bg-orange-50 border border-dashed border-slate-300 hover:border-[#F95721] px-2.5 py-1.5 rounded-xl transition flex items-center gap-1" onclick="addShift('seg')" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+<span>Turno</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition" onclick="openCopyModal('seg')" title="Copiar este horário para outros dias" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<!-- Closed Placeholder (Hidden initially) -->
+<div class="day-closed-msg hidden text-xs font-medium text-slate-400 py-1.5 flex items-center gap-1.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Não abre neste dia (Fechado)
+              </div>
+</div>
+<!-- Terça-feira -->
+<div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3" data-day="ter">
+<div class="flex items-center justify-between md:justify-start gap-3 min-w-[150px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" onchange="toggleDay('ter', this.checked)" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#F95721]"></div>
+</label>
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-slate-900">Terça</span>
+<span class="day-status-badge text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Aberto</span>
+</div>
+</div>
+<div class="day-slots-container flex flex-wrap items-center gap-2 flex-grow justify-start md:justify-end">
+<div class="flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+<input class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="11:00"/>
+<span class="text-slate-400 font-medium">até</span>
+<input class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="15:00"/>
+</div>
+<div class="shift-2 flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+<input class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="18:00"/>
+<span class="text-slate-400 font-medium">até</span>
+<input class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="23:00"/>
+<button class="text-slate-400 hover:text-red-500 p-0.5 rounded transition ml-1" onclick="removeShift(this)" title="Remover turno" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<button class="btn-add-shift text-xs font-semibold text-slate-600 hover:text-[#F95721] bg-white hover:bg-orange-50 border border-dashed border-slate-300 hover:border-[#F95721] px-2.5 py-1.5 rounded-xl transition flex items-center gap-1" onclick="addShift('ter')" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+<span>Turno</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition" onclick="openCopyModal('ter')" title="Copiar este horário" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="day-closed-msg hidden text-xs font-medium text-slate-400 py-1.5 flex items-center gap-1.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Não abre neste dia (Fechado)
+              </div>
+</div>
+<!-- Quarta-feira -->
+<div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3" data-day="qua">
+<div class="flex items-center justify-between md:justify-start gap-3 min-w-[150px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" onchange="toggleDay('qua', this.checked)" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#F95721]"></div>
+</label>
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-slate-900">Quarta</span>
+<span class="day-status-badge text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Aberto</span>
+</div>
+</div>
+<div class="day-slots-container flex flex-wrap items-center gap-2 flex-grow justify-start md:justify-end">
+<div class="flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+<input class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="11:00"/>
+<span class="text-slate-400 font-medium">até</span>
+<input class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="15:00"/>
+</div>
+<div class="shift-2 flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+<input class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="18:00"/>
+<span class="text-slate-400 font-medium">até</span>
+<input class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="23:00"/>
+<button class="text-slate-400 hover:text-red-500 p-0.5 rounded transition ml-1" onclick="removeShift(this)" title="Remover turno" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<button class="btn-add-shift text-xs font-semibold text-slate-600 hover:text-[#F95721] bg-white hover:bg-orange-50 border border-dashed border-slate-300 hover:border-[#F95721] px-2.5 py-1.5 rounded-xl transition flex items-center gap-1" onclick="addShift('qua')" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+<span>Turno</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition" onclick="openCopyModal('qua')" title="Copiar este horário" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="day-closed-msg hidden text-xs font-medium text-slate-400 py-1.5 flex items-center gap-1.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Não abre neste dia (Fechado)
+              </div>
+</div>
+<!-- Quinta-feira -->
+<div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3" data-day="qui">
+<div class="flex items-center justify-between md:justify-start gap-3 min-w-[150px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" onchange="toggleDay('qui', this.checked)" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#F95721]"></div>
+</label>
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-slate-900">Quinta</span>
+<span class="day-status-badge text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Aberto</span>
+</div>
+</div>
+<div class="day-slots-container flex flex-wrap items-center gap-2 flex-grow justify-start md:justify-end">
+<div class="flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+<input class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="11:00"/>
+<span class="text-slate-400 font-medium">até</span>
+<input class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="15:00"/>
+</div>
+<div class="shift-2 flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+<input class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="18:00"/>
+<span class="text-slate-400 font-medium">até</span>
+<input class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="23:00"/>
+<button class="text-slate-400 hover:text-red-500 p-0.5 rounded transition ml-1" onclick="removeShift(this)" title="Remover turno" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<button class="btn-add-shift text-xs font-semibold text-slate-600 hover:text-[#F95721] bg-white hover:bg-orange-50 border border-dashed border-slate-300 hover:border-[#F95721] px-2.5 py-1.5 rounded-xl transition flex items-center gap-1" onclick="addShift('qui')" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+<span>Turno</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition" onclick="openCopyModal('qui')" title="Copiar este horário" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="day-closed-msg hidden text-xs font-medium text-slate-400 py-1.5 flex items-center gap-1.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Não abre neste dia (Fechado)
+              </div>
+</div>
+<!-- Sexta-feira -->
+<div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3" data-day="sex">
+<div class="flex items-center justify-between md:justify-start gap-3 min-w-[150px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" onchange="toggleDay('sex', this.checked)" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#F95721]"></div>
+</label>
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-slate-900">Sexta</span>
+<span class="day-status-badge text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Aberto</span>
+</div>
+</div>
+<div class="day-slots-container flex flex-wrap items-center gap-2 flex-grow justify-start md:justify-end">
+<div class="flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+<input class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="11:00"/>
+<span class="text-slate-400 font-medium">até</span>
+<input class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="15:00"/>
+</div>
+<div class="shift-2 flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+<input class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="18:00"/>
+<span class="text-slate-400 font-medium">até</span>
+<input class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="23:30"/>
+<button class="text-slate-400 hover:text-red-500 p-0.5 rounded transition ml-1" onclick="removeShift(this)" title="Remover turno" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<button class="btn-add-shift text-xs font-semibold text-slate-600 hover:text-[#F95721] bg-white hover:bg-orange-50 border border-dashed border-slate-300 hover:border-[#F95721] px-2.5 py-1.5 rounded-xl transition flex items-center gap-1" onclick="addShift('sex')" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+<span>Turno</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition" onclick="openCopyModal('sex')" title="Copiar este horário" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="day-closed-msg hidden text-xs font-medium text-slate-400 py-1.5 flex items-center gap-1.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Não abre neste dia (Fechado)
+              </div>
+</div>
+<!-- Sábado -->
+<div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3" data-day="sab">
+<div class="flex items-center justify-between md:justify-start gap-3 min-w-[150px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" onchange="toggleDay('sab', this.checked)" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#F95721]"></div>
+</label>
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-slate-900">Sábado</span>
+<span class="day-status-badge text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Aberto</span>
+</div>
+</div>
+<div class="day-slots-container flex flex-wrap items-center gap-2 flex-grow justify-start md:justify-end">
+<div class="flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+<input class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="11:00"/>
+<span class="text-slate-400 font-medium">até</span>
+<input class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="23:30"/>
+</div>
+<button class="btn-add-shift text-xs font-semibold text-slate-600 hover:text-[#F95721] bg-white hover:bg-orange-50 border border-dashed border-slate-300 hover:border-[#F95721] px-2.5 py-1.5 rounded-xl transition flex items-center gap-1" onclick="addShift('sab')" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+<span>Turno</span>
+</button>
+<button class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition" onclick="openCopyModal('sab')" title="Copiar este horário" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="day-closed-msg hidden text-xs font-medium text-slate-400 py-1.5 flex items-center gap-1.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Não abre neste dia (Fechado)
+              </div>
+</div>
+<!-- Domingo (Padrão: Fechado) -->
+<div class="py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3" data-day="dom">
+<div class="flex items-center justify-between md:justify-start gap-3 min-w-[150px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" onchange="toggleDay('dom', this.checked)" type="checkbox"/>
+<div class="w-9 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#F95721]"></div>
+</label>
+<div class="flex items-center gap-2">
+<span class="text-sm font-bold text-slate-900">Domingo</span>
+<span class="day-status-badge text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200">Fechado</span>
+</div>
+</div>
+<div class="day-slots-container hidden flex-wrap items-center gap-2 flex-grow justify-start md:justify-end">
+<div class="flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs">
+<input class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="18:00"/>
+<span class="text-slate-400 font-medium">até</span>
+<input class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer" onchange="updateSummary()" type="time" value="23:00"/>
+</div>
+<button class="btn-add-shift text-xs font-semibold text-slate-600 hover:text-[#F95721] bg-white hover:bg-orange-50 border border-dashed border-slate-300 hover:border-[#F95721] px-2.5 py-1.5 rounded-xl transition flex items-center gap-1" onclick="addShift('dom')" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 4v16m8-8H4"></path></svg>
+<span>Turno</span>
+</button>
+</div>
+<div class="day-closed-msg text-xs font-medium text-slate-400 py-1.5 flex items-center gap-1.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Não abre aos domingos (Fechado)
+              </div>
+</div>
+</div>
+<div class="bg-slate-50/70 p-4 border-t border-slate-100 text-xs text-slate-500 flex items-center justify-between">
+<span class="flex items-center gap-1.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Precisa virar a noite? (ex: 20:00 até 02:00) Você pode definir horários que cruzam a meia-noite normalmente.
+            </span>
+</div>
+</div>
+<!-- Card: Online Store Receiving Settings -->
+<div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-card">
+<div class="flex items-start justify-between gap-4">
+<div class="flex items-start gap-3.5">
+<div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<h3 class="text-sm font-bold text-slate-900">Recebimento de Pedidos na Loja Online</h3>
+<p class="text-xs text-slate-500 mt-1 leading-relaxed">
+                  Por padrão, seu cardápio digital aceita pedidos exatamente durante os horários em que seu restaurante estiver com as portas abertas.
+                </p>
+<div class="mt-3 flex items-center gap-2 text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1.5 rounded-lg w-fit border border-emerald-200">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                  Sincronizado automaticamente com o horário físico
+                </div>
+</div>
+</div>
+<!-- Switch Toggle -->
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#F95721]"></div>
+</label>
+</div>
+</div>
+<!-- Card: Average Prep Time -->
+<div class="bg-white rounded-2xl p-5 sm:p-6 border border-slate-200/80 shadow-card">
+<div class="flex items-center gap-2 mb-1">
+<span class="w-6 h-6 rounded-full bg-slate-100 text-slate-700 text-xs font-bold flex items-center justify-center">2</span>
+<h3 class="text-base font-bold text-slate-900">Tempo Médio de Preparo dos Pedidos</h3>
+</div>
+<p class="text-xs text-slate-500 pl-8 mb-5">
+            Quanto tempo sua cozinha normalmente leva para preparar os itens antes do envio ou da retirada?
+          </p>
+<div class="pl-0 sm:pl-8">
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5" id="prepTimeContainer">
+<button class="prep-option py-3 px-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-center transition font-semibold text-slate-700 text-xs" onclick="selectPrepTime(15, this)" type="button">
+<span class="block text-sm font-bold text-slate-900">15 min</span>
+<span class="text-[10px] text-slate-400 font-normal">Express</span>
+</button>
+<button class="prep-option py-3 px-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-center transition font-semibold text-slate-700 text-xs" onclick="selectPrepTime(20, this)" type="button">
+<span class="block text-sm font-bold text-slate-900">20 min</span>
+<span class="text-[10px] text-slate-400 font-normal">Rápido</span>
+</button>
+<!-- Selected Option (Recomendado) -->
+<button class="prep-option py-3 px-3 rounded-xl border-2 border-[#F95721] bg-orange-50/70 text-center transition font-semibold text-[#F95721] text-xs shadow-sm ring-1 ring-orange-200" onclick="selectPrepTime(30, this)" type="button">
+<span class="block text-sm font-bold text-[#F95721]">30 min</span>
+<span class="text-[10px] font-bold text-[#F95721]">Recomendado</span>
+</button>
+<button class="prep-option py-3 px-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-center transition font-semibold text-slate-700 text-xs" onclick="selectPrepTime(45, this)" type="button">
+<span class="block text-sm font-bold text-slate-900">45 min</span>
+<span class="text-[10px] text-slate-400 font-normal">Padrão chef</span>
+</button>
+<button class="prep-option py-3 px-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-center transition font-semibold text-slate-700 text-xs col-span-2 sm:col-span-1" onclick="selectPrepTime(60, this)" type="button">
+<span class="block text-sm font-bold text-slate-900">60 min</span>
+<span class="text-[10px] text-slate-400 font-normal">Elaborado</span>
+</button>
+</div>
+<p class="text-xs text-slate-500 mt-3 flex items-center gap-1.5">
+<svg class="w-4 h-4 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Essa estimativa é somada ao tempo de rota de delivery para calcular o prazo total ao cliente (ex: 30min prep + 15min delivery = 45 min).
+            </p>
+</div>
+</div>
+<!-- Info Card: Smart Operational Automation -->
+<div class="bg-blue-50/60 rounded-2xl p-4 sm:p-5 border border-blue-100 flex items-start gap-3.5 text-blue-900">
+<div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center shrink-0 mt-0.5">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<div class="text-xs leading-relaxed">
+<strong class="font-bold block text-sm mb-0.5 text-blue-950">Abertura e Fechamento Inteligente</strong>
+            Sua loja abre e fecha automaticamente conforme os horários cadastrados. Se a cozinha sobrecarregar, você poderá pausar novos pedidos temporariamente com 1 clique direto no topo do painel.
+          </div>
+</div>
+</section>
+<!-- RIGHT COLUMN: Sticky Summary Card (Approx 32%) -->
+<aside class="lg:col-span-4 space-y-6">
+<!-- Summary Card -->
+<div class="bg-white rounded-2xl border border-slate-200/80 shadow-card p-6 sticky top-28">
+<div class="flex items-center justify-between pb-4 border-b border-slate-100">
+<div class="flex items-center gap-2">
+<svg class="w-5 h-5 text-slate-700" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+<h3 class="text-sm font-bold tracking-tight text-slate-900 uppercase">Resumo dos Horários</h3>
+</div>
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-ping"></span>
+</div>
+<!-- Schedule Snapshot -->
+<div class="mt-4 space-y-2.5 text-xs">
+<div class="flex justify-between items-start py-1 border-b border-slate-50">
+<span class="text-slate-500 font-medium">Seg a Qui:</span>
+<span class="text-right font-bold text-slate-800" id="sum-seg-qui">11:00–15:00 • 18:00–23:00</span>
+</div>
+<div class="flex justify-between items-start py-1 border-b border-slate-50">
+<span class="text-slate-500 font-medium">Sexta-feira:</span>
+<span class="text-right font-bold text-slate-800" id="sum-sex">11:00–15:00 • 18:00–23:30</span>
+</div>
+<div class="flex justify-between items-start py-1 border-b border-slate-50">
+<span class="text-slate-500 font-medium">Sábado:</span>
+<span class="text-right font-bold text-slate-800" id="sum-sab">11:00–23:30 (Turno contínuo)</span>
+</div>
+<div class="flex justify-between items-center py-1 border-b border-slate-50">
+<span class="text-slate-500 font-medium">Domingo:</span>
+<span class="text-right font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded" id="sum-dom">Fechado</span>
+</div>
+<div class="flex justify-between items-center pt-2">
+<span class="text-slate-500 font-medium">Preparo estimado:</span>
+<span class="text-right font-extrabold text-[#F95721]" id="sum-prep">30 minutos</span>
+</div>
+</div>
+<!-- Customer Storefront Live Preview Widget -->
+<div class="mt-6 pt-5 border-t border-slate-100">
+<p class="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2">Como seu cliente verá na loja:</p>
+<div class="bg-gradient-to-br from-slate-50 to-orange-50/30 rounded-xl p-3.5 border border-slate-200/90 shadow-sm">
+<div class="flex items-center gap-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+<span class="text-xs font-bold text-slate-900">Aberto Agora</span>
+<span class="text-[10px] text-slate-400">• Fecha às 23:00</span>
+</div>
+<p class="text-[11px] text-slate-600 mt-1.5 flex items-center gap-1">
+<svg class="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Tempo total aprox.: <strong>45-55 min</strong> (Preparo + Entrega)
+              </p>
+</div>
+</div>
+<!-- Next Step Teaser -->
+<div class="mt-5 pt-4 border-t border-slate-100 flex items-center justify-between text-xs">
+<span class="text-slate-400">Próxima etapa:</span>
+<span class="font-bold text-slate-800">Passo 6 — Formas de Pagamento</span>
+</div>
+<!-- Support Mini Box -->
+<div class="mt-6 p-3.5 rounded-xl bg-slate-50 border border-slate-200/70 text-slate-600">
+<p class="text-xs font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+<svg class="w-4 h-4 text-[#F95721]" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Dúvidas sobre turnos especiais?
+            </p>
+<p class="text-[11px] text-slate-500 leading-normal">
+              O MenuNext suporta turnos de madrugada, datas comemorativas e feriados com horários exclusivos via painel.
+            </p>
+</div>
+</div>
+</aside>
+</div>
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: BottomStickyNavigation -->
+<footer class="w-full bg-white border-t border-slate-200/80 py-4 px-4 sm:px-6 lg:px-8 mt-12 sticky bottom-0 z-40 shadow-lg" data-purpose="onboarding-footer-navigation">
+<div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+<!-- Back Button -->
+<a class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-300 hover:bg-slate-50 text-slate-700 text-xs font-bold flex items-center justify-center gap-2 transition shadow-sm" href="#">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7"></path></svg>
+        Voltar ao Passo 4 (Delivery)
+      </a>
+<!-- Middle: Skip Link -->
+<button class="text-xs font-semibold text-slate-500 hover:text-slate-800 underline transition order-last sm:order-none" onclick="openSkipModal()" type="button">
+        Pular por enquanto (configurar depois no painel)
+      </button>
+<!-- Continue Primary Button -->
+<button class="w-full sm:w-auto px-8 py-3 rounded-xl bg-[#F95721] hover:bg-[#ea4b16] text-white text-sm font-bold flex items-center justify-center gap-2 transition shadow-md shadow-[#F95721]/30" id="btnContinue" onclick="saveAndProceed()" type="button">
+<span id="btnText">Continuar para o Passo 6</span>
+<svg class="w-4 h-4" fill="none" id="btnIcon" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7"></path></svg>
+<svg class="w-4 h-4 animate-spin hidden" fill="none" id="btnLoading" viewbox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" fill="currentColor"></path></svg>
+</button>
+</div>
+</footer>
+<!-- END: BottomStickyNavigation -->
+<!-- BEGIN: LegalFooterInfo -->
+<div class="w-full bg-[#FAFBFD] py-4 text-center text-xs text-slate-400 border-t border-slate-100 flex flex-wrap items-center justify-center gap-4">
+<span>© 2026 MenuNext Tecnologia para Gastronomia Ltda.</span>
+<span>•</span>
+<span>Passo 5: Horários de Atendimento</span>
+<span>•</span>
+<span class="flex items-center gap-1 text-emerald-600 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+      SaaS Multi-tenant Pronto
+    </span>
+<span>•</span>
+<a class="hover:underline text-slate-500" href="#">Ajuda &amp; Suporte</a>
+</div>
+<!-- END: LegalFooterInfo -->
+<!-- BEGIN: ModalCopyHours -->
+<div class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4" id="copyHoursModal">
+<div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200">
+<div class="flex items-start justify-between mb-4">
+<div>
+<h3 class="text-lg font-bold text-slate-900">Copiar horário</h3>
+<p class="text-xs text-slate-500" id="copyModalSub">Copiar horários configurados para outros dias:</p>
+</div>
+<button class="text-slate-400 hover:text-slate-600 p-1" onclick="closeCopyModal()" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<div class="space-y-2 py-2">
+<label class="flex items-center gap-2.5 p-2 rounded-lg hover:bg-slate-50 cursor-pointer text-xs font-semibold text-slate-700">
+<input class="rounded border-slate-300 text-[#F95721] focus:ring-[#F95721]" id="copy-all" onchange="toggleSelectAllDays(this.checked)" type="checkbox"/>
+<span class="text-slate-900 font-bold">Selecionar todos os dias</span>
+</label>
+<div class="border-t border-slate-100 my-1"></div>
+<div class="grid grid-cols-2 gap-2 text-xs">
+<label class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+<input class="target-day-check rounded border-slate-300 text-[#F95721] focus:ring-[#F95721]" name="target-day" type="checkbox" value="seg"/>
+<span>Segunda-feira</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+<input class="target-day-check rounded border-slate-300 text-[#F95721] focus:ring-[#F95721]" name="target-day" type="checkbox" value="ter"/>
+<span>Terça-feira</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+<input class="target-day-check rounded border-slate-300 text-[#F95721] focus:ring-[#F95721]" name="target-day" type="checkbox" value="qua"/>
+<span>Quarta-feira</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+<input class="target-day-check rounded border-slate-300 text-[#F95721] focus:ring-[#F95721]" name="target-day" type="checkbox" value="qui"/>
+<span>Quinta-feira</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+<input class="target-day-check rounded border-slate-300 text-[#F95721] focus:ring-[#F95721]" name="target-day" type="checkbox" value="sex"/>
+<span>Sexta-feira</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+<input class="target-day-check rounded border-slate-300 text-[#F95721] focus:ring-[#F95721]" name="target-day" type="checkbox" value="sab"/>
+<span>Sábado</span>
+</label>
+<label class="flex items-center gap-2 p-2 rounded-lg hover:bg-slate-50 cursor-pointer">
+<input class="target-day-check rounded border-slate-300 text-[#F95721] focus:ring-[#F95721]" name="target-day" type="checkbox" value="dom"/>
+<span>Domingo</span>
+</label>
+</div>
+</div>
+<div class="mt-6 flex items-center justify-end gap-2 border-t border-slate-100 pt-4">
+<button class="px-4 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-100 rounded-lg" onclick="closeCopyModal()" type="button">Cancelar</button>
+<button class="px-4 py-2 text-xs font-bold text-white bg-[#F95721] hover:bg-[#ea4b16] rounded-lg shadow-sm" onclick="executeCopyHours()" type="button">Aplicar Horários</button>
+</div>
+</div>
+</div>
+<!-- END: ModalCopyHours -->
+<!-- BEGIN: ModalSkipConfirmation -->
+<div class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4" id="skipConfirmModal">
+<div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-200 text-center">
+<div class="w-12 h-12 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-3">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="text-lg font-bold text-slate-900">Configurar horários depois?</h3>
+<p class="text-xs text-slate-500 mt-2 leading-relaxed">
+        Sua loja online permanecerá fechada para pedidos até que pelo menos um horário de atendimento seja informado no painel administrativo.
+      </p>
+<div class="mt-6 flex flex-col gap-2">
+<button class="w-full py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold transition" onclick="confirmSkip()" type="button">
+          Continuar mesmo assim (Pendente)
+        </button>
+<button class="w-full py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs font-bold transition" onclick="closeSkipModal()" type="button">
+          Voltar e definir horários
+        </button>
+</div>
+</div>
+</div>
+<!-- END: ModalSkipConfirmation -->
+<!-- Toast Notification Container -->
+<div class="fixed bottom-20 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 bg-slate-900 text-white text-xs font-medium px-4 py-3 rounded-xl shadow-xl flex items-center gap-2.5" id="toastNotification">
+<svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7"></path></svg>
+<span id="toastMsg">Alteração salva automaticamente!</span>
+</div>
+<!-- BEGIN: InteractiveScripts -->
+<script data-purpose="onboarding-interactivity">
+    let sourceDayForCopy = 'seg';
+    let currentPrepTime = 30;
+
+    // Toast feedback helper
+    function showToast(message) {
+      const toast = document.getElementById('toastNotification');
+      const text = document.getElementById('toastMsg');
+      text.innerText = message;
+      toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+      }, 2600);
+    }
+
+    // Toggle day active state
+    function toggleDay(dayId, isChecked) {
+      const row = document.querySelector(`[data-day="${dayId}"]`);
+      if (!row) return;
+
+      const badge = row.querySelector('.day-status-badge');
+      const slotsContainer = row.querySelector('.day-slots-container');
+      const closedMsg = row.querySelector('.day-closed-msg');
+
+      if (isChecked) {
+        badge.className = "day-status-badge text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200";
+        badge.innerText = "Aberto";
+        slotsContainer.classList.remove('hidden');
+        closedMsg.classList.add('hidden');
+      } else {
+        badge.className = "day-status-badge text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded-md border border-slate-200";
+        badge.innerText = "Fechado";
+        slotsContainer.classList.add('hidden');
+        closedMsg.classList.remove('hidden');
+      }
+
+      updateSummary();
+      showToast(`Horário de ${getDayName(dayId)} atualizado.`);
+    }
+
+    function getDayName(id) {
+      const map = {
+        seg: 'Segunda', ter: 'Terça', qua: 'Quarta', qui: 'Quinta',
+        sex: 'Sexta', sab: 'Sábado', dom: 'Domingo'
+      };
+      return map[id] || id;
+    }
+
+    // Add extra shift slot to a day
+    function addShift(dayId) {
+      const row = document.querySelector(`[data-day="${dayId}"]`);
+      const container = row.querySelector('.day-slots-container');
+      const addBtn = row.querySelector('.btn-add-shift');
+
+      // Check count of shifts
+      const existingShifts = container.querySelectorAll('.time-start').length;
+      if (existingShifts >= 3) {
+        alert('Limite máximo de 3 turnos diários atingido.');
+        return;
+      }
+
+      const shiftDiv = document.createElement('div');
+      shiftDiv.className = "flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs";
+      shiftDiv.innerHTML = `
+        <input type="time" value="18:00" onchange="updateSummary()" class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer">
+        <span class="text-slate-400 font-medium">até</span>
+        <input type="time" value="23:00" onchange="updateSummary()" class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer">
+        <button type="button" onclick="removeShift(this)" title="Remover turno" class="text-slate-400 hover:text-red-500 p-0.5 rounded transition ml-1">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      `;
+
+      container.insertBefore(shiftDiv, addBtn);
+      updateSummary();
+      showToast(`Novo turno adicionado a ${getDayName(dayId)}.`);
+    }
+
+    // Remove shift
+    function removeShift(btn) {
+      const shiftSlot = btn.closest('div');
+      shiftSlot.remove();
+      updateSummary();
+      showToast('Turno removido.');
+    }
+
+    // Select prep time pills
+    function selectPrepTime(minutes, el) {
+      currentPrepTime = minutes;
+      const buttons = document.querySelectorAll('.prep-option');
+      buttons.forEach(b => {
+        b.className = "prep-option py-3 px-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 text-center transition font-semibold text-slate-700 text-xs";
+        const title = b.querySelector('.block');
+        if (title) title.className = "block text-sm font-bold text-slate-900";
+      });
+
+      el.className = "prep-option py-3 px-3 rounded-xl border-2 border-[#F95721] bg-orange-50/70 text-center transition font-semibold text-[#F95721] text-xs shadow-sm ring-1 ring-orange-200";
+      const currentTitle = el.querySelector('.block');
+      if (currentTitle) currentTitle.className = "block text-sm font-bold text-[#F95721]";
+
+      document.getElementById('sum-prep').innerText = `${minutes} minutos`;
+      showToast(`Tempo de preparo definido: ${minutes} min`);
+    }
+
+    // Copy modal controls
+    function openCopyModal(fromDay) {
+      sourceDayForCopy = fromDay;
+      document.getElementById('copyModalSub').innerText = `Copiar horários de ${getDayName(fromDay)} para:`;
+      
+      // Uncheck origin day in modal
+      document.querySelectorAll('.target-day-check').forEach(chk => {
+        chk.checked = false;
+        chk.disabled = (chk.value === fromDay);
+      });
+      document.getElementById('copy-all').checked = false;
+
+      document.getElementById('copyHoursModal').classList.remove('hidden');
+    }
+
+    function closeCopyModal() {
+      document.getElementById('copyHoursModal').classList.add('hidden');
+    }
+
+    function toggleSelectAllDays(checked) {
+      document.querySelectorAll('.target-day-check').forEach(chk => {
+        if (!chk.disabled) chk.checked = checked;
+      });
+    }
+
+    function executeCopyHours() {
+      const selected = Array.from(document.querySelectorAll('.target-day-check:checked')).map(c => c.value);
+      if (selected.length === 0) {
+        alert('Selecione pelo menos um dia para aplicar.');
+        return;
+      }
+
+      const srcRow = document.querySelector(`[data-day="${sourceDayForCopy}"]`);
+      const srcCheckbox = srcRow.querySelector('input[type="checkbox"]');
+      const isSrcActive = srcCheckbox.checked;
+
+      // Extract time ranges from source
+      const starts = Array.from(srcRow.querySelectorAll('.time-start')).map(i => i.value);
+      const ends = Array.from(srcRow.querySelectorAll('.time-end')).map(i => i.value);
+
+      selected.forEach(targetId => {
+        const targetRow = document.querySelector(`[data-day="${targetId}"]`);
+        const targetCheckbox = targetRow.querySelector('input[type="checkbox"]');
+        
+        targetCheckbox.checked = isSrcActive;
+        toggleDay(targetId, isSrcActive);
+
+        if (isSrcActive) {
+          const container = targetRow.querySelector('.day-slots-container');
+          const addBtn = targetRow.querySelector('.btn-add-shift');
+
+          // Clean existing slots
+          container.querySelectorAll('.time-start').forEach(ts => ts.closest('div').remove());
+
+          // Rebuild identical slots
+          for (let i = 0; i < starts.length; i++) {
+            const shiftDiv = document.createElement('div');
+            shiftDiv.className = "flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs";
+            const removeBtnHtml = (i > 0) ? `
+              <button type="button" onclick="removeShift(this)" title="Remover turno" class="text-slate-400 hover:text-red-500 p-0.5 rounded transition ml-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
+            ` : '';
+
+            shiftDiv.innerHTML = `
+              <input type="time" value="${starts[i]}" onchange="updateSummary()" class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer">
+              <span class="text-slate-400 font-medium">até</span>
+              <input type="time" value="${ends[i]}" onchange="updateSummary()" class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer">
+              ${removeBtnHtml}
+            `;
+            container.insertBefore(shiftDiv, addBtn);
+          }
+        }
+      });
+
+      closeCopyModal();
+      updateSummary();
+      showToast(`Horário de ${getDayName(sourceDayForCopy)} copiado com sucesso!`);
+    }
+
+    // Skip confirmation modal
+    function openSkipModal() {
+      document.getElementById('skipConfirmModal').classList.remove('hidden');
+    }
+
+    function closeSkipModal() {
+      document.getElementById('skipConfirmModal').classList.add('hidden');
+    }
+
+    function confirmSkip() {
+      closeSkipModal();
+      showToast('Avançando para Passo 6 (Horários marcados como pendentes)...');
+      setTimeout(() => {
+        alert('Redirecionando para o Passo 6 (Pagamentos)...');
+      }, 700);
+    }
+
+    // Express presets
+    function applyExpressHours() {
+      ['seg', 'ter', 'qua', 'qui', 'sex', 'sab', 'dom'].forEach(day => {
+        const row = document.querySelector(`[data-day="${day}"]`);
+        const checkbox = row.querySelector('input[type="checkbox"]');
+        checkbox.checked = true;
+        toggleDay(day, true);
+
+        const container = row.querySelector('.day-slots-container');
+        const addBtn = row.querySelector('.btn-add-shift');
+        container.querySelectorAll('.time-start').forEach(ts => ts.closest('div').remove());
+
+        const shiftDiv = document.createElement('div');
+        shiftDiv.className = "flex items-center gap-1.5 bg-slate-50 p-1.5 rounded-xl border border-slate-200 text-xs";
+        shiftDiv.innerHTML = `
+          <input type="time" value="11:00" onchange="updateSummary()" class="time-start bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer">
+          <span class="text-slate-400 font-medium">até</span>
+          <input type="time" value="23:00" onchange="updateSummary()" class="time-end bg-transparent text-xs font-semibold text-slate-800 border-none p-0 focus:ring-0 w-16 text-center cursor-pointer">
+        `;
+        container.insertBefore(shiftDiv, addBtn);
+      });
+
+      updateSummary();
+      showToast('Horário Express 11:00 às 23:00 aplicado a todos os dias.');
+    }
+
+    // Simulation presets
+    function applyPreset(type) {
+      if (type === 'default') {
+        location.reload();
+      } else if (type === 'all-days') {
+        applyExpressHours();
+      } else if (type === 'sunday-closed') {
+        const domRow = document.querySelector(`[data-day="dom"]`);
+        domRow.querySelector('input[type="checkbox"]').checked = false;
+        toggleDay('dom', false);
+      } else if (type === 'single-shift') {
+        ['seg', 'ter', 'qua', 'qui'].forEach(d => {
+          const row = document.querySelector(`[data-day="${d}"]`);
+          const secondShift = row.querySelector('.shift-2');
+          if (secondShift) secondShift.remove();
+        });
+        updateSummary();
+        showToast('Turno único configurado.');
+      }
+    }
+
+    function triggerSavingSim() {
+      const btn = document.getElementById('simSaveBtn');
+      btn.innerText = 'Salvando dados...';
+      btn.classList.add('text-amber-300');
+      setTimeout(() => {
+        btn.innerText = 'Salvo!';
+        btn.classList.remove('text-amber-300');
+        btn.classList.add('text-emerald-400');
+        setTimeout(() => {
+          btn.innerText = 'Salvando...';
+          btn.classList.remove('text-emerald-400');
+        }, 1500);
+      }, 800);
+    }
+
+    function saveAndProceed() {
+      const btn = document.getElementById('btnContinue');
+      const text = document.getElementById('btnText');
+      const icon = document.getElementById('btnIcon');
+      const loading = document.getElementById('btnLoading');
+
+      text.innerText = "Salvando horários...";
+      icon.classList.add('hidden');
+      loading.classList.remove('hidden');
+      btn.disabled = true;
+
+      setTimeout(() => {
+        showToast('Horários gravados com sucesso! Redirecionando...');
+        setTimeout(() => {
+          alert('Pronto! Seguindo para o Passo 6 (Configurações de Pagamento).');
+          text.innerText = "Continuar para o Passo 6";
+          icon.classList.remove('hidden');
+          loading.classList.add('hidden');
+          btn.disabled = false;
+        }, 800);
+      }, 1000);
+    }
+
+    function updateSummary() {
+      // Dynamic summary builder
+      const domChecked = document.querySelector('[data-day="dom"] input[type="checkbox"]').checked;
+      const domSummary = document.getElementById('sum-dom');
+      if (domChecked) {
+        domSummary.innerText = "18:00–23:00";
+        domSummary.className = "text-right font-bold text-slate-800";
+      } else {
+        domSummary.innerText = "Fechado";
+        domSummary.className = "text-right font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded";
+      }
+    }
+  </script>
+<!-- END: InteractiveScripts -->
+</body></html>

@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MenuNext — Painel Lojista: Aparência da Loja</title>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 CDN with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              500: '#f95721',
+              600: '#ea4913',
+              700: '#c2380b',
+            },
+            store: {
+              primary: '#E85D2A',
+              secondary: '#F3A43B',
+              dark: '#121826',
+              cream: '#FFF9F5',
+              text: '#1F2937'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom CSS for Device Frame & Layout Tweaks -->
+<style data-purpose="custom-styling">
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #f8fafc;
+      color: #1e293b;
+    }
+    /* Hide scrollbar for category pills and preview screens */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    /* Realistic Mobile Phone Frame Mockup */
+    .iphone-frame {
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.25), 0 0 0 10px #1e293b, 0 0 0 12px #334155;
+      border-radius: 40px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col antialiased selection:bg-orange-100 selection:text-orange-900">
+<!-- BEGIN: TopHeader -->
+<header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-4 lg:px-6 h-16 flex items-center justify-between shadow-sm">
+<!-- Brand Logo & Store Selector -->
+<div class="flex items-center space-x-6">
+<a class="flex items-center space-x-2" href="#">
+<div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-600 to-orange-400 flex items-center justify-center text-white font-black text-xl shadow-sm">
+          M
+        </div>
+<span class="text-xl font-bold tracking-tight text-slate-900">Menu<span class="text-brand-500">Next</span></span>
+</a>
+<div class="h-6 w-px bg-slate-200 hidden md:block"></div>
+<!-- Current Store Badge -->
+<div class="hidden sm:flex items-center space-x-3 bg-slate-50 border border-slate-200/80 rounded-lg px-3 py-1.5">
+<div class="w-6 h-6 rounded-md bg-amber-500/10 text-amber-600 font-bold text-xs flex items-center justify-center">NB</div>
+<div class="flex flex-col">
+<div class="flex items-center space-x-2">
+<span class="text-xs font-bold text-slate-800 leading-none">Next Burger Express</span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-1 animate-pulse"></span> Loja Aberta
+            </span>
+<span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-[10px] font-medium bg-blue-50 text-blue-700 border border-blue-200">
+              Realtime Ativo
+            </span>
+</div>
+<span class="text-[11px] text-slate-500 mt-0.5">Unidade Moema • São Paulo/SP</span>
+</div>
+</div>
+</div>
+<!-- Right Header Actions -->
+<div class="flex items-center space-x-3">
+<a class="inline-flex items-center px-3.5 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 hover:text-slate-900 transition-colors shadow-xs" href="https://menunext.com.br/nextburger" target="_blank">
+<svg class="w-3.5 h-3.5 mr-1.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+        Ver Loja Pública
+      </a>
+<!-- Notification Bell -->
+<button class="relative p-2 text-slate-500 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-orange-500"></span>
+</button>
+<!-- User Profile Avatar -->
+<div class="flex items-center pl-2 border-l border-slate-200">
+<div class="w-8 h-8 rounded-full bg-slate-900 text-white font-bold text-xs flex items-center justify-center ring-2 ring-slate-100">
+          JD
+        </div>
+<div class="hidden lg:block ml-2 text-left">
+<div class="text-xs font-bold text-slate-900 leading-tight">Jonatha D.</div>
+<div class="text-[10px] text-slate-500">Administrador</div>
+</div>
+</div>
+</div>
+</header>
+<!-- END: TopHeader -->
+<!-- BEGIN: MainContainer -->
+<div class="flex-1 flex overflow-hidden">
+<!-- BEGIN: SidebarNav -->
+<aside class="w-64 bg-white border-r border-slate-200 flex-shrink-0 hidden lg:flex flex-col justify-between overflow-y-auto">
+<div class="p-4 space-y-6">
+<!-- Group: Operacional -->
+<div>
+<span class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Operacional</span>
+<div class="mt-2 space-y-1">
+<a class="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Início
+              </span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Pedidos
+              </span>
+<span class="px-1.5 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-800 rounded-full">4 novos</span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Cardápio
+              </span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Delivery e Taxas
+              </span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-100 hover:text-slate-900 transition" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Frente de Caixa (PDV)
+              </span>
+</a>
+</div>
+</div>
+<!-- Group: Gestão & Clientes -->
+<div>
+<span class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Gestão &amp; Finanças</span>
+<div class="mt-2 space-y-1">
+<a class="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-100 transition" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Clientes
+              </span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-100 transition" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Vendas &amp; Relatórios
+              </span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-100 transition" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Marketing &amp; Cupons
+              </span>
+</a>
+<!-- ACTIVE ITEM: Aparência da Loja -->
+<a class="flex items-center justify-between px-3 py-2 text-xs font-bold text-brand-600 bg-brand-50 rounded-lg border border-brand-100 shadow-xs" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-brand-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M7 21a4 4 0 01-4-4 4 4 0 014-4c1.1 0 2.1.45 2.83 1.17L12 16l4-4a5.66 5.66 0 118 8l-4 4a5.66 5.66 0 01-8-8l2.17-2.17A3.99 3.99 0 017 21z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+                Aparência da Loja
+              </span>
+<span class="w-1.5 h-1.5 rounded-full bg-brand-500"></span>
+</a>
+</div>
+</div>
+<!-- Group: Configurações -->
+<div>
+<span class="px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">Sistema</span>
+<div class="mt-2 space-y-1">
+<a class="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-100 transition" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Horários
+              </span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-100 transition" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Pagamentos
+              </span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-100 transition" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Configurações
+              </span>
+</a>
+<a class="flex items-center justify-between px-3 py-2 text-xs font-semibold text-slate-600 rounded-lg hover:bg-slate-100 transition" href="#">
+<span class="flex items-center gap-2.5">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                Ajuda &amp; Suporte
+              </span>
+</a>
+</div>
+</div>
+</div>
+<!-- Bottom sidebar info -->
+<div class="p-4 border-t border-slate-100 bg-slate-50/70">
+<div class="flex items-center space-x-2 text-[11px] font-medium text-slate-600">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>Canal Direto Ativo</span>
+</div>
+<p class="text-[10px] text-slate-400 mt-0.5">Sem retenção de valores por pedido</p>
+</div>
+</aside>
+<!-- END: SidebarNav -->
+<!-- BEGIN: MainContentArea -->
+<main class="flex-1 overflow-y-auto bg-slate-50/50 p-4 sm:p-6 lg:p-8">
+<div class="max-w-7xl mx-auto space-y-6">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-2 border-b border-slate-200/80">
+<div>
+<div class="flex items-center gap-3">
+<h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Aparência da Loja</h1>
+<span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+<svg class="w-3 h-3 mr-1 text-emerald-600" fill="currentColor" viewbox="0 0 20 20"><path clip-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" fill-rule="evenodd"></path></svg>
+                Alterações salvas
+              </span>
+</div>
+<p class="text-xs sm:text-sm text-slate-500 mt-1">Personalize a identidade visual, logo, cores, imagens e produtos da sua Loja Pública com liberdade e consistência profissional.</p>
+</div>
+<!-- Actions: Top Right -->
+<div class="flex items-center gap-2.5 self-start md:self-auto">
+<button class="px-3.5 py-2 text-xs font-semibold text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition shadow-xs flex items-center gap-1.5">
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Pré-visualizar loja
+            </button>
+<button class="px-3 py-2 text-xs font-semibold text-slate-500 hover:text-slate-800 transition">
+              Restaurar padrão
+            </button>
+<button class="px-4 py-2 text-xs font-bold text-white bg-brand-500 rounded-lg hover:bg-brand-600 transition shadow-sm flex items-center gap-1.5">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Salvar alterações
+            </button>
+</div>
+</div>
+<!-- 2 Columns Layout Grid -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-start">
+<!-- LEFT COLUMN: Forms & Customization (approx 62%) -->
+<div class="xl:col-span-7 space-y-6">
+<!-- 1. CARD: Logo & Color Palette Generator -->
+<div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-6">
+<div class="flex items-start justify-between">
+<div>
+<h2 class="text-base font-bold text-slate-900">Logo do Restaurante</h2>
+<p class="text-xs text-slate-500 mt-0.5">Formato recomendado: PNG, SVG ou WebP com fundo transparente. Mínimo 400x400px.</p>
+</div>
+<span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">Ativo na Loja</span>
+</div>
+<!-- Current Logo Preview Row -->
+<div class="flex flex-col sm:flex-row items-center sm:items-center justify-between gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100">
+<div class="flex items-center space-x-4">
+<!-- Styled Logo Sample -->
+<div class="w-16 h-16 rounded-2xl bg-amber-50 border-2 border-amber-500 flex flex-col items-center justify-center p-1 text-center shadow-xs">
+<span class="text-xs font-black tracking-tighter text-amber-900 leading-none">NEXT</span>
+<span class="text-[10px] font-bold text-brand-600 uppercase leading-none mt-0.5">BURGER</span>
+<span class="text-[8px] text-amber-700 font-semibold leading-none">★ EXP ★</span>
+</div>
+<div>
+<h3 class="text-xs font-bold text-slate-800">logo_nextburger_2026.png</h3>
+<p class="text-[11px] text-slate-400 mt-0.5">340 KB • Dimensões: 600x600 px • Fundo transparente</p>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 text-xs font-semibold text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition shadow-xs flex items-center gap-1">
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Alterar logo
+                  </button>
+<button class="px-2.5 py-1.5 text-xs font-semibold text-rose-600 hover:bg-rose-50 rounded-lg transition">
+                    Remover
+                  </button>
+</div>
+</div>
+<!-- AI Palette Generator Section -->
+<div class="rounded-xl border border-orange-200 bg-gradient-to-br from-orange-50/80 via-white to-amber-50/50 p-5 space-y-4">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<div class="w-7 h-7 rounded-lg bg-brand-500/10 text-brand-600 flex items-center justify-center text-sm font-bold">✨</div>
+<div>
+<h3 class="text-xs font-bold text-slate-900 uppercase tracking-wide">Sugerir paleta a partir do logo</h3>
+<p class="text-xs text-slate-600">O MenuNext identifica as cores dominantes da sua marca e sugere uma harmonia visual pronta.</p>
+</div>
+</div>
+<button class="hidden sm:inline-flex items-center px-3 py-1.5 text-xs font-bold text-brand-600 bg-white border border-brand-200 rounded-lg hover:bg-brand-50 shadow-2xs">
+                    Re-analisar logo
+                  </button>
+</div>
+<!-- Palette Result Container -->
+<div class="bg-white rounded-xl border border-slate-200 p-4 space-y-3 shadow-xs">
+<div class="flex items-center justify-between border-b border-slate-100 pb-2">
+<span class="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                      Paleta extraída com sucesso
+                    </span>
+<span class="text-[11px] font-semibold text-brand-600 bg-brand-50 px-2 py-0.5 rounded border border-brand-100">
+                      ✓ Paleta aplicada no preview
+                    </span>
+</div>
+<!-- 5 Visual Swatches -->
+<div class="grid grid-cols-2 sm:grid-cols-5 gap-2.5 pt-1">
+<!-- Swatch 1 -->
+<div class="p-2 rounded-lg border border-slate-200 bg-slate-50/50 flex flex-col items-center text-center">
+<div class="w-8 h-8 rounded-full border border-black/10 shadow-inner mb-1.5" style="background-color: #E85D2A;"></div>
+<span class="text-[11px] font-bold text-slate-800">Laranja Burger</span>
+<span class="text-[10px] text-slate-400 font-mono">#E85D2A</span>
+<span class="mt-1 text-[9px] font-semibold text-brand-700 bg-brand-100/60 px-1.5 py-0.2 rounded">Primária</span>
+</div>
+<!-- Swatch 2 -->
+<div class="p-2 rounded-lg border border-slate-200 bg-slate-50/50 flex flex-col items-center text-center">
+<div class="w-8 h-8 rounded-full border border-black/10 shadow-inner mb-1.5" style="background-color: #F3A43B;"></div>
+<span class="text-[11px] font-bold text-slate-800">Âmbar Mostarda</span>
+<span class="text-[10px] text-slate-400 font-mono">#F3A43B</span>
+<span class="mt-1 text-[9px] font-semibold text-amber-700 bg-amber-100/60 px-1.5 py-0.2 rounded">Secundária</span>
+</div>
+<!-- Swatch 3 -->
+<div class="p-2 rounded-lg border border-slate-200 bg-slate-50/50 flex flex-col items-center text-center">
+<div class="w-8 h-8 rounded-full border border-black/10 shadow-inner mb-1.5" style="background-color: #121826;"></div>
+<span class="text-[11px] font-bold text-slate-800">Graphite Noite</span>
+<span class="text-[10px] text-slate-400 font-mono">#121826</span>
+<span class="mt-1 text-[9px] font-semibold text-slate-700 bg-slate-200/60 px-1.5 py-0.2 rounded">Destaque</span>
+</div>
+<!-- Swatch 4 -->
+<div class="p-2 rounded-lg border border-slate-200 bg-slate-50/50 flex flex-col items-center text-center">
+<div class="w-8 h-8 rounded-full border border-slate-300 shadow-inner mb-1.5" style="background-color: #FFF9F5;"></div>
+<span class="text-[11px] font-bold text-slate-800">Warm Cream</span>
+<span class="text-[10px] text-slate-400 font-mono">#FFF9F5</span>
+<span class="mt-1 text-[9px] font-semibold text-orange-700 bg-orange-100/60 px-1.5 py-0.2 rounded">Fundo Loja</span>
+</div>
+<!-- Swatch 5 -->
+<div class="p-2 rounded-lg border border-slate-200 bg-slate-50/50 flex flex-col items-center text-center col-span-2 sm:col-span-1">
+<div class="w-8 h-8 rounded-full border border-black/10 shadow-inner mb-1.5" style="background-color: #1F2937;"></div>
+<span class="text-[11px] font-bold text-slate-800">Carvão Leitura</span>
+<span class="text-[10px] text-slate-400 font-mono">#1F2937</span>
+<span class="mt-1 text-[9px] font-semibold text-slate-700 bg-slate-200/60 px-1.5 py-0.2 rounded">Texto Base</span>
+</div>
+</div>
+<!-- Actions footer for palette -->
+<div class="flex items-center justify-between pt-2 border-t border-slate-100">
+<span class="text-[11px] text-slate-500">Cores geradas com contraste adequado para pedidos online.</span>
+<button class="px-3 py-1 text-xs font-bold text-white bg-slate-900 rounded-lg hover:bg-slate-800 transition">
+                      ✓ Aplicar paleta à loja
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- 2. CARD: Manual Colors & Accessibility Check -->
+<div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-5">
+<div>
+<h2 class="text-base font-bold text-slate-900">Cores da Loja</h2>
+<p class="text-xs text-slate-500 mt-0.5">Personalize os tons caso queira um ajuste fino sobre a paleta automática.</p>
+</div>
+<!-- 4 Inputs Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Color 1 -->
+<div class="p-3 border border-slate-200 rounded-xl space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="text-xs font-bold text-slate-700">Cor Primária</label>
+<span class="text-[10px] text-slate-400">Botões &amp; Destaques</span>
+</div>
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-lg shadow-inner border border-slate-300 flex-shrink-0 cursor-pointer" style="background-color: #E85D2A;"></div>
+<input class="w-full text-xs font-mono font-semibold text-slate-800 uppercase px-2.5 py-1.5 rounded-lg border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500" type="text" value="#E85D2A"/>
+</div>
+</div>
+<!-- Color 2 -->
+<div class="p-3 border border-slate-200 rounded-xl space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="text-xs font-bold text-slate-700">Cor Secundária</label>
+<span class="text-[10px] text-slate-400">Banners e Selos</span>
+</div>
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-lg shadow-inner border border-slate-300 flex-shrink-0 cursor-pointer" style="background-color: #F3A43B;"></div>
+<input class="w-full text-xs font-mono font-semibold text-slate-800 uppercase px-2.5 py-1.5 rounded-lg border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500" type="text" value="#F3A43B"/>
+</div>
+</div>
+<!-- Color 3 -->
+<div class="p-3 border border-slate-200 rounded-xl space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="text-xs font-bold text-slate-700">Fundo da Loja</label>
+<span class="text-[10px] text-slate-400">Cor de fundo do app</span>
+</div>
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-lg shadow-inner border border-slate-300 flex-shrink-0 cursor-pointer" style="background-color: #FFF9F5;"></div>
+<input class="w-full text-xs font-mono font-semibold text-slate-800 uppercase px-2.5 py-1.5 rounded-lg border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500" type="text" value="#FFF9F5"/>
+</div>
+</div>
+<!-- Color 4 -->
+<div class="p-3 border border-slate-200 rounded-xl space-y-1.5">
+<div class="flex items-center justify-between">
+<label class="text-xs font-bold text-slate-700">Texto Principal</label>
+<span class="text-[10px] text-slate-400">Títulos e Preços</span>
+</div>
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-lg shadow-inner border border-slate-300 flex-shrink-0 cursor-pointer" style="background-color: #121826;"></div>
+<input class="w-full text-xs font-mono font-semibold text-slate-800 uppercase px-2.5 py-1.5 rounded-lg border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500" type="text" value="#121826"/>
+</div>
+</div>
+</div>
+<!-- Accessibility WCAG AAA Box -->
+<div class="flex items-center justify-between p-3.5 bg-emerald-50/80 border border-emerald-200 rounded-xl text-xs">
+<div class="flex items-center space-x-2.5">
+<div class="w-6 h-6 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">✓</div>
+<div>
+<span class="font-bold text-emerald-900">Excelente contraste verificado: 7.8:1 (WCAG AAA)</span>
+<p class="text-[11px] text-emerald-700 mt-0.5">Leitura de títulos, botões e valores 100% nítida e acessível em dispositivos móveis sob a luz solar.</p>
+</div>
+</div>
+<span class="text-[10px] font-bold text-emerald-800 uppercase tracking-wider bg-white/70 px-2 py-1 rounded border border-emerald-200 hidden sm:block">Aprovado</span>
+</div>
+</div>
+<!-- 3. CARD: Store Cover Image -->
+<div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-4">
+<div class="flex items-start justify-between">
+<div>
+<h2 class="text-base font-bold text-slate-900">Imagem de Capa</h2>
+<p class="text-xs text-slate-500 mt-0.5">Imagem panorâmica no topo da loja. Recomendado: 1920x600px.</p>
+</div>
+<span class="text-[10px] font-bold text-slate-600 bg-slate-100 px-2 py-0.5 rounded">Proporção 16:5 aplicada</span>
+</div>
+<!-- Banner Preview Box with Styled Burger Graphic Background -->
+<div class="relative w-full h-36 sm:h-44 rounded-xl overflow-hidden border border-slate-200 bg-slate-900 flex items-end p-4 group">
+<!-- Cover Image Simulator -->
+<div class="absolute inset-0 bg-cover bg-center opacity-85" style="background-image: linear-gradient(to top, rgba(18,24,38,0.9) 0%, rgba(18,24,38,0.2) 60%, rgba(0,0,0,0.4) 100%), radial-gradient(circle at center, #E85D2A 0%, #1e1b18 80%);">
+<div class="w-full h-full flex items-center justify-center text-amber-100/15 text-6xl font-black select-none tracking-widest">
+                    NEXT BURGER
+                  </div>
+</div>
+<div class="relative z-10 flex items-center justify-between w-full">
+<div>
+<span class="text-[10px] font-bold uppercase tracking-wider bg-black/40 backdrop-blur-xs text-white px-2 py-0.5 rounded border border-white/20">Capa Ativa</span>
+<h3 class="text-white font-bold text-sm sm:text-base mt-1 drop-shadow-sm">Foto Panorâmica: Burgers Artesanais &amp; Grelha</h3>
+</div>
+<div class="flex items-center gap-2">
+<button class="px-3 py-1.5 text-xs font-semibold text-slate-900 bg-white/95 backdrop-blur-xs rounded-lg hover:bg-white transition shadow-sm">
+                      Substituir capa
+                    </button>
+<button class="px-2.5 py-1.5 text-xs font-semibold text-rose-200 bg-rose-950/60 hover:bg-rose-950/90 rounded-lg transition">
+                      Remover
+                    </button>
+</div>
+</div>
+</div>
+</div>
+<!-- 4. CARD: Store Info & Promotional Banner -->
+<div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-5">
+<h2 class="text-base font-bold text-slate-900">Informações Básicas &amp; Destaques</h2>
+<div class="space-y-4">
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-1">Nome de Exibição da Loja</label>
+<input class="w-full text-xs font-semibold text-slate-800 px-3 py-2 rounded-lg border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500" type="text" value="Next Burger Express"/>
+</div>
+<div>
+<div class="flex justify-between items-center mb-1">
+<label class="block text-xs font-bold text-slate-700">Slogan / Bio do Restaurante</label>
+<span class="text-[10px] text-slate-400">102/160 caracteres</span>
+</div>
+<textarea class="w-full text-xs text-slate-800 px-3 py-2 rounded-lg border border-slate-200 focus:border-brand-500 focus:ring-1 focus:ring-brand-500" rows="2">Hambúrgueres artesanais, combos especiais e batatas rústicas quentinhas entregues com agilidade.</textarea>
+</div>
+<!-- Banner Promo Toggle -->
+<div class="pt-3 border-t border-slate-100">
+<div class="flex items-center justify-between">
+<div>
+<span class="text-xs font-bold text-slate-900">Exibir Banner Promocional no Topo da Loja</span>
+<p class="text-[11px] text-slate-500">Fita colorida de alta conversão exibida acima do cardápio.</p>
+</div>
+<!-- Active Switch -->
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-brand-500"></div>
+</label>
+</div>
+<div class="mt-3 grid grid-cols-1 sm:grid-cols-3 gap-3">
+<div class="sm:col-span-2">
+<label class="block text-[11px] font-semibold text-slate-600 mb-1">Texto do Banner</label>
+<input class="w-full text-xs font-medium text-slate-800 px-3 py-1.5 rounded-lg border border-slate-200" type="text" value="Terça do Burger • 20% OFF em todos os combos artesanais!"/>
+</div>
+<div>
+<label class="block text-[11px] font-semibold text-slate-600 mb-1">Texto do Botão CTA</label>
+<input class="w-full text-xs font-medium text-slate-800 px-3 py-1.5 rounded-lg border border-slate-200" type="text" value="Pedir agora"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 5. CARD: Featured Products on Home -->
+<div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-4">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="text-base font-bold text-slate-900">Produtos em Destaque na Home</h2>
+<p class="text-xs text-slate-500 mt-0.5">Exibidos em carrossel no topo da loja pública antes das categorias (4 de 6 selecionados).</p>
+</div>
+<button class="text-xs font-bold text-brand-600 hover:text-brand-700">
+                  + Selecionar produtos
+                </button>
+</div>
+<!-- Reorderable List -->
+<div class="space-y-2">
+<!-- Item 1 -->
+<div class="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition">
+<div class="flex items-center space-x-3">
+<span class="cursor-grab text-slate-400 hover:text-slate-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 8h16M4 16h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+<div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center text-lg">🍔</div>
+<div>
+<h4 class="text-xs font-bold text-slate-900">X-Bacon Artesanal Especial</h4>
+<p class="text-[11px] text-slate-500">Blend 180g, cheddar duplo, bacon crocante no brioche</p>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="text-xs font-bold text-slate-900 font-mono">R$ 34,90</span>
+<span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Destaque 1</span>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition">
+<div class="flex items-center space-x-3">
+<span class="cursor-grab text-slate-400 hover:text-slate-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 8h16M4 16h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+<div class="w-10 h-10 rounded-lg bg-amber-100 flex items-center justify-center text-lg">🍟</div>
+<div>
+<h4 class="text-xs font-bold text-slate-900">Batata Rústica com Cheddar &amp; Bacon</h4>
+<p class="text-[11px] text-slate-500">Corte rústico artesanal temperada com páprica</p>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="text-xs font-bold text-slate-900 font-mono">R$ 24,90</span>
+<span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Destaque 2</span>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition">
+<div class="flex items-center space-x-3">
+<span class="cursor-grab text-slate-400 hover:text-slate-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 8h16M4 16h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+<div class="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center text-lg">🥤</div>
+<div>
+<h4 class="text-xs font-bold text-slate-900">Combo Família Smash Duplo + Refri</h4>
+<p class="text-[11px] text-slate-500">2 Smash Burgers + 2 Fritas Pequenas + 2 Latas</p>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="text-xs font-bold text-slate-900 font-mono">R$ 69,90</span>
+<span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Destaque 3</span>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="flex items-center justify-between p-3 rounded-xl border border-slate-200 bg-white hover:border-slate-300 transition">
+<div class="flex items-center space-x-3">
+<span class="cursor-grab text-slate-400 hover:text-slate-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 8h16M4 16h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</span>
+<div class="w-10 h-10 rounded-lg bg-slate-100 flex items-center justify-center text-lg">🥫</div>
+<div>
+<h4 class="text-xs font-bold text-slate-900">Coca-Cola Gelada 350ml</h4>
+<p class="text-[11px] text-slate-500">Lata original trincando de gelada</p>
+</div>
+</div>
+<div class="flex items-center space-x-3">
+<span class="text-xs font-bold text-slate-900 font-mono">R$ 7,90</span>
+<span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200">Destaque 4</span>
+</div>
+</div>
+</div>
+</div>
+<!-- 6. CARD: Categories Order & Store Footer -->
+<div class="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-xs space-y-5">
+<div>
+<h2 class="text-base font-bold text-slate-900">Ordem das Categorias &amp; Informações do Rodapé</h2>
+<p class="text-xs text-slate-500 mt-0.5">Defina a sequência de visualização no cardápio público.</p>
+</div>
+<!-- Reorderable pills -->
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-2">Ordem das Categorias (Arraste para organizar)</label>
+<div class="flex flex-wrap gap-2">
+<span class="cursor-move inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold border border-slate-200">
+                    🍔 Hambúrgueres
+                  </span>
+<span class="cursor-move inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold border border-slate-200">
+                    🍟 Porções
+                  </span>
+<span class="cursor-move inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold border border-slate-200">
+                    🥤 Bebidas
+                  </span>
+<span class="cursor-move inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold border border-slate-200">
+                    🍨 Sobremesas
+                  </span>
+<span class="cursor-move inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-lg text-xs font-semibold border border-slate-200">
+                    🥗 Acompanhamentos
+                  </span>
+</div>
+</div>
+<!-- Visible footer items -->
+<div class="pt-4 border-t border-slate-100 space-y-3">
+<label class="block text-xs font-bold text-slate-700">Informações visíveis no rodapé da loja</label>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs text-slate-700">
+<label class="flex items-center space-x-2">
+<input checked="" class="rounded border-slate-300 text-brand-500 focus:ring-brand-500" type="checkbox"/>
+<span>Endereço completo da loja física</span>
+</label>
+<label class="flex items-center space-x-2">
+<input checked="" class="rounded border-slate-300 text-brand-500 focus:ring-brand-500" type="checkbox"/>
+<span>Horários de atendimento e funcionamento</span>
+</label>
+<label class="flex items-center space-x-2">
+<input checked="" class="rounded border-slate-300 text-brand-500 focus:ring-brand-500" type="checkbox"/>
+<span>Botão de WhatsApp e Telefone</span>
+</label>
+<label class="flex items-center space-x-2">
+<input checked="" class="rounded border-slate-300 text-brand-500 focus:ring-brand-500" type="checkbox"/>
+<span>Formas de Pagamento aceitas (Pix, Cartões)</span>
+</label>
+</div>
+</div>
+<!-- Social Links -->
+<div class="pt-4 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-2 gap-3">
+<div>
+<label class="block text-[11px] font-semibold text-slate-600 mb-1">Instagram do Restaurante</label>
+<div class="relative">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400 text-xs">@</span>
+<input class="w-full text-xs text-slate-800 pl-7 pr-3 py-1.5 rounded-lg border border-slate-200" type="text" value="nextburgerexpress"/>
+</div>
+</div>
+<div>
+<label class="block text-[11px] font-semibold text-slate-600 mb-1">WhatsApp de Pedidos</label>
+<input class="w-full text-xs text-slate-800 px-3 py-1.5 rounded-lg border border-slate-200" type="text" value="(11) 99999-8888"/>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN: Realtime Live Preview & Publication (approx 38%) -->
+<div class="xl:col-span-5 space-y-6">
+<!-- 1. CARD: Publication Status & Public Link -->
+<div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-3">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+<span class="text-xs font-bold text-slate-900">Loja Publicada e Online</span>
+</div>
+<span class="text-[10px] font-semibold text-slate-500">Sincronização instantânea</span>
+</div>
+<div class="flex items-center gap-2 p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+<svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<input class="w-full text-xs font-mono font-medium text-slate-700 bg-transparent border-none p-0 focus:ring-0" readonly="" type="text" value="menunext.com.br/nextburger"/>
+<button class="px-2.5 py-1 text-[11px] font-bold text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-100 shadow-2xs">
+                  Copiar
+                </button>
+</div>
+</div>
+<!-- 2. CARD: Live Interactive Mockup Simulator -->
+<div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs space-y-4">
+<!-- Device Switcher Header -->
+<div class="flex items-center justify-between pb-2 border-b border-slate-100">
+<div class="flex items-center space-x-1.5">
+<span class="w-2 h-2 rounded-full bg-brand-500"></span>
+<span class="text-xs font-bold text-slate-900">Pré-visualização em Tempo Real</span>
+</div>
+<!-- Switch Buttons -->
+<div class="inline-flex bg-slate-100 p-1 rounded-lg">
+<button class="px-2.5 py-1 text-[11px] font-bold bg-white text-slate-900 rounded-md shadow-xs flex items-center gap-1">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Mobile
+                  </button>
+<button class="px-2.5 py-1 text-[11px] font-medium text-slate-500 hover:text-slate-800 rounded-md transition flex items-center gap-1">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+                    Desktop
+                  </button>
+</div>
+</div>
+<!-- SMARTPHONE DEVICE WRAPPER -->
+<div class="flex justify-center py-2">
+<div class="iphone-frame w-[320px] h-[640px] bg-white overflow-hidden relative flex flex-col border border-slate-300 select-none">
+<!-- Phone Notch / Dynamic Island -->
+<div class="w-full bg-[#1e293b] h-6 flex items-center justify-between px-6 text-white text-[10px] font-semibold shrink-0">
+<span>9:41</span>
+<div class="w-18 h-3.5 bg-black rounded-full"></div>
+<div class="flex items-center space-x-1">
+<span class="text-[9px]">5G</span>
+<div class="w-3.5 h-2 border border-white rounded-[2px] p-0.5"><div class="w-full h-full bg-white"></div></div>
+</div>
+</div>
+<!-- PHONE CONTENT (SCROLLABLE SIMULATOR) -->
+<div class="flex-1 overflow-y-auto no-scrollbar bg-[#FFF9F5] flex flex-col">
+<!-- Store Header Banner in Phone -->
+<div class="relative h-28 bg-gradient-to-r from-orange-700 to-amber-600 shrink-0">
+<div class="absolute inset-0 bg-black/25"></div>
+<div class="absolute -bottom-5 left-4 flex items-end space-x-3">
+<div class="w-14 h-14 rounded-xl bg-amber-50 border-2 border-white shadow-md flex flex-col items-center justify-center p-1 text-center">
+<span class="text-[9px] font-black text-amber-900 leading-none">NEXT</span>
+<span class="text-[8px] font-bold text-brand-600 leading-none mt-0.5">BURGER</span>
+</div>
+</div>
+</div>
+<!-- Store Info Under Header -->
+<div class="pt-6 px-4 pb-2">
+<div class="flex items-center justify-between">
+<h3 class="text-sm font-bold text-[#121826]">Next Burger Express</h3>
+<span class="text-[9px] font-semibold text-emerald-700 bg-emerald-100 px-1.5 py-0.5 rounded">🟢 Aberto</span>
+</div>
+<p class="text-[10px] text-slate-500 line-clamp-1 mt-0.5">Hambúrgueres artesanais, combos especiais e batatas rústicas.</p>
+<div class="flex items-center gap-2 mt-1 text-[10px] text-slate-600">
+<span>⭐ 4.9 (420)</span>
+<span>•</span>
+<span>35-50 min</span>
+<span>•</span>
+<span class="text-emerald-700 font-semibold">Frete R$ 5,00</span>
+</div>
+</div>
+<!-- Promo Strip in Phone -->
+<div class="mx-3 my-1.5 p-2 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-between text-[10px]">
+<div class="flex items-center space-x-1.5 text-amber-900 font-bold">
+<span>🔥</span>
+<span class="line-clamp-1">Terça do Burger • 20% OFF</span>
+</div>
+<span class="text-[9px] font-bold text-white bg-brand-500 px-2 py-0.5 rounded shadow-2xs shrink-0">Aproveitar</span>
+</div>
+<!-- Delivery / Pickup Tabs -->
+<div class="px-3 pt-1">
+<div class="grid grid-cols-2 bg-slate-200/60 p-0.5 rounded-lg text-[10px] font-bold text-center">
+<div class="py-1 bg-white text-slate-900 rounded-md shadow-2xs">🛵 Entrega (35 min)</div>
+<div class="py-1 text-slate-500">🛍️ Retirada (15 min)</div>
+</div>
+</div>
+<!-- Horizontal Categories Bar -->
+<div class="px-3 py-2 flex items-center space-x-2 overflow-x-auto no-scrollbar shrink-0 text-[10px] font-bold">
+<span class="px-2.5 py-1 bg-brand-500 text-white rounded-full whitespace-nowrap shadow-2xs">🍔 Hambúrgueres</span>
+<span class="px-2.5 py-1 bg-white text-slate-700 border border-slate-200 rounded-full whitespace-nowrap">🍟 Porções</span>
+<span class="px-2.5 py-1 bg-white text-slate-700 border border-slate-200 rounded-full whitespace-nowrap">🥤 Bebidas</span>
+</div>
+<!-- Product Cards List (Compact) -->
+<div class="px-3 space-y-2 pb-16">
+<!-- Product 1 -->
+<div class="p-2.5 bg-white rounded-xl border border-slate-200 shadow-2xs flex gap-2">
+<div class="flex-1">
+<h4 class="text-[11px] font-bold text-[#121826]">X-Bacon Especial</h4>
+<p class="text-[9px] text-slate-500 line-clamp-2 mt-0.5">Blend artesanal 180g, cheddar cremoso e fatias crocantes de bacon no pão brioche amanteigado.</p>
+<div class="flex items-center justify-between mt-2">
+<span class="text-xs font-extrabold text-[#E85D2A] font-mono">R$ 34,90</span>
+<button class="px-2 py-0.5 text-[10px] font-bold text-white bg-brand-500 rounded-md shadow-2xs">+ Adicionar</button>
+</div>
+</div>
+<div class="w-16 h-16 rounded-lg bg-orange-50 border border-orange-200 flex items-center justify-center text-2xl shrink-0">
+                          🍔
+                        </div>
+</div>
+<!-- Product 2 -->
+<div class="p-2.5 bg-white rounded-xl border border-slate-200 shadow-2xs flex gap-2">
+<div class="flex-1">
+<h4 class="text-[11px] font-bold text-[#121826]">Batata Rústica Cheddar</h4>
+<p class="text-[9px] text-slate-500 line-clamp-2 mt-0.5">Porção generosa de fritas rústicas crocantes cobertas com melt de cheddar inglês e farofa de bacon.</p>
+<div class="flex items-center justify-between mt-2">
+<span class="text-xs font-extrabold text-[#E85D2A] font-mono">R$ 24,90</span>
+<button class="px-2 py-0.5 text-[10px] font-bold text-white bg-brand-500 rounded-md shadow-2xs">+ Adicionar</button>
+</div>
+</div>
+<div class="w-16 h-16 rounded-lg bg-amber-50 border border-amber-200 flex items-center justify-center text-2xl shrink-0">
+                          🍟
+                        </div>
+</div>
+</div>
+</div>
+<!-- Fixed Bottom Navigation Bar & Cart Badge in Phone -->
+<div class="absolute bottom-0 inset-x-0 bg-white border-t border-slate-200 py-1.5 px-3 flex items-center justify-around text-center shrink-0">
+<div class="text-brand-500 flex flex-col items-center">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg>
+<span class="text-[9px] font-bold">Início</span>
+</div>
+<div class="text-slate-400 flex flex-col items-center">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[9px]">Cardápio</span>
+</div>
+<div class="text-slate-400 flex flex-col items-center relative">
+<span class="absolute -top-1 right-1 w-3.5 h-3.5 bg-brand-500 text-white rounded-full text-[8px] font-black flex items-center justify-center">2</span>
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[9px]">Sacola</span>
+</div>
+<div class="text-slate-400 flex flex-col items-center">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[9px]">Conta</span>
+</div>
+</div>
+</div>
+</div>
+<p class="text-center text-[11px] text-slate-400 pt-1">Pré-visualização fiel atualizada com base na paleta sugerida pelo logo e dados configurados.</p>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- END: MainContentArea -->
+</div>
+<!-- END: MainContainer -->
+<!-- BEGIN: MainFooter -->
+<footer class="bg-white border-t border-slate-200 py-4 px-4 sm:px-8 text-xs text-slate-500 flex flex-col sm:flex-row items-center justify-between gap-3">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-slate-900">Menu<span class="text-brand-500">Next</span></span>
+<span>• A plataforma definitiva de canal próprio para restaurantes e dark kitchens.</span>
+</div>
+<div class="flex items-center space-x-4 text-xs font-medium">
+<a class="hover:text-slate-900 transition" href="#">Central de Ajuda</a>
+<a class="hover:text-slate-900 transition" href="#">Termos de Uso</a>
+<a class="hover:text-slate-900 transition" href="#">Privacidade &amp; LGPD</a>
+<span class="inline-flex items-center text-emerald-600 font-semibold gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Infraestrutura Ativa
+      </span>
+<span>© 2026 MenuNext Tecnologia.</span>
+</div>
+</footer>
+<!-- END: MainFooter -->
+</body></html>

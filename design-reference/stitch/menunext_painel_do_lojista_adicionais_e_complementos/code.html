@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary-fixed-variant":"#005236","inverse-on-surface":"#edf0ff","outline":"#8f7067","secondary-container":"#d8391e","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#3f0400","on-secondary":"#ffffff","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-tint":"#af3100","inverse-surface":"#2a303f","tertiary":"#006947","on-primary-fixed":"#3a0a00","primary":"#ab2f00","error":"#ba1a1a","surface-bright":"#faf8ff","on-primary-fixed-variant":"#862300","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","primary-container":"#d53e02","surface-container-lowest":"#ffffff","outline-variant":"#e4beb4","on-primary-container":"#fffbff","primary-fixed":"#ffdbd1","on-surface":"#151b29","on-secondary-fixed-variant":"#8f1200","on-error-container":"#93000a","on-tertiary-container":"#f5fff6","primary-fixed-dim":"#ffb59f","on-error":"#ffffff","surface-container":"#e9edff","surface-container-high":"#e2e8fc","secondary":"#b41e04","surface-dim":"#d4d9ed","surface-variant":"#dde2f6","background":"#faf8ff","inverse-primary":"#ffb59f","error-container":"#ffdad6","surface":"#faf8ff","secondary-fixed-dim":"#ffb4a5","secondary-fixed":"#ffdad3","on-secondary-container":"#fffbff","surface-container-low":"#f1f3ff","on-background":"#151b29","tertiary-container":"#00855b","surface-container-highest":"#dde2f6","on-surface-variant":"#5b4139"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"container-max":"1440px","space-sm":"0.75rem","space-xl":"2rem","space-2xl":"3rem","space-3xl":"4rem","space-xs":"0.5rem","space-lg":"1.5rem","gutter":"1.5rem","space-2xs":"0.25rem","space-md":"1rem"},fontFamily:{"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-md":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-xs" data-path="landing-page" href="#"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></a><nav class="hidden lg:flex items-center gap-space-lg ml-space-md" data-active-classes="text-primary font-label-lg font-bold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="recursos" href="#">Recursos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="como-funciona" href="#">Como Funciona</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Planos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">FAQ</a></nav></div><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_3px_0_rgba(18,24,38,0.05)]" data-path="login" href="#">Entrar</a><a class="inline-flex items-center justify-center h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.3)]" data-path="cadastro" href="#">Criar minha loja grátis</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full">
+<!-- LOJISTA SUB-HEADER / STORE STATUS STRIP -->
+<div class="w-full bg-surface-container-lowest shadow-sm z-30">
+<div class="max-w-[1440px] mx-auto px-gutter py-space-xs flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></div>
+<span class="font-label-md text-label-md text-tertiary">Loja Aberta</span>
+</div>
+<div class="h-4 w-px bg-surface-container-high"></div>
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Next Burger Express</span>
+<span class="bg-surface-container px-space-xs py-0.5 rounded-full font-label-sm text-label-sm text-on-surface-variant">Matriz Delivery</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<a class="inline-flex items-center gap-space-2xs text-primary hover:text-primary-container font-label-md text-label-md transition-colors" href="#">
+<span>Acessar loja pública</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+<div class="h-4 w-px bg-surface-container-high"></div>
+<button class="relative p-1.5 rounded-lg text-on-surface-variant hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 rounded-full bg-error"></span>
+</button>
+<div class="flex items-center gap-space-xs pl-space-xs">
+<div class="w-7 h-7 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-label-md text-label-md font-bold">
+            J
+          </div>
+<div class="hidden sm:flex flex-col text-left">
+<span class="font-label-sm text-label-sm text-on-surface font-semibold leading-tight">Jonatha Silva</span>
+<span class="font-body-sm text-[10px] text-on-surface-variant leading-tight">Administrador</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- WORKSPACE WRAPPER (SIDEBAR + MAIN CONTENT VIEW) -->
+<div class="max-w-[1440px] mx-auto w-full px-gutter py-space-lg flex items-start gap-space-lg">
+<!-- LEFT SIDEBAR NAIGATION (PAINEL DO LOJISTA) -->
+<aside class="hidden lg:flex flex-col w-64 shrink-0 bg-surface-container-lowest rounded-xl shadow-sm p-space-sm gap-space-2xs">
+<div class="px-space-xs py-space-2xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Gestão Operacional</span>
+</div>
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span>Início</span>
+</a>
+<a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span>Pedidos</span>
+</div>
+<span class="bg-primary text-on-primary font-label-sm text-[10px] font-bold px-2 py-0.5 rounded-full">7</span>
+</a>
+<!-- CARDÁPIO EXPANDED ACCORDION -->
+<div class="flex flex-col rounded-xl bg-surface-container-low/60 p-1">
+<button class="w-full flex items-center justify-between px-space-xs py-2 rounded-lg text-on-surface font-label-md text-label-md font-bold" type="button">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] text-primary">restaurant_menu</span>
+<span>Cardápio</span>
+</div>
+<span class="material-symbols-outlined text-[18px]">expand_less</span>
+</button>
+<div class="flex flex-col pl-7 pr-1 pb-1 space-y-1">
+<a class="px-space-xs py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors font-body-sm text-body-sm" href="#">
+              Categorias
+            </a>
+<a class="px-space-xs py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors font-body-sm text-body-sm" href="#">
+              Produtos
+            </a>
+<!-- ACTIVE ROUTE ITEM -->
+<a class="px-space-xs py-1.5 rounded-lg bg-primary-fixed/50 text-primary font-label-md text-label-md font-bold flex items-center justify-between" href="#">
+<span>Adicionais e Complementos</span>
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+</a>
+<a class="px-space-xs py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors font-body-sm text-body-sm" href="#">
+              Combos
+            </a>
+</div>
+</div>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">two_wheeler</span>
+<span>Delivery</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+<span>Frente de Caixa (PDV)</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span>Clientes</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">query_stats</span>
+<span>Vendas &amp; Relatórios</span>
+</a>
+<a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]">campaign</span>
+<span>Marketing</span>
+</div>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">palette</span>
+<span>Aparência</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span>Horários</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">credit_card</span>
+<span>Pagamentos</span>
+</a>
+<a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span>Configurações</span>
+</div>
+<span class="material-symbols-outlined text-[16px]">chevron_right</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+<span>Usuários</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+<span>Ajuda</span>
+</a>
+</nav>
+<!-- RESTAURANT FOOTER WIDGET -->
+<div class="mt-auto pt-space-sm border-t border-surface-container">
+<div class="bg-surface-container-low rounded-xl p-space-sm flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-lg bg-primary-container/20 flex items-center justify-center text-primary font-headline-sm">
+            🍔
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface font-bold truncate">Next Burger Express</span>
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-body-sm text-[11px] text-tertiary font-medium">Loja Aberta</span>
+</div>
+</div>
+</div>
+</div>
+</aside>
+<!-- CONTENT WORKSPACE -->
+<div class="flex-1 flex flex-col min-w-0 gap-space-lg">
+<!-- BREADCRUMB & PAGE HEADER -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-2xs text-on-surface-variant font-label-sm text-label-sm">
+<span>Painel</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span>Cardápio</span>
+<span class="material-symbols-outlined text-[14px]">chevron_right</span>
+<span class="text-primary font-bold">Adicionais e Complementos</span>
+</div>
+<div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-space-md mt-1">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-extrabold tracking-tight">
+              Adicionais e Complementos
+            </h1>
+<p class="font-body-md text-body-md text-on-surface-variant mt-0.5">
+              Crie grupos de opções e complementos reutilizáveis para personalizar os produtos do seu restaurante (acompanhamentos, molhos, pontos de preparo e extras).
+            </p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="inline-flex items-center gap-space-2xs px-space-md py-2.5 rounded-xl bg-surface-container-lowest hover:bg-surface-container font-label-md text-label-md text-on-surface transition-all shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">lightbulb</span>
+<span>Como funcionam os grupos?</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-lg py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-bold transition-all shadow-md active:scale-95" id="btn-open-drawer" type="button">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span>Novo grupo</span>
+</button>
+</div>
+</div>
+</div>
+<!-- METRIC CARDS (4 TILES) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-space-md">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total de Grupos</span>
+<span class="font-headline-md text-headline-md font-extrabold text-on-surface mt-1">14 grupos</span>
+<span class="font-body-sm text-[11px] text-tertiary font-medium mt-0.5">12 ativos · 2 inativos</span>
+</div>
+<div class="w-11 h-11 rounded-xl bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">folder_copy</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Opções Cadastradas</span>
+<span class="font-headline-md text-headline-md font-extrabold text-on-surface mt-1">58 opções</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Distribuição ativa</span>
+</div>
+<div class="w-11 h-11 rounded-xl bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">checklist</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Produtos Vinculados</span>
+<span class="font-headline-md text-headline-md font-extrabold text-on-surface mt-1">31 produtos</span>
+<span class="font-body-sm text-[11px] text-tertiary font-medium mt-0.5">Com adicionais ativos</span>
+</div>
+<div class="w-11 h-11 rounded-xl bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">link</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex items-center justify-between">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Média por Produto</span>
+<span class="font-headline-md text-headline-md font-extrabold text-on-surface mt-1">2.4 grupos</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Reutilização inteligente</span>
+</div>
+<div class="w-11 h-11 rounded-xl bg-surface-container-low flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[24px]">hub</span>
+</div>
+</div>
+</div>
+<!-- FILTER & CONTROL BAR -->
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm flex flex-col md:flex-row items-center justify-between gap-space-sm">
+<div class="flex flex-wrap items-center gap-space-sm w-full md:w-auto">
+<!-- SEARCH FIELD -->
+<div class="relative w-full sm:w-72">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px]">search</span>
+<input class="w-full h-10 pl-9 pr-3 rounded-xl bg-surface-container-low text-on-surface placeholder:text-on-surface-variant font-body-sm text-body-sm focus:outline-none focus:ring-2 focus:ring-primary/20" placeholder="Buscar grupo por nome..." type="text"/>
+</div>
+<!-- SEGMENTED STATUS -->
+<div class="inline-flex bg-surface-container-low p-1 rounded-xl font-label-sm text-label-sm">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface font-bold shadow-xs" type="button">
+              Todos (14)
+            </button>
+<button class="px-3 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+              Ativos (12)
+            </button>
+<button class="px-3 py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+              Inativos (2)
+            </button>
+</div>
+<!-- RULE SELECT -->
+<div class="relative">
+<select class="h-10 px-3 pr-8 rounded-xl bg-surface-container-low text-on-surface font-body-sm text-body-sm appearance-none focus:outline-none focus:ring-2 focus:ring-primary/20">
+<option>Todas as regras</option>
+<option>Obrigatórios</option>
+<option>Opcionais</option>
+<option>Escolha Única</option>
+<option>Múltipla Escolha</option>
+</select>
+<span class="material-symbols-outlined absolute right-2.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[18px] pointer-events-none">expand_more</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm shrink-0">
+<span class="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+<span>14 grupos cadastrados</span>
+</div>
+</div>
+<!-- MAIN DATA TABLE FOR GROUPS -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/70 text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-3 px-4 w-12 text-center">#</th>
+<th class="py-3 px-4">Grupo e Descrição</th>
+<th class="py-3 px-4">Opções Configurada</th>
+<th class="py-3 px-4">Regras de Escolha</th>
+<th class="py-3 px-4">Produtos Vinculados</th>
+<th class="py-3 px-4">Status</th>
+<th class="py-3 px-4 text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container font-body-sm text-body-sm">
+<!-- ITEM 1 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="py-4 px-4 text-center text-on-surface-variant cursor-grab">
+<span class="material-symbols-outlined text-[18px] opacity-40 group-hover:opacity-100">drag_indicator</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Escolha do Acompanhamento</span>
+<span class="bg-primary-fixed text-on-primary-fixed-variant text-[10px] font-bold px-2 py-0.5 rounded-full">Pratos Principais</span>
+</div>
+<span class="text-on-surface-variant font-body-sm text-[12px] mt-0.5">Selecione o acompanhamento principal do seu prato</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col gap-1">
+<span class="font-semibold text-on-surface">4 opções cadastradas</span>
+<div class="flex flex-wrap gap-1 max-w-xs">
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Arroz branco</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Batata rústica</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">+2 outras</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-[11px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                    Obrigatório · Exato 1 (1/1)
+                  </span>
+</td>
+<td class="py-4 px-4">
+<button class="inline-flex items-center gap-1 text-primary hover:underline font-label-sm text-label-sm font-semibold" type="button">
+<span class="material-symbols-outlined text-[16px]">fastfood</span>
+<span>8 produtos</span>
+</button>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<button class="w-9 h-5 rounded-full bg-tertiary p-0.5 relative transition-colors" type="button">
+<span class="block w-4 h-4 rounded-full bg-white ml-auto"></span>
+</button>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">● Ativo</span>
+</div>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-primary transition-colors" title="Editar" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" title="Duplicar" type="button">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ITEM 2 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="py-4 px-4 text-center text-on-surface-variant cursor-grab">
+<span class="material-symbols-outlined text-[18px] opacity-40 group-hover:opacity-100">drag_indicator</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Molhos Especiais</span>
+<span class="bg-surface-container text-on-surface-variant text-[10px] font-bold px-2 py-0.5 rounded-full">Geral</span>
+</div>
+<span class="text-on-surface-variant font-body-sm text-[12px] mt-0.5">Molhos artesanais para acompanhar sua refeição</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col gap-1">
+<span class="font-semibold text-on-surface">5 opções cadastradas</span>
+<div class="flex flex-wrap gap-1 max-w-xs">
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Maionese verde</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Barbecue</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Chimichurri</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">+2</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-[11px] font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                    Opcional · Até 2 (0/2)
+                  </span>
+</td>
+<td class="py-4 px-4">
+<button class="inline-flex items-center gap-1 text-primary hover:underline font-label-sm text-label-sm font-semibold" type="button">
+<span class="material-symbols-outlined text-[16px]">fastfood</span>
+<span>12 produtos</span>
+</button>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<button class="w-9 h-5 rounded-full bg-tertiary p-0.5 relative transition-colors" type="button">
+<span class="block w-4 h-4 rounded-full bg-white ml-auto"></span>
+</button>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">● Ativo</span>
+</div>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ITEM 3 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="py-4 px-4 text-center text-on-surface-variant cursor-grab">
+<span class="material-symbols-outlined text-[18px] opacity-40 group-hover:opacity-100">drag_indicator</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Ponto da Carne</span>
+<span class="bg-secondary-fixed text-on-secondary-fixed-variant text-[10px] font-bold px-2 py-0.5 rounded-full">Grelhados</span>
+</div>
+<span class="text-on-surface-variant font-body-sm text-[12px] mt-0.5">Como você prefere o preparo da sua carne</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col gap-1">
+<span class="font-semibold text-on-surface">4 opções cadastradas</span>
+<div class="flex flex-wrap gap-1 max-w-xs">
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Mal passado</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Ao ponto</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">+2</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-error-container text-on-error-container font-label-sm text-[11px] font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                    Obrigatório · Exato 1 (1/1)
+                  </span>
+</td>
+<td class="py-4 px-4">
+<button class="inline-flex items-center gap-1 text-primary hover:underline font-label-sm text-label-sm font-semibold" type="button">
+<span class="material-symbols-outlined text-[16px]">fastfood</span>
+<span>6 produtos</span>
+</button>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<button class="w-9 h-5 rounded-full bg-tertiary p-0.5 relative transition-colors" type="button">
+<span class="block w-4 h-4 rounded-full bg-white ml-auto"></span>
+</button>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">● Ativo</span>
+</div>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ITEM 4 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="py-4 px-4 text-center text-on-surface-variant cursor-grab">
+<span class="material-symbols-outlined text-[18px] opacity-40 group-hover:opacity-100">drag_indicator</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Bebida do Combo</span>
+<span class="bg-primary-fixed text-on-primary-fixed-variant text-[10px] font-bold px-2 py-0.5 rounded-full">Combos</span>
+</div>
+<span class="text-on-surface-variant font-body-sm text-[12px] mt-0.5">Escolha a sua bebida de 350ml para acompanhar</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col gap-1">
+<span class="font-semibold text-on-surface">6 opções cadastradas</span>
+<div class="flex flex-wrap gap-1 max-w-xs">
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Coca-Cola</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Guaraná</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">+4</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-[11px] font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                    Opcional · Até 1 (0/1)
+                  </span>
+</td>
+<td class="py-4 px-4">
+<button class="inline-flex items-center gap-1 text-primary hover:underline font-label-sm text-label-sm font-semibold" type="button">
+<span class="material-symbols-outlined text-[16px]">fastfood</span>
+<span>5 produtos</span>
+</button>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<button class="w-9 h-5 rounded-full bg-tertiary p-0.5 relative transition-colors" type="button">
+<span class="block w-4 h-4 rounded-full bg-white ml-auto"></span>
+</button>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">● Ativo</span>
+</div>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ITEM 5 -->
+<tr class="hover:bg-surface-container-low/40 transition-colors group">
+<td class="py-4 px-4 text-center text-on-surface-variant cursor-grab">
+<span class="material-symbols-outlined text-[18px] opacity-40 group-hover:opacity-100">drag_indicator</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Turbine seu Prato (Extras)</span>
+<span class="bg-tertiary-fixed text-on-tertiary-fixed-variant text-[10px] font-bold px-2 py-0.5 rounded-full">Rentabilidade</span>
+</div>
+<span class="text-on-surface-variant font-body-sm text-[12px] mt-0.5">Ingredientes extras e acréscimos especiais</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col gap-1">
+<span class="font-semibold text-on-surface">6 opções pagas</span>
+<div class="flex flex-wrap gap-1 max-w-xs">
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Bacon +R$5</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Queijo +R$4,50</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">+4</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-[11px] font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                    Opcional · Até 4 (0/4)
+                  </span>
+</td>
+<td class="py-4 px-4">
+<button class="inline-flex items-center gap-1 text-primary hover:underline font-label-sm text-label-sm font-semibold" type="button">
+<span class="material-symbols-outlined text-[16px]">fastfood</span>
+<span>9 produtos</span>
+</button>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<button class="w-9 h-5 rounded-full bg-tertiary p-0.5 relative transition-colors" type="button">
+<span class="block w-4 h-4 rounded-full bg-white ml-auto"></span>
+</button>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">● Ativo</span>
+</div>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ITEM 6 (INACTIVE EXAMPLE) -->
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low/50 transition-colors group opacity-85">
+<td class="py-4 px-4 text-center text-on-surface-variant cursor-grab">
+<span class="material-symbols-outlined text-[18px] opacity-30">drag_indicator</span>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Borda Recheada (Pizzas)</span>
+<span class="bg-surface-container-highest text-on-surface-variant text-[10px] font-bold px-2 py-0.5 rounded-full">Pizzas</span>
+</div>
+<span class="text-on-surface-variant font-body-sm text-[12px] mt-0.5">Recheio especial para a borda da sua pizza artesanal</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="flex flex-col gap-1">
+<span class="font-semibold text-on-surface">3 opções cadastradas</span>
+<div class="flex flex-wrap gap-1 max-w-xs">
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Catupiry original</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Cheddar cremoso</span>
+<span class="bg-surface-container text-on-surface-variant px-1.5 py-0.5 rounded text-[11px]">Chocolate</span>
+</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span>
+                    Opcional · Até 1 (0/1)
+                  </span>
+</td>
+<td class="py-4 px-4">
+<button class="inline-flex items-center gap-1 text-on-surface-variant hover:underline font-label-sm text-label-sm font-semibold" type="button">
+<span class="material-symbols-outlined text-[16px]">fastfood</span>
+<span>4 produtos</span>
+</button>
+</td>
+<td class="py-4 px-4">
+<div class="flex items-center gap-2">
+<button class="w-9 h-5 rounded-full bg-surface-container-highest p-0.5 relative transition-colors" type="button">
+<span class="block w-4 h-4 rounded-full bg-white"></span>
+</button>
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Inativo</span>
+</div>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="inline-flex items-center gap-1">
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-primary transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+</button>
+<button class="p-1.5 rounded-lg hover:bg-surface-container text-on-surface-variant hover:text-on-surface transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- TABLE FOOTER / PAGINATION -->
+<div class="p-space-sm bg-surface-container-low/40 flex flex-col sm:flex-row items-center justify-between gap-space-sm text-on-surface-variant font-body-sm text-body-sm">
+<span>Mostrando 1 a 6 de 14 grupos de adicionais</span>
+<div class="flex items-center gap-1">
+<button class="p-1.5 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface shadow-xs disabled:opacity-40" disabled="" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_left</span>
+</button>
+<button class="w-8 h-8 rounded-lg bg-primary text-on-primary font-bold font-label-sm text-label-sm" type="button">1</button>
+<button class="w-8 h-8 rounded-lg bg-surface-container-lowest text-on-surface font-label-sm text-label-sm hover:bg-surface-container" type="button">2</button>
+<button class="w-8 h-8 rounded-lg bg-surface-container-lowest text-on-surface font-label-sm text-label-sm hover:bg-surface-container" type="button">3</button>
+<button class="p-1.5 rounded-lg bg-surface-container-lowest text-on-surface-variant hover:text-on-surface shadow-xs" type="button">
+<span class="material-symbols-outlined text-[18px]">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SLIDE-OVER DRAWER FOR CREATING/EDITING GROUP (OPEN STATE PREVIEW) -->
+<div class="fixed inset-0 z-50 overflow-hidden flex justify-end bg-inverse-surface/40 backdrop-blur-xs transition-opacity duration-300" id="drawer-container">
+<div class="w-full max-w-3xl bg-surface-container-lowest h-full shadow-2xl flex flex-col overflow-hidden">
+<!-- DRAWER HEADER -->
+<div class="px-space-lg py-space-md border-b border-surface-container flex items-center justify-between shrink-0 bg-surface-container-low/30">
+<div>
+<h2 class="font-headline-md text-headline-md font-extrabold text-on-surface">Novo grupo de opções</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Configure o grupo e veja ao lado como o cliente visualizará no cardápio digital</p>
+</div>
+<button class="p-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors" id="btn-close-drawer" type="button">
+<span class="material-symbols-outlined text-[24px]">close</span>
+</button>
+</div>
+<!-- DRAWER BODY WITH SPLIT EDIT & LIVE PREVIEW -->
+<div class="flex-1 overflow-y-auto p-space-lg grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+<!-- LEFT COLUMN: CONFIGURATION FORM -->
+<div class="lg:col-span-7 flex flex-col gap-space-md">
+<!-- BASIC INFO -->
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface font-bold">
+              Nome do grupo <span class="text-primary">*</span>
+</label>
+<input class="h-11 px-space-sm rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/30" placeholder="Ex.: Escolha do acompanhamento" type="text" value="Escolha do acompanhamento"/>
+</div>
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface font-bold">
+              Descrição informativa
+            </label>
+<input class="h-11 px-space-sm rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/30" placeholder="Explique ao cliente o que ele deve escolher" type="text" value="Selecione o acompanhamento principal do seu prato"/>
+</div>
+<!-- SELECTION RULES -->
+<div class="bg-surface-container-low/50 rounded-xl p-space-md flex flex-col gap-space-sm">
+<span class="font-label-md text-label-md text-on-surface font-bold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">rule</span>
+              Regras de Escolha
+            </span>
+<div class="grid grid-cols-2 gap-space-sm">
+<label class="flex items-center gap-space-xs p-space-xs rounded-xl bg-surface-container-lowest shadow-xs cursor-pointer">
+<input checked="" class="text-primary focus:ring-primary accent-primary" name="choice_type" type="radio"/>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface font-bold">Escolha única</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Cliente escolhe 1 item</span>
+</div>
+</label>
+<label class="flex items-center gap-space-xs p-space-xs rounded-xl bg-surface-container-lowest shadow-xs cursor-pointer">
+<input class="text-primary focus:ring-primary accent-primary" name="choice_type" type="radio"/>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface font-bold">Múltiplas escolhas</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Permite várias opções</span>
+</div>
+</label>
+</div>
+<div class="grid grid-cols-2 gap-space-sm pt-1">
+<div class="flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Mínimo obrigatório</span>
+<input class="h-10 px-3 rounded-xl bg-surface-container-lowest text-on-surface font-body-sm text-body-sm focus:outline-none" min="0" type="number" value="1"/>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Máximo permitido</span>
+<input class="h-10 px-3 rounded-xl bg-surface-container-lowest text-on-surface font-body-sm text-body-sm focus:outline-none" min="1" type="number" value="1"/>
+</div>
+</div>
+<label class="flex items-center gap-space-xs cursor-pointer pt-1">
+<input class="rounded text-primary focus:ring-primary accent-primary" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">Cliente pode avançar sem selecionar nenhuma opção (Opcional)</span>
+</label>
+</div>
+<!-- GROUP ITEMS LIST -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface font-bold">
+                Opções deste grupo (4)
+              </label>
+<button class="inline-flex items-center gap-1 text-primary font-label-sm text-label-sm font-bold hover:underline" type="button">
+<span class="material-symbols-outlined text-[16px]">add</span>
+<span>Adicionar opção</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-xs">
+<!-- OPTION ROW 1 -->
+<div class="flex items-center gap-space-xs bg-surface-container-low/40 p-space-xs rounded-xl">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] cursor-grab">drag_indicator</span>
+<input class="flex-1 h-9 px-2.5 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm" type="text" value="Arroz branco"/>
+<div class="w-28 relative">
+<span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] text-on-surface-variant">R$</span>
+<input class="w-full h-9 pl-7 pr-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm text-right" type="text" value="0,00"/>
+</div>
+<button class="p-1.5 text-on-surface-variant hover:text-error transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+<!-- OPTION ROW 2 -->
+<div class="flex items-center gap-space-xs bg-surface-container-low/40 p-space-xs rounded-xl">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] cursor-grab">drag_indicator</span>
+<input class="flex-1 h-9 px-2.5 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm" type="text" value="Batata rústica"/>
+<div class="w-28 relative">
+<span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] text-on-surface-variant">+R$</span>
+<input class="w-full h-9 pl-7 pr-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm text-right" type="text" value="4,00"/>
+</div>
+<button class="p-1.5 text-on-surface-variant hover:text-error transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+<!-- OPTION ROW 3 -->
+<div class="flex items-center gap-space-xs bg-surface-container-low/40 p-space-xs rounded-xl">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] cursor-grab">drag_indicator</span>
+<input class="flex-1 h-9 px-2.5 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm" type="text" value="Purê de batata"/>
+<div class="w-28 relative">
+<span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] text-on-surface-variant">+R$</span>
+<input class="w-full h-9 pl-7 pr-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm text-right" type="text" value="3,50"/>
+</div>
+<button class="p-1.5 text-on-surface-variant hover:text-error transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+<!-- OPTION ROW 4 -->
+<div class="flex items-center gap-space-xs bg-surface-container-low/40 p-space-xs rounded-xl">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] cursor-grab">drag_indicator</span>
+<input class="flex-1 h-9 px-2.5 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm" type="text" value="Salada da casa"/>
+<div class="w-28 relative">
+<span class="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] text-on-surface-variant">+R$</span>
+<input class="w-full h-9 pl-7 pr-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm text-right" type="text" value="2,50"/>
+</div>
+<button class="p-1.5 text-on-surface-variant hover:text-error transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- LINKED PRODUCTS INFO WIDGET -->
+<div class="rounded-xl p-space-sm bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface font-bold">Produtos Vinculados</span>
+<span class="font-label-sm text-label-sm text-primary font-semibold cursor-pointer hover:underline" id="trigger-products-popover">Ver 8 produtos</span>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant">
+              Este grupo pode ser vinculado a vários produtos simultaneamente. Atualmente aplicado em: Filé à Parmegiana, Frango Grelhado, Prato Executivo e outros 5.
+            </p>
+</div>
+<!-- SAFETY WARNING -->
+<div class="flex items-start gap-space-xs p-space-xs rounded-xl bg-surface-container text-on-surface-variant font-body-sm text-[11px]">
+<span class="material-symbols-outlined text-primary text-[16px] shrink-0 mt-0.5">shield</span>
+<span>Grupos vinculados a produtos em pedidos abertos têm integridade protegida para evitar erros na cozinha.</span>
+</div>
+</div>
+<!-- RIGHT COLUMN: LIVE CUSTOMER PREVIEW -->
+<div class="lg:col-span-5 flex flex-col gap-space-sm bg-surface-container-low/60 rounded-2xl p-space-md border border-surface-container">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface font-bold uppercase tracking-wider flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-tertiary">visibility</span>
+              Como o cliente verá no cardápio
+            </span>
+<span class="bg-surface-container-lowest px-2 py-0.5 rounded-full font-label-sm text-[10px] text-on-surface-variant">Tempo Real</span>
+</div>
+<!-- PHONE / MODAL SIMULATION CARD -->
+<div class="bg-surface-container-lowest rounded-xl shadow-md p-space-md flex flex-col gap-space-sm border border-surface-container">
+<div class="flex flex-col">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg font-extrabold text-on-surface">Escolha do acompanhamento</span>
+<span class="bg-error-container text-on-error-container font-label-sm text-[10px] font-bold px-2 py-0.5 rounded-full">
+                  Obrigatório
+                </span>
+</div>
+<span class="text-on-surface-variant font-body-sm text-[11px] mt-0.5">Selecione 1 opção para continuar</span>
+</div>
+<div class="flex flex-col gap-1.5 pt-1">
+<!-- RADIO ITEM 1 -->
+<label class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-low/40 cursor-pointer border border-primary/30">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full border-4 border-primary bg-white"></div>
+<span class="font-label-md text-label-md text-on-surface font-bold">Arroz branco</span>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">Incluso (R$ 0,00)</span>
+</label>
+<!-- RADIO ITEM 2 -->
+<label class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer border border-surface-container">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full border border-outline"></div>
+<span class="font-body-md text-body-md text-on-surface">Batata rústica</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">+ R$ 4,00</span>
+</label>
+<!-- RADIO ITEM 3 -->
+<label class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer border border-surface-container">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full border border-outline"></div>
+<span class="font-body-md text-body-md text-on-surface">Purê de batata</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">+ R$ 3,50</span>
+</label>
+<!-- RADIO ITEM 4 -->
+<label class="flex items-center justify-between p-2.5 rounded-xl bg-surface-container-lowest hover:bg-surface-container-low transition-colors cursor-pointer border border-surface-container">
+<div class="flex items-center gap-2">
+<div class="w-4 h-4 rounded-full border border-outline"></div>
+<span class="font-body-md text-body-md text-on-surface">Salada da casa</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">+ R$ 2,50</span>
+</label>
+</div>
+<!-- SIMULATED ACTION BUTTON -->
+<button class="w-full mt-2 py-2.5 rounded-xl bg-primary text-on-primary font-label-md text-label-md font-bold shadow-sm flex items-center justify-center gap-1" type="button">
+<span>Confirmar Escolha</span>
+<span class="material-symbols-outlined text-[16px]">check</span>
+</button>
+</div>
+<div class="bg-surface-container-lowest p-space-xs rounded-xl flex items-center gap-space-xs text-on-surface-variant font-body-sm text-[11px]">
+<span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span>
+<span>Design otimizado para alta conversão mobile e tablets de balcão.</span>
+</div>
+</div>
+</div>
+<!-- DRAWER FOOTER ACTIONS -->
+<div class="px-space-lg py-space-sm border-t border-surface-container flex items-center justify-between shrink-0 bg-surface-container-lowest">
+<button class="px-space-md py-2.5 rounded-xl hover:bg-surface-container font-label-md text-label-md text-on-surface-variant transition-colors" id="btn-cancel-drawer" type="button">
+          Cancelar
+        </button>
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-2.5 rounded-xl bg-surface-container-low text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors" type="button">
+            Salvar e continuar editando
+          </button>
+<button class="px-space-lg py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-bold shadow-md transition-all active:scale-95" type="button">
+            Salvar Grupo
+          </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+    (function() {
+      const drawer = document.getElementById('drawer-container');
+      const openBtn = document.getElementById('btn-open-drawer');
+      const closeBtn = document.getElementById('btn-close-drawer');
+      const cancelBtn = document.getElementById('btn-cancel-drawer');
+
+      function openDrawer() {
+        drawer.classList.remove('hidden');
+        drawer.classList.add('flex');
+      }
+
+      function closeDrawer() {
+        drawer.classList.remove('flex');
+        drawer.classList.add('hidden');
+      }
+
+      if (openBtn) openBtn.addEventListener('click', openDrawer);
+      if (closeBtn) closeBtn.addEventListener('click', closeDrawer);
+      if (cancelBtn) cancelBtn.addEventListener('click', closeDrawer);
+
+      // Close when clicking backdrop
+      if (drawer) {
+        drawer.addEventListener('click', function(e) {
+          if (e.target === drawer) {
+            closeDrawer();
+          }
+        });
+      }
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low mt-space-3xl"><div class="max-w-[1440px] mx-auto px-gutter py-space-3xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl"><div class="lg:col-span-1 flex flex-col gap-space-md"><div class="flex items-center gap-space-xs"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">A plataforma definitiva de pedidos online, KDS e autoatendimento inteligente para restaurantes e dark kitchens que escalam com autonomia.</p><div class="flex items-center gap-space-xs mt-space-xs"><span class="inline-flex items-center px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>Infraestrutura Ativa</span></div></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Produto</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="cardapio-digital" href="#">Cardápio Digital QR</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="kds-cozinha" href="#">KDS Operacional</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="painel-gestao" href="#">Painel Gerencial</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="integracao-pos" href="#">Integrações POS &amp; iFood</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Tabela de Preços</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Empresa</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="sobre" href="#">Sobre o MenuNext</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="clientes" href="#">Histórias de Sucesso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="carreiras" href="#">Vagas e Carreiras</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="imprensa" href="#">Mídia &amp; Imprensa</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="parceiros" href="#">Programa de Parceiros</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Suporte</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="central-ajuda" href="#">Central de Ajuda 24/7</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="tutoriais" href="#">Vídeos e Tutoriais</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="status" href="#">Status dos Servidores</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">Perguntas Frequentes</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="fale-conosco" href="#">Contato com Consultor</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Legal</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="termos" href="#">Termos de Uso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade e LGPD</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="seguranca" href="#">Segurança da Informação</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="compliance" href="#">Políticas Comerciais</a></div></div><div class="mt-space-2xl pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><p>© 2025 MenuNext Tecnologia para Gastronomia Ltda. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</p><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade</a><a class="hover:text-on-surface transition-colors" data-path="termos" href="#">Termos</a></div></div></div></footer></body></html>

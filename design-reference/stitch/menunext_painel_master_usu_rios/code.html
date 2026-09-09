@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-slate-50" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>MenuNext — Painel Master: Usuários</title>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS CDN with forms and container queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              500: '#f95721',
+              600: '#ea4a13',
+              700: '#c2380b',
+            },
+            graphite: {
+              800: '#1e293b',
+              900: '#121826',
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scrollbar">
+    /* Custom subtle scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+  </style>
+</head>
+<body class="h-full font-sans text-slate-800 antialiased overflow-x-hidden flex">
+<!-- BEGIN: Left Vertical Navigation -->
+<aside class="w-64 bg-white border-r border-slate-200 flex flex-col justify-between shrink-0 h-screen sticky top-0 z-20" data-purpose="sidebar-navigation">
+<div>
+<!-- Platform Brand Header -->
+<div class="p-6 border-b border-slate-100 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-brand-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24">
+<path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="text-base font-bold text-slate-900 tracking-tight">MenuNext</span>
+</div>
+<span class="text-[10px] uppercase tracking-wider font-semibold text-slate-400">Plataforma SaaS</span>
+</div>
+</div>
+<span class="text-[11px] font-bold px-2 py-0.5 bg-orange-100 text-brand-600 rounded-md uppercase tracking-wider">Master</span>
+</div>
+<!-- Navigation Links List -->
+<div class="p-4">
+<p class="px-3 text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Controle Global</p>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Início
+          </a>
+<a class="flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 transition-colors" href="#">
+<div class="flex items-center gap-3">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M13.5 21v-7.5a.75.75 0 01.75-.75h3a.75.75 0 01.75.75V21m-4.5 0H2.36m11.14 0H18m0 0h3.64m-1.39 0V9.349m-16.5 11.65V9.35m0 0a3.001 3.001 0 003.75-.615A2.993 2.993 0 009 9.75c.696 0 1.346-.237 1.868-.636m.002 0a2.993 2.993 0 004.26 0m0 0A2.993 2.993 0 0017.25 9.75c.696 0 1.346-.237 1.868-.636M3.75 9.35a3.004 3.004 0 01-.004-.002M3.75 9.35V4.875A2.625 2.625 0 016.375 2.25h11.25A2.625 2.625 0 0120.25 4.875V9.35" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              Restaurantes
+            </div>
+<span class="text-xs bg-slate-100 text-slate-600 font-semibold px-2 py-0.5 rounded-full">248</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15A2.25 2.25 0 002.25 6.75v10.5A2.25 2.25 0 004.5 21z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Assinaturas
+          </a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Planos
+          </a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Pedidos
+          </a>
+<!-- Active Menu Item: Usuários -->
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-semibold text-white bg-brand-500 rounded-xl shadow-md shadow-brand-500/20" href="#">
+<svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Usuários
+          </a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Métricas
+          </a>
+<a class="flex items-center justify-between px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 transition-colors" href="#">
+<div class="flex items-center gap-3">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 0012 20.25z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              Suporte
+            </div>
+<span class="w-2 h-2 rounded-full bg-amber-500"></span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-sm font-medium text-slate-600 rounded-xl hover:bg-slate-50 transition-colors" href="#">
+<svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.6 6.6 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.241.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+            Configurações
+          </a>
+</nav>
+</div>
+</div>
+<!-- Bottom User Profile Footer -->
+<div class="p-3 border-t border-slate-100 bg-slate-50/50 m-2 rounded-xl">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5 overflow-hidden">
+<div class="relative">
+<div class="w-8 h-8 rounded-lg bg-graphite-900 text-white font-bold flex items-center justify-center text-xs">
+              AM
+            </div>
+<span class="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 border-2 border-white rounded-full"></span>
+</div>
+<div class="truncate">
+<p class="text-xs font-semibold text-slate-900 truncate">Administrador Master</p>
+<p class="text-[11px] text-slate-500 truncate">admin@menunext.com.br</p>
+</div>
+</div>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100" title="Encerrar sessão" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</div>
+</div>
+</aside>
+<!-- END: Left Vertical Navigation -->
+<!-- Main Content Container -->
+<div class="flex-1 flex flex-col min-w-0 bg-slate-50">
+<!-- BEGIN: Top Header Bar -->
+<header class="h-20 bg-white border-b border-slate-200 px-8 flex items-center justify-between sticky top-0 z-10" data-purpose="top-header">
+<div>
+<div class="flex items-center gap-3">
+<h1 class="text-xl font-bold text-slate-900 tracking-tight">Usuários Master</h1>
+<span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-200">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+            Acessos Seguros (2FA Obrigatório)
+          </span>
+</div>
+<p class="text-xs text-slate-500 mt-0.5">Gerenciamento da equipe interna e controle de acessos administrativos da plataforma.</p>
+</div>
+<div class="flex items-center gap-4">
+<!-- Notification Bell -->
+<button class="relative p-2 text-slate-500 hover:text-slate-700 rounded-xl hover:bg-slate-100 transition-colors" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-brand-500 rounded-full ring-2 ring-white"></span>
+</button>
+<!-- Primary Action -->
+<button class="inline-flex items-center gap-2 px-4 py-2.5 bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold rounded-xl shadow-md shadow-brand-500/20 transition-all" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+          Convidar Usuário
+        </button>
+</div>
+</header>
+<!-- END: Top Header Bar -->
+<!-- Main Content Area -->
+<main class="flex-1 p-8 space-y-6 overflow-y-auto">
+<!-- BEGIN: Informational Alert Bar -->
+<section class="bg-blue-50/80 border border-blue-200/80 rounded-2xl p-4 flex items-start gap-3.5 shadow-sm" data-purpose="segregation-alert">
+<div class="p-2 bg-blue-100 text-blue-700 rounded-xl mt-0.5 shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+<div class="text-xs text-blue-900 leading-relaxed">
+<span class="font-bold block text-sm text-blue-950 mb-0.5">Segregação Operacional da Plataforma SaaS</span>
+          Esta área é restrita a <strong>operadores internos do MenuNext</strong> (time de engenharia, suporte ao cliente, financeiro e produto). Usuários de restaurantes parceiros (gerentes de loja, garçons e operadores KDS) são administrados de forma isolada dentro do portal exclusivo de cada estabelecimento parceiro.
+        </div>
+</section>
+<!-- END: Informational Alert Bar -->
+<!-- BEGIN: Metric Overview Cards -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5" data-purpose="metrics-overview">
+<!-- Card 1 -->
+<article class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-500">Total de Membros</span>
+<div class="p-2 bg-slate-100 text-slate-600 rounded-xl">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+</div>
+<div class="mt-3">
+<span class="text-2xl font-bold text-slate-900">8</span>
+<span class="text-xs font-semibold text-emerald-600 ml-1.5">ativos</span>
+<p class="text-[11px] text-slate-400 mt-1">Capacidade de até 25 licenças Master</p>
+</div>
+</article>
+<!-- Card 2 -->
+<article class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-500">Administradores</span>
+<div class="p-2 bg-purple-50 text-purple-600 rounded-xl">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+</div>
+<div class="mt-3">
+<span class="text-2xl font-bold text-slate-900">3</span>
+<span class="text-xs text-slate-500 ml-1.5">com permissão total</span>
+<p class="text-[11px] text-slate-400 mt-1">Acesso irrestrito ao core do SaaS</p>
+</div>
+</article>
+<!-- Card 3 -->
+<article class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-500">Suporte &amp; Operações</span>
+<div class="p-2 bg-blue-50 text-blue-600 rounded-xl">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+</div>
+<div class="mt-3">
+<span class="text-2xl font-bold text-slate-900">3</span>
+<span class="text-xs text-slate-500 ml-1.5">analistas</span>
+<p class="text-[11px] text-slate-400 mt-1">Atendimento B2B &amp; onboarding de lojas</p>
+</div>
+</article>
+<!-- Card 4 -->
+<article class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="text-xs font-semibold text-slate-500">Autenticação 2FA</span>
+<div class="p-2 bg-emerald-50 text-emerald-600 rounded-xl">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</div>
+</div>
+<div class="mt-3">
+<span class="text-2xl font-bold text-emerald-600">100%</span>
+<span class="text-xs text-slate-500 ml-1.5">em conformidade</span>
+<p class="text-[11px] text-emerald-600/80 mt-1 font-medium">Todos os 8 usuários com 2FA ativo</p>
+</div>
+</article>
+</section>
+<!-- END: Metric Overview Cards -->
+<!-- BEGIN: Filter & Search Controls -->
+<section class="bg-white p-4 rounded-2xl border border-slate-200 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4" data-purpose="table-controls">
+<!-- Filter Pills -->
+<div class="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+<button class="px-3.5 py-1.5 text-xs font-semibold rounded-xl bg-slate-900 text-white whitespace-nowrap" type="button">
+            Todos (8)
+          </button>
+<button class="px-3.5 py-1.5 text-xs font-medium rounded-xl text-slate-600 hover:bg-slate-100 transition-colors whitespace-nowrap" type="button">
+            Administradores (3)
+          </button>
+<button class="px-3.5 py-1.5 text-xs font-medium rounded-xl text-slate-600 hover:bg-slate-100 transition-colors whitespace-nowrap" type="button">
+            Operações (3)
+          </button>
+<button class="px-3.5 py-1.5 text-xs font-medium rounded-xl text-slate-600 hover:bg-slate-100 transition-colors whitespace-nowrap" type="button">
+            Financeiro (2)
+          </button>
+</div>
+<!-- Search Bar and Action Dropdown -->
+<div class="flex items-center gap-3 w-full md:w-auto">
+<div class="relative flex-1 md:w-80">
+<span class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</span>
+<input class="w-full text-xs pl-9 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all outline-none" placeholder="Buscar usuário por nome, email ou perfil..." type="text"/>
+</div>
+<div class="relative">
+<button class="flex items-center gap-1.5 px-3 py-2 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors shrink-0" type="button">
+<svg class="w-3.5 h-3.5 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M10.5 6h9.75M10.5 6a1.5 1.5 0 11-3 0m3 0a1.5 1.5 0 10-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m-9.75 0h9.75" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+              Filtrar
+            </button>
+</div>
+</div>
+</section>
+<!-- END: Filter & Search Controls -->
+<!-- BEGIN: Internal Team Members Table -->
+<section class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden" data-purpose="team-table">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-slate-50/75 border-b border-slate-200 text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+<th class="py-3.5 px-6">Membro</th>
+<th class="py-3.5 px-6">Papel / Nível</th>
+<th class="py-3.5 px-6">Autenticação 2FA</th>
+<th class="py-3.5 px-6">Último Acesso</th>
+<th class="py-3.5 px-6">Status</th>
+<th class="py-3.5 px-6 text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-100 text-xs text-slate-600 font-medium">
+<!-- Row 1: Super Admin -->
+<tr class="hover:bg-slate-50/60 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-orange-500 text-white font-bold flex items-center justify-center text-xs shrink-0 shadow-sm shadow-orange-500/30">
+                      AM
+                    </div>
+<div>
+<p class="text-slate-900 font-bold text-sm">Administrador Master</p>
+<p class="text-[11px] text-slate-400">admin@menunext.com.br</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-purple-100 text-purple-700">
+<span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                    Super Admin
+                  </span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1 text-emerald-600 font-semibold text-[11px]">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    Google Auth (Ativo)
+                  </span>
+</td>
+<td class="py-4 px-6">
+<span class="text-slate-800 font-semibold">Agora mesmo</span>
+<p class="text-[10px] text-slate-400">IP: 177.92.xx.xx</p>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Ativo
+                  </span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</td>
+</tr>
+<!-- Row 2: Tech Lead -->
+<tr class="hover:bg-slate-50/60 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-slate-800 text-white font-bold flex items-center justify-center text-xs shrink-0">
+                      RS
+                    </div>
+<div>
+<p class="text-slate-900 font-bold text-sm">Rodrigo Silveira</p>
+<p class="text-[11px] text-slate-400">rodrigo@menunext.com.br</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-slate-100 text-slate-700">
+                    Tech Lead
+                  </span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1 text-emerald-600 font-semibold text-[11px]">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    YubiKey / TOTP
+                  </span>
+</td>
+<td class="py-4 px-6">
+<span class="text-slate-800">Hoje, às 11:22</span>
+<p class="text-[10px] text-slate-400">IP: 189.40.xx.xx</p>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Ativo
+                  </span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</td>
+</tr>
+<!-- Row 3: Support Specialist -->
+<tr class="hover:bg-slate-50/60 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-blue-600 text-white font-bold flex items-center justify-center text-xs shrink-0">
+                      CL
+                    </div>
+<div>
+<p class="text-slate-900 font-bold text-sm">Camila Lima</p>
+<p class="text-[11px] text-slate-400">camila.suporte@menunext.com.br</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-blue-100 text-blue-700">
+                    Analista de Suporte
+                  </span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1 text-emerald-600 font-semibold text-[11px]">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    Google Auth (Ativo)
+                  </span>
+</td>
+<td class="py-4 px-6">
+<span class="text-slate-800">Hoje, às 09:40</span>
+<p class="text-[10px] text-slate-400">IP: 201.17.xx.xx</p>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Ativo
+                  </span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</td>
+</tr>
+<!-- Row 4: Finance Manager -->
+<tr class="hover:bg-slate-50/60 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-emerald-600 text-white font-bold flex items-center justify-center text-xs shrink-0">
+                      FA
+                    </div>
+<div>
+<p class="text-slate-900 font-bold text-sm">Felipe Alcantara</p>
+<p class="text-[11px] text-slate-400">financeiro@menunext.com.br</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-emerald-100 text-emerald-800">
+                    Gestor Financeiro
+                  </span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1 text-emerald-600 font-semibold text-[11px]">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    Google Auth (Ativo)
+                  </span>
+</td>
+<td class="py-4 px-6">
+<span class="text-slate-800">Ontem, às 17:05</span>
+<p class="text-[10px] text-slate-400">IP: 187.32.xx.xx</p>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Ativo
+                  </span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75 0 010 1.5z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</td>
+</tr>
+<!-- Row 5: Operations -->
+<tr class="hover:bg-slate-50/60 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-amber-600 text-white font-bold flex items-center justify-center text-xs shrink-0">
+                      BN
+                    </div>
+<div>
+<p class="text-slate-900 font-bold text-sm">Beatriz Nogueira</p>
+<p class="text-[11px] text-slate-400">beatriz.ops@menunext.com.br</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-amber-100 text-amber-800">
+                    Operações &amp; Onboarding
+                  </span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1 text-emerald-600 font-semibold text-[11px]">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    Google Auth (Ativo)
+                  </span>
+</td>
+<td class="py-4 px-6">
+<span class="text-slate-800">Hoje, às 08:15</span>
+<p class="text-[10px] text-slate-400">IP: 177.18.xx.xx</p>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Ativo
+                  </span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75 0 010 1.5z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</td>
+</tr>
+<!-- Row 6: Security Auditor -->
+<tr class="hover:bg-slate-50/60 transition-colors">
+<td class="py-4 px-6">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-indigo-600 text-white font-bold flex items-center justify-center text-xs shrink-0">
+                      GV
+                    </div>
+<div>
+<p class="text-slate-900 font-bold text-sm">Gabriel Vasconcelos</p>
+<p class="text-[11px] text-slate-400">auditoria@menunext.com.br</p>
+</div>
+</div>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold bg-indigo-100 text-indigo-700">
+                    Auditor de Segurança
+                  </span>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1 text-emerald-600 font-semibold text-[11px]">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewbox="0 0 24 24"><path d="M4.5 12.75l6 6 9-13.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                    Chave de Segurança FIDO2
+                  </span>
+</td>
+<td class="py-4 px-6">
+<span class="text-slate-800">24/Out, 14:10</span>
+<p class="text-[10px] text-slate-400">IP: 179.99.xx.xx</p>
+</td>
+<td class="py-4 px-6">
+<span class="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-600">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span> Ativo
+                  </span>
+</td>
+<td class="py-4 px-6 text-right">
+<button class="p-1.5 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75 0 010 1.5z" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- END: Internal Team Members Table -->
+</main>
+</div>
+<!-- BEGIN: Side Drawer / Slide-over Panel -->
+<aside class="w-96 bg-white border-l border-slate-200 shadow-2xl flex flex-col justify-between shrink-0 h-screen sticky top-0 z-30" data-purpose="invite-user-drawer">
+<div>
+<!-- Drawer Header -->
+<div class="p-6 border-b border-slate-100 flex items-center justify-between">
+<div>
+<div class="flex items-center gap-2">
+<h2 class="text-base font-bold text-slate-900 tracking-tight">Convidar Usuário Master</h2>
+<span class="text-[10px] uppercase font-bold bg-orange-100 text-brand-600 px-1.5 py-0.5 rounded">Equipe</span>
+</div>
+<p class="text-xs text-slate-400 mt-1">Adicione um novo operador ao painel SaaS interno.</p>
+</div>
+<button class="p-1.5 text-slate-400 hover:text-slate-600 rounded-lg hover:bg-slate-100" type="button">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+</button>
+</div>
+<!-- Drawer Form -->
+<form class="p-6 space-y-4">
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-1.5">Nome completo</label>
+<input class="w-full text-xs px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none" placeholder="Ex: Mariana Castro" type="text"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-1.5">E-mail corporativo</label>
+<div class="relative">
+<input class="w-full text-xs pl-3.5 pr-36 py-2.5 bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none" placeholder="mariana.castro" type="email"/>
+<span class="absolute right-3 top-2.5 text-xs text-slate-400 font-medium select-none">@menunext.com.br</span>
+</div>
+<p class="text-[11px] text-slate-400 mt-1">Apenas domínios autorizados da organização.</p>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-700 mb-1.5">Nível de Acesso</label>
+<div class="space-y-2">
+<!-- Role Option 1 -->
+<label class="flex items-start gap-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-orange-50/30 transition-all">
+<input class="mt-0.5 text-brand-500 focus:ring-brand-500 border-slate-300" name="user-role" type="radio"/>
+<div>
+<span class="block text-xs font-bold text-slate-800">Super Admin</span>
+<span class="block text-[11px] text-slate-500">Controle irrestrito: gateway, planos, bancos e acessos.</span>
+</div>
+</label>
+<!-- Role Option 2 (Checked) -->
+<label class="flex items-start gap-3 p-3 border-2 border-brand-500 bg-orange-50/40 rounded-xl cursor-pointer transition-all">
+<input checked="" class="mt-0.5 text-brand-500 focus:ring-brand-500 border-slate-300" name="user-role" type="radio"/>
+<div>
+<span class="block text-xs font-bold text-brand-600">Administrador Regular</span>
+<span class="block text-[11px] text-slate-600">Gerência de restaurantes, faturamento e métricas.</span>
+</div>
+</label>
+<!-- Role Option 3 -->
+<label class="flex items-start gap-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-orange-50/30 transition-all">
+<input class="mt-0.5 text-brand-500 focus:ring-brand-500 border-slate-300" name="user-role" type="radio"/>
+<div>
+<span class="block text-xs font-bold text-slate-800">Suporte / Atendimento</span>
+<span class="block text-[11px] text-slate-500">Acesso a chamados, onboarding e auditoria de pedidos.</span>
+</div>
+</label>
+<!-- Role Option 4 -->
+<label class="flex items-start gap-3 p-3 border border-slate-200 rounded-xl cursor-pointer hover:border-brand-500 hover:bg-orange-50/30 transition-all">
+<input class="mt-0.5 text-brand-500 focus:ring-brand-500 border-slate-300" name="user-role" type="radio"/>
+<div>
+<span class="block text-xs font-bold text-slate-800">Financeiro</span>
+<span class="block text-[11px] text-slate-500">Acesso a relatórios de conciliação e assinaturas SaaS.</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Security requirement toggle -->
+<div class="pt-2">
+<label class="flex items-start gap-2.5 cursor-pointer">
+<input checked="" class="mt-0.5 rounded border-slate-300 text-brand-500 focus:ring-brand-500" type="checkbox"/>
+<span class="text-xs text-slate-600 font-medium leading-relaxed">
+              Exigir ativação obrigatória de <strong>Autenticação 2FA (TOTP)</strong> no primeiro login.
+            </span>
+</label>
+</div>
+</form>
+</div>
+<!-- Drawer Footer Actions -->
+<div class="p-6 border-t border-slate-100 bg-slate-50/50 flex items-center justify-end gap-3">
+<button class="px-4 py-2 text-xs font-semibold text-slate-600 hover:text-slate-800 hover:bg-slate-200/60 rounded-xl transition-all" type="button">
+        Cancelar
+      </button>
+<button class="px-4 py-2 bg-brand-500 hover:bg-brand-600 text-white text-xs font-bold rounded-xl shadow-md shadow-brand-500/20 transition-all" type="button">
+        Enviar Convite
+      </button>
+</div>
+</aside>
+<!-- END: Side Drawer / Slide-over Panel -->
+</body></html>

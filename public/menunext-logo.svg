@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 56" fill="none">
+  <g transform="translate(4, 4)">
+    <!-- Brand Icon: Modern stylized chef hat + speed / digital arrow -->
+    <rect width="48" height="48" rx="14" fill="#F95721" />
+    <path d="M15 33H33V31C33 29.3431 31.6569 28 30 28H18C16.3431 28 15 29.3431 15 31V33Z" fill="white" fill-opacity="0.95"/>
+    <path d="M17 26.5C15.067 26.5 13.5 24.933 13.5 23C13.5 21.28 14.733 19.85 16.38 19.55C16.2 18.9 16.1 18.22 16.1 17.5C16.1 14.4624 18.5624 12 21.6 12C23.32 12 24.85 12.79 25.86 14.03C26.78 13.08 28.07 12.5 29.5 12.5C32.2614 12.5 34.5 14.7386 34.5 17.5C34.5 18.06 34.41 18.59 34.25 19.1C35.85 19.52 37 20.97 37 22.7C37 24.8 35.3 26.5 33.2 26.5H17Z" fill="white"/>
+    <circle cx="34" cy="14" r="4.5" fill="#10B981" stroke="#F95721" stroke-width="2"/>
+  </g>
+  <!-- Brand Wordmark -->
+  <text x="64" y="36" font-family="Plus Jakarta Sans, Inter, sans-serif" font-size="28" font-weight="800" fill="#121826" letter-spacing="-0.8px">Menu<tspan fill="#F95721">Next</tspan></text>
+</svg>

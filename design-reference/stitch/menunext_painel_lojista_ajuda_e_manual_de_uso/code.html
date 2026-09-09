@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary-fixed-variant":"#005236","inverse-on-surface":"#edf0ff","outline":"#8f7067","secondary-container":"#d8391e","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#3f0400","on-secondary":"#ffffff","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-tint":"#af3100","inverse-surface":"#2a303f","tertiary":"#006947","on-primary-fixed":"#3a0a00","primary":"#ab2f00","error":"#ba1a1a","surface-bright":"#faf8ff","on-primary-fixed-variant":"#862300","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","primary-container":"#d53e02","surface-container-lowest":"#ffffff","outline-variant":"#e4beb4","on-primary-container":"#fffbff","primary-fixed":"#ffdbd1","on-surface":"#151b29","on-secondary-fixed-variant":"#8f1200","on-error-container":"#93000a","on-tertiary-container":"#f5fff6","primary-fixed-dim":"#ffb59f","on-error":"#ffffff","surface-container":"#e9edff","surface-container-high":"#e2e8fc","secondary":"#b41e04","surface-dim":"#d4d9ed","surface-variant":"#dde2f6","background":"#faf8ff","inverse-primary":"#ffb59f","error-container":"#ffdad6","surface":"#faf8ff","secondary-fixed-dim":"#ffb4a5","secondary-fixed":"#ffdad3","on-secondary-container":"#fffbff","surface-container-low":"#f1f3ff","on-background":"#151b29","tertiary-container":"#00855b","surface-container-highest":"#dde2f6","on-surface-variant":"#5b4139"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"container-max":"1440px","space-sm":"0.75rem","space-xl":"2rem","space-2xl":"3rem","space-3xl":"4rem","space-xs":"0.5rem","space-lg":"1.5rem","gutter":"1.5rem","space-2xs":"0.25rem","space-md":"1rem"},fontFamily:{"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-md":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-xs" data-path="landing-page" href="#"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></a><nav class="hidden lg:flex items-center gap-space-lg ml-space-md" data-active-classes="text-primary font-label-lg font-bold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="recursos" href="#">Recursos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="como-funciona" href="#">Como Funciona</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Planos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">FAQ</a></nav></div><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_3px_0_rgba(18,24,38,0.05)]" data-path="login" href="#">Entrar</a><a class="inline-flex items-center justify-center h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.3)]" data-path="cadastro" href="#">Criar minha loja grátis</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full">
+<!-- Interactive Support Page Container -->
+<div class="w-full max-w-[1440px] mx-auto px-gutter py-space-xl flex flex-col gap-space-2xl">
+<!-- HEADER & STATUS DA PÁGINA -->
+<section class="flex flex-col md:flex-row md:items-center justify-between gap-space-lg bg-surface-container-lowest p-space-xl rounded-xl shadow-sm">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center px-space-sm py-0.5 rounded-full bg-surface-container text-primary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary mr-1.5"></span>
+            Painel Lojista • Suporte Operacional
+          </span>
+<span class="inline-flex items-center px-space-sm py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>
+            WhatsApp VIP Pro • Resposta ≤ 5 min
+          </span>
+</div>
+<h1 class="font-headline-xl text-headline-xl text-on-surface font-extrabold tracking-tight">
+          Ajuda e Manual de Uso
+        </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant">
+          Encontre respostas rápidas para configurar, operar e escalar seu restaurante sem gargalos.
+        </p>
+</div>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm shrink-0">
+<button class="inline-flex items-center justify-center gap-space-xs h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-low hover:bg-surface-container transition-colors shadow-sm" onclick="document.getElementById('manual-drawer').classList.remove('translate-x-full'); document.getElementById('drawer-backdrop').classList.remove('hidden');">
+<span class="material-symbols-outlined text-[18px]">menu_book</span>
+          Abrir Guia Rápido
+        </button>
+<a class="inline-flex items-center justify-center gap-space-xs h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.25)]" href="https://wa.me/5511999999999" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+          Falar com suporte VIP
+        </a>
+</div>
+</section>
+<!-- CAMPO DE BUSCA INTELIGENTE RÁPIDA -->
+<section class="flex flex-col items-center justify-center text-center bg-surface-container-low/70 py-space-2xl px-space-lg rounded-xl">
+<div class="max-w-2xl w-full flex flex-col gap-space-md">
+<div class="flex flex-col gap-space-2xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Busca unificada do lojista</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Como podemos ajudar hoje?</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Digite o termo ou selecione os tópicos mais acessados durante o plantão da cozinha.</p>
+</div>
+<!-- Input Wrapper -->
+<div class="relative w-full">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-on-surface-variant">
+<span class="material-symbols-outlined text-[22px]">search</span>
+</div>
+<input class="w-full h-14 pl-12 pr-12 rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md shadow-sm outline-none focus:ring-4 focus:ring-primary/15 transition-all placeholder:text-on-surface-variant/60" id="faq-search-input" oninput="filterFaq(this.value)" placeholder="Pesquise por pedido, cardápio, delivery, taxa pix, pausar loja, KDS..." type="text"/>
+<button class="hidden absolute inset-y-0 right-0 pr-4 flex items-center text-on-surface-variant hover:text-on-surface" id="clear-search-btn" onclick="clearSearch()" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Chips de atalho rápido -->
+<div class="flex flex-wrap items-center justify-center gap-space-xs pt-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant mr-1 font-semibold">Atalhos:</span>
+<button class="px-3 py-1 rounded-full bg-surface-container-lowest hover:bg-surface-container font-label-sm text-label-sm text-on-surface transition-colors shadow-sm" onclick="setSearch('cardápio')">
+            #cardápio
+          </button>
+<button class="px-3 py-1 rounded-full bg-surface-container-lowest hover:bg-surface-container font-label-sm text-label-sm text-on-surface transition-colors shadow-sm" onclick="setSearch('delivery')">
+            #delivery
+          </button>
+<button class="px-3 py-1 rounded-full bg-surface-container-lowest hover:bg-surface-container font-label-sm text-label-sm text-on-surface transition-colors shadow-sm" onclick="setSearch('pix')">
+            #taxa pix
+          </button>
+<button class="px-3 py-1 rounded-full bg-surface-container-lowest hover:bg-surface-container font-label-sm text-label-sm text-on-surface transition-colors shadow-sm" onclick="setSearch('pausar')">
+            #pausar pedidos
+          </button>
+<button class="px-3 py-1 rounded-full bg-surface-container-lowest hover:bg-surface-container font-label-sm text-label-sm text-on-surface transition-colors shadow-sm" onclick="setSearch('rastreamento')">
+            #rastreamento
+          </button>
+<button class="px-3 py-1 rounded-full bg-surface-container-lowest hover:bg-surface-container font-label-sm text-label-sm text-on-surface transition-colors shadow-sm" onclick="setSearch('plano')">
+            #plano pro
+          </button>
+</div>
+</div>
+</section>
+<!-- SEÇÃO 1: COMEÇANDO NO MENUNEXT (CHECKLIST DE ATIVAÇÃO) -->
+<section class="w-full bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col gap-space-lg">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<div class="flex flex-col gap-space-2xs">
+<div class="flex items-center gap-space-xs">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-tertiary">Checklist de Sucesso</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">
+              85% Concluído • Quase lá!
+            </span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Comece a vender em poucos passos</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Sua loja já tem estrutura completa. Falta apenas validar o ciclo do primeiro pedido.</p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<a class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-lg text-label-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+            Ver Loja Pública
+          </a>
+<button class="inline-flex items-center gap-space-xs px-space-md py-2 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg transition-all shadow-sm" onclick="document.getElementById('manual-drawer').classList.remove('translate-x-full'); document.getElementById('drawer-backdrop').classList.remove('hidden');">
+<span class="material-symbols-outlined text-[18px]">play_arrow</span>
+            Simular Pedido Teste
+          </button>
+</div>
+</div>
+<!-- Barra de progresso visual -->
+<div class="w-full bg-surface-container-high rounded-full h-3 overflow-hidden">
+<div class="bg-tertiary h-full rounded-full transition-all duration-700" style="width: 85%;"></div>
+</div>
+<!-- Checklist Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-space-xs">
+<!-- Step 1 -->
+<div class="flex flex-col p-space-sm rounded-xl bg-surface-container-low gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="w-5 h-5 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">01</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-bold">Restaurante</span>
+<span class="font-body-sm text-body-sm text-tertiary font-semibold">Configurado</span>
+</div>
+<!-- Step 2 -->
+<div class="flex flex-col p-space-sm rounded-xl bg-surface-container-low gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="w-5 h-5 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">02</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-bold">Cardápio</span>
+<span class="font-body-sm text-body-sm text-tertiary font-semibold">14 Itens Ativos</span>
+</div>
+<!-- Step 3 -->
+<div class="flex flex-col p-space-sm rounded-xl bg-surface-container-low gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="w-5 h-5 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">03</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-bold">Delivery</span>
+<span class="font-body-sm text-body-sm text-tertiary font-semibold">Raio de 7km</span>
+</div>
+<!-- Step 4 -->
+<div class="flex flex-col p-space-sm rounded-xl bg-surface-container-low gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="w-5 h-5 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">04</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-bold">Pagamentos</span>
+<span class="font-body-sm text-body-sm text-tertiary font-semibold">Pix &amp; Cartão</span>
+</div>
+<!-- Step 5 -->
+<div class="flex flex-col p-space-sm rounded-xl bg-surface-container-low gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="w-5 h-5 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">05</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-bold">Loja Pública</span>
+<span class="font-body-sm text-body-sm text-tertiary font-semibold">Publicada</span>
+</div>
+<!-- Step 6 -->
+<div class="flex flex-col p-space-sm rounded-xl bg-surface-container-low gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="w-5 h-5 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined text-[14px]">check</span>
+</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">06</span>
+</div>
+<span class="font-label-md text-label-md text-on-surface font-bold">Link &amp; QR</span>
+<span class="font-body-sm text-body-sm text-tertiary font-semibold">Gerados</span>
+</div>
+<!-- Step 7: Em aberto com pulso sutil -->
+<div class="flex flex-col p-space-sm rounded-xl bg-primary-fixed/40 gap-space-xs relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="w-5 h-5 rounded-full bg-primary flex items-center justify-center text-on-primary animate-pulse">
+<span class="w-2 h-2 rounded-full bg-white"></span>
+</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Passo 07</span>
+</div>
+<span class="font-label-md text-label-md text-primary font-extrabold">1º Pedido</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Aguardando disparo</span>
+</div>
+</div>
+</section>
+<!-- SEÇÃO 2: GUIAS RÁPIDOS EM CARDS (Grid 5 cards com imagem fotográfica) -->
+<section class="flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between gap-space-xs">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Biblioteca prática</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Guias Rápidos de Operação</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Instruções visuais condensadas para você e sua equipe de turno.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-space-md">
+<!-- Card 1 -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+<div class="h-32 w-full overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Close up photograph of a professional kitchen tablet displaying a vibrant food menu with artisanal burgers, fresh ingredients, soft ambient kitchen lighting in warm orange and slate tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAs-GS40MEjNX_WpUwjIGWJ81zILmJB01pnsStG8HfddZjW_6TOga8-Hvg2AKZeZppEr0CpA4GKprJMpbfC3UjnPHFDsY9cjOUUSx1QG9kCEkkBej3PxJR35RNNr6jBP2UwKYBP5WnBcEfcvIjokh0krC8565Nq4Lv7NIbnYGS4xNRQkWodOq7UVLDBTXLTBYbm_mbPmlY4OgMimc8ZNsgyEp4paedtB1qkiC3MFJ4opxJR7wDbKpFA"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface font-label-sm text-label-sm font-semibold shadow-sm">
+              Cardápio
+            </span>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Como configurar meu cardápio?</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Cadastre categorias, produtos, fotos reais, adicionais e combos especiais com poucos cliques.</p>
+</div>
+<button class="inline-flex items-center gap-1 font-label-lg text-label-lg text-primary hover:text-primary-container font-semibold transition-colors pt-space-xs" onclick="openGuideModal('Como configurar meu cardápio?', 'Aprenda a estruturar categorias, variações obrigatórias e combos atrativos.')">
+              Ver guia
+              <span class="material-symbols-outlined text-[16px]">north_east</span>
+</button>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+<div class="h-32 w-full overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Digital delivery dispatch interface shown on a modern restaurant monitor with map routes, courier pins, clean minimalist UI with orange indicator badges and dark graphite panels." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCjrDB2Q6S7jHz4oUcm2KG4BB_lt-_G7l95zyqWKX13-izlNjnvjdGNHgn1ryuKUtvUK1sVL4Ci06cCK7miPE4n3ChwIUoLDxALFFUlFdV8pLCkcTq9hBo7NR_YmN566VhNlv0jqgm1GoxkzrwxwBjnky1APbTycyiNOBXZ3RSvUmkmE_asr4oHMqPpVqmHYfYySJsoV43WlbC8-bP8Nuq_GfTP5qHyMrtT09dA-bwZx5mCOE40vPU2"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface font-label-sm text-label-sm font-semibold shadow-sm">
+              Logística
+            </span>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Como configurar o delivery?</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Defina regiões de entrega, taxas dinâmicas por bairro, tempo médio e valor de pedido mínimo.</p>
+</div>
+<button class="inline-flex items-center gap-1 font-label-lg text-label-lg text-primary hover:text-primary-container font-semibold transition-colors pt-space-xs" onclick="openGuideModal('Como configurar o delivery?', 'Cadastre raios de atendimento em quilômetros ou taxas fixas por bairro.')">
+              Ver guia
+              <span class="material-symbols-outlined text-[16px]">north_east</span>
+</button>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+<div class="h-32 w-full overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Busy commercial kitchen counter with thermal order tickets, chef expediting freshly made food under warm heat lamps, tactile and energetic gastronomic environment." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnoFFQ6PbiNCB8xdBxwpgmo62Bj_-KZpzDM9mlnw6Q5Ay5b3VEDpX-e3aV1NU_gGWPwyYrVQiJlAzu1I7A_8VqD_kxgAZLGSG2X2ESOF1mYgc1ss7O6vrEMxbPeaGeW5-xdt4l0zg16mqqnk0hatm2Pk8-FGnvgL0RTCoOKY961dDs9K8boBzaPn2Bdhb7QXqUaoD7PPX54HRoV1gN89DUUBqKb4dE6vYzJyqwr3paSl10hDEWtks0"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface font-label-sm text-label-sm font-semibold shadow-sm">
+              Operação
+            </span>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Como receber pedidos?</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Entenda o fluxo completo de novos pedidos do checkout até a notificação no KDS e expedição.</p>
+</div>
+<button class="inline-flex items-center gap-1 font-label-lg text-label-lg text-primary hover:text-primary-container font-semibold transition-colors pt-space-xs" onclick="document.getElementById('manual-drawer').classList.remove('translate-x-full'); document.getElementById('drawer-backdrop').classList.remove('hidden');">
+              Ver guia
+              <span class="material-symbols-outlined text-[16px]">north_east</span>
+</button>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+<div class="h-32 w-full overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="Modern smartphone displaying an instant Pix payment confirmation screen with glowing green checkmark on top of a polished wooden restaurant counter." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDdk8w9seDA5dO-596y56gRH9_voFSWfv-tyhQRRLSBAdZGeeSch6j2oIBcwRpapA9LFsC6xg3iIfoDJ0FB8w5Wii54BVPEspPZ-HzoF7I9sjot7SfOkBWineaW-knRgVYBvBNZLHGf8xYN2-ds9D5qs716BoyiFYtr_x2OaOpzLAaNUahT1xM80jKD0OZ1Zjq7PBqdyp-FateR8ZZCm3Quwl2tKeBw7SG8Pi5aSpG4JFExhiq5vR_P"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface font-label-sm text-label-sm font-semibold shadow-sm">
+              Financeiro
+            </span>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Como configurar o Pix?</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Cadastre sua chave Pix instantânea e comece a receber pagamentos diretos na conta sem intermediação cara.</p>
+</div>
+<button class="inline-flex items-center gap-1 font-label-lg text-label-lg text-primary hover:text-primary-container font-semibold transition-colors pt-space-xs" onclick="openGuideModal('Como configurar o Pix?', 'Receba transferências automáticas ou manuais com QR Code dinâmico no checkout.')">
+              Ver guia
+              <span class="material-symbols-outlined text-[16px]">north_east</span>
+</button>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="flex flex-col bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden hover:shadow-md transition-shadow group">
+<div class="h-32 w-full overflow-hidden relative">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="An elegant acrylic table tent with QR Code inside an artisanal modern pizzeria dining room, soft sunlit bokeh in background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBxjWTXdxVUywdbDBQU4z0aRnU4q810Fjs7qKb59o8hNMZ4OkG0mbMem8wBpSxKD6OYhBtLc5ALymDNfvjA5_pQVqJzT_nLrsK9MtMsn4LXdRH9YoJns-IJtFqNc2fMGArEdXnHE78Gi-ZigCBRx15IZEpkjtW08X8ldc4FgNz_78ZkPDKQFepdnnJyhGDo6DM-tGyrkIrXEBtQDJq2O26Trm5wiVD7T2SX0VfB-J7kUM_qpPWQ0f4X"/>
+<span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-on-surface font-label-sm text-label-sm font-semibold shadow-sm">
+              Divulgação
+            </span>
+</div>
+<div class="p-space-md flex flex-col justify-between flex-1 gap-space-sm">
+<div class="flex flex-col gap-space-2xs">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Como compartilhar a loja?</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Use seu link exclusivo no Instagram, WhatsApp Business ou imprima QR Codes para mesas e balcão.</p>
+</div>
+<button class="inline-flex items-center gap-1 font-label-lg text-label-lg text-primary hover:text-primary-container font-semibold transition-colors pt-space-xs" onclick="openGuideModal('Como compartilhar minha loja?', 'Baixe o kit de impressão de QR Codes de alta resolução para suas mesas.')">
+              Ver guia
+              <span class="material-symbols-outlined text-[16px]">north_east</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- SEÇÃO 3: PERGUNTAS FREQUENTES (FAQ Accordion interativo) -->
+<section class="flex flex-col gap-space-lg">
+<div class="flex flex-col gap-space-2xs">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-primary font-bold">Tira-dúvidas operacional</span>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Perguntas Frequentes</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Respostas diretas para as dúvidas mais comuns dos restaurantes no MenuNext.</p>
+</div>
+<div class="flex flex-col gap-space-xs" id="faq-list">
+<!-- Q1 (Aberto por padrão) -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden transition-all" data-keywords="cliente fazer pedido checkout link qr code menu">
+<button class="w-full p-space-md text-left flex items-center justify-between gap-space-sm hover:bg-surface-container-low/50 transition-colors" onclick="toggleFaq(this)">
+<div class="flex items-center gap-space-sm">
+<span class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">shopping_cart</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Como meu cliente faz um pedido?</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 faq-icon rotate-180">expand_more</span>
+</button>
+<div class="faq-content px-space-md pb-space-md pt-space-2xs">
+<p class="font-body-md text-body-md text-on-surface-variant pl-11">
+              O cliente acessa o link exclusivo ou escaneia o QR Code da sua loja em mesas/balcão. Ele visualiza o cardápio estruturado com fotos e adicionais, escolhe se deseja Delivery ou Retirada, define a forma de pagamento e finaliza em segundos — sem obrigatoriedade de baixar aplicativos ou criar senhas longas.
+            </p>
+</div>
+</div>
+<!-- Q2 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden transition-all" data-keywords="conta cliente cadastro login convidado guest checkout">
+<button class="w-full p-space-md text-left flex items-center justify-between gap-space-sm hover:bg-surface-container-low/50 transition-colors" onclick="toggleFaq(this)">
+<div class="flex items-center gap-space-sm">
+<span class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">person_off</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">O cliente precisa criar uma conta?</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 faq-icon">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-md pb-space-md pt-space-2xs">
+<p class="font-body-md text-body-md text-on-surface-variant pl-11">
+              Não! O MenuNext adota a metodologia de <strong>Checkout Convidado Inteligente</strong>. O cliente apenas preenche seu Nome e WhatsApp. Ao finalizar, nosso sistema memoriza o endereço com cookies seguros para que pedidos futuros sejam realizados com apenas 2 toques.
+            </p>
+</div>
+</div>
+<!-- Q3 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden transition-all" data-keywords="receber novo pedido som som kds kanban cozinha despacho">
+<button class="w-full p-space-md text-left flex items-center justify-between gap-space-sm hover:bg-surface-container-low/50 transition-colors" onclick="toggleFaq(this)">
+<div class="flex items-center gap-space-sm">
+<span class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">notifications_active</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Como recebo um novo pedido?</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 faq-icon">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-md pb-space-md pt-space-2xs">
+<p class="font-body-md text-body-md text-on-surface-variant pl-11">
+              Assim que o cliente conclui o checkout, o painel do MenuNext emite um alerta sonoro contínuo, exibe o cartão piscante na coluna "Novos Pedidos" do Gestor de Pedidos e envia a comanda automaticamente para a tela do KDS de preparo na sua cozinha ou impressora térmica configurada.
+            </p>
+</div>
+</div>
+<!-- Q4 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden transition-all" data-keywords="pausar fechar loja cozinha cheia parar pedidos emergencia">
+<button class="w-full p-space-md text-left flex items-center justify-between gap-space-sm hover:bg-surface-container-low/50 transition-colors" onclick="toggleFaq(this)">
+<div class="flex items-center gap-space-sm">
+<span class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">pause_circle</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Como pauso os pedidos se a cozinha estiver cheia?</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 faq-icon">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-md pb-space-md pt-space-2xs">
+<p class="font-body-md text-body-md text-on-surface-variant pl-11">
+              No topo superior direito do seu painel ou no menu Configurações, utilize o botão de status rápido "Loja Aberta". Alterne para "Pausada" ou "Fechada". O cardápio digital permanece legível para os clientes, mas o checkout exibirá a mensagem avisando que a cozinha reabrirá em breve.
+            </p>
+</div>
+</div>
+<!-- Q5 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden transition-all" data-keywords="horario funcionamento abrir fechar automatico turno dias">
+<button class="w-full p-space-md text-left flex items-center justify-between gap-space-sm hover:bg-surface-container-low/50 transition-colors" onclick="toggleFaq(this)">
+<div class="flex items-center gap-space-sm">
+<span class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Como altero o horário da loja?</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 faq-icon">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-md pb-space-md pt-space-2xs">
+<p class="font-body-md text-body-md text-on-surface-variant pl-11">
+              Acesse a opção <strong>Configurações → Horários de Funcionamento</strong>. Você pode configurar turnos separados (ex: Almoço 11:30 às 15:00 e Jantar 18:30 às 23:30) para cada dia da semana. O sistema abre e fecha a aceitação de pedidos automaticamente.
+            </p>
+</div>
+</div>
+<!-- Q6 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden transition-all" data-keywords="produto esgotado indisponivel ocultar item estoque faltou">
+<button class="w-full p-space-md text-left flex items-center justify-between gap-space-sm hover:bg-surface-container-low/50 transition-colors" onclick="toggleFaq(this)">
+<div class="flex items-center gap-space-sm">
+<span class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">inventory_2</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Como marcar um produto como indisponível?</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 faq-icon">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-md pb-space-md pt-space-2xs">
+<p class="font-body-md text-body-md text-on-surface-variant pl-11">
+              Em <strong>Cardápio → Produtos</strong>, localize o item que esgotou no estoque e desative a chave toggle verde. Ele se tornará cinza e desaparecerá instantaneamente do cardápio público sem desconfigurar fotos, preços ou opcionais quando você for reativá-lo.
+            </p>
+</div>
+</div>
+<!-- Q7 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden transition-all" data-keywords="rastreamento entrega status motoboy cliente tempo real">
+<button class="w-full p-space-md text-left flex items-center justify-between gap-space-sm hover:bg-surface-container-low/50 transition-colors" onclick="toggleFaq(this)">
+<div class="flex items-center gap-space-sm">
+<span class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">moped</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Como funciona o rastreamento do pedido?</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 faq-icon">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-md pb-space-md pt-space-2xs">
+<p class="font-body-md text-body-md text-on-surface-variant pl-11">
+              Ao concluir o pedido, a tela do cliente atualiza para a <strong>Linha do Tempo de Rastreamento</strong>. Conforme seu operador avança os cards no painel (Recebido → Em Preparo → Saiu para Entrega → Entregue), o cliente recebe atualizações sem precisar ligar para o restaurante.
+            </p>
+</div>
+</div>
+<!-- Q8 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden transition-all" data-keywords="plano assinatura pro start upgrade faturamento cancelamento preco">
+<button class="w-full p-space-md text-left flex items-center justify-between gap-space-sm hover:bg-surface-container-low/50 transition-colors" onclick="toggleFaq(this)">
+<div class="flex items-center gap-space-sm">
+<span class="w-8 h-8 rounded-lg bg-surface-container-low flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">credit_card</span>
+</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Como alterar meu plano?</span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant transition-transform duration-300 faq-icon">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-md pb-space-md pt-space-2xs">
+<p class="font-body-md text-body-md text-on-surface-variant pl-11">
+              Acesse a guia <strong>Configurações → Plano e Faturamento</strong>. É possível migrar entre o plano Start, Pro ou Plus a qualquer momento. A liberação de recursos extras (como multi-KDS e relatórios avançados) ocorre de forma instantânea.
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- SEÇÃO 4: CARD DE SUPORTE DIRETO & MANUAL COMPLETO -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+<!-- Bloco Suporte -->
+<div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col justify-between gap-space-lg relative overflow-hidden">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-primary">Time de Atendimento</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Precisa de ajuda humana?</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Nosso suporte especializado em restaurantes está disponível para ajudar você a configurar e operar sua loja com máxima agilidade durante seus horários de maior movimento.
+          </p>
+</div>
+<div class="flex flex-col gap-space-sm bg-surface-container-low p-space-md rounded-xl">
+<div class="flex items-center gap-space-sm">
+<span class="w-9 h-9 rounded-lg bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">WhatsApp Comercial &amp; Plantão</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Segunda a Domingo, das 09h às 23h</span>
+</div>
+</div>
+<div class="flex items-center gap-space-sm">
+<span class="w-9 h-9 rounded-lg bg-surface-container-high text-on-surface flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[20px]">mail</span>
+</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">E-mail Prioritário</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">suporte@menunext.com • Resposta em até 1 hora</span>
+</div>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-sm">
+<a class="flex-1 inline-flex items-center justify-center gap-space-xs h-12 px-space-md rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-sm" href="https://wa.me/5511999999999" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[20px]">chat</span>
+            Falar com suporte (WhatsApp)
+          </a>
+<button class="inline-flex items-center justify-center gap-space-xs h-12 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-low hover:bg-surface-container transition-colors shadow-sm" onclick="alert('Ticket criado com sucesso. Nossa equipe entrará em contato via WhatsApp cadastrado em instantes.')">
+<span class="material-symbols-outlined text-[18px]">send</span>
+            Enviar mensagem
+          </button>
+</div>
+</div>
+<!-- Bloco Manual Completo do MenuNext -->
+<div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col justify-between gap-space-lg relative overflow-hidden">
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-secondary">Documentação Oficial</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Manual completo do MenuNext</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Veja passo a passo em formato estruturado como utilizar e extrair o máximo de performance de cada módulo do seu restaurante.
+          </p>
+</div>
+<!-- Módulos contemplados -->
+<div class="grid grid-cols-2 gap-space-xs">
+<div class="flex items-center gap-space-xs p-space-sm rounded-xl bg-surface-container-low">
+<span class="material-symbols-outlined text-primary text-[20px]">restaurant_menu</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Cardápio &amp; Combos</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Engenharia de Menu</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs p-space-sm rounded-xl bg-surface-container-low">
+<span class="material-symbols-outlined text-primary text-[20px]">kitchen</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">KDS Cozinha</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Tempo de Preparo</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs p-space-sm rounded-xl bg-surface-container-low">
+<span class="material-symbols-outlined text-primary text-[20px]">point_of_sale</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Balcão &amp; PDV</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Venda Presencial</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs p-space-sm rounded-xl bg-surface-container-low">
+<span class="material-symbols-outlined text-primary text-[20px]">local_shipping</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Gestor de Entregas</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Rastreio &amp; Motoboys</span>
+</div>
+</div>
+</div>
+<button class="w-full inline-flex items-center justify-center gap-space-xs h-12 px-space-lg rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-low hover:bg-surface-container transition-colors shadow-sm" onclick="document.getElementById('manual-drawer').classList.remove('translate-x-full'); document.getElementById('drawer-backdrop').classList.remove('hidden');">
+<span class="material-symbols-outlined text-[20px]">import_contacts</span>
+          Abrir manual de instruções interativo
+        </button>
+</div>
+</section>
+</div>
+<!-- BACKDROP DO DRAWER / MODAL -->
+<div class="hidden fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm z-50 transition-opacity" id="drawer-backdrop" onclick="closeDrawer()"></div>
+<!-- DRAWER / MODAL DE GUIA RÁPIDO DO MENUNEXT -->
+<div class="fixed top-0 right-0 w-full max-w-xl h-full bg-surface-container-lowest shadow-2xl z-50 transform translate-x-full transition-transform duration-300 flex flex-col justify-between overflow-y-auto" id="manual-drawer">
+<!-- Drawer Header -->
+<div class="p-space-xl flex items-center justify-between border-b border-surface-container bg-surface-container-lowest shrink-0 sticky top-0 z-10">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider text-primary">Manual Operacional MenuNext</span>
+<h3 class="font-headline-md text-headline-md text-on-surface font-extrabold" id="drawer-title">Como receber e despachar pedidos</h3>
+</div>
+<button class="w-9 h-9 rounded-xl bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface transition-colors" onclick="closeDrawer()">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Drawer Content / Passos -->
+<div class="p-space-xl flex flex-col gap-space-lg flex-1">
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[24px]">info</span>
+<p class="font-body-md text-body-md text-on-surface" id="drawer-subtitle">
+          Este fluxo acontece em tempo real em todas as lojas MenuNext para garantir entregas pontuais e comanda sem erros.
+        </p>
+</div>
+<!-- Steps Timeline -->
+<div class="flex flex-col gap-space-md">
+<!-- Passo 1 -->
+<div class="flex gap-space-md items-start">
+<div class="w-8 h-8 rounded-full bg-primary text-on-primary flex items-center justify-center font-bold text-label-md shrink-0 shadow-sm">
+            1
+          </div>
+<div class="flex flex-col gap-space-2xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Alerta Sonoro &amp; Notificação</span>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Quando o cliente clica em "Finalizar Pedido" na sua loja pública, uma notificação sonora de alta prioridade toca no navegador do painel com aviso visual instantâneo.
+            </p>
+</div>
+</div>
+<!-- Passo 2 -->
+<div class="flex gap-space-md items-start">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-bold text-label-md shrink-0">
+            2
+          </div>
+<div class="flex flex-col gap-space-2xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Aceitar Pedido no Kanban</span>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              No menu <strong>Pedidos → Kanban</strong>, clique no botão "Aceitar Pedido" no card correspondente. O tempo estimado de preparo será enviado para o WhatsApp do cliente.
+            </p>
+</div>
+</div>
+<!-- Passo 3 -->
+<div class="flex gap-space-md items-start">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-bold text-label-md shrink-0">
+            3
+          </div>
+<div class="flex flex-col gap-space-2xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Preparo na Cozinha (KDS / Impressão)</span>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              O card migra para a tela de KDS dos cozinheiros ou sai na impressora de 80mm com lista detalhada de observações e complementos marcados.
+            </p>
+</div>
+</div>
+<!-- Passo 4 -->
+<div class="flex gap-space-md items-start">
+<div class="w-8 h-8 rounded-full bg-surface-container-high text-on-surface flex items-center justify-center font-bold text-label-md shrink-0">
+            4
+          </div>
+<div class="flex flex-col gap-space-2xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Chamar Entregador / Despacho</span>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Com a comida embalada e lacrada, alterne o pedido para "Pronto". O motoboy do seu restaurante recebe a rota com endereço via mapa e o cliente é notificado que a entrega saiu.
+            </p>
+</div>
+</div>
+<!-- Passo 5 -->
+<div class="flex gap-space-md items-start">
+<div class="w-8 h-8 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center font-bold text-label-md shrink-0 shadow-sm">
+            5
+          </div>
+<div class="flex flex-col gap-space-2xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Conclusão e Métricas</span>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              O motoboy confirma a entrega no app ou o operador arquiva como "Entregue". Os dados de ticket médio, faturamento e taxa são computados no seu Relatório Financeiro.
+            </p>
+</div>
+</div>
+</div>
+</div>
+<!-- Drawer Footer -->
+<div class="p-space-lg bg-surface-container-low border-t border-surface-container flex items-center justify-between gap-space-md shrink-0">
+<button class="inline-flex items-center justify-center px-space-lg h-11 rounded-xl bg-surface-container-lowest text-on-surface font-label-lg text-label-lg hover:bg-surface-container transition-colors shadow-sm" onclick="closeDrawer()">
+        Fechar guia
+      </button>
+<a class="inline-flex items-center justify-center gap-space-xs px-space-lg h-11 rounded-xl bg-primary text-on-primary font-label-lg text-label-lg hover:bg-primary-container transition-all shadow-sm" href="https://wa.me/5511999999999" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[18px]">support_agent</span>
+        Ainda com dúvidas?
+      </a>
+</div>
+</div>
+<!-- SCRIPT DE MICRO-INTERAÇÕES & BUSCA INTELIGENTE -->
+<script>
+    function toggleFaq(button) {
+      const parent = button.closest('.faq-item');
+      const content = parent.querySelector('.faq-content');
+      const icon = button.querySelector('.faq-icon');
+
+      const isHidden = content.classList.contains('hidden');
+      if (isHidden) {
+        content.classList.remove('hidden');
+        icon.classList.add('rotate-180');
+      } else {
+        content.classList.add('hidden');
+        icon.classList.remove('rotate-180');
+      }
+    }
+
+    function filterFaq(query) {
+      const term = query.toLowerCase().trim();
+      const clearBtn = document.getElementById('clear-search-btn');
+      if (term.length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+
+      const items = document.querySelectorAll('.faq-item');
+      items.forEach(item => {
+        const text = (item.textContent || '').toLowerCase();
+        const keywords = (item.getAttribute('data-keywords') || '').toLowerCase();
+        if (text.includes(term) || keywords.includes(term)) {
+          item.classList.remove('hidden');
+          // expand match if searching
+          if (term.length > 1) {
+            item.querySelector('.faq-content').classList.remove('hidden');
+            const icon = item.querySelector('.faq-icon');
+            if (icon) icon.classList.add('rotate-180');
+          }
+        } else {
+          item.classList.add('hidden');
+        }
+      });
+    }
+
+    function setSearch(value) {
+      const input = document.getElementById('faq-search-input');
+      input.value = value;
+      filterFaq(value);
+      input.focus();
+      // Smooth scroll towards FAQ
+      document.getElementById('faq-list').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function clearSearch() {
+      const input = document.getElementById('faq-search-input');
+      input.value = '';
+      filterFaq('');
+    }
+
+    function closeDrawer() {
+      document.getElementById('manual-drawer').classList.add('translate-x-full');
+      document.getElementById('drawer-backdrop').classList.add('hidden');
+    }
+
+    function openGuideModal(title, subtitle) {
+      document.getElementById('drawer-title').innerText = title;
+      document.getElementById('drawer-subtitle').innerText = subtitle;
+      document.getElementById('manual-drawer').classList.remove('translate-x-full');
+      document.getElementById('drawer-backdrop').classList.remove('hidden');
+    }
+  </script>
+</div></main><footer class="w-full bg-surface-container-low mt-space-3xl"><div class="max-w-[1440px] mx-auto px-gutter py-space-3xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl"><div class="lg:col-span-1 flex flex-col gap-space-md"><div class="flex items-center gap-space-xs"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">A plataforma definitiva de pedidos online, KDS e autoatendimento inteligente para restaurantes e dark kitchens que escalam com autonomia.</p><div class="flex items-center gap-space-xs mt-space-xs"><span class="inline-flex items-center px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>Infraestrutura Ativa</span></div></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Produto</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="cardapio-digital" href="#">Cardápio Digital QR</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="kds-cozinha" href="#">KDS Operacional</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="painel-gestao" href="#">Painel Gerencial</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="integracao-pos" href="#">Integrações POS &amp; iFood</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Tabela de Preços</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Empresa</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="sobre" href="#">Sobre o MenuNext</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="clientes" href="#">Histórias de Sucesso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="carreiras" href="#">Vagas e Carreiras</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="imprensa" href="#">Mídia &amp; Imprensa</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="parceiros" href="#">Programa de Parceiros</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Suporte</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="central-ajuda" href="#">Central de Ajuda 24/7</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="tutoriais" href="#">Vídeos e Tutoriais</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="status" href="#">Status dos Servidores</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">Perguntas Frequentes</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="fale-conosco" href="#">Contato com Consultor</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Legal</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="termos" href="#">Termos de Uso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade e LGPD</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="seguranca" href="#">Segurança da Informação</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="compliance" href="#">Políticas Comerciais</a></div></div><div class="mt-space-2xl pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><p>© 2025 MenuNext Tecnologia para Gastronomia Ltda. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</p><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade</a><a class="hover:text-on-surface transition-colors" data-path="termos" href="#">Termos</a></div></div></div></footer></body></html>

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary-fixed-variant":"#005236","inverse-on-surface":"#edf0ff","outline":"#8f7067","secondary-container":"#d8391e","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#3f0400","on-secondary":"#ffffff","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-tint":"#af3100","inverse-surface":"#2a303f","tertiary":"#006947","on-primary-fixed":"#3a0a00","primary":"#ab2f00","error":"#ba1a1a","surface-bright":"#faf8ff","on-primary-fixed-variant":"#862300","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","primary-container":"#d53e02","surface-container-lowest":"#ffffff","outline-variant":"#e4beb4","on-primary-container":"#fffbff","primary-fixed":"#ffdbd1","on-surface":"#151b29","on-secondary-fixed-variant":"#8f1200","on-error-container":"#93000a","on-tertiary-container":"#f5fff6","primary-fixed-dim":"#ffb59f","on-error":"#ffffff","surface-container":"#e9edff","surface-container-high":"#e2e8fc","secondary":"#b41e04","surface-dim":"#d4d9ed","surface-variant":"#dde2f6","background":"#faf8ff","inverse-primary":"#ffb59f","error-container":"#ffdad6","surface":"#faf8ff","secondary-fixed-dim":"#ffb4a5","secondary-fixed":"#ffdad3","on-secondary-container":"#fffbff","surface-container-low":"#f1f3ff","on-background":"#151b29","tertiary-container":"#00855b","surface-container-highest":"#dde2f6","on-surface-variant":"#5b4139"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"container-max":"1440px","space-sm":"0.75rem","space-xl":"2rem","space-2xl":"3rem","space-3xl":"4rem","space-xs":"0.5rem","space-lg":"1.5rem","gutter":"1.5rem","space-2xs":"0.25rem","space-md":"1rem"},fontFamily:{"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-md":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-xs" data-path="landing-page" href="#"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></a><nav class="hidden lg:flex items-center gap-space-lg ml-space-md" data-active-classes="text-primary font-label-lg font-bold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="recursos" href="#">Recursos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="como-funciona" href="#">Como Funciona</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Planos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">FAQ</a></nav></div><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_3px_0_rgba(18,24,38,0.05)]" data-path="login" href="#">Entrar</a><a class="inline-flex items-center justify-center h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.3)]" data-path="cadastro" href="#">Criar minha loja grátis</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full">
+<!-- Merchant Main Frame Layout with Sidebar -->
+<div class="flex w-full min-h-[calc(100vh-80px)] bg-surface">
+<!-- Merchant Persistent Sidebar Navigation (260px desktop) -->
+<aside class="hidden lg:flex flex-col w-[260px] shrink-0 bg-surface-container-lowest border-r border-outline-variant/30 py-space-lg px-space-md justify-between select-none">
+<div class="flex flex-col gap-space-xs">
+<!-- Store Selector Switcher Mini -->
+<div class="p-space-xs mb-space-sm bg-surface-container-low rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-space-xs min-w-0">
+<div class="w-9 h-9 rounded-lg bg-primary-container/15 text-primary flex items-center justify-center font-bold font-headline-sm">
+              NB
+            </div>
+<div class="flex flex-col min-w-0 leading-tight">
+<span class="font-label-md text-label-md text-on-surface truncate font-bold">Next Burger</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Unidade Moema</span>
+</div>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">unfold_more</span>
+</div>
+<!-- Section Label: Operação -->
+<span class="font-label-sm text-label-sm text-on-surface-variant px-space-xs uppercase tracking-wider mt-space-xs">Operação</span>
+<a class="flex items-center gap-space-xs px-space-xs py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">receipt_long</span>
+<span>Pedidos em Tempo Real</span>
+</a>
+<a class="flex items-center gap-space-xs px-space-xs py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">soup_kitchen</span>
+<span>KDS Cozinha</span>
+</a>
+<a class="flex items-center gap-space-xs px-space-xs py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">menu_book</span>
+<span>Cardápio &amp; Categorias</span>
+</a>
+<a class="flex items-center gap-space-xs px-space-xs py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">analytics</span>
+<span>Desempenho &amp; Vendas</span>
+</a>
+<!-- Section Label: Configurações da Loja -->
+<span class="font-label-sm text-label-sm text-on-surface-variant px-space-xs uppercase tracking-wider mt-space-md">Gestão &amp; Loja</span>
+<a class="flex items-center gap-space-xs px-space-xs py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">palette</span>
+<span>Aparência</span>
+</a>
+<a class="flex items-center gap-space-xs px-space-xs py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">schedule</span>
+<span>Horários</span>
+</a>
+<a class="flex items-center gap-space-xs px-space-xs py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">two_wheeler</span>
+<span>Delivery &amp; Raio</span>
+</a>
+<a class="flex items-center gap-space-xs px-space-xs py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">payments</span>
+<span>Pagamentos</span>
+</a>
+<a class="flex items-center gap-space-xs px-space-xs py-2 rounded-lg text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">group</span>
+<span>Usuários &amp; Equipe</span>
+</a>
+<!-- Active Item: Configurações Gerais -->
+<a class="flex items-center gap-space-xs px-space-xs py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md shadow-sm" href="#">
+<span class="material-symbols-outlined text-[20px] text-on-primary" style="font-variation-settings: 'FILL' 1;">settings</span>
+<span class="font-bold">Configurações Gerais</span>
+</a>
+</div>
+<!-- Quick Support Status in Sidebar -->
+<div class="p-space-xs bg-surface-container-low rounded-xl flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">Suporte VIP Pro</span>
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Resposta média em 4 min</span>
+</div>
+</aside>
+<!-- Content Workspace -->
+<div class="flex-1 flex flex-col min-w-0">
+<!-- Top Action Bar / Page Header -->
+<header class="w-full bg-surface-container-lowest px-gutter py-space-md shadow-sm">
+<div class="max-w-5xl mx-auto flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="flex flex-col">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-lg text-headline-lg text-on-surface font-bold">Configurações Gerais</span>
+<span class="hidden md:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-fixed/40 text-on-tertiary-fixed-variant font-label-sm text-label-sm font-semibold">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                Loja Aberta (Moema)
+              </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+              Gerencie as informações essenciais do seu restaurante, link público e dados da conta.
+            </p>
+</div>
+<!-- Header Right Action Buttons -->
+<div class="flex items-center gap-space-xs self-start sm:self-auto">
+<a class="inline-flex items-center gap-1.5 h-10 px-space-md rounded-xl font-label-md text-label-md text-on-surface bg-surface-container-low hover:bg-surface-container transition-colors" href="#" target="_blank">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+<span>Ver Loja Pública</span>
+</a>
+<button class="inline-flex items-center gap-1.5 h-10 px-space-lg rounded-xl font-label-md text-label-md text-on-primary bg-primary hover:bg-primary-container shadow-[0_4px_14px_rgba(171,47,0,0.3)] active:scale-[0.98] transition-all" id="save-all-btn">
+<span class="material-symbols-outlined text-[18px]">check</span>
+<span>Salvar alterações</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Body Container -->
+<main class="w-full px-gutter py-space-xl">
+<div class="max-w-5xl mx-auto flex flex-col gap-space-xl">
+<!-- 1. CARD: INFORMAÇÕES DO RESTAURANTE -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm p-space-xl flex flex-col gap-space-lg">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">storefront</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Informações do Restaurante</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Essas informações aparecem na sua loja pública e nos comprovantes de pedido.</p>
+</div>
+</div>
+</div>
+<!-- Form Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Nome do restaurante -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="store-name">Nome de exibição</label>
+<input class="h-11 px-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="store-name" type="text" value="Next Burger"/>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Nome destacado no cardápio e notificações.</span>
+</div>
+<!-- Razão / Subtítulo -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="legal-name">Nome comercial / Unidade</label>
+<input class="h-11 px-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="legal-name" type="text" value="Next Burger Express - Moema"/>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Útil para clientes identificarem a filial.</span>
+</div>
+<!-- Telefone / WhatsApp -->
+<div class="flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="phone">WhatsApp &amp; Telefone principal</label>
+<span class="inline-flex items-center gap-1 font-label-sm text-label-sm text-tertiary">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">verified</span> Verificado
+                  </span>
+</div>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-[18px]">call</span>
+<input class="w-full h-11 pl-10 pr-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="phone" type="tel" value="(11) 98765-4321"/>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Utilizado para mensagens de status e suporte ao cliente.</span>
+</div>
+<!-- E-mail de contato -->
+<div class="flex flex-col gap-1.5">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="email">E-mail de contato da loja</label>
+<div class="relative">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 material-symbols-outlined text-on-surface-variant text-[18px]">mail</span>
+<input class="w-full h-11 pl-10 pr-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="email" type="email" value="contato@nextburger.com.br"/>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Para recebimento de relatórios e faturamento.</span>
+</div>
+<!-- Descrição Curta (Full Width) -->
+<div class="md:col-span-2 flex flex-col gap-1.5">
+<div class="flex items-center justify-between">
+<label class="font-label-md text-label-md text-on-surface font-semibold" for="description">Descrição curta da loja (Bio)</label>
+<span class="font-label-sm text-label-sm text-on-surface-variant">104/160 caracteres</span>
+</div>
+<textarea class="p-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm resize-none" id="description" rows="2">Hambúrgueres artesanais grelhados no fogo, smash burgers suculentos e porções crocantes feitas na hora.</textarea>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Aparece no topo do seu cardápio público e prévias no Google.</span>
+</div>
+</div>
+<!-- Card Footer -->
+<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm pt-space-md border-t border-surface-container-high/60">
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">history</span>
+                Última atualização hoje às 11:20
+              </span>
+<button class="inline-flex items-center justify-center h-10 px-space-md rounded-xl font-label-md text-label-md text-on-surface bg-surface-container-low hover:bg-surface-container transition-colors shadow-sm">
+                Salvar dados do restaurante
+              </button>
+</div>
+</section>
+<!-- 2. CARD: ENDEREÇO DA LOJA (ORIGEM DE DELIVERY) -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm p-space-xl flex flex-col gap-space-lg">
+<div class="flex items-start gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">pin_drop</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Endereço da Loja</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Este endereço é usado como ponto de partida oficial para o cálculo automático de taxas e raio de entrega.</p>
+</div>
+</div>
+<!-- Two-column visual layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-lg items-stretch">
+<!-- Left Address Specs -->
+<div class="md:col-span-6 flex flex-col justify-between p-space-lg bg-surface-container-low/70 rounded-xl">
+<div class="flex flex-col gap-2">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-tertiary-fixed/30 text-on-tertiary-fixed-variant font-label-sm text-label-sm w-fit font-bold">
+<span class="material-symbols-outlined text-[14px]">check_circle</span>
+                    Localização confirmada no mapa
+                  </div>
+<div class="mt-2">
+<p class="font-label-lg text-label-lg text-on-surface font-bold">Alameda dos Anapurus, 1200</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Complemento: Loja 02 (Esquina com Av. Jamaris)</p>
+<p class="font-body-md text-body-md text-on-surface-variant">Bairro Moema — São Paulo / SP</p>
+<p class="font-body-md text-body-md text-on-surface font-semibold">CEP 04087-001</p>
+</div>
+</div>
+<div class="pt-space-md mt-space-md border-t border-surface-container-high flex items-center justify-between">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Latitude: -23.6087 | Longitude: -46.6631</span>
+<button class="inline-flex items-center gap-1 text-primary hover:text-primary-container font-label-md text-label-md font-bold">
+<span class="material-symbols-outlined text-[16px]">edit</span>
+                    Editar endereço
+                  </button>
+</div>
+</div>
+<!-- Right Mini Map Preview (Map Integration with data-location) -->
+<div class="md:col-span-6 relative min-h-[190px] rounded-xl overflow-hidden shadow-sm flex flex-col justify-end p-space-sm" data-location="Alameda dos Anapurus, 1200, Moema, Sao Paulo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuB-HeTWYgN7idwxr0WnXnQoVAfeMGFX01q7jdXbS63DS96QKzCNCAESOBre6vexelIuzlXyj_cnLWSj9-EPujdc7Tv5ZaJ3W-SbolLrU0Ef2KRQMPL9LLlPDXleIZmf-_1dYXRXPjx9xgVlGAicdBV_QHSO0Xxmf5tTF6UJfno4O3eNIs0o4_BtR1wGYzRIV5cYvZp9u1epQk4ZEuUqo7uVAmAX-G26xVgdJGm2S-bVaCnIuxIuyKyi')">
+<!-- Fallback/Overlay Gradient for legibility -->
+<div class="absolute inset-0 bg-gradient-to-t from-inverse-surface/85 via-inverse-surface/20 to-transparent"></div>
+<!-- Stylized Center Radar Pin -->
+<div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+<div class="relative flex items-center justify-center">
+<span class="absolute w-14 h-14 rounded-full bg-primary/25 animate-ping"></span>
+<div class="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-lg">
+<span class="material-symbols-outlined text-[20px]">store</span>
+</div>
+</div>
+</div>
+<!-- Info floating overlay -->
+<div class="relative z-10 flex items-center justify-between bg-surface-container-lowest/90 backdrop-blur-md px-space-sm py-1.5 rounded-lg">
+<div class="flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-bold">Origem de Despacho &amp; Balcão</span>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Raio 8.5 km</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 3. CARD: LINK PÚBLICO & QR CODE -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm p-space-xl flex flex-col gap-space-lg">
+<div class="flex items-start gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">qr_code_2</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Link da Loja &amp; Divulgação</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Compartilhe este link direto com seus clientes no Instagram, WhatsApp e materialize seu cardápio físico.</p>
+</div>
+</div>
+<!-- Vanity Link Row -->
+<div class="p-space-md bg-surface-container-low rounded-xl flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-sm min-w-0">
+<span class="material-symbols-outlined text-primary text-[24px]">link</span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Seu Link Permanente</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-extrabold tracking-tight truncate">menunext.com.br/nextburger</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<button class="inline-flex items-center gap-1.5 h-10 px-space-md rounded-xl font-label-md text-label-md text-on-surface bg-surface-container-lowest hover:bg-surface-container shadow-sm active:scale-95 transition-all" id="copy-link-btn">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+<span id="copy-link-text">Copiar link</span>
+</button>
+<a class="inline-flex items-center gap-1 h-10 px-space-md rounded-xl font-label-md text-label-md text-on-primary bg-primary hover:bg-primary-container shadow-sm transition-colors" href="#" target="_blank">
+<span class="material-symbols-outlined text-[18px]">launch</span>
+<span>Abrir loja</span>
+</a>
+</div>
+</div>
+<!-- QR Code Section -->
+<div class="flex flex-col md:flex-row items-center gap-space-lg p-space-md bg-surface-container-lowest rounded-xl">
+<!-- SVG QR Code Display -->
+<div class="w-32 h-32 p-2 bg-surface-container-lowest rounded-xl shadow-md flex items-center justify-center shrink-0">
+<svg class="w-full h-full text-on-surface" fill="currentColor" viewbox="0 0 100 100">
+<!-- Outer frame corners -->
+<path d="M5,5 h30 v30 h-30 z M10,10 v20 h20 v-20 z M15,15 h10 v10 h-10 z"></path>
+<path d="M65,5 h30 v30 h-30 z M70,10 v20 h20 v-20 z M75,15 h10 v10 h-10 z"></path>
+<path d="M5,65 h30 v30 h-30 z M10,70 v20 h20 v-20 z M15,75 h10 v10 h-10 z"></path>
+<!-- Data matrix pattern stylized -->
+<rect height="6" width="6" x="42" y="10"></rect>
+<rect height="12" width="6" x="52" y="10"></rect>
+<rect height="6" width="16" x="42" y="24"></rect>
+<rect height="16" width="6" x="10" y="42"></rect>
+<rect height="6" width="10" x="24" y="42"></rect>
+<rect height="6" width="8" x="20" y="52"></rect>
+<rect class="text-primary fill-primary" height="20" rx="3" width="20" x="40" y="40"></rect>
+<rect height="6" width="12" x="68" y="42"></rect>
+<rect height="16" width="6" x="86" y="42"></rect>
+<rect height="6" width="8" x="74" y="54"></rect>
+<rect height="18" width="6" x="42" y="68"></rect>
+<rect height="6" width="12" x="54" y="74"></rect>
+<rect height="6" width="22" x="70" y="68"></rect>
+<rect height="12" width="10" x="70" y="80"></rect>
+<rect height="8" width="6" x="86" y="84"></rect>
+</svg>
+</div>
+<div class="flex-1 flex flex-col gap-1 text-center md:text-left">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">QR Code do Balcão e Mesas</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+                  Gere materiais impressos de autoatendimento. Clientes apontam a câmera do celular diretamente para seu cardápio, sem necessidade de baixar nenhum app.
+                </p>
+<div class="flex flex-wrap items-center justify-center md:justify-start gap-space-xs mt-space-xs">
+<button class="inline-flex items-center gap-1.5 h-9 px-space-sm rounded-lg font-label-md text-label-md text-on-surface bg-surface-container-low hover:bg-surface-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px]">download</span>
+                    Baixar QR Code (PNG)
+                  </button>
+<button class="inline-flex items-center gap-1.5 h-9 px-space-sm rounded-lg font-label-md text-label-md text-on-surface bg-surface-container-low hover:bg-surface-container transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[16px]">print</span>
+                    Imprimir Display Acrílico
+                  </button>
+</div>
+</div>
+</div>
+</section>
+<!-- 4. CARD: PEDIDOS ONLINE & OPERAÇÃO -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm p-space-xl flex flex-col gap-space-lg">
+<div class="flex items-start gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">shopping_bag</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Regras Rápidas de Pedidos</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Parâmetros básicos do recebimento e fluxo de pedidos em tempo real.</p>
+</div>
+</div>
+<!-- Toggles List -->
+<div class="flex flex-col gap-space-md">
+<!-- Toggle 1: Receber pedidos online -->
+<div class="flex items-start justify-between gap-space-md p-space-sm rounded-xl hover:bg-surface-container-low/50 transition-colors">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Receber pedidos online</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                    Quando ativado, sua loja aceita novos pedidos através do cardápio digital e despacha para a cozinha.
+                  </span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Toggle 2: Somente no horário -->
+<div class="flex items-start justify-between gap-space-md p-space-sm rounded-xl hover:bg-surface-container-low/50 transition-colors">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Aceitar pedidos somente no horário de funcionamento</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                    A loja fecha automaticamente para pedidos fora dos intervalos programados na aba 'Horários'.
+                  </span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Input: Tempo de Preparo -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md p-space-sm bg-surface-container-low/50 rounded-xl">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Tempo padrão de preparo informado ao cliente</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                    Esse tempo médio é exibido no cardápio público e utilizado para balizar os prazos de entrega.
+                  </span>
+</div>
+<div class="flex items-center gap-2 shrink-0">
+<input class="w-20 h-10 px-space-xs text-center rounded-lg bg-surface-container-lowest text-on-surface font-headline-sm text-headline-sm font-bold shadow-sm focus:outline-none focus:ring-2 focus:ring-primary" max="180" min="5" type="number" value="30"/>
+<span class="font-label-md text-label-md text-on-surface font-semibold">minutos</span>
+</div>
+</div>
+</div>
+</section>
+<!-- 5. CARD: EXPERIÊNCIA DO CLIENTE -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm p-space-xl flex flex-col gap-space-lg">
+<div class="flex items-start gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">favorite</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Experiência de Compra do Cliente</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Configure os fluxos de fricção reduzida e canais de contato direto no cardápio.</p>
+</div>
+</div>
+<!-- Options -->
+<div class="flex flex-col gap-space-md">
+<!-- Checkout Convidado -->
+<div class="flex items-start justify-between gap-space-md p-space-sm rounded-xl hover:bg-surface-container-low/50 transition-colors">
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Permitir pedidos sem cadastro prévio (Checkout Convidado)</span>
+<span class="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-tertiary-fixed/50 text-on-tertiary-fixed-variant">Recomendado</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                    O cliente digita apenas Nome e WhatsApp para concluir a compra em poucos segundos, aumentando comprovadamente a taxa de conversão em até 28%.
+                  </span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+<!-- Botão WhatsApp Flutuante -->
+<div class="flex items-start justify-between gap-space-md p-space-sm rounded-xl hover:bg-surface-container-low/50 transition-colors">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Exibir botão flutuante de WhatsApp na loja pública</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                    Facilita o atendimento direto para clientes tirarem dúvidas sobre alérgenos, observações de itens ou status de entregas.
+                  </span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-surface-container-lowest after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- 6. CARD: DADOS DA CONTA & ASSINATURA -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm p-space-xl flex flex-col gap-space-lg">
+<div class="flex items-start justify-between">
+<div class="flex items-start gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-surface-container flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[24px]">verified_user</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Dados da Conta MenuNext</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Informações cadastrais e contratuais do titular da loja.</p>
+</div>
+</div>
+<button class="inline-flex items-center gap-1 text-on-surface-variant hover:text-on-surface font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">manage_accounts</span>
+                Editar titular
+              </button>
+</div>
+<!-- Info Metadata Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-space-md p-space-md bg-surface-container-low/40 rounded-xl">
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Proprietário Principal</span>
+<span class="font-label-md text-label-md text-on-surface font-bold mt-0.5">Bruno Viana</span>
+<span class="inline-flex items-center text-[10px] font-bold text-primary mt-1">👑 Proprietário</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">E-mail de Acesso</span>
+<span class="font-label-md text-label-md text-on-surface font-semibold mt-0.5 truncate">bruno@nextburger.com.br</span>
+<span class="text-[10px] text-tertiary mt-1">✓ Autenticação 2FA</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Plano Contratado</span>
+<span class="font-label-md text-label-md text-on-surface font-bold mt-0.5">MenuNext Pro</span>
+<span class="text-[10px] text-on-surface-variant mt-1">R$ 69,90/mês • Renova 15/10</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm text-on-surface-variant">ID da Loja</span>
+<span class="font-label-md text-label-md text-on-surface font-mono font-bold mt-0.5">MN-0001048</span>
+<span class="text-[10px] text-on-surface-variant mt-1">Servidor BR-SP (Ativo)</span>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+              O proprietário principal possui controle total de acesso administrativo. Para convidar garçons, cozinheiros e caixas, acesse o menu <strong>Usuários &amp; Equipe</strong>.
+            </p>
+</section>
+<!-- 7. CARD: ZONA DE PERIGO (Perigo controlado) -->
+<section class="bg-error-container/20 rounded-xl p-space-xl flex flex-col gap-space-md">
+<div class="flex items-start gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-error-container text-error flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">warning</span>
+</div>
+<div class="flex-1">
+<h2 class="font-headline-sm text-headline-sm text-error font-bold">Zona de Perigo</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                  Ações de alto impacto na disponibilidade e status do restaurante na plataforma MenuNext.
+                </p>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pt-space-sm">
+<div class="flex flex-col max-w-2xl">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Desativar restaurante temporariamente</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                  A loja ficará completamente indisponível para novos clientes e pedidos. Todo o seu cardápio, produtos, histórico de vendas e dados financeiros permanecem 100% seguros e intactos.
+                </span>
+</div>
+<button class="inline-flex items-center justify-center h-10 px-space-md rounded-xl font-label-md text-label-md text-error bg-surface-container-lowest hover:bg-error-container hover:text-on-error-container transition-all shadow-sm shrink-0 font-bold" id="open-danger-modal-btn">
+                Desativar restaurante
+              </button>
+</div>
+</section>
+</div>
+</main>
+</div>
+</div>
+<!-- TOAST FEEDBACK NOTIFICATION (Floating bottom right) -->
+<div class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 pointer-events-none transition-all duration-300 flex items-center gap-2 bg-inverse-surface text-inverse-on-surface px-space-md py-3 rounded-xl shadow-xl" id="toast-feedback">
+<span class="material-symbols-outlined text-tertiary-fixed text-[20px]">check_circle</span>
+<span class="font-label-md text-label-md" id="toast-message">Alterações salvas com sucesso!</span>
+</div>
+<!-- MODAL: CONFIRMAÇÃO DE DESATIVAÇÃO (Hidden by default) -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/60 backdrop-blur-sm hidden items-center justify-center p-4" id="danger-modal">
+<div class="bg-surface-container-lowest max-w-lg w-full rounded-2xl shadow-xl overflow-hidden animate-in fade-in zoom-in duration-200">
+<div class="p-space-xl flex flex-col gap-space-md">
+<div class="flex items-center gap-space-xs text-error">
+<div class="w-10 h-10 rounded-full bg-error-container flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-[24px]">power_settings_new</span>
+</div>
+<h3 class="font-headline-md text-headline-md font-bold">Desativar restaurante?</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Ao confirmar, o cardápio público da unidade <strong>Next Burger Moema</strong> será pausado imediatamente. Nenhum cliente conseguirá abrir pedidos pelo link ou QR Code até a reativação manual.
+        </p>
+<div class="p-space-sm bg-surface-container-low rounded-xl flex flex-col gap-1.5">
+<label class="font-label-sm text-label-sm text-on-surface font-bold" for="confirm-pass">Digite sua senha de administrador para confirmar:</label>
+<input class="h-10 px-space-sm rounded-lg bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-sm" id="confirm-pass" placeholder="••••••••" type="password"/>
+</div>
+<div class="flex items-center justify-end gap-space-xs mt-space-sm">
+<button class="h-11 px-space-md rounded-xl font-label-md text-label-md text-on-surface hover:bg-surface-container transition-colors" id="cancel-danger-modal-btn">
+            Cancelar e manter aberto
+          </button>
+<button class="h-11 px-space-lg rounded-xl font-label-md text-label-md text-on-error bg-error hover:bg-on-error-container transition-all shadow-sm font-bold" id="confirm-danger-action-btn">
+            Sim, desativar agora
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- Client-Side Micro-interactions Script -->
+<script>
+    (function() {
+      // Toast helper
+      const toast = document.getElementById('toast-feedback');
+      const toastMsg = document.getElementById('toast-message');
+      
+      function showToast(message) {
+        if (!toast || !toastMsg) return;
+        toastMsg.textContent = message;
+        toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+        setTimeout(() => {
+          toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        }, 3000);
+      }
+
+      // Copy link action
+      const copyBtn = document.getElementById('copy-link-btn');
+      const copyText = document.getElementById('copy-link-text');
+      if (copyBtn) {
+        copyBtn.addEventListener('click', () => {
+          navigator.clipboard?.writeText('https://menunext.com.br/nextburger');
+          if (copyText) copyText.textContent = 'Link copiado!';
+          showToast('Link do restaurante copiado para a área de transferência!');
+          setTimeout(() => {
+            if (copyText) copyText.textContent = 'Copiar link';
+          }, 2500);
+        });
+      }
+
+      // Save changes trigger
+      const saveBtn = document.getElementById('save-all-btn');
+      if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+          saveBtn.classList.add('scale-95');
+          setTimeout(() => saveBtn.classList.remove('scale-95'), 150);
+          showToast('Todas as alterações foram salvas com sucesso!');
+        });
+      }
+
+      // Danger zone modal toggling
+      const modal = document.getElementById('danger-modal');
+      const openModalBtn = document.getElementById('open-danger-modal-btn');
+      const closeModalBtn = document.getElementById('cancel-danger-modal-btn');
+      const confirmDeactivateBtn = document.getElementById('confirm-danger-action-btn');
+
+      if (openModalBtn && modal) {
+        openModalBtn.addEventListener('click', () => {
+          modal.classList.remove('hidden');
+          modal.classList.add('flex');
+        });
+      }
+
+      if (closeModalBtn && modal) {
+        closeModalBtn.addEventListener('click', () => {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+        });
+      }
+
+      if (confirmDeactivateBtn && modal) {
+        confirmDeactivateBtn.addEventListener('click', () => {
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+          showToast('Restaurante desativado temporariamente.');
+        });
+      }
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low mt-space-3xl"><div class="max-w-[1440px] mx-auto px-gutter py-space-3xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl"><div class="lg:col-span-1 flex flex-col gap-space-md"><div class="flex items-center gap-space-xs"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">A plataforma definitiva de pedidos online, KDS e autoatendimento inteligente para restaurantes e dark kitchens que escalam com autonomia.</p><div class="flex items-center gap-space-xs mt-space-xs"><span class="inline-flex items-center px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>Infraestrutura Ativa</span></div></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Produto</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="cardapio-digital" href="#">Cardápio Digital QR</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="kds-cozinha" href="#">KDS Operacional</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="painel-gestao" href="#">Painel Gerencial</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="integracao-pos" href="#">Integrações POS &amp; iFood</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Tabela de Preços</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Empresa</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="sobre" href="#">Sobre o MenuNext</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="clientes" href="#">Histórias de Sucesso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="carreiras" href="#">Vagas e Carreiras</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="imprensa" href="#">Mídia &amp; Imprensa</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="parceiros" href="#">Programa de Parceiros</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Suporte</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="central-ajuda" href="#">Central de Ajuda 24/7</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="tutoriais" href="#">Vídeos e Tutoriais</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="status" href="#">Status dos Servidores</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">Perguntas Frequentes</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="fale-conosco" href="#">Contato com Consultor</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Legal</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="termos" href="#">Termos de Uso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade e LGPD</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="seguranca" href="#">Segurança da Informação</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="compliance" href="#">Políticas Comerciais</a></div></div><div class="mt-space-2xl pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><p>© 2025 MenuNext Tecnologia para Gastronomia Ltda. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</p><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade</a><a class="hover:text-on-surface transition-colors" data-path="termos" href="#">Termos</a></div></div></div></footer></body></html>

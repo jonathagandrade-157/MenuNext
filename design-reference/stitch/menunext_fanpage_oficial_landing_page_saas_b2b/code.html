@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary-fixed-variant":"#005236","inverse-on-surface":"#edf0ff","outline":"#8f7067","secondary-container":"#d8391e","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#3f0400","on-secondary":"#ffffff","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-tint":"#af3100","inverse-surface":"#2a303f","tertiary":"#006947","on-primary-fixed":"#3a0a00","primary":"#ab2f00","error":"#ba1a1a","surface-bright":"#faf8ff","on-primary-fixed-variant":"#862300","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","primary-container":"#d53e02","surface-container-lowest":"#ffffff","outline-variant":"#e4beb4","on-primary-container":"#fffbff","primary-fixed":"#ffdbd1","on-surface":"#151b29","on-secondary-fixed-variant":"#8f1200","on-error-container":"#93000a","on-tertiary-container":"#f5fff6","primary-fixed-dim":"#ffb59f","on-error":"#ffffff","surface-container":"#e9edff","surface-container-high":"#e2e8fc","secondary":"#b41e04","surface-dim":"#d4d9ed","surface-variant":"#dde2f6","background":"#faf8ff","inverse-primary":"#ffb59f","error-container":"#ffdad6","surface":"#faf8ff","secondary-fixed-dim":"#ffb4a5","secondary-fixed":"#ffdad3","on-secondary-container":"#fffbff","surface-container-low":"#f1f3ff","on-background":"#151b29","tertiary-container":"#00855b","surface-container-highest":"#dde2f6","on-surface-variant":"#5b4139"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"container-max":"1440px","space-sm":"0.75rem","space-xl":"2rem","space-2xl":"3rem","space-3xl":"4rem","space-xs":"0.5rem","space-lg":"1.5rem","gutter":"1.5rem","space-2xs":"0.25rem","space-md":"1rem"},fontFamily:{"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-md":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-xs" data-path="landing-page" href="#"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></a><nav class="hidden lg:flex items-center gap-space-lg ml-space-md" data-active-classes="text-primary font-label-lg font-bold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="recursos" href="#">Recursos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="como-funciona" href="#">Como Funciona</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Planos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">FAQ</a></nav></div><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_3px_0_rgba(18,24,38,0.05)]" data-path="login" href="#">Entrar</a><a class="inline-flex items-center justify-center h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.3)]" data-path="cadastro" href="#">Criar minha loja grátis</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full overflow-hidden">
+<!-- ==================== 1. HERO SECTION ==================== -->
+<section class="relative w-full max-w-[1440px] mx-auto px-gutter pt-space-xl pb-space-3xl">
+<div class="absolute -top-16 -left-20 w-96 h-96 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute top-1/2 right-0 w-[500px] h-[500px] bg-secondary/5 rounded-full blur-3xl pointer-events-none"></div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-center relative z-10">
+<!-- Coluna Esquerda: Conteúdo / Call to Actions -->
+<div class="lg:col-span-6 flex flex-col gap-space-lg">
+<!-- Badge Pill Superior -->
+<div class="inline-flex items-center gap-space-xs self-start px-space-md py-1.5 rounded-full bg-surface-container text-primary font-label-md text-label-md shadow-sm">
+<span class="material-symbols-outlined text-[18px] text-primary" style="font-variation-settings: 'FILL' 1;">stars</span>
+<span>O SaaS completo para vender direto sem taxas abusivas</span>
+</div>
+<!-- Headline Principal -->
+<div class="flex flex-col">
+<h1 class="font-display text-display text-on-surface tracking-tight leading-[1.05]">
+            Seu restaurante.<br/>
+<span class="text-primary">Seu cardápio.</span><br/>
+            Seus pedidos.
+          </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant mt-space-md max-w-xl">
+            Crie sua loja online personalizada, receba pedidos em tempo real direto dos seus clientes e livre sua operação da dependência de marketplaces caros.
+          </p>
+</div>
+<!-- Bloco de CTAs Primário & Secundário -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-space-md pt-space-xs">
+<a class="inline-flex items-center justify-center gap-space-xs h-14 px-space-xl rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-lg shadow-primary/20" href="#planos">
+<span>Criar minha loja grátis</span>
+<span class="material-symbols-outlined text-[20px]">rocket_launch</span>
+</a>
+<a class="inline-flex items-center justify-center gap-space-xs h-14 px-space-xl rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container transition-all shadow-sm" href="#como-funciona">
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+<span>Ver como funciona</span>
+</a>
+</div>
+<!-- Badges de Confiança -->
+<div class="flex flex-wrap items-center gap-space-md text-on-surface-variant font-label-sm text-label-sm pt-space-xs">
+<span class="inline-flex items-center gap-1.5 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<strong class="font-semibold text-on-surface">30 dias grátis</strong>
+</span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+<span class="inline-flex items-center gap-1.5 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<strong class="font-semibold text-on-surface">Sem cartão de crédito</strong>
+</span>
+<span class="w-1.5 h-1.5 rounded-full bg-outline-variant"></span>
+<span class="inline-flex items-center gap-1.5 text-tertiary">
+<span class="material-symbols-outlined text-[16px]">check_circle</span>
+<strong class="font-semibold text-on-surface">0% de comissão</strong>
+</span>
+</div>
+</div>
+<!-- Coluna Direita: Composição Visual (Smartphone + Painel Administrativo Overlap) -->
+<div class="lg:col-span-6 relative flex justify-center items-center mt-space-xl lg:mt-0">
+<!-- Fundo Decorativo do Painel do Lojista -->
+<div class="w-full max-w-lg bg-surface-container-lowest rounded-2xl p-space-lg shadow-xl shadow-surface-variant/50 relative z-0 translate-y-3 lg:translate-x-8">
+<!-- Top bar do painel -->
+<div class="flex items-center justify-between pb-space-sm mb-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-lg bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-[18px]">storefront</span>
+</div>
+<div>
+<p class="font-label-md text-label-md text-on-surface font-bold">Painel Operacional</p>
+<p class="font-body-sm text-[10px] text-on-surface-variant leading-none">Next Burger • Delivery</p>
+</div>
+</div>
+<!-- Status Loja Aberta Pulsante -->
+<span class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
+<span>Loja Aberta</span>
+</span>
+</div>
+<!-- Métricas Rápidas -->
+<div class="grid grid-cols-2 gap-space-sm mb-space-md">
+<div class="bg-surface-container-low rounded-xl p-space-sm">
+<span class="font-body-sm text-[11px] text-on-surface-variant">Faturamento Hoje</span>
+<p class="font-headline-sm text-headline-sm text-on-surface font-bold mt-0.5">R$ 1.248,00</p>
+<span class="font-label-sm text-[10px] text-tertiary font-bold flex items-center gap-0.5 mt-1">
+<span class="material-symbols-outlined text-[14px]">trending_up</span> +18% vs ontem
+              </span>
+</div>
+<div class="bg-surface-container-low rounded-xl p-space-sm">
+<span class="font-body-sm text-[11px] text-on-surface-variant">Pedidos Ativos</span>
+<p class="font-headline-sm text-headline-sm text-primary font-bold mt-0.5">4 em preparo</p>
+<span class="font-label-sm text-[10px] text-on-surface-variant flex items-center gap-0.5 mt-1">
+<span class="material-symbols-outlined text-[14px]">timer</span> Tempo médio: 24 min
+              </span>
+</div>
+</div>
+<!-- Notificação em Tempo Real Flutuante -->
+<div class="bg-surface-bright p-space-sm rounded-xl flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-space-xs">
+<div class="w-9 h-9 rounded-full bg-tertiary-fixed flex items-center justify-center text-on-tertiary-fixed">
+<span class="material-symbols-outlined text-[20px]">notifications_active</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface font-bold">Novo pedido #1048 recebido</p>
+<p class="font-body-sm text-[11px] text-on-surface-variant">R$ 54,80 • Pix confirmado instantâneo</p>
+</div>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary font-bold bg-tertiary/10 px-2 py-0.5 rounded-full">Novo</span>
+</div>
+</div>
+<!-- Mockup Smartphone Frontal Sobreposto -->
+<div class="absolute -bottom-6 lg:-bottom-10 left-4 sm:left-12 lg:-left-2 z-20 w-[270px] sm:w-[300px] bg-inverse-surface rounded-[2.5rem] p-2.5 shadow-2xl">
+<div class="w-full bg-surface-container-lowest rounded-[2rem] overflow-hidden flex flex-col">
+<!-- Dynamic Island / Speaker bar -->
+<div class="w-full h-5 bg-inverse-surface flex items-center justify-center">
+<div class="w-16 h-2.5 bg-inverse-surface rounded-full"></div>
+</div>
+<!-- Banner Loja e Cabeçalho -->
+<div class="relative h-24 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Close up artisanal juicy gourmet burger with melting cheddar cheese and caramelized onions on rustic board with soft appetizing lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDkYsWSXg0dvFKIjg-71MJGWBlO4dmQhT4g4raOAepCJUC_GqDuAzGdNOU0Sl21PFCvyic3igg6hJWCX2vtKR016exZZuHBLmFvgh-RCQJXy1dU8DuNxNNEtlMTMkgBxZkABnh7FLOUZDZ_gWC3TYhl6Jb2KzyMPeoNOLW3oFqFwu-j9PqgJ5gdbr0PPTiAENq3fiLXaDUOLfMVjrnQDPsKWA7_ONcpZML02YNkZ6ymRcihe49Rh1Sc"/>
+<div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+<div class="absolute bottom-2 left-3 flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-surface-container-lowest p-0.5 shadow-sm flex items-center justify-center text-primary font-bold text-xs">
+                  NB
+                </div>
+<div>
+<h2 class="font-label-sm text-label-sm text-on-secondary font-bold leading-tight">Next Burger Artesanal</h2>
+<p class="font-body-sm text-[10px] text-surface-variant">Aberto agora • 30-45 min</p>
+</div>
+</div>
+</div>
+<!-- Abas do Cardápio -->
+<div class="flex items-center gap-2 px-3 py-2 bg-surface-bright overflow-x-auto text-[11px] font-label-sm">
+<span class="px-2.5 py-1 rounded-full bg-primary text-on-primary font-bold">Burgers</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant">Combos</span>
+<span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface-variant">Bebidas</span>
+</div>
+<!-- Item Destaque -->
+<div class="p-3 flex flex-col gap-2">
+<div class="p-2.5 bg-surface rounded-xl flex items-center justify-between gap-2">
+<div class="flex flex-col flex-1">
+<span class="font-label-sm text-label-sm text-on-surface font-bold">X-Bacon Artesanal</span>
+<p class="font-body-sm text-[10px] text-on-surface-variant line-clamp-2">Pão brioche, blend 180g, cheddar duplo, bacon crocante.</p>
+<span class="font-label-sm text-label-sm text-primary font-bold mt-1">R$ 28,90</span>
+</div>
+<div class="w-14 h-14 rounded-lg overflow-hidden flex-shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Artisanal smash burger with crispy bacon bits, melted cheddar on a brioche bun close shot food photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAslg1rOk6ZYWqemdgvLN-rKW0hlOhGEDKOotGtWL6HeSE6pwsK7sFvaMLOXJDL83A6ZQ_Kb1s7A70g_-jHx6Lf80NddGAeQkP3eTDeuAiCZA_VSoVeKuevxlPwjnIeCjIv3OD2hg-QSPYxLzJqGul7y0kX-CJx3a9BNsKn4UTuYzgbgafHPtz8mLkqEpTVRdUpA6rVZGEkfXH0493QMGd2Avdh8fMi-lYm8W1kvG0rPVHtGfHtQ4aI"/>
+</div>
+</div>
+<!-- Botão Sacola Flutuante no App -->
+<button class="w-full mt-1 py-2 rounded-xl bg-primary text-on-primary font-label-sm text-[11px] flex items-center justify-between px-3 shadow-md shadow-primary/25">
+<span class="flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px]">shopping_bag</span>
+<span>Ver Sacola (1 item)</span>
+</span>
+<span class="font-bold">R$ 28,90</span>
+</button>
+</div>
+<!-- Rodapé sutil mobile -->
+<div class="py-1 bg-surface-bright text-center">
+<span class="font-body-sm text-[9px] text-on-surface-variant">Desenvolvido por <strong>MenuNext</strong></span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 2. BARRA DE BENEFÍCIOS RÁPIDOS ==================== -->
+<section class="w-full bg-surface-container-low py-space-lg my-space-md">
+<div class="max-w-[1440px] mx-auto px-gutter">
+<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-space-md items-center">
+<div class="flex items-center gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">rocket</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Canal Próprio</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sua marca, suas regras</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">percent</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">0% de Comissão</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sem cortes nos pedidos</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">bolt</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Pedido Direto</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Cliente fala com você</span>
+</div>
+</div>
+<div class="flex items-center gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">palette</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">100% Customizável</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Cores, logo e produtos</span>
+</div>
+</div>
+<div class="col-span-2 md:col-span-1 flex items-center gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface flex-shrink-0">
+<span class="material-symbols-outlined text-[22px]">devices</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md text-on-surface font-bold">Sem App pra Baixar</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Abre direto no link</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 3. COMO FUNCIONA ==================== -->
+<section class="w-full max-w-[1440px] mx-auto px-gutter py-space-3xl" id="como-funciona">
+<!-- Cabeçalho da Seção -->
+<div class="text-center max-w-2xl mx-auto mb-space-2xl">
+<span class="font-label-md text-label-md text-primary tracking-wide uppercase font-bold">Processo Rápido &amp; Sem Complicações</span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mt-space-xs">
+        Do cardápio ao primeiro pedido em poucos minutos.
+      </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+        Criado para donos de restaurantes que não querem perder tempo com burocracias técnicas.
+      </p>
+</div>
+<!-- 3 Passos Estruturados -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-lg relative">
+<!-- Passo 01 -->
+<div class="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow relative">
+<div>
+<div class="flex items-center justify-between mb-space-lg">
+<span class="font-display text-headline-xl text-primary/30 font-extrabold">01</span>
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[26px]">store</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold mb-space-xs">Crie sua loja</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Cadastre seu restaurante em menos de 2 minutos. Defina nome comercial, logotipo, horários e dados para entregas ou retiradas.
+          </p>
+</div>
+<div class="mt-space-lg pt-space-md flex items-center gap-space-xs text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">timer</span>
+<span>Tempo estimado: ~2 min</span>
+</div>
+</div>
+<!-- Passo 02 -->
+<div class="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow relative">
+<div>
+<div class="flex items-center justify-between mb-space-lg">
+<span class="font-display text-headline-xl text-primary/30 font-extrabold">02</span>
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[26px]">restaurant_menu</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold mb-space-xs">Monte seu cardápio</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Adicione categorias com fotos reais, grupos de adicionais, combos promocionais, tamanhos e observações detalhadas com total autonomia.
+          </p>
+</div>
+<div class="mt-space-lg pt-space-md flex items-center gap-space-xs text-primary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">add_photo_alternate</span>
+<span>Importação simples e intuitiva</span>
+</div>
+</div>
+<!-- Passo 03 -->
+<div class="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow relative">
+<div>
+<div class="flex items-center justify-between mb-space-lg">
+<span class="font-display text-headline-xl text-primary/30 font-extrabold">03</span>
+<div class="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined text-[26px]">send</span>
+</div>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold mb-space-xs">Publique e venda</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Divulgue seu link no Instagram, WhatsApp e Google Meu Negócio. Receba os pedidos sonoros direto no painel com zero intermediários.
+          </p>
+</div>
+<div class="mt-space-lg pt-space-md flex items-center gap-space-xs text-tertiary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span>Pronto para receber pedidos</span>
+</div>
+</div>
+</div>
+<!-- Indicador de fluxo visual -->
+<div class="mt-space-xl py-space-md px-space-lg bg-surface-container-low rounded-xl flex flex-wrap items-center justify-center gap-space-md text-center">
+<span class="font-label-lg text-label-lg text-on-surface font-semibold flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary"></span> 1. Cadastro Imediato
+      </span>
+<span class="material-symbols-outlined text-outline-variant text-[20px] hidden sm:inline">arrow_forward</span>
+<span class="font-label-lg text-label-lg text-on-surface font-semibold flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-primary-container"></span> 2. Loja Pronta &amp; Testada
+      </span>
+<span class="material-symbols-outlined text-outline-variant text-[20px] hidden sm:inline">arrow_forward</span>
+<span class="font-label-lg text-label-lg text-tertiary font-bold flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-tertiary animate-pulse"></span> 3. Primeiro Pedido Lucrativo
+      </span>
+</div>
+</section>
+<!-- ==================== 4. DEMONSTRAÇÃO DO PRODUTO (DOIS LADOS) ==================== -->
+<section class="w-full bg-surface-bright py-space-3xl">
+<div class="max-w-[1440px] mx-auto px-gutter">
+<div class="text-center max-w-2xl mx-auto mb-space-2xl">
+<span class="font-label-md text-label-md text-primary tracking-wide uppercase font-bold">Experiência Completa</span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mt-space-xs">
+          Uma loja para o seu cliente. Um painel para você.
+        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+          A experiência mais fluida para quem compra, o controle mais eficiente para quem gerencia a cozinha e a expedição.
+        </p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-xl">
+<!-- CARD 1: Loja do Cliente -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-xl shadow-md flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-space-xs mb-space-sm">
+<span class="px-space-sm py-1 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-bold">
+                EXPERIÊNCIA DO CLIENTE
+              </span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface font-bold">
+              Nenhum cadastro obrigatório.
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs mb-space-lg">
+              Seu cliente acessa pelo celular sem precisar baixar nada nem criar senhas. Escolhe os opcionais em segundos, insere o endereço e paga via Pix instantâneo.
+            </p>
+<!-- Mock Cardápio Produto Interativo -->
+<div class="bg-surface-container-low rounded-xl p-space-md">
+<div class="flex gap-space-md items-start">
+<div class="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-surface-container">
+<img class="w-full h-full object-cover" data-alt="Artisanal pepperoni and mozzarella cheese pizza with fresh basil leaves and roasted crust, food photography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEhqCn7ue0-ifztteXzTx6lWJ7Iz3tMio3xbQCMm1oF-ftitZtyA956deMFq4hMCcXIlaKV0do_P8DW8oXaSihhvMj9yBS33upJtePkinyAZF0_tXDScIUYYucWVP2IGPTQl-EcEEg7xnwoo0sTaxRjHs3JoVqeprUwME49HQvCNyLVnNMkOuL3okuhY17PDgDZKSQDXaA58O5bTo-DufBVUjcYA6K6SYWCBFZJlbVsMpn335QGXOZ"/>
+</div>
+<div class="flex-1">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Pizza Margherita Especial</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Molho pelati italiano, mozzarella di bufala e manjericão fresco colhido.</p>
+<p class="font-headline-sm text-headline-sm text-primary font-bold mt-1">R$ 49,90</p>
+</div>
+</div>
+<!-- Seletores de Variação simulados -->
+<div class="mt-space-md pt-space-sm flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface font-bold">Ponto da Borda / Adicional:</span>
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">radio_button_checked</span>
+                    Borda Recheada Catupiry (+ R$ 8,00)
+                  </span>
+<span class="font-label-sm text-label-sm font-bold">Selecionado</span>
+</div>
+<div class="flex items-center justify-between p-2 rounded-lg bg-surface-container-lowest text-on-surface font-body-sm text-body-sm opacity-60">
+<span class="flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">radio_button_unchecked</span>
+                    Borda Tradicional Crocante (Grátis)
+                  </span>
+</div>
+</div>
+<!-- Botão Adicionar ao Carrinho -->
+<div class="mt-space-md flex items-center justify-between bg-primary text-on-primary p-space-sm rounded-xl">
+<div class="flex items-center gap-2 font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">shopping_cart</span>
+<span>Adicionar ao Pedido</span>
+</div>
+<span class="font-bold">R$ 57,90</span>
+</div>
+</div>
+</div>
+<div class="mt-space-lg flex items-center gap-space-md text-on-surface-variant font-label-sm text-label-sm">
+<span class="flex items-center gap-1">⚡ Abre em 1.2s</span>
+<span>•</span>
+<span class="flex items-center gap-1">💳 Pix Copia &amp; Cola</span>
+<span>•</span>
+<span class="flex items-center gap-1">🛵 Rastreio do Pedido</span>
+</div>
+</div>
+<!-- CARD 2: Painel do Restaurante -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-xl shadow-md flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-space-xs mb-space-sm">
+<span class="px-space-sm py-1 rounded-full bg-secondary-container/10 text-secondary font-label-sm text-label-sm font-bold">
+                GESTAO DO RESTAURANTE
+              </span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface font-bold">
+              Painel Kanban &amp; Alerta Sonoro.
+            </h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs mb-space-lg">
+              Acompanhe pedidos em tempo real por status, altere preços num clique, gerencie taxas de entrega e veja métricas do dia de forma limpa.
+            </p>
+<!-- Mini Kanban Board Mockup -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-space-sm">
+<div class="grid grid-cols-3 gap-2 text-center font-label-sm text-[11px] font-bold">
+<div class="bg-primary/10 text-primary py-1.5 rounded-lg">Novos (1)</div>
+<div class="bg-surface-container-highest text-on-surface py-1.5 rounded-lg">Em Preparo (2)</div>
+<div class="bg-tertiary/10 text-tertiary py-1.5 rounded-lg">Despachados (4)</div>
+</div>
+<!-- Cartão de Pedido no Kanban -->
+<div class="bg-surface-container-lowest p-space-sm rounded-xl shadow-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-bold text-on-surface">#1052 - Carlos M.</span>
+<span class="font-label-sm text-[10px] bg-tertiary-fixed text-on-tertiary-fixed font-bold px-1.5 py-0.5 rounded">PIX CONFIRMADO</span>
+</div>
+<p class="font-body-sm text-[11px] text-on-surface-variant mt-1">2x Burger Especial + 1x Batata Rústica</p>
+<div class="flex items-center justify-between mt-2 pt-2 border-t border-surface-container">
+<span class="font-label-sm text-label-sm text-primary font-bold">Total: R$ 68,00</span>
+<button class="px-2.5 py-1 rounded-lg bg-surface-container-highest hover:bg-primary hover:text-on-primary text-on-surface font-label-sm text-[10px] transition-colors">
+                    Mover p/ Preparo →
+                  </button>
+</div>
+</div>
+<!-- Mini Indicador de Vendas no Painel -->
+<div class="p-space-sm bg-surface-container-lowest rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">bar_chart</span>
+<div>
+<p class="font-label-sm text-label-sm font-bold text-on-surface">Total Vendido na Semana</p>
+<p class="font-body-sm text-[10px] text-on-surface-variant">Segunda a Domingo</p>
+</div>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">R$ 8.940,00</span>
+</div>
+</div>
+</div>
+<div class="mt-space-lg flex items-center gap-space-md text-on-surface-variant font-label-sm text-label-sm">
+<span class="flex items-center gap-1">🔊 Notificação Sonora</span>
+<span>•</span>
+<span class="flex items-center gap-1">🖨️ Impressão Térmica</span>
+<span>•</span>
+<span class="flex items-center gap-1">📍 Taxa por Bairro</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 5. GRADE DE RECURSOS E FUNCIONALIDADES ==================== -->
+<section class="w-full max-w-[1440px] mx-auto px-gutter py-space-3xl" id="recursos">
+<div class="text-center max-w-2xl mx-auto mb-space-2xl">
+<span class="font-label-md text-label-md text-primary tracking-wide uppercase font-bold">Módulos Estratégicos</span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mt-space-xs">
+        Tudo o que seu negócio gastronômico precisa para crescer
+      </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+        Recursos pensados especificamente para a rotina dinâmica e de alta pressão da operação de alimentos.
+      </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+<!-- Recurso 1 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-space-md">
+<span class="material-symbols-outlined text-[24px]">menu_book</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-space-xs">Cardápio Digital Interativo</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Fotos apetitosas, variações ilimitadas de tamanhos, grupos de adicionais obrigatórios ou opcionais e combos.
+        </p>
+</div>
+<!-- Recurso 2 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-space-md">
+<span class="material-symbols-outlined text-[24px]">notifications_active</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-space-xs">Pedidos em Tempo Real</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Alerta sonoro contínuo para você nunca perder um pedido. Painel visual no estilo Kanban para agilizar o despacho.
+        </p>
+</div>
+<!-- Recurso 3 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-space-md">
+<span class="material-symbols-outlined text-[24px]">two_wheeler</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-space-xs">Delivery Próprio &amp; Bairros</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Configure taxa fixa, cálculo por bairro atendido ou opção para o cliente retirar no balcão sem cobrança de frete.
+        </p>
+</div>
+<!-- Recurso 4 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-tertiary/10 flex items-center justify-center text-tertiary mb-space-md">
+<span class="material-symbols-outlined text-[24px]">qr_code_2</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-space-xs">Pix Automático &amp; Direto</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Seu cliente paga instantaneamente com Pix Copia e Cola direto na sua chave, sem intermediários segurando seus recebíveis.
+        </p>
+</div>
+<!-- Recurso 5 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-space-md">
+<span class="material-symbols-outlined text-[24px]">loyalty</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-space-xs">Cupons &amp; Campanhas</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Crie cupons de primeira compra, porcentagem ou desconto fixo para reativar clientes inativos pelo WhatsApp.
+        </p>
+</div>
+<!-- Recurso 6 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-space-md">
+<span class="material-symbols-outlined text-[24px]">contacts</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-space-xs">Base de Clientes Proprietária</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Tenha em mãos o nome, telefone, histórico de compras e pratos favoritos de cada cliente que já comprou de você.
+        </p>
+</div>
+<!-- Recurso 7 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface mb-space-md">
+<span class="material-symbols-outlined text-[24px]">schedule</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-space-xs">Horários de Funcionamento</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Abertura e fechamento programado por turnos (almoço e jantar) ou botão de pausa de emergência com um só clique.
+        </p>
+</div>
+<!-- Recurso 8 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface mb-space-md">
+<span class="material-symbols-outlined text-[24px]">format_paint</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-space-xs">Personalização de Marca</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Insira seu logotipo, escolha a paleta de cores institucional, adicione banner promocional e utilize seu próprio domínio.
+        </p>
+</div>
+<!-- Recurso 9 -->
+<div class="bg-surface-container-lowest p-space-lg rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+<div class="w-12 h-12 rounded-xl bg-surface-container-highest flex items-center justify-center text-on-surface mb-space-md">
+<span class="material-symbols-outlined text-[24px]">analytics</span>
+</div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold mb-space-xs">Relatórios de Ticket Médio</h3>
+<p class="font-body-md text-body-md text-on-surface-variant">
+          Descubra quais são os pratos mais lucrativos, horários de pico e ticket médio por canal de atendimento.
+        </p>
+</div>
+</div>
+</section>
+<!-- ==================== 6. DIFERENCIAL (MENUNEXT VS MARKETPLACES) ==================== -->
+<section class="w-full bg-surface-container-low py-space-3xl">
+<div class="max-w-[1440px] mx-auto px-gutter">
+<div class="text-center max-w-3xl mx-auto mb-space-2xl">
+<span class="font-label-md text-label-md text-primary tracking-wide uppercase font-bold">Autonomia Comercial</span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mt-space-xs">
+          Você não precisa dividir seu lucro com marketplaces.
+        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+          Nos grandes aplicativos de entrega você é apenas mais uma opção disputando preço com dezenas de concorrentes. Com o MenuNext, a marca e o cliente são seus.
+        </p>
+</div>
+<!-- Tabela Comparativa Estruturada -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg max-w-4xl mx-auto">
+<!-- Coluna MenuNext (Destaque) -->
+<div class="bg-surface-container-lowest rounded-2xl p-space-xl shadow-lg relative overflow-hidden">
+<div class="absolute top-0 left-0 right-0 h-2 bg-primary"></div>
+<div class="flex items-center justify-between mb-space-lg">
+<div>
+<span class="font-headline-md text-headline-md text-on-surface font-bold">Com o MenuNext</span>
+<p class="font-body-sm text-body-sm text-primary font-semibold">Canal próprio de alta conversão</p>
+</div>
+<span class="material-symbols-outlined text-primary text-[32px]">verified</span>
+</div>
+<ul class="flex flex-col gap-space-md">
+<li class="flex items-start gap-space-sm text-on-surface font-body-md text-body-md">
+<span class="material-symbols-outlined text-tertiary text-[20px] mt-0.5">check_circle</span>
+<div>
+<strong>Sua marca e identidade própria:</strong> o cliente compra na sua página sem distrações.
+              </div>
+</li>
+<li class="flex items-start gap-space-sm text-on-surface font-body-md text-body-md">
+<span class="material-symbols-outlined text-tertiary text-[20px] mt-0.5">check_circle</span>
+<div>
+<strong>Base de contatos 100% sua:</strong> acesso a telefones e e-mails para fazer remarketing.
+              </div>
+</li>
+<li class="flex items-start gap-space-sm text-on-surface font-body-md text-body-md">
+<span class="material-symbols-outlined text-tertiary text-[20px] mt-0.5">check_circle</span>
+<div>
+<strong>0% de comissão por venda:</strong> o valor total do pedido fica integralmente no seu caixa.
+              </div>
+</li>
+<li class="flex items-start gap-space-sm text-on-surface font-body-md text-body-md">
+<span class="material-symbols-outlined text-tertiary text-[20px] mt-0.5">check_circle</span>
+<div>
+<strong>Pix direto na sua conta bancária:</strong> sem aguardar 30 dias de repasse.
+              </div>
+</li>
+<li class="flex items-start gap-space-sm text-on-surface font-body-md text-body-md">
+<span class="material-symbols-outlined text-tertiary text-[20px] mt-0.5">check_circle</span>
+<div>
+<strong>Sem concorrência na sua vitrine:</strong> nenhum cupom de outros restaurantes é exibido.
+              </div>
+</li>
+</ul>
+<div class="mt-space-xl p-space-md rounded-xl bg-tertiary/10 flex items-center gap-space-xs text-tertiary font-label-md text-label-md">
+<span class="material-symbols-outlined text-[20px]">trending_up</span>
+<span>Economize milhares de reais em taxas operacionais todo mês.</span>
+</div>
+</div>
+<!-- Coluna Marketplace (Neutro / Desvantajoso) -->
+<div class="bg-surface-container rounded-2xl p-space-xl shadow-sm opacity-90 flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-space-lg">
+<div>
+<span class="font-headline-md text-headline-md text-on-surface font-bold">Marketplaces Tradicionais</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Intermediação e perda de margem</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[32px]">storefront</span>
+</div>
+<ul class="flex flex-col gap-space-md">
+<li class="flex items-start gap-space-sm text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-error text-[20px] mt-0.5">cancel</span>
+<div>
+<strong>Comissões abusivas de 12% a 27%:</strong> uma fatia pesada que corrói o seu lucro.
+                </div>
+</li>
+<li class="flex items-start gap-space-sm text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-error text-[20px] mt-0.5">cancel</span>
+<div>
+<strong>O cliente pertence à plataforma:</strong> você não tem acesso ao telefone direto do comprador.
+                </div>
+</li>
+<li class="flex items-start gap-space-sm text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-error text-[20px] mt-0.5">cancel</span>
+<div>
+<strong>Concorrentes patrocinados:</strong> restaurantes vizinhos pagam para aparecer no seu perfil.
+                </div>
+</li>
+<li class="flex items-start gap-space-sm text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-error text-[20px] mt-0.5">cancel</span>
+<div>
+<strong>Guerra constante por descontos:</strong> desvalorização do seu produto para figurar no topo.
+                </div>
+</li>
+<li class="flex items-start gap-space-sm text-on-surface-variant font-body-md text-body-md">
+<span class="material-symbols-outlined text-error text-[20px] mt-0.5">cancel</span>
+<div>
+<strong>Repasses atrasados:</strong> fluxos demorados que prejudicam seu capital de giro.
+                </div>
+</li>
+</ul>
+</div>
+<div class="mt-space-xl p-space-md rounded-xl bg-surface-container-highest text-on-surface-variant font-body-sm text-body-sm">
+            Ideal apenas para aquisição de novos clientes — migre o cliente fidelizado para o seu MenuNext.
+          </div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 7. TABELA DE PREÇOS E PLANOS ==================== -->
+<section class="w-full max-w-[1440px] mx-auto px-gutter py-space-3xl" id="planos">
+<div class="text-center max-w-2xl mx-auto mb-space-xl">
+<span class="font-label-md text-label-md text-primary tracking-wide uppercase font-bold">Investimento Acessível</span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mt-space-xs">
+        Escolha o plano que combina com seu restaurante.
+      </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+        Sem taxas ocultas, sem fidelidade e com 30 dias grátis para testar na prática.
+      </p>
+</div>
+<!-- Banner Destaque 30 Dias Grátis -->
+<div class="max-w-xl mx-auto mb-space-2xl text-center py-2 px-space-md rounded-full bg-tertiary/10 text-tertiary font-label-md text-label-md flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[18px]">celebration</span>
+<span>30 dias grátis para experimentar • Sem cartão de crédito • Cancele quando quiser</span>
+</div>
+<!-- Grid com os 3 Planos -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg items-stretch">
+<!-- PLANO 1: Start -->
+<div class="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div>
+<div class="flex justify-between items-center mb-space-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Plano Start</h3>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Início</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+            Perfeito para pequenos negócios, marmitarias e quem está começando a digitalizar as vendas.
+          </p>
+<div class="flex items-baseline gap-1 mb-space-lg">
+<span class="font-display text-display text-on-surface font-extrabold">R$ 39,90</span>
+<span class="font-body-md text-body-md text-on-surface-variant">/mês</span>
+</div>
+<ul class="flex flex-col gap-space-sm font-body-sm text-body-sm text-on-surface-variant mb-space-xl">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check</span>
+              Até 100 pedidos por mês
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check</span>
+              Cardápio digital ilimitado
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check</span>
+              Recebimento de Pix direto
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check</span>
+              Link personalizado para redes sociais
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check</span>
+              Suporte via WhatsApp
+            </li>
+</ul>
+</div>
+<a class="w-full py-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-bold text-center transition-colors" href="#cadastro">
+          Começar no Start
+        </a>
+</div>
+<!-- PLANO 2: Pro (Destaque) -->
+<div class="bg-surface-container-lowest p-space-xl rounded-2xl shadow-xl flex flex-col justify-between relative transform lg:-translate-y-2">
+<div class="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-primary text-on-primary font-label-sm text-label-sm font-bold uppercase tracking-wider py-1 px-4 rounded-full shadow-md">
+          MAIS ESCOLHIDO
+        </div>
+<div>
+<div class="flex justify-between items-center mb-space-sm mt-1">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Plano Pro</h3>
+<span class="px-2.5 py-0.5 rounded-full bg-primary/10 font-label-sm text-label-sm text-primary font-bold">Recomendado</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+            O pacote completo para hamburguerias, pizzarias e cozinhas com delivery ativo diário.
+          </p>
+<div class="flex items-baseline gap-1 mb-space-lg">
+<span class="font-display text-display text-primary font-extrabold">R$ 69,90</span>
+<span class="font-body-md text-body-md text-on-surface-variant">/mês</span>
+</div>
+<ul class="flex flex-col gap-space-sm font-body-sm text-body-sm text-on-surface mb-space-xl">
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
+<strong>Pedidos ilimitados (0% comissão)</strong>
+</li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
+              Taxas de entrega personalizadas por bairro
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
+              Painel Kanban sonoro em tempo real
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
+              Cupons de desconto e combos promocionais
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
+              Impressão automática de comandas de cozinha
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
+              QR Codes de mesa e balcão prontos para imprimir
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check_circle</span>
+              Suporte prioritário via WhatsApp
+            </li>
+</ul>
+</div>
+<a class="w-full py-3.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-bold text-center transition-all shadow-md shadow-primary/20" href="#cadastro">
+          Experimentar 30 dias grátis
+        </a>
+</div>
+<!-- PLANO 3: Plus -->
+<div class="bg-surface-container-lowest p-space-xl rounded-2xl shadow-sm flex flex-col justify-between hover:shadow-md transition-shadow">
+<div>
+<div class="flex justify-between items-center mb-space-sm">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Plano Plus</h3>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container font-label-sm text-label-sm text-on-surface-variant">Escala</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mb-space-md">
+            Para restaurantes com múltiplos atendentes, alto volume de expedição e dark kitchens.
+          </p>
+<div class="flex items-baseline gap-1 mb-space-lg">
+<span class="font-display text-display text-on-surface font-extrabold">R$ 119,90</span>
+<span class="font-body-md text-body-md text-on-surface-variant">/mês</span>
+</div>
+<ul class="flex flex-col gap-space-sm font-body-sm text-body-sm text-on-surface-variant mb-space-xl">
+<li class="flex items-center gap-2 text-on-surface font-semibold">
+<span class="material-symbols-outlined text-tertiary text-[18px]">done_all</span>
+              Tudo o que está incluído no Pro
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check</span>
+              Múltiplos usuários e perfis de atendentes
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check</span>
+              Relatórios avançados e exportação contábil
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check</span>
+              Domínio próprio configurado (seurestaurante.com.br)
+            </li>
+<li class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">check</span>
+              Gerente de conta VIP dedicado
+            </li>
+</ul>
+</div>
+<a class="w-full py-3 rounded-xl bg-surface-container hover:bg-surface-container-high text-on-surface font-label-md text-label-md font-bold text-center transition-colors" href="#cadastro">
+          Assinar o Plus
+        </a>
+</div>
+</div>
+</section>
+<!-- ==================== 8. FAQ INTERATIVO ==================== -->
+<section class="w-full bg-surface-container-low py-space-3xl" id="faq">
+<div class="max-w-3xl mx-auto px-gutter">
+<div class="text-center mb-space-2xl">
+<span class="font-label-md text-label-md text-primary tracking-wide uppercase font-bold">Dúvidas Frequentes</span>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mt-space-xs">
+          Perguntas Frequentes
+        </h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-space-xs">
+          Tudo o que você precisa saber para começar a usar o MenuNext hoje mesmo.
+        </p>
+</div>
+<!-- Accordion Vanilla JS -->
+<div class="flex flex-col gap-space-sm" id="faq-accordion">
+<!-- FAQ 1 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<button class="faq-trigger w-full px-space-lg py-space-md flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-bold hover:text-primary transition-colors">
+<span>Preciso instalar algum aplicativo?</span>
+<span class="material-symbols-outlined faq-icon transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-lg pb-space-md text-on-surface-variant font-body-md text-body-md">
+            Não! O MenuNext funciona 100% no navegador da internet, tanto no celular quanto em computadores, notebooks ou tablets. Você e sua equipe não precisam baixar nada, e seus clientes abrem o cardápio num piscar de olhos.
+          </div>
+</div>
+<!-- FAQ 2 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<button class="faq-trigger w-full px-space-lg py-space-md flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-bold hover:text-primary transition-colors">
+<span>Meus clientes precisam criar uma conta ou senha?</span>
+<span class="material-symbols-outlined faq-icon transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-lg pb-space-md text-on-surface-variant font-body-md text-body-md">
+            Não! Esse é um dos maiores diferenciais de conversão do MenuNext: seu cliente acessa o link, escolhe os pratos, adiciona itens extras, digita o endereço e conclui a compra em menos de 1 minuto, eliminando o atrito de cadastros demorados.
+          </div>
+</div>
+<!-- FAQ 3 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<button class="faq-trigger w-full px-space-lg py-space-md flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-bold hover:text-primary transition-colors">
+<span>Existe cobrança de comissão por cada pedido?</span>
+<span class="material-symbols-outlined faq-icon transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-lg pb-space-md text-on-surface-variant font-body-md text-body-md">
+            Zero comissão. Ao contrário de plataformas como iFood ou Rappi que cobram até 27%, no MenuNext você paga apenas o valor mensal fixo da sua assinatura. Venda 10 ou 1.000 pedidos, seu custo com a plataforma continua exatamente o mesmo.
+          </div>
+</div>
+<!-- FAQ 4 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<button class="faq-trigger w-full px-space-lg py-space-md flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-bold hover:text-primary transition-colors">
+<span>Posso personalizar a loja com a identidade do meu restaurante?</span>
+<span class="material-symbols-outlined faq-icon transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-lg pb-space-md text-on-surface-variant font-body-md text-body-md">
+            Sim! Você pode fazer upload do seu logotipo oficial, imagem de banner de capa, escolher as cores predominantes dos botões, configurar sua bio descritiva e organizar as categorias no estilo que desejar.
+          </div>
+</div>
+<!-- FAQ 5 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<button class="faq-trigger w-full px-space-lg py-space-md flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-bold hover:text-primary transition-colors">
+<span>Posso trabalhar com entrega (delivery) e retirada no local?</span>
+<span class="material-symbols-outlined faq-icon transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-lg pb-space-md text-on-surface-variant font-body-md text-body-md">
+            Sim! O sistema permite ativar Delivery (com taxa única fixa ou configurada individualmente por bairro atendido) e a opção de Retirada no Balcão, facilitando a logística do seu salão.
+          </div>
+</div>
+<!-- FAQ 6 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<button class="faq-trigger w-full px-space-lg py-space-md flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-bold hover:text-primary transition-colors">
+<span>Como funciona o pagamento por Pix?</span>
+<span class="material-symbols-outlined faq-icon transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-lg pb-space-md text-on-surface-variant font-body-md text-body-md">
+            Você cadastra sua própria chave Pix no painel. Na tela final do pedido, o cliente recebe o código Copia e Cola e a chave do seu restaurante. O dinheiro cai direto na sua conta bancária sem intermediação de gateway retendo saldo.
+          </div>
+</div>
+<!-- FAQ 7 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<button class="faq-trigger w-full px-space-lg py-space-md flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-bold hover:text-primary transition-colors">
+<span>Posso pausar minha loja temporariamente durante um pico na cozinha?</span>
+<span class="material-symbols-outlined faq-icon transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-lg pb-space-md text-on-surface-variant font-body-md text-body-md">
+            Sim! No topo do painel gerencial há o interruptor 'Status da Loja'. Com 1 clique você pausa o recebimento de novos pedidos quando a cozinha estiver sobrecarregada, e reabre no momento exato em que normalizar.
+          </div>
+</div>
+<!-- FAQ 8 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<button class="faq-trigger w-full px-space-lg py-space-md flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-bold hover:text-primary transition-colors">
+<span>Posso alterar preços ou pausar pratos a qualquer momento?</span>
+<span class="material-symbols-outlined faq-icon transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-lg pb-space-md text-on-surface-variant font-body-md text-body-md">
+            Imediatamente! Se um ingrediente acabou, basta abrir o painel pelo celular ou computador e marcar o prato como esgotado. Ele desaparece instantaneamente para os clientes que estiverem navegando.
+          </div>
+</div>
+<!-- FAQ 9 -->
+<div class="faq-item bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<button class="faq-trigger w-full px-space-lg py-space-md flex items-center justify-between text-left font-headline-sm text-headline-sm text-on-surface font-bold hover:text-primary transition-colors">
+<span>Como funciona o período de teste grátis?</span>
+<span class="material-symbols-outlined faq-icon transition-transform duration-200">expand_more</span>
+</button>
+<div class="faq-content hidden px-space-lg pb-space-md text-on-surface-variant font-body-md text-body-md">
+            Oferecemos 30 dias de acesso gratuito completo a todos os recursos. Não pedimos cartão de crédito no cadastro. Você só decide continuar se constatar na prática o aumento nas suas vendas diretas.
+          </div>
+</div>
+</div>
+</div>
+</section>
+<!-- ==================== 9. CTA FINAL (GRAND FINALE) ==================== -->
+<section class="w-full max-w-[1440px] mx-auto px-gutter py-space-3xl">
+<div class="w-full bg-inverse-surface text-inverse-on-surface rounded-3xl p-space-xl sm:p-space-3xl relative overflow-hidden text-center shadow-2xl">
+<!-- Detalhes decorativos de iluminação interna -->
+<div class="absolute -top-32 -left-32 w-80 h-80 bg-primary/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="absolute -bottom-32 -right-32 w-80 h-80 bg-secondary/20 rounded-full blur-3xl pointer-events-none"></div>
+<div class="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-space-lg">
+<span class="px-space-md py-1 rounded-full bg-primary/20 text-primary-fixed font-label-md text-label-md font-bold">
+          COMECE HOJE MESMO
+        </span>
+<h2 class="font-display text-display text-on-secondary font-extrabold tracking-tight leading-tight">
+          Seu restaurante já tem clientes.<br/>
+          Agora tenha seu próprio canal de vendas.
+        </h2>
+<p class="font-body-lg text-body-lg text-surface-variant max-w-2xl">
+          Crie sua loja online no MenuNext em menos de 5 minutos e comece a receber pedidos diretamente pelo WhatsApp e web com 100% do lucro no seu caixa.
+        </p>
+<div class="pt-space-xs flex flex-col sm:flex-row items-center gap-space-md">
+<a class="inline-flex items-center justify-center gap-space-xs h-14 px-space-2xl rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-lg shadow-primary/40" href="#cadastro">
+<span>Criar minha loja grátis</span>
+<span class="material-symbols-outlined text-[22px]">arrow_forward</span>
+</a>
+</div>
+<div class="flex flex-wrap items-center justify-center gap-space-md text-surface-variant font-label-sm text-label-sm pt-space-md">
+<span>✓ 30 dias grátis</span>
+<span>•</span>
+<span>✓ Sem cartão de crédito</span>
+<span>•</span>
+<span>✓ Sem comissão por pedido</span>
+<span>•</span>
+<span>✓ Configuração em 5 minutos</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Script Inline para Controle Interativo dos FAQs (Vanilla JS) -->
+<script>
+    document.querySelectorAll('.faq-trigger').forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const content = trigger.nextElementSibling;
+        const icon = trigger.querySelector('.faq-icon');
+        const isOpen = !content.classList.contains('hidden');
+
+        // Fecha todos os itens para manter padrão accordion limpo
+        document.querySelectorAll('.faq-content').forEach(c => c.classList.add('hidden'));
+        document.querySelectorAll('.faq-icon').forEach(i => i.classList.remove('rotate-180'));
+
+        // Alterna o estado do item clicado
+        if (!isOpen) {
+          content.classList.remove('hidden');
+          icon.classList.add('rotate-180');
+        }
+      });
+    });
+  </script>
+</div></main><footer class="w-full bg-surface-container-low mt-space-3xl"><div class="max-w-[1440px] mx-auto px-gutter py-space-3xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl"><div class="lg:col-span-1 flex flex-col gap-space-md"><div class="flex items-center gap-space-xs"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">A plataforma definitiva de pedidos online, KDS e autoatendimento inteligente para restaurantes e dark kitchens que escalam com autonomia.</p><div class="flex items-center gap-space-xs mt-space-xs"><span class="inline-flex items-center px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>Infraestrutura Ativa</span></div></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Produto</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="cardapio-digital" href="#">Cardápio Digital QR</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="kds-cozinha" href="#">KDS Operacional</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="painel-gestao" href="#">Painel Gerencial</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="integracao-pos" href="#">Integrações POS &amp; iFood</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Tabela de Preços</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Empresa</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="sobre" href="#">Sobre o MenuNext</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="clientes" href="#">Histórias de Sucesso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="carreiras" href="#">Vagas e Carreiras</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="imprensa" href="#">Mídia &amp; Imprensa</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="parceiros" href="#">Programa de Parceiros</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Suporte</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="central-ajuda" href="#">Central de Ajuda 24/7</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="tutoriais" href="#">Vídeos e Tutoriais</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="status" href="#">Status dos Servidores</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">Perguntas Frequentes</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="fale-conosco" href="#">Contato com Consultor</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Legal</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="termos" href="#">Termos de Uso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade e LGPD</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="seguranca" href="#">Segurança da Informação</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="compliance" href="#">Políticas Comerciais</a></div></div><div class="mt-space-2xl pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><p>© 2025 MenuNext Tecnologia para Gastronomia Ltda. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</p><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade</a><a class="hover:text-on-surface transition-colors" data-path="termos" href="#">Termos</a></div></div></div></footer></body></html>

@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary-fixed-variant":"#005236","inverse-on-surface":"#edf0ff","outline":"#8f7067","secondary-container":"#d8391e","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#3f0400","on-secondary":"#ffffff","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-tint":"#af3100","inverse-surface":"#2a303f","tertiary":"#006947","on-primary-fixed":"#3a0a00","primary":"#ab2f00","error":"#ba1a1a","surface-bright":"#faf8ff","on-primary-fixed-variant":"#862300","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","primary-container":"#d53e02","surface-container-lowest":"#ffffff","outline-variant":"#e4beb4","on-primary-container":"#fffbff","primary-fixed":"#ffdbd1","on-surface":"#151b29","on-secondary-fixed-variant":"#8f1200","on-error-container":"#93000a","on-tertiary-container":"#f5fff6","primary-fixed-dim":"#ffb59f","on-error":"#ffffff","surface-container":"#e9edff","surface-container-high":"#e2e8fc","secondary":"#b41e04","surface-dim":"#d4d9ed","surface-variant":"#dde2f6","background":"#faf8ff","inverse-primary":"#ffb59f","error-container":"#ffdad6","surface":"#faf8ff","secondary-fixed-dim":"#ffb4a5","secondary-fixed":"#ffdad3","on-secondary-container":"#fffbff","surface-container-low":"#f1f3ff","on-background":"#151b29","tertiary-container":"#00855b","surface-container-highest":"#dde2f6","on-surface-variant":"#5b4139"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"container-max":"1440px","space-sm":"0.75rem","space-xl":"2rem","space-2xl":"3rem","space-3xl":"4rem","space-xs":"0.5rem","space-lg":"1.5rem","gutter":"1.5rem","space-2xs":"0.25rem","space-md":"1rem"},fontFamily:{"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-md":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-xs" data-path="landing-page" href="#"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></a><nav class="hidden lg:flex items-center gap-space-lg ml-space-md" data-active-classes="text-primary font-label-lg font-bold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="recursos" href="#">Recursos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="como-funciona" href="#">Como Funciona</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Planos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">FAQ</a></nav></div><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_3px_0_rgba(18,24,38,0.05)]" data-path="login" href="#">Entrar</a><a class="inline-flex items-center justify-center h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.3)]" data-path="cadastro" href="#">Criar minha loja grátis</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full">
+<!-- Sub-header Operacional MenuNext -->
+<div class="w-full bg-surface-container-lowest shadow-sm">
+<div class="max-w-[1440px] mx-auto px-gutter py-space-sm flex flex-wrap items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs px-space-sm py-1 bg-surface-container-low rounded-full">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-sm text-label-sm text-on-surface font-semibold">Loja Aberta • Moema (SP)</span>
+</div>
+<div class="h-4 w-[1px] bg-surface-container-high hidden sm:block"></div>
+<span class="font-body-sm text-body-sm text-on-surface-variant hidden sm:inline">Turno Almoço • Mesa 1 a 24 &amp; Delivery</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<a class="inline-flex items-center gap-1.5 font-label-md text-label-md text-primary hover:text-primary-container px-space-sm py-1.5 rounded-lg hover:bg-surface-container-low transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">storefront</span>
+          Ver Loja Pública
+          <span class="material-symbols-outlined text-[14px]">north_east</span>
+</a>
+<button aria-label="Notificações" class="relative w-9 h-9 flex items-center justify-center rounded-xl bg-surface-container-low text-on-surface hover:bg-surface-container transition-colors">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary ring-2 ring-surface-container-lowest"></span>
+</button>
+<div class="flex items-center gap-space-xs pl-space-xs">
+<div class="w-8 h-8 rounded-full bg-surface-container-high flex items-center justify-center font-bold text-primary font-label-sm text-label-sm">
+            BV
+          </div>
+<div class="flex flex-col text-left hidden md:block">
+<span class="font-label-md text-label-md text-on-surface leading-none">Bruno Viana</span>
+<span class="font-body-sm text-[11px] text-tertiary font-medium">Proprietário</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Layout Grid com Sidebar Administrativa -->
+<div class="max-w-[1440px] w-full mx-auto px-gutter py-space-xl">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-start">
+<!-- 1. SIDEBAR ADMINISTRATIVA MENU NEXT -->
+<aside class="hidden lg:block lg:col-span-3 xl:col-span-2 bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-md sticky top-28">
+<div class="px-space-xs pb-space-xs border-b border-surface-container-high">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">Menu Gestão</span>
+<p class="font-headline-sm text-headline-sm text-on-surface font-extrabold mt-1">NextBurger</p>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+            Início
+          </a>
+<a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+              Pedidos
+            </div>
+<span class="bg-primary-fixed text-on-primary-fixed font-bold text-[10px] px-1.5 py-0.5 rounded-full">12</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">menu_book</span>
+            Cardápio
+          </a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">moped</span>
+            Delivery
+          </a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+            Frente de Caixa
+          </a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">soup_kitchen</span>
+            KDS Cozinha
+          </a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+            Clientes
+          </a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">trending_up</span>
+            Vendas
+          </a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">campaign</span>
+            Marketing
+          </a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">palette</span>
+            Aparência
+          </a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+            Horários
+          </a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">credit_card</span>
+            Pagamentos
+          </a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+            Configurações
+          </a>
+<!-- ITEM ATIVO: USUÁRIOS -->
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md font-bold shadow-[0_4px_12px_rgba(171,47,0,0.25)]" href="#">
+<span class="material-symbols-outlined text-[20px]">manage_accounts</span>
+            Usuários
+          </a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low font-label-md text-label-md transition-all pt-space-xs" href="#">
+<span class="material-symbols-outlined text-[20px]">help_outline</span>
+            Ajuda &amp; Suporte
+          </a>
+</nav>
+</aside>
+<!-- 2. CONTEÚDO PRINCIPAL DO PAINEL DE USUÁRIOS -->
+<main class="col-span-1 lg:col-span-9 xl:col-span-10 space-y-space-xl">
+<!-- Header da Página -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="space-y-1">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[28px]">group</span>
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-extrabold tracking-tight">Usuários e Permissões</h1>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Gerencie o acesso da sua equipe ao painel de forma simples e rápida.
+            </p>
+</div>
+<div class="flex items-center gap-space-sm">
+<button class="inline-flex items-center justify-center gap-space-xs h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_8px_20px_-4px_rgba(249,87,33,0.35)] font-bold" id="btnOpenAddModal" onclick="document.getElementById('userDrawer').classList.remove('translate-x-full'); document.getElementById('drawerBackdrop').classList.remove('hidden');">
+<span class="material-symbols-outlined text-[20px]">person_add</span>
+              + Adicionar funcionário
+            </button>
+</div>
+</div>
+<!-- 3. FAIXA DE INDICADORES RÁPIDOS (METRIC CARDS) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant font-bold">Total de Usuários</span>
+<div class="font-headline-md text-headline-md text-on-surface font-extrabold mt-1">5 membros</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">1 Proprietário • 4 Funcionários</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-surface-container-low flex items-center justify-center text-on-surface">
+<span class="material-symbols-outlined text-[24px]">groups</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant font-bold">Ativos no Turno</span>
+<div class="font-headline-md text-headline-md text-tertiary font-extrabold mt-1">4 colaboradores</div>
+<span class="font-body-sm text-body-sm text-tertiary flex items-center gap-1 font-medium">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                Operando agora
+              </span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">badge</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant font-bold">Convites Pendentes</span>
+<div class="font-headline-md text-headline-md text-secondary font-extrabold mt-1">1 convite</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Aguardando confirmação</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-secondary-fixed text-on-secondary-fixed flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">mark_email_unread</span>
+</div>
+</div>
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex items-center justify-between">
+<div>
+<span class="font-label-sm text-label-sm uppercase tracking-wide text-on-surface-variant font-bold">Modelo Simplificado</span>
+<div class="font-headline-md text-headline-md text-on-surface font-extrabold mt-1">100% por Módulo</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sem cargos ou burocracia</span>
+</div>
+<div class="w-12 h-12 rounded-xl bg-surface-container text-on-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">toggle_on</span>
+</div>
+</div>
+</div>
+<!-- 4. SEÇÃO DO PROPRIETÁRIO (DESTAQUE ESPECIAL) -->
+<div class="bg-gradient-to-r from-surface-container-low via-surface-container-lowest to-surface-container-lowest rounded-xl p-space-lg shadow-sm border-l-4 border-primary">
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="relative">
+<div class="w-14 h-14 rounded-2xl bg-primary flex items-center justify-center text-on-primary font-headline-md text-headline-md font-extrabold shadow-md">
+                  BV
+                </div>
+<span class="absolute -top-1.5 -right-1.5 text-lg" title="Proprietário">👑</span>
+</div>
+<div class="space-y-1">
+<div class="flex flex-wrap items-center gap-space-xs">
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Bruno Viana</h2>
+<span class="inline-flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-bold">
+                    👑 Proprietário • Acesso Completo
+                  </span>
+</div>
+<div class="flex flex-wrap items-center gap-space-md text-on-surface-variant font-body-sm text-body-sm">
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">mail</span>
+                    bruno@nextburger.com.br
+                  </span>
+<span class="flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">phone</span>
+                    (11) 98765-4321
+                  </span>
+</div>
+<p class="font-body-sm text-[12px] text-on-surface-variant italic">
+                  O proprietário possui controle total e irrestrito sobre todas as áreas, relatórios financeiros e configurações do restaurante.
+                </p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs self-start md:self-center">
+<button class="px-space-md py-2 rounded-xl bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container-low transition-colors shadow-sm font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px]">account_circle</span>
+                Minha Conta
+              </button>
+</div>
+</div>
+</div>
+<!-- 5. FILTROS E BUSCA -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm space-y-space-md">
+<div class="flex flex-col md:flex-row items-center justify-between gap-space-md">
+<!-- Pílulas de filtro simplificadas (Sem filtro de cargos) -->
+<div class="flex items-center gap-space-xs w-full md:w-auto overflow-x-auto pb-1 md:pb-0">
+<button class="px-space-md py-2 rounded-full font-label-md text-label-md bg-primary text-on-primary font-bold whitespace-nowrap shadow-sm">
+                Todos (5)
+              </button>
+<button class="px-space-md py-2 rounded-full font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-semibold whitespace-nowrap transition-colors">
+                Ativos (4)
+              </button>
+<button class="px-space-md py-2 rounded-full font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-semibold whitespace-nowrap transition-colors flex items-center gap-1.5">
+                Convites Pendentes
+                <span class="bg-secondary-fixed text-on-secondary-fixed text-[11px] font-bold px-1.5 rounded-full">1</span>
+</button>
+<button class="px-space-md py-2 rounded-full font-label-md text-label-md text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface font-semibold whitespace-nowrap transition-colors">
+                Desativados (0)
+              </button>
+</div>
+<!-- Campo de Busca -->
+<div class="relative w-full md:w-80">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-10 pl-10 pr-space-md rounded-xl bg-surface-container-low text-on-surface font-body-sm text-body-sm placeholder:text-on-surface-variant focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest transition-all" placeholder="Buscar por nome, whatsapp..." type="text"/>
+</div>
+</div>
+<!-- 6. TABELA / LISTA DE FUNCIONÁRIOS (SIMPLIFICADA) -->
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-3 px-space-md rounded-l-lg font-bold">Colaborador</th>
+<th class="py-3 px-space-md font-bold">Tipo de Perfil</th>
+<th class="py-3 px-space-md font-bold">Módulos Liberados</th>
+<th class="py-3 px-space-md font-bold">Último Acesso</th>
+<th class="py-3 px-space-md font-bold">Status</th>
+<th class="py-3 px-space-md rounded-r-lg font-bold text-right">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<!-- Funcionário 1: Mariana Oliveira -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high text-on-surface flex items-center justify-center font-bold font-label-md text-label-md">
+                        MO
+                      </div>
+<div>
+<div class="font-label-lg text-label-lg font-bold text-on-surface">Mariana Oliveira</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">chat</span>
+                          (11) 97123-4567
+                        </div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 font-label-md text-label-md text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">person</span>
+                      Funcionário
+                    </span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-wrap items-center gap-1.5 max-w-sm">
+<span class="px-2 py-0.5 rounded-md bg-surface-container font-label-sm text-[11px] text-on-surface font-semibold">Pedidos</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container font-label-sm text-[11px] text-on-surface font-semibold">Frente de Caixa</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container font-label-sm text-[11px] text-on-surface font-semibold">Clientes</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Hoje, 10:15</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                      Ativo
+                    </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm font-semibold transition-colors" onclick="document.getElementById('userDrawer').classList.remove('translate-x-full'); document.getElementById('drawerBackdrop').classList.remove('hidden');">
+                        Editar Acessos
+                      </button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-error transition-colors" onclick="document.getElementById('modalDesativar').classList.remove('hidden');" title="Mais opções">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Funcionário 2: Carlos Henrique -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high text-on-surface flex items-center justify-center font-bold font-label-md text-label-md">
+                        CH
+                      </div>
+<div>
+<div class="font-label-lg text-label-lg font-bold text-on-surface">Carlos Henrique</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">chat</span>
+                          (11) 98456-7890
+                        </div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 font-label-md text-label-md text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">person</span>
+                      Funcionário
+                    </span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-wrap items-center gap-1.5 max-w-sm">
+<span class="px-2 py-0.5 rounded-md bg-surface-container font-label-sm text-[11px] text-on-surface font-semibold">Frente de Caixa</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container font-label-sm text-[11px] text-on-surface font-semibold">KDS / Cozinha</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Hoje, 11:02</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                      Ativo
+                    </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm font-semibold transition-colors" onclick="document.getElementById('userDrawer').classList.remove('translate-x-full'); document.getElementById('drawerBackdrop').classList.remove('hidden');">
+                        Editar Acessos
+                      </button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-error transition-colors" onclick="document.getElementById('modalDesativar').classList.remove('hidden');" title="Mais opções">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Funcionário 3: Ana Beatriz -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high text-on-surface flex items-center justify-center font-bold font-label-md text-label-md">
+                        AB
+                      </div>
+<div>
+<div class="font-label-lg text-label-lg font-bold text-on-surface">Ana Beatriz</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">chat</span>
+                          (11) 97788-9900
+                        </div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 font-label-md text-label-md text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">person</span>
+                      Funcionário
+                    </span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-wrap items-center gap-1.5 max-w-sm">
+<span class="px-2 py-0.5 rounded-md bg-surface-container font-label-sm text-[11px] text-on-surface font-semibold">KDS / Cozinha</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Hoje, 11:08</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                      Ativo
+                    </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm font-semibold transition-colors" onclick="document.getElementById('userDrawer').classList.remove('translate-x-full'); document.getElementById('drawerBackdrop').classList.remove('hidden');">
+                        Editar Acessos
+                      </button>
+<button class="w-8 h-8 rounded-lg hover:bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-error transition-colors" onclick="document.getElementById('modalDesativar').classList.remove('hidden');" title="Mais opções">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Funcionário 4: Lucas Mendes (Convite Pendente) -->
+<tr class="hover:bg-surface-container-low/50 transition-colors group">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-low text-on-surface-variant flex items-center justify-center font-bold font-label-md text-label-md">
+                        LM
+                      </div>
+<div>
+<div class="font-label-lg text-label-lg font-bold text-on-surface">Lucas Mendes</div>
+<div class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">chat</span>
+                          (11) 99111-2233
+                        </div>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 font-label-md text-label-md text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-on-surface-variant">person</span>
+                      Funcionário
+                    </span>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-wrap items-center gap-1.5 max-w-sm">
+<span class="px-2 py-0.5 rounded-md bg-surface-container font-label-sm text-[11px] text-on-surface font-semibold">Pedidos</span>
+<span class="px-2 py-0.5 rounded-md bg-surface-container font-label-sm text-[11px] text-on-surface font-semibold">Frente de Caixa</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="font-body-sm text-body-sm text-on-surface-variant italic">Convite enviado (Aguardando)</span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+                      Convite Pendente
+                    </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container text-primary font-label-sm text-label-sm font-bold transition-colors">
+                        Reenviar Convite
+                      </button>
+<button class="px-2 py-1.5 rounded-lg text-on-surface-variant hover:text-error font-label-sm text-label-sm font-semibold transition-colors" onclick="document.getElementById('modalDesativar').classList.remove('hidden');">
+                        Cancelar
+                      </button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 8. SEÇÃO AUXILIAR: ÚLTIMAS ATIVIDADES DOS COLABORADORES -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm">
+<div class="flex items-center justify-between pb-space-sm border-b border-surface-container">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px]">history</span>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Atividade Recente da Equipe</h3>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Atualizado em tempo real</span>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md mt-space-md">
+<div class="flex items-start gap-space-sm p-space-sm rounded-xl bg-surface-container-low">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center font-bold text-primary font-label-sm text-label-sm shrink-0">
+                MO
+              </div>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface">Mariana Oliveira</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Atualizou status do Pedido #1049 para "Pronto"</p>
+<span class="font-label-sm text-[11px] text-tertiary font-semibold mt-1 inline-block">há 2 min</span>
+</div>
+</div>
+<div class="flex items-start gap-space-sm p-space-sm rounded-xl bg-surface-container-low">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center font-bold text-primary font-label-sm text-label-sm shrink-0">
+                CH
+              </div>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface">Carlos Henrique</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Abriu a gaveta e iniciou o caixa do turno almoço</p>
+<span class="font-label-sm text-[11px] text-on-surface-variant font-semibold mt-1 inline-block">há 18 min</span>
+</div>
+</div>
+<div class="flex items-start gap-space-sm p-space-sm rounded-xl bg-surface-container-low">
+<div class="w-8 h-8 rounded-lg bg-surface-container-highest flex items-center justify-center font-bold text-primary font-label-sm text-label-sm shrink-0">
+                AB
+              </div>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface">Ana Beatriz</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Conectou ao terminal da chapa no KDS Cozinha</p>
+<span class="font-label-sm text-[11px] text-on-surface-variant font-semibold mt-1 inline-block">há 2h</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+<!-- 7. DRAWER LATERAL DE ADICIONAR / EDITAR FUNCIONÁRIO (SLIDE-OVER) -->
+<div class="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm z-50 transition-opacity hidden" id="drawerBackdrop" onclick="document.getElementById('userDrawer').classList.add('translate-x-full'); this.classList.add('hidden');"></div>
+<div class="fixed inset-y-0 right-0 max-w-xl w-full bg-surface-container-lowest shadow-2xl z-50 transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col" id="userDrawer">
+<!-- Header do Drawer -->
+<div class="p-space-lg bg-surface-container-low flex items-start justify-between border-b border-surface-container">
+<div>
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[24px]">person_add</span>
+<h2 class="font-headline-sm text-headline-sm font-bold text-on-surface">Adicionar Funcionário</h2>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">
+          Envie um convite e defina quais áreas este colaborador poderá acessar.
+        </p>
+</div>
+<button aria-label="Fechar drawer" class="w-9 h-9 rounded-xl hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-colors" onclick="document.getElementById('userDrawer').classList.add('translate-x-full'); document.getElementById('drawerBackdrop').classList.add('hidden');">
+<span class="material-symbols-outlined">close</span>
+</button>
+</div>
+<!-- Conteúdo Formulário (Rolagem Suave) -->
+<div class="flex-1 overflow-y-auto p-space-lg space-y-space-lg">
+<!-- Dados Básicos -->
+<div class="space-y-space-md">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">1. Dados do Colaborador</span>
+<div>
+<label class="block font-label-md text-label-md text-on-surface font-semibold mb-1">Nome Completo *</label>
+<input class="w-full h-11 px-space-md rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest border-none transition-all" placeholder="Ex: Mariana Oliveira" type="text" value="Mariana Oliveira"/>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div>
+<label class="block font-label-md text-label-md text-on-surface font-semibold mb-1">WhatsApp (com DDD) *</label>
+<input class="w-full h-11 px-space-md rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest border-none transition-all" placeholder="(11) 90000-0000" type="text" value="(11) 97123-4567"/>
+<span class="font-body-sm text-[11px] text-on-surface-variant mt-1 block">O link de acesso será enviado via WhatsApp.</span>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface font-semibold mb-1">E-mail (opcional)</label>
+<input class="w-full h-11 px-space-md rounded-xl bg-surface-container-low text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary/20 focus:bg-surface-container-lowest border-none transition-all" placeholder="mariana@email.com" type="email"/>
+</div>
+</div>
+</div>
+<div class="h-[1px] w-full bg-surface-container"></div>
+<!-- Seletor de Permissões por Módulo -->
+<div class="space-y-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant font-bold">2. O que este funcionário pode acessar?</span>
+<span class="font-label-sm text-label-sm text-primary font-bold">Acesso por Módulo</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Os acessos definem quais áreas do painel este funcionário poderá utilizar. Sem configurações complicadas ou cargos confusos.
+        </p>
+<!-- GRUPO 1: OPERAÇÃO -->
+<div class="bg-surface-container-low rounded-xl p-space-md space-y-space-sm">
+<div class="flex items-center gap-space-xs text-primary font-label-md text-label-md font-bold">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+            OPERAÇÃO EM TEMPO REAL
+          </div>
+<!-- Módulo Pedidos -->
+<label class="flex items-start justify-between p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors cursor-pointer">
+<div class="space-y-0.5">
+<span class="font-label-lg text-label-lg font-bold text-on-surface flex items-center gap-1.5">
+                Pedidos
+              </span>
+<p class="font-body-sm text-[12px] text-on-surface-variant">Receber, aceitar e despachar pedidos delivery e mesas.</p>
+</div>
+<input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary accent-primary mt-1" type="checkbox"/>
+</label>
+<!-- Módulo Frente de Caixa -->
+<label class="flex items-start justify-between p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors cursor-pointer">
+<div class="space-y-0.5">
+<span class="font-label-lg text-label-lg font-bold text-on-surface flex items-center gap-1.5">
+                Frente de Caixa
+              </span>
+<p class="font-body-sm text-[12px] text-on-surface-variant">Registrar pedidos rápidos no balcão e receber pagamentos.</p>
+</div>
+<input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary accent-primary mt-1" type="checkbox"/>
+</label>
+<!-- Módulo KDS / Cozinha -->
+<label class="flex items-start justify-between p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors cursor-pointer">
+<div class="space-y-0.5">
+<span class="font-label-lg text-label-lg font-bold text-on-surface flex items-center gap-1.5">
+                KDS / Cozinha
+              </span>
+<p class="font-body-sm text-[12px] text-on-surface-variant">Visão exclusiva de preparo da cozinha e tempo de pratos.</p>
+</div>
+<input class="w-5 h-5 rounded text-primary focus:ring-primary accent-primary mt-1" type="checkbox"/>
+</label>
+</div>
+<!-- GRUPO 2: GESTÃO -->
+<div class="bg-surface-container-low rounded-xl p-space-md space-y-space-sm">
+<div class="flex items-center gap-space-xs text-on-surface font-label-md text-label-md font-bold">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+            GESTÃO E ATENDIMENTO
+          </div>
+<!-- Módulo Cardápio -->
+<label class="flex items-start justify-between p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors cursor-pointer">
+<div class="space-y-0.5">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Cardápio</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant">Editar produtos, preços, pausar itens e gerenciar combos.</p>
+</div>
+<input class="w-5 h-5 rounded text-primary focus:ring-primary accent-primary mt-1" type="checkbox"/>
+</label>
+<!-- Módulo Clientes -->
+<label class="flex items-start justify-between p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors cursor-pointer">
+<div class="space-y-0.5">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Clientes</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant">Consultar histórico de pedidos e telefones de clientes.</p>
+</div>
+<input checked="" class="w-5 h-5 rounded text-primary focus:ring-primary accent-primary mt-1" type="checkbox"/>
+</label>
+<!-- Módulo Delivery -->
+<label class="flex items-start justify-between p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors cursor-pointer">
+<div class="space-y-0.5">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Delivery</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant">Ajustar taxas de entrega por bairro ou raio em km.</p>
+</div>
+<input class="w-5 h-5 rounded text-primary focus:ring-primary accent-primary mt-1" type="checkbox"/>
+</label>
+<!-- Módulo Marketing -->
+<label class="flex items-start justify-between p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors cursor-pointer">
+<div class="space-y-0.5">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Marketing &amp; Cupons</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant">Criar cupons de desconto e banners promocionais.</p>
+</div>
+<input class="w-5 h-5 rounded text-primary focus:ring-primary accent-primary mt-1" type="checkbox"/>
+</label>
+<!-- Módulo Vendas -->
+<label class="flex items-start justify-between p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors cursor-pointer">
+<div class="space-y-0.5">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Vendas &amp; Faturamento</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant">Relatórios financeiros, ticket médio e fechamento do dia.</p>
+</div>
+<input class="w-5 h-5 rounded text-primary focus:ring-primary accent-primary mt-1" type="checkbox"/>
+</label>
+</div>
+<!-- GRUPO 3: CONFIGURAÇÕES -->
+<div class="bg-surface-container-low rounded-xl p-space-md space-y-space-sm">
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-md text-label-md font-bold">
+<span class="material-symbols-outlined text-[18px]">settings</span>
+            CONFIGURAÇÕES CRÍTICAS
+          </div>
+<!-- Módulo Aparência -->
+<label class="flex items-start justify-between p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors cursor-pointer">
+<div class="space-y-0.5">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Aparência</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant">Cores da marca, logomarca e capa do cardápio online.</p>
+</div>
+<input class="w-5 h-5 rounded text-primary focus:ring-primary accent-primary mt-1" type="checkbox"/>
+</label>
+<!-- Módulo Horários -->
+<label class="flex items-start justify-between p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors cursor-pointer">
+<div class="space-y-0.5">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Horários</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant">Horário de funcionamento e pausas programadas da cozinha.</p>
+</div>
+<input class="w-5 h-5 rounded text-primary focus:ring-primary accent-primary mt-1" type="checkbox"/>
+</label>
+<!-- Módulo Pagamentos -->
+<label class="flex items-start justify-between p-space-sm rounded-lg bg-surface-container-lowest hover:bg-surface-container transition-colors cursor-pointer">
+<div class="space-y-0.5">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Pagamentos</span>
+<p class="font-body-sm text-[12px] text-on-surface-variant">Chaves Pix da loja, taxas de cartão e conta bancária.</p>
+</div>
+<input class="w-5 h-5 rounded text-primary focus:ring-primary accent-primary mt-1" type="checkbox"/>
+</label>
+</div>
+<!-- Resumo Dinâmico do Perfil -->
+<div class="p-space-md rounded-xl bg-primary-fixed/40 text-on-primary-fixed-variant font-body-sm text-body-sm flex items-start gap-space-xs">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">verified_user</span>
+<div>
+<strong class="font-bold">Resumo deste acesso:</strong>
+            Este funcionário terá acesso estrito à operação de balcão (Frente de Caixa), gestão de pedidos ao vivo e lista de clientes.
+          </div>
+</div>
+</div>
+</div>
+<!-- Footer de Ações do Drawer -->
+<div class="p-space-md bg-surface-container-low border-t border-surface-container flex items-center justify-end gap-space-sm">
+<button class="px-space-md py-2.5 rounded-xl bg-surface-container-lowest text-on-surface font-label-md text-label-md hover:bg-surface-container transition-colors font-semibold" onclick="document.getElementById('userDrawer').classList.add('translate-x-full'); document.getElementById('drawerBackdrop').classList.add('hidden');">
+        Cancelar
+      </button>
+<button class="px-space-lg py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-bold transition-all shadow-md" onclick="document.getElementById('userDrawer').classList.add('translate-x-full'); document.getElementById('drawerBackdrop').classList.add('hidden');">
+        Salvar Acessos do Funcionário
+      </button>
+</div>
+</div>
+<!-- 9. MODAL DE CONFIRMAÇÃO DE DESATIVAÇÃO -->
+<div class="fixed inset-0 bg-inverse-surface/40 backdrop-blur-sm z-50 flex items-center justify-center p-space-md hidden" id="modalDesativar">
+<div class="max-w-md w-full bg-surface-container-lowest rounded-2xl p-space-xl shadow-2xl space-y-space-md">
+<div class="w-12 h-12 rounded-xl bg-error-container text-on-error-container flex items-center justify-center">
+<span class="material-symbols-outlined text-[26px]">person_off</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Desativar funcionário?</h3>
+<p class="font-body-md text-body-md text-on-surface-variant mt-2">
+          Este colaborador não poderá mais acessar o painel deste restaurante. O histórico de vendas, atendimentos e logs será preservado intacto.
+        </p>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-xs">
+<button class="px-space-md py-2.5 rounded-xl bg-surface-container text-on-surface font-label-md text-label-md font-semibold hover:bg-surface-container-high transition-colors" onclick="document.getElementById('modalDesativar').classList.add('hidden');">
+          Cancelar
+        </button>
+<button class="px-space-md py-2.5 rounded-xl bg-error hover:opacity-90 text-on-error font-label-md text-label-md font-bold transition-all shadow-sm" onclick="document.getElementById('modalDesativar').classList.add('hidden');">
+          Sim, Desativar Acesso
+        </button>
+</div>
+</div>
+</div>
+</div></main><footer class="w-full bg-surface-container-low mt-space-3xl"><div class="max-w-[1440px] mx-auto px-gutter py-space-3xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl"><div class="lg:col-span-1 flex flex-col gap-space-md"><div class="flex items-center gap-space-xs"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">A plataforma definitiva de pedidos online, KDS e autoatendimento inteligente para restaurantes e dark kitchens que escalam com autonomia.</p><div class="flex items-center gap-space-xs mt-space-xs"><span class="inline-flex items-center px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>Infraestrutura Ativa</span></div></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Produto</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="cardapio-digital" href="#">Cardápio Digital QR</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="kds-cozinha" href="#">KDS Operacional</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="painel-gestao" href="#">Painel Gerencial</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="integracao-pos" href="#">Integrações POS &amp; iFood</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Tabela de Preços</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Empresa</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="sobre" href="#">Sobre o MenuNext</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="clientes" href="#">Histórias de Sucesso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="carreiras" href="#">Vagas e Carreiras</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="imprensa" href="#">Mídia &amp; Imprensa</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="parceiros" href="#">Programa de Parceiros</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Suporte</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="central-ajuda" href="#">Central de Ajuda 24/7</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="tutoriais" href="#">Vídeos e Tutoriais</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="status" href="#">Status dos Servidores</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">Perguntas Frequentes</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="fale-conosco" href="#">Contato com Consultor</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Legal</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="termos" href="#">Termos de Uso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade e LGPD</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="seguranca" href="#">Segurança da Informação</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="compliance" href="#">Políticas Comerciais</a></div></div><div class="mt-space-2xl pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><p>© 2025 MenuNext Tecnologia para Gastronomia Ltda. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</p><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade</a><a class="hover:text-on-surface transition-colors" data-path="termos" href="#">Termos</a></div></div></div></footer></body></html>

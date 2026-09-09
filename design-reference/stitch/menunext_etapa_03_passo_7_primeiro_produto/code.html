@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MenuNext - Etapa 03: Passo 7 (Primeiro Produto)</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff5f2',
+              100: '#ffe8e1',
+              500: '#f95721',
+              600: '#e54512',
+              700: '#c2350a',
+            },
+            dark: {
+              900: '#121826',
+              800: '#1f2937',
+              700: '#374151',
+              500: '#6b7280',
+              400: '#9ca3af',
+              200: '#e5e7eb',
+              100: '#f3f4f6',
+              50: '#fafafa'
+            },
+            emerald: {
+              500: '#10b981',
+              600: '#059669',
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #faf8ff;
+      color: #121826;
+      -webkit-font-smoothing: antialiased;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #f1f3ff;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-brand-500 selection:text-white">
+
+  <!-- BARRA DE SIMULAÇÃO DE ESTADOS (TOPO) -->
+  <header class="bg-dark-900 text-white text-xs py-2 px-4 border-b border-dark-800 z-50 sticky top-0">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-2">
+      <div class="flex items-center gap-2">
+        <span class="text-amber-400 font-bold flex items-center gap-1">
+          <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          SIMULAR ESTADOS DO PASSO 7:
+        </span>
+        <span class="text-dark-400 hidden sm:inline">| Alterne cenários em tempo real:</span>
+      </div>
+      <div class="flex flex-wrap items-center gap-1.5 overflow-x-auto py-1">
+        <button onclick="setScenario('filled')" id="btn-scenario-filled" class="px-2.5 py-1 rounded bg-brand-500 text-white font-medium hover:bg-brand-600 transition">Padrão (Com Foto & Preço)</button>
+        <button onclick="setScenario('empty')" id="btn-scenario-empty" class="px-2.5 py-1 rounded bg-dark-800 text-dark-200 hover:bg-dark-700 transition">Campos Vazios</button>
+        <button onclick="setScenario('no_photo')" id="btn-scenario-no_photo" class="px-2.5 py-1 rounded bg-dark-800 text-dark-200 hover:bg-dark-700 transition">Sem Foto</button>
+        <button onclick="setScenario('error_category')" id="btn-scenario-error_category" class="px-2.5 py-1 rounded bg-dark-800 text-dark-200 hover:bg-dark-700 transition">Erro de Categoria</button>
+        <button onclick="setScenario('saving')" id="btn-scenario-saving" class="px-2.5 py-1 rounded bg-dark-800 text-dark-200 hover:bg-dark-700 transition">Salvando...</button>
+        <button onclick="openModal('modal-success')" class="px-2.5 py-1 rounded bg-emerald-600 text-white font-medium hover:bg-emerald-500 transition flex items-center gap-1">
+          <span>🎉 Produto Criado</span>
+        </button>
+        <button onclick="openModal('modal-skip')" class="px-2.5 py-1 rounded bg-dark-800 text-dark-200 hover:bg-dark-700 transition">Modal Pular</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CABEÇALHO DA MARCA & STATUS DE SEGURANÇA -->
+  <nav class="bg-white border-b border-slate-100 shadow-sm sticky top-[41px] z-40">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <!-- Logo MenuNext -->
+      <div class="flex items-center gap-3">
+        <a href="#" class="flex items-center gap-2 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
+            <!-- Chapéu de chef estilizado -->
+            <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M6 13.8a4.4 4.4 0 0 1-2.8-4.2A4.5 4.5 0 0 1 7.5 5.2 4.6 4.6 0 0 1 12 3a4.6 4.6 0 0 1 4.5 2.2 4.5 4.5 0 0 1 4.3 4.4 4.4 4.4 0 0 1-2.8 4.2"/>
+              <path d="M6 17h12"/>
+              <path d="M7 21h10"/>
+              <path d="M6 14v7"/>
+              <path d="M18 14v7"/>
+            </svg>
+          </div>
+          <div class="flex flex-col">
+            <div class="flex items-center">
+              <span class="text-xl font-extrabold tracking-tight text-dark-900">Menu<span class="text-brand-500">Next</span></span>
+            </div>
+            <span class="text-[10px] font-semibold text-dark-400 tracking-wider uppercase -mt-1">SaaS Gastronomia</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Badges de Confiança e Ações Rápidas -->
+      <div class="flex items-center gap-4 sm:gap-6">
+        <div class="hidden md:flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200/60">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          Ambiente Seguro
+        </div>
+        <div class="hidden lg:flex items-center gap-2 text-xs text-dark-500">
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+          Dados Salvos Automaticamente
+        </div>
+        <div class="h-4 w-px bg-slate-200 hidden sm:block"></div>
+        <a href="#" class="text-xs font-semibold text-dark-700 hover:text-brand-500 flex items-center gap-1 transition">
+          <span class="hidden sm:inline">Já possui sua loja?</span> Entrar
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+    <!-- STEPPER / BARRA DE PROGRESSO DO ONBOARDING (7 ETAPAS) -->
+    <section class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 mb-8">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+        <div class="flex items-center gap-2.5">
+          <span class="text-xs font-extrabold uppercase tracking-wider px-2.5 py-1 rounded-md bg-brand-50 text-brand-600 border border-brand-200">
+            ETAPA 7 DE 7
+          </span>
+          <h2 class="text-sm font-bold text-dark-900">Primeiro Produto no Cardápio</h2>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="text-xs font-bold text-dark-500">Progresso Geral: <strong class="text-emerald-600 text-sm">100% Concluído</strong></span>
+          <div class="w-24 sm:w-32 h-2 bg-slate-100 rounded-full overflow-hidden">
+            <div class="h-full bg-gradient-to-r from-brand-500 to-emerald-500 rounded-full w-full"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stepper horizontal clicável / status -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 pt-2 border-t border-slate-100 text-xs">
+        
+        <!-- 1. Restaurante -->
+        <div class="flex items-center gap-2 p-2 rounded-xl bg-emerald-50/60 border border-emerald-200/50 text-emerald-800">
+          <div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 text-[10px] font-bold">✓</div>
+          <div class="truncate">
+            <p class="font-bold truncate text-[11px]">1. Restaurante</p>
+            <p class="text-[9px] text-emerald-600 truncate font-medium">Concluído</p>
+          </div>
+        </div>
+
+        <!-- 2. Endereço -->
+        <div class="flex items-center gap-2 p-2 rounded-xl bg-emerald-50/60 border border-emerald-200/50 text-emerald-800">
+          <div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 text-[10px] font-bold">✓</div>
+          <div class="truncate">
+            <p class="font-bold truncate text-[11px]">2. Endereço</p>
+            <p class="text-[9px] text-emerald-600 truncate font-medium">Concluído</p>
+          </div>
+        </div>
+
+        <!-- 3. Atendimento -->
+        <div class="flex items-center gap-2 p-2 rounded-xl bg-emerald-50/60 border border-emerald-200/50 text-emerald-800">
+          <div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 text-[10px] font-bold">✓</div>
+          <div class="truncate">
+            <p class="font-bold truncate text-[11px]">3. Atendimento</p>
+            <p class="text-[9px] text-emerald-600 truncate font-medium">Concluído</p>
+          </div>
+        </div>
+
+        <!-- 4. Delivery -->
+        <div class="flex items-center gap-2 p-2 rounded-xl bg-emerald-50/60 border border-emerald-200/50 text-emerald-800">
+          <div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 text-[10px] font-bold">✓</div>
+          <div class="truncate">
+            <p class="font-bold truncate text-[11px]">4. Delivery</p>
+            <p class="text-[9px] text-emerald-600 truncate font-medium">Concluído</p>
+          </div>
+        </div>
+
+        <!-- 5. Horários -->
+        <div class="flex items-center gap-2 p-2 rounded-xl bg-emerald-50/60 border border-emerald-200/50 text-emerald-800">
+          <div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 text-[10px] font-bold">✓</div>
+          <div class="truncate">
+            <p class="font-bold truncate text-[11px]">5. Horários</p>
+            <p class="text-[9px] text-emerald-600 truncate font-medium">Concluído</p>
+          </div>
+        </div>
+
+        <!-- 6. Pagamentos -->
+        <div class="flex items-center gap-2 p-2 rounded-xl bg-emerald-50/60 border border-emerald-200/50 text-emerald-800">
+          <div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center flex-shrink-0 text-[10px] font-bold">✓</div>
+          <div class="truncate">
+            <p class="font-bold truncate text-[11px]">6. Pagamentos</p>
+            <p class="text-[9px] text-emerald-600 truncate font-medium">Concluído</p>
+          </div>
+        </div>
+
+        <!-- 7. 1º Produto (DESTACADA) -->
+        <div class="col-span-2 sm:col-span-4 lg:col-span-1 flex items-center gap-2 p-2 rounded-xl bg-brand-50 border-2 border-brand-500 text-brand-700 shadow-sm">
+          <div class="w-5 h-5 rounded-full bg-brand-500 text-white flex items-center justify-center flex-shrink-0 text-[11px] font-bold">7</div>
+          <div class="truncate">
+            <p class="font-extrabold truncate text-[11px] text-brand-600">7. 1º Produto</p>
+            <div class="flex items-center gap-1 text-[9px] text-brand-600 font-bold uppercase tracking-wider">
+              <span class="w-1.5 h-1.5 rounded-full bg-brand-500 animate-ping"></span>
+              Em Andamento
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- TÍTULO DA PÁGINA COM FOCO EM SIMPLICIDADE -->
+    <div class="text-center max-w-3xl mx-auto mb-10">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-100/70 text-brand-700 text-xs font-bold mb-3 border border-brand-200">
+        <span>🍔</span> Último passo da configuração inicial
+      </div>
+      <h1 class="text-2xl sm:text-4xl font-extrabold text-dark-900 tracking-tight leading-tight">
+        Vamos colocar seu primeiro produto na loja
+      </h1>
+      <p class="mt-3 text-sm sm:text-base text-dark-500 font-normal leading-relaxed">
+        Cadastre um produto para começar a montar seu cardápio. Você poderá adicionar mais produtos, adicionais, tamanhos e combos depois.
+      </p>
+      <div class="mt-2 inline-flex items-center gap-1.5 text-xs text-dark-400 font-medium bg-white px-3 py-1 rounded-full border border-slate-200 shadow-2xs">
+        <svg class="w-3.5 h-3.5 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Não precisa configurar tudo agora. Vamos começar pelo essencial.
+      </div>
+    </div>
+
+    <!-- GRID PRINCIPAL: 2 COLUNAS (ESQUERDA: FORMULÁRIO | DIREITA: PRÉVIA E RESUMO) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- COLUNA DA ESQUERDA: FORMULÁRIO DE CADASTRO DO PRIMEIRO PRODUTO (7 COLUNAS) -->
+      <div class="lg:col-span-7 space-y-6">
+
+        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm p-6 sm:p-8 relative">
+          
+          <div class="flex items-center justify-between pb-6 mb-6 border-b border-slate-100">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-lg bg-brand-50 text-brand-500 flex items-center justify-center font-bold text-sm">
+                  🍕
+                </span>
+                <h3 class="text-lg font-bold text-dark-900">Seu primeiro produto</h3>
+              </div>
+              <p class="text-xs text-dark-400 mt-1">Preencha os dados básicos que aparecerão para seus clientes.</p>
+            </div>
+            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-dark-500">
+              * Campos obrigatórios
+            </span>
+          </div>
+
+          <form id="product-form" onsubmit="event.preventDefault(); handleSubmit();" class="space-y-6">
+
+            <!-- 1. CATEGORIA (DROPDOWN + BOTÃO NOVO MODAL) -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label for="product-category" class="text-xs font-bold text-dark-800 uppercase tracking-wider flex items-center gap-1">
+                  Categoria do Produto <span class="text-brand-500">*</span>
+                </label>
+                <button type="button" onclick="openModal('modal-new-category')" class="text-xs font-bold text-brand-500 hover:text-brand-600 flex items-center gap-1 hover:underline">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                  + Criar nova categoria
+                </button>
+              </div>
+
+              <div class="relative">
+                <select id="product-category" onchange="updatePreview()" class="w-full h-12 pl-4 pr-10 rounded-xl border border-slate-200 bg-white text-dark-900 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition appearance-none">
+                  <option value="Hambúrgueres Artesanais" selected>Hambúrgueres Artesanais</option>
+                  <option value="Bebidas e Refrigerantes">Bebidas e Refrigerantes</option>
+                  <option value="Porções e Acompanhamentos">Porções e Acompanhamentos</option>
+                  <option value="Sobremesas e Doces">Sobremesas e Doces</option>
+                  <option value="Pizzas Tradicionais">Pizzas Tradicionais</option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-slate-400">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+                </div>
+              </div>
+              <p id="error-category-msg" class="hidden mt-1.5 text-xs text-rose-600 font-medium flex items-center gap-1">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Por favor, selecione uma categoria válida.
+              </p>
+            </div>
+
+            <!-- 2. NOME DO PRODUTO -->
+            <div>
+              <label for="product-name" class="block text-xs font-bold text-dark-800 uppercase tracking-wider mb-1.5">
+                Nome do produto <span class="text-brand-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                id="product-name" 
+                value="X-Burger Artesanal Bacon Melt" 
+                oninput="updatePreview()" 
+                placeholder="Ex.: X-Burger Artesanal" 
+                class="w-full h-12 px-4 rounded-xl border border-slate-200 bg-white text-dark-900 text-sm font-semibold placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition"
+              >
+              <p class="mt-1.5 text-xs text-dark-400 flex items-center justify-between">
+                <span>Use um nome fácil de entender para o cliente.</span>
+                <span id="char-count" class="text-slate-400 text-[11px]">28/60</span>
+              </p>
+              <p id="error-name-msg" class="hidden mt-1 text-xs text-rose-600 font-medium">
+                Informe o nome do produto.
+              </p>
+            </div>
+
+            <!-- 3. DESCRIÇÃO DO PRODUTO (OPCIONAL) -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label for="product-desc" class="text-xs font-bold text-dark-800 uppercase tracking-wider">
+                  Descrição dos Ingredientes
+                </label>
+                <span class="text-[11px] font-medium text-slate-400 bg-slate-100 px-2 py-0.5 rounded">Opcional</span>
+              </div>
+              <textarea 
+                id="product-desc" 
+                rows="3" 
+                oninput="updatePreview()" 
+                placeholder="Ex.: Pão brioche selado na manteiga, hambúrguer artesanal 180g, cheddar cremoso e fatias crocantes de bacon." 
+                class="w-full p-3.5 rounded-xl border border-slate-200 bg-white text-dark-800 text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition resize-none custom-scrollbar"
+              >Pão brioche fofinho tostado na manteiga, hambúrguer bovino angus 180g grelhado no fogo, generosa camada de cheddar derretido, tiras de bacon crocante, alface americana e molho especial do chef.</textarea>
+              <p class="mt-1.5 text-xs text-dark-400">
+                Você poderá editar ou adicionar opcionais e adicionais pagos depois no módulo de Cardápio.
+              </p>
+            </div>
+
+            <!-- 4. FOTO DO PRODUTO (ÁREA VISUAL DE UPLOAD COM ESTADOS) -->
+            <div>
+              <label class="block text-xs font-bold text-dark-800 uppercase tracking-wider mb-1.5">
+                Foto do Produto
+                <span class="text-[11px] font-normal text-slate-400 ml-1">(Opcional, mas aumenta em 40% as vendas)</span>
+              </label>
+
+              <!-- Card de Upload Dinâmico -->
+              <div id="photo-upload-box" class="relative group border-2 border-dashed border-slate-200 hover:border-brand-500 rounded-2xl p-4 sm:p-6 text-center transition-all bg-slate-50/50 hover:bg-brand-50/20 cursor-pointer">
+                
+                <!-- ESTADO: FOTO SELECIONADA (PADRÃO) -->
+                <div id="photo-selected-state" class="flex flex-col sm:flex-row items-center gap-4 text-left">
+                  <div class="relative w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden border border-slate-200 flex-shrink-0 shadow-sm bg-white">
+                    <img id="uploaded-img-preview" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdtVWkJnS1kfvK6KsbiN00FXGVb_hKEPRHKyFgtcTmskF1GVkxMwOVMTP8zV1KFEEI4jbLYO3L6g6bM3Wd048EN73WiIeccBJWeUw1TnMMnGIwwOielidZq6_9TtDgVFakPU465bKycRnSrBUKekS6wwAMEBge2D-bj2TRu1_9weGHDXQffxqIXx507LOGOQ2y5quWsPB3__LryW4vYfVNsAk37A-mpNdO-Qds8F_ZVpK0Ju65X2pO" alt="Foto do Produto" class="w-full h-full object-cover">
+                    <div class="absolute top-1 right-1 bg-emerald-500 text-white rounded-full p-1 shadow">
+                      <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
+                    </div>
+                  </div>
+                  <div class="flex-grow space-y-1.5 text-center sm:text-left">
+                    <div class="flex items-center justify-center sm:justify-start gap-2">
+                      <span class="text-xs font-bold text-emerald-600 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-md flex items-center gap-1">
+                        <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Foto Carregada
+                      </span>
+                      <span class="text-xs text-dark-400">1024 × 1024 px • 420 KB</span>
+                    </div>
+                    <h4 class="text-sm font-bold text-dark-900">burger-artesanal-angus.jpg</h4>
+                    <p class="text-xs text-dark-500 leading-relaxed">
+                      Excelente qualidade! A imagem foi otimizada para o cardápio no celular e desktop.
+                    </p>
+                    <div class="flex items-center justify-center sm:justify-start gap-3 pt-1">
+                      <button type="button" onclick="triggerFileInput()" class="text-xs font-bold text-brand-600 hover:text-brand-700 underline">Alterar foto</button>
+                      <span class="text-slate-300">|</span>
+                      <button type="button" onclick="removePhoto()" class="text-xs font-bold text-rose-600 hover:text-rose-700">Remover foto</button>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- ESTADO: SEM FOTO (PLACEHOLDER) -->
+                <div id="photo-empty-state" class="hidden flex flex-col items-center justify-center py-4 space-y-2">
+                  <div class="w-12 h-12 rounded-full bg-brand-50 text-brand-500 flex items-center justify-center group-hover:scale-110 transition-transform">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-dark-800">
+                      <span class="text-brand-500 font-bold hover:underline">Clique para selecionar</span> ou arraste a imagem aqui
+                    </p>
+                    <p class="text-xs text-dark-400 mt-1">
+                      Formatos aceitos: JPG, PNG ou WEBP • Recomendado: 800 × 800 px
+                    </p>
+                  </div>
+                  <button type="button" onclick="restorePhoto()" class="mt-2 text-xs font-semibold px-3 py-1 bg-white border border-slate-200 rounded-lg text-dark-600 hover:bg-slate-50 transition">
+                    Restaurar foto demonstrativa
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- 5. PREÇO & 6. DISPONIBILIDADE (GRID 2 COLUNAS) -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-2">
+              
+              <!-- Preço Monetário Formatado -->
+              <div>
+                <label for="product-price" class="block text-xs font-bold text-dark-800 uppercase tracking-wider mb-1.5">
+                  Preço de Venda <span class="text-brand-500">*</span>
+                </label>
+                <div class="relative">
+                  <span class="absolute inset-y-0 left-0 flex items-center pl-4 font-bold text-sm text-dark-400">R$</span>
+                  <input 
+                    type="text" 
+                    id="product-price" 
+                    value="32,90" 
+                    oninput="formatCurrency(this); updatePreview();" 
+                    placeholder="0,00" 
+                    class="w-full h-12 pl-12 pr-4 rounded-xl border border-slate-200 bg-white text-dark-900 text-base font-extrabold focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition"
+                  >
+                </div>
+                <p class="mt-1.5 text-[11px] text-dark-400">
+                  O preço poderá ser alterado a qualquer momento no Cardápio.
+                </p>
+                <p id="error-price-msg" class="hidden mt-1 text-xs text-rose-600 font-medium">
+                  Informe o preço de venda.
+                </p>
+              </div>
+
+              <!-- Switch Disponibilidade Ativo por Padrão -->
+              <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-3.5 flex flex-col justify-between">
+                <div class="flex items-center justify-between">
+                  <span class="text-xs font-bold text-dark-800 uppercase tracking-wider">Disponibilidade</span>
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" id="product-availability" checked onchange="updatePreview()" class="sr-only peer">
+                    <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                  </label>
+                </div>
+                <div class="mt-2">
+                  <span id="availability-badge" class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Produto disponível na loja
+                  </span>
+                  <p class="text-[11px] text-dark-400 mt-1 leading-snug">
+                    Quando ativado, o item fica imediatamente visível no cardápio online do cliente.
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <!-- BOTÕES DE SUBMISSÃO E NAVEGAÇÃO -->
+            <div class="pt-6 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-4">
+              
+              <button type="button" onclick="alert('Retornando ao Passo 6 — Formas de Pagamento')" class="w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-200 text-xs font-bold text-dark-700 hover:bg-slate-50 transition flex items-center justify-center gap-1.5">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                Voltar ao Passo 6
+              </button>
+
+              <div class="flex items-center gap-3 w-full sm:w-auto">
+                <button type="button" onclick="openModal('modal-skip')" class="text-xs font-bold text-dark-500 hover:text-dark-800 px-3 py-2 transition underline">
+                  Pular por enquanto
+                </button>
+
+                <button 
+                  type="submit" 
+                  id="btn-submit-product" 
+                  class="flex-grow sm:flex-grow-0 px-7 py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 active:bg-brand-700 text-white font-extrabold text-sm shadow-lg shadow-brand-500/25 hover:shadow-brand-500/35 transition flex items-center justify-center gap-2 group"
+                >
+                  <span id="btn-submit-text">Criar meu primeiro produto</span>
+                  <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </button>
+              </div>
+
+            </div>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <!-- COLUNA DA DIREITA: PRÉVIA DA LOJA DO CLIENTE EM TEMPO REAL + RESUMO (5 COLUNAS) -->
+      <div class="lg:col-span-5 space-y-6 lg:sticky lg:top-24">
+
+        <!-- CARD 1: MOCKUP REALISTA DA LOJA DIGITAL DO CLIENTE -->
+        <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+          
+          <div class="p-4 bg-slate-50 border-b border-slate-100 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-400"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+              <span class="ml-2 text-xs font-bold text-dark-700 tracking-tight flex items-center gap-1.5">
+                <svg class="w-3.5 h-3.5 text-brand-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                Prévia na sua Loja Online
+              </span>
+            </div>
+            <span class="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded bg-emerald-100 text-emerald-800">Tempo Real</span>
+          </div>
+
+          <!-- Header do Restaurante na Loja Pública -->
+          <div class="p-5 border-b border-slate-100 bg-gradient-to-b from-slate-50/70 to-white">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-xl bg-dark-900 text-white flex items-center justify-center font-extrabold text-base shadow-sm border border-slate-100">
+                🍔
+              </div>
+              <div class="flex-grow">
+                <div class="flex items-center gap-2">
+                  <h4 class="font-extrabold text-sm text-dark-900">Next Burger Express</h4>
+                  <span class="text-[10px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-1.5 py-0.2 rounded-full flex items-center gap-1">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Aberto agora
+                  </span>
+                </div>
+                <p class="text-[11px] text-dark-400 mt-0.5">Av. Paulista, 1578 • Entrega em 30–45 min (R$ 5,00)</p>
+              </div>
+            </div>
+
+            <!-- Abas de categorias da loja -->
+            <div class="flex items-center gap-2 mt-4 overflow-x-auto pb-1 text-xs">
+              <span id="preview-category-pill" class="px-3 py-1 rounded-full bg-brand-500 text-white font-bold whitespace-nowrap shadow-xs">
+                Hambúrgueres Artesanais
+              </span>
+              <span class="px-3 py-1 rounded-full bg-slate-100 text-dark-600 font-medium whitespace-nowrap">
+                Bebidas
+              </span>
+              <span class="px-3 py-1 rounded-full bg-slate-100 text-dark-600 font-medium whitespace-nowrap">
+                Porções
+              </span>
+            </div>
+          </div>
+
+          <!-- Card do Produto renderizado como o cliente verá -->
+          <div class="p-5">
+            <div class="border border-slate-200 rounded-2xl p-4 hover:border-brand-500 transition-all shadow-xs group bg-white">
+              
+              <div class="flex gap-4">
+                
+                <!-- Informações textuais -->
+                <div class="flex-grow flex flex-col justify-between">
+                  <div>
+                    <h5 id="preview-name" class="font-bold text-sm text-dark-900 leading-snug group-hover:text-brand-600 transition">
+                      X-Burger Artesanal Bacon Melt
+                    </h5>
+                    <p id="preview-desc" class="text-xs text-dark-500 mt-1 line-clamp-2 leading-relaxed">
+                      Pão brioche fofinho tostado na manteiga, hambúrguer bovino angus 180g grelhado no fogo, generosa camada de cheddar derretido, tiras de bacon crocante, alface americana e molho especial do chef.
+                    </p>
+                  </div>
+
+                  <div class="mt-3 flex items-center justify-between">
+                    <div class="flex flex-col">
+                      <span class="text-[10px] uppercase font-bold text-slate-400">A partir de</span>
+                      <span id="preview-price" class="text-base font-extrabold text-dark-900">
+                        R$ 32,90
+                      </span>
+                    </div>
+
+                    <button type="button" class="px-3 py-1.5 rounded-lg bg-brand-50 text-brand-600 font-extrabold text-xs group-hover:bg-brand-500 group-hover:text-white transition flex items-center gap-1 shadow-2xs">
+                      <span>Adicionar</span>
+                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"/></svg>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Foto do Produto na Prévia -->
+                <div id="preview-img-container" class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 relative border border-slate-100 shadow-2xs">
+                  <img id="preview-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAdtVWkJnS1kfvK6KsbiN00FXGVb_hKEPRHKyFgtcTmskF1GVkxMwOVMTP8zV1KFEEI4jbLYO3L6g6bM3Wd048EN73WiIeccBJWeUw1TnMMnGIwwOielidZq6_9TtDgVFakPU465bKycRnSrBUKekS6wwAMEBge2D-bj2TRu1_9weGHDXQffxqIXx507LOGOQ2y5quWsPB3__LryW4vYfVNsAk37A-mpNdO-Qds8F_ZVpK0Ju65X2pO" alt="Prévia do Produto" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                  <div id="preview-placeholder-icon" class="hidden w-full h-full flex flex-col items-center justify-center text-slate-400 p-2 text-center">
+                    <svg class="w-8 h-8 mb-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <span class="text-[9px] font-semibold">Sem foto</span>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- Selo se produto estiver indisponível -->
+              <div id="preview-unavailable-badge" class="hidden mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-amber-600 font-semibold bg-amber-50 px-2.5 py-1 rounded-lg">
+                <span class="flex items-center gap-1">
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                  Produto pausado (não visível aos clientes)
+                </span>
+                <span class="text-[10px] underline cursor-pointer">Ativar</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Rodapé da prévia: Carrinho rápido -->
+          <div class="px-5 py-3 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs text-dark-500">
+            <span class="flex items-center gap-1.5 font-medium">
+              <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Cardápio digital 100% responsivo
+            </span>
+            <span class="font-bold text-dark-800">1 item cadastrado</span>
+          </div>
+
+        </div>
+
+        <!-- CARD 2: RECURSOS AVANÇADOS DISPONÍVEIS DEPOIS (EDUCATIVO) -->
+        <div class="bg-gradient-to-br from-brand-50/60 via-white to-orange-50/40 rounded-3xl border border-brand-100 p-5 shadow-sm">
+          <div class="flex items-start gap-3">
+            <div class="w-8 h-8 rounded-xl bg-brand-500 text-white flex items-center justify-center flex-shrink-0 text-sm shadow-sm">
+              ✨
+            </div>
+            <div>
+              <h4 class="text-xs font-extrabold uppercase tracking-wider text-brand-700">Depois você pode deixar seu cardápio completo</h4>
+              <p class="text-xs text-dark-500 mt-1 leading-relaxed">
+                No Painel do Lojista, você poderá turbinar suas vendas com opções avançadas:
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5 mt-4 text-xs font-semibold text-dark-700">
+            <div class="flex items-center gap-1.5 p-2 rounded-lg bg-white/80 border border-brand-100/50">
+              <span class="text-emerald-500 font-bold">✓</span> Tamanhos (P, M, G)
+            </div>
+            <div class="flex items-center gap-1.5 p-2 rounded-lg bg-white/80 border border-brand-100/50">
+              <span class="text-emerald-500 font-bold">✓</span> Adicionais & Opcionais
+            </div>
+            <div class="flex items-center gap-1.5 p-2 rounded-lg bg-white/80 border border-brand-100/50">
+              <span class="text-emerald-500 font-bold">✓</span> Combos & Bebidas
+            </div>
+            <div class="flex items-center gap-1.5 p-2 rounded-lg bg-white/80 border border-brand-100/50">
+              <span class="text-emerald-500 font-bold">✓</span> Cupons & Promoções
+            </div>
+          </div>
+          
+          <p class="mt-3 text-[11px] text-dark-400 text-center font-medium">
+            Tudo isso poderá ser configurado depois sem pressa na aba <strong>Cardápio</strong>.
+          </p>
+        </div>
+
+        <!-- CARD 3: RESUMO DO ONBOARDING -->
+        <div class="bg-white rounded-2xl border border-slate-100 p-4 shadow-sm text-xs space-y-2">
+          <div class="flex items-center justify-between font-bold text-dark-900 pb-2 border-b border-slate-100">
+            <span class="flex items-center gap-1.5">
+              <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Seu Onboarding Completo
+            </span>
+            <span class="text-emerald-600 font-extrabold">Passo Final</span>
+          </div>
+          <div class="grid grid-cols-2 gap-1 text-[11px] text-dark-500">
+            <div>✓ Restaurante configurado</div>
+            <div>✓ Horários ativos</div>
+            <div>✓ Endereço confirmado</div>
+            <div>✓ Pagamentos salvos</div>
+            <div>✓ Delivery parametrizado</div>
+            <div class="text-brand-600 font-bold">● 1º Produto em criação</div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- RODAPÉ DISCRETO -->
+  <footer class="bg-white border-t border-slate-100 py-6 mt-12 text-xs text-dark-400">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-dark-700">MenuNext</span>
+        <span>•</span>
+        <span>Tecnologia para Gastronomia Ltda.</span>
+        <span>•</span>
+        <span>Passo 7: Primeiro Produto</span>
+      </div>
+      <div class="flex items-center gap-4 text-dark-500">
+        <span class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-emerald-500"></span> SaaS Multi-tenant Pronto</span>
+        <a href="#" class="hover:text-brand-500 transition">Central de Ajuda</a>
+        <a href="#" class="hover:text-brand-500 transition">Termos de Uso</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ======================================================== -->
+  <!-- MODAIS INTERATIVOS: CRIAR CATEGORIA, PULAR ETAPA, SUCESSO -->
+  <!-- ======================================================== -->
+
+  <!-- MODAL 1: CRIAR NOVA CATEGORIA -->
+  <div id="modal-new-category" class="fixed inset-0 bg-dark-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl border border-slate-100 transform transition-all">
+      <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-xl bg-brand-50 text-brand-500 flex items-center justify-center font-bold">
+            🏷️
+          </div>
+          <h3 class="font-extrabold text-base text-dark-900">Criar nova categoria</h3>
+        </div>
+        <button onclick="closeModal('modal-new-category')" class="text-dark-400 hover:text-dark-700 p-1">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="py-4 space-y-3">
+        <label for="new-category-name" class="block text-xs font-bold text-dark-800 uppercase tracking-wider">
+          Nome da categoria *
+        </label>
+        <input 
+          type="text" 
+          id="new-category-name" 
+          placeholder="Ex.: Lanches Especiais, Bebidas, Sobremesas..." 
+          class="w-full h-12 px-4 rounded-xl border border-slate-200 text-sm font-semibold text-dark-900 focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500"
+        >
+        <p class="text-xs text-dark-400">
+          Você poderá organizar e reordenar as categorias a qualquer momento no painel.
+        </p>
+      </div>
+
+      <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+        <button type="button" onclick="closeModal('modal-new-category')" class="px-4 py-2.5 rounded-xl border border-slate-200 text-xs font-bold text-dark-600 hover:bg-slate-50 transition">
+          Cancelar
+        </button>
+        <button type="button" onclick="saveNewCategory()" class="px-5 py-2.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-xs font-extrabold shadow-md shadow-brand-500/20 transition">
+          Criar e Selecionar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: CONFIRMAÇÃO DE PULAR POR ENQUANTO -->
+  <div id="modal-skip" class="fixed inset-0 bg-dark-900/60 backdrop-blur-xs z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 text-center">
+      <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center mx-auto text-2xl mb-4 border border-amber-200">
+        ⚠️
+      </div>
+      <h3 class="text-lg font-extrabold text-dark-900">Tem certeza que deseja pular?</h3>
+      <p class="text-xs sm:text-sm text-dark-500 mt-2 leading-relaxed">
+        Sem produtos cadastrados, sua loja digital ainda não poderá receber pedidos dos clientes. Você poderá cadastrar itens a qualquer momento pelo Painel do Lojista.
+      </p>
+
+      <div class="bg-slate-50 rounded-xl p-3 my-4 text-left border border-slate-200/70 text-xs text-dark-600 space-y-1">
+        <div class="font-bold text-dark-800">Status no checklist:</div>
+        <div class="flex items-center gap-1.5 text-amber-700">
+          <span class="w-2 h-2 rounded-full bg-amber-500"></span> Primeiro produto: <strong>Marcado como Pendente</strong>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
+        <button onclick="closeModal('modal-skip')" class="w-full sm:w-auto px-5 py-3 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-xs font-extrabold shadow-md shadow-brand-500/20 transition">
+          Continuar e cadastrar produto
+        </button>
+        <button onclick="confirmSkip()" class="w-full sm:w-auto px-5 py-3 rounded-xl border border-slate-200 text-xs font-bold text-dark-500 hover:text-dark-800 hover:bg-slate-50 transition">
+          Pular por enquanto
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: SUCESSO / PRODUTO CRIADO & ONBOARDING CONCLUÍDO (ESTADO FINAL) -->
+  <div id="modal-success" class="fixed inset-0 bg-dark-900/70 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 text-center relative overflow-hidden animate-in fade-in zoom-in duration-300">
+      
+      <!-- Efeito decorativo de confete / sucesso -->
+      <div class="absolute -top-12 -right-12 w-32 h-32 bg-brand-100/60 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="absolute -bottom-12 -left-12 w-32 h-32 bg-emerald-100/60 rounded-full blur-2xl pointer-events-none"></div>
+
+      <div class="w-16 h-16 rounded-3xl bg-gradient-to-br from-emerald-500 to-emerald-600 text-white flex items-center justify-center mx-auto text-3xl mb-4 shadow-xl shadow-emerald-500/30">
+        🎉
+      </div>
+
+      <span class="text-xs font-extrabold uppercase tracking-widest px-3 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+        Onboarding 100% Concluído
+      </span>
+
+      <h3 class="text-2xl font-extrabold text-dark-900 tracking-tight mt-3">
+        Seu primeiro produto está na loja!
+      </h3>
+      <p class="text-xs sm:text-sm text-dark-500 mt-2 leading-relaxed max-w-sm mx-auto">
+        Parabéns! Você acabou de concluir as 7 etapas essenciais do MenuNext. Sua loja já tem identidade, regras de entrega e o primeiro item pronto para ser vendido.
+      </p>
+
+      <!-- Checklist de Conquistas -->
+      <div class="bg-slate-50 rounded-2xl p-4 my-5 border border-slate-200/80 text-left text-xs space-y-2">
+        <div class="font-extrabold text-dark-800 uppercase tracking-wider text-[10px] text-slate-400">Resumo da sua loja:</div>
+        <div class="grid grid-cols-2 gap-2 text-dark-700 font-semibold text-[11px]">
+          <div class="flex items-center gap-1.5"><span class="text-emerald-500">✓</span> Restaurante & URL</div>
+          <div class="flex items-center gap-1.5"><span class="text-emerald-500">✓</span> Endereço & Mapa</div>
+          <div class="flex items-center gap-1.5"><span class="text-emerald-500">✓</span> Delivery parametrizado</div>
+          <div class="flex items-center gap-1.5"><span class="text-emerald-500">✓</span> Horários sincronizados</div>
+          <div class="flex items-center gap-1.5"><span class="text-emerald-500">✓</span> Pix & Pagamentos</div>
+          <div class="flex items-center gap-1.5 text-brand-600 font-bold"><span class="text-brand-500">✓</span> 1º Produto Ativo</div>
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+        <button onclick="alert('Redirecionando para o Painel do Lojista (MenuNext Dashboard)...')" class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-xs font-extrabold shadow-lg shadow-brand-500/25 transition flex items-center justify-center gap-2">
+          <span>Continuar para minha loja</span>
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+        </button>
+        <button onclick="closeModal('modal-success'); resetFormForAnother();" class="w-full sm:w-auto px-5 py-3.5 rounded-xl border border-slate-200 text-xs font-bold text-dark-700 hover:bg-slate-50 transition">
+          + Adicionar outro produto
+        </button>
+      </div>
+
+      <p class="text-[11px] text-dark-400 mt-4">
+        Você poderá alterar fotos, descrições, adicionar opcionais e cadastrar centenas de itens a qualquer momento pelo Painel.
+      </p>
+
+    </div>
+  </div>
+
+  <!-- SCRIPT DE INTERATIVIDADE E SINCRONIZAÇÃO EM TEMPO REAL -->
+  <script>
+    // Estado global de demonstração
+    let hasPhoto = true;
+    const defaultPhotoSrc = "https://lh3.googleusercontent.com/aida-public/AB6AXuAdtVWkJnS1kfvK6KsbiN00FXGVb_hKEPRHKyFgtcTmskF1GVkxMwOVMTP8zV1KFEEI4jbLYO3L6g6bM3Wd048EN73WiIeccBJWeUw1TnMMnGIwwOielidZq6_9TtDgVFakPU465bKycRnSrBUKekS6wwAMEBge2D-bj2TRu1_9weGHDXQffxqIXx507LOGOQ2y5quWsPB3__LryW4vYfVNsAk37A-mpNdO-Qds8F_ZVpK0Ju65X2pO";
+
+    function updatePreview() {
+      const categorySelect = document.getElementById('product-category');
+      const nameInput = document.getElementById('product-name');
+      const descInput = document.getElementById('product-desc');
+      const priceInput = document.getElementById('product-price');
+      const availabilityCheckbox = document.getElementById('product-availability');
+
+      // Atualiza textos
+      const name = nameInput.value.trim() || 'Seu produto';
+      const desc = descInput.value.trim() || 'Descrição do produto e ingredientes aparecerão aqui para os clientes.';
+      const price = priceInput.value.trim() || '0,00';
+      const category = categorySelect.value;
+
+      document.getElementById('preview-name').textContent = name;
+      document.getElementById('preview-desc').textContent = desc;
+      document.getElementById('preview-price').textContent = 'R$ ' + price;
+      document.getElementById('preview-category-pill').textContent = category;
+      document.getElementById('char-count').textContent = nameInput.value.length + '/60';
+
+      // Atualiza Disponibilidade
+      const isAvailable = availabilityCheckbox.checked;
+      const unavailableBadge = document.getElementById('preview-unavailable-badge');
+      const availabilityBadge = document.getElementById('availability-badge');
+
+      if (isAvailable) {
+        unavailableBadge.classList.add('hidden');
+        availabilityBadge.className = "inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100/60 px-2 py-0.5 rounded";
+        availabilityBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Produto disponível na loja';
+      } else {
+        unavailableBadge.classList.remove('hidden');
+        availabilityBadge.className = "inline-flex items-center gap-1 text-[11px] font-bold text-amber-700 bg-amber-100/60 px-2 py-0.5 rounded";
+        availabilityBadge.innerHTML = '<span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Produto pausado (invisível)';
+      }
+    }
+
+    function formatCurrency(input) {
+      let value = input.value.replace(/\D/g, '');
+      if (value === '') {
+        input.value = '';
+        return;
+      }
+      let number = (parseFloat(value) / 100).toFixed(2);
+      input.value = number.replace('.', ',');
+    }
+
+    function removePhoto() {
+      hasPhoto = false;
+      document.getElementById('photo-selected-state').classList.add('hidden');
+      document.getElementById('photo-empty-state').classList.remove('hidden');
+      
+      // Atualiza prévia
+      document.getElementById('preview-img').classList.add('hidden');
+      document.getElementById('preview-placeholder-icon').classList.remove('hidden');
+    }
+
+    function restorePhoto() {
+      hasPhoto = true;
+      document.getElementById('photo-selected-state').classList.remove('hidden');
+      document.getElementById('photo-empty-state').classList.add('hidden');
+      
+      // Atualiza prévia
+      document.getElementById('preview-img').classList.remove('hidden');
+      document.getElementById('preview-placeholder-icon').classList.add('hidden');
+    }
+
+    function triggerFileInput() {
+      alert('Simulação: Seletor de arquivos aberto. Selecione uma imagem JPG, PNG ou WEBP.');
+    }
+
+    function openModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    function closeModal(id) {
+      const modal = document.getElementById(id);
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    function saveNewCategory() {
+      const catInput = document.getElementById('new-category-name');
+      const catName = catInput.value.trim();
+      if (!catName) {
+        alert('Por favor, digite o nome da categoria.');
+        return;
+      }
+      const select = document.getElementById('product-category');
+      const newOption = new Option(catName, catName, true, true);
+      select.add(newOption);
+      catInput.value = '';
+      closeModal('modal-new-category');
+      updatePreview();
+    }
+
+    function confirmSkip() {
+      closeModal('modal-skip');
+      alert('Passo 7 pulado! Marcado como pendente no checklist do painel. Encaminhando...');
+    }
+
+    function handleSubmit() {
+      const btn = document.getElementById('btn-submit-product');
+      const btnText = document.getElementById('btn-submit-text');
+      
+      // Efeito salvando
+      btn.disabled = true;
+      btnText.textContent = 'Salvando produto...';
+      btn.classList.add('opacity-80', 'cursor-not-allowed');
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btnText.textContent = 'Criar meu primeiro produto';
+        btn.classList.remove('opacity-80', 'cursor-not-allowed');
+        openModal('modal-success');
+      }, 800);
+    }
+
+    function resetFormForAnother() {
+      document.getElementById('product-name').value = '';
+      document.getElementById('product-desc').value = '';
+      document.getElementById('product-price').value = '';
+      removePhoto();
+      updatePreview();
+    }
+
+    // Gerenciamento de Cenários da Barra Superior
+    function setScenario(type) {
+      // Reseta botões de cenário
+      document.querySelectorAll('[id^="btn-scenario-"]').forEach(btn => {
+        btn.className = "px-2.5 py-1 rounded bg-dark-800 text-dark-200 hover:bg-dark-700 transition";
+      });
+      const activeBtn = document.getElementById('btn-scenario-' + type);
+      if (activeBtn) {
+        activeBtn.className = "px-2.5 py-1 rounded bg-brand-500 text-white font-medium hover:bg-brand-600 transition";
+      }
+
+      // Limpa erros
+      document.getElementById('error-category-msg').classList.add('hidden');
+      document.getElementById('error-name-msg').classList.add('hidden');
+      document.getElementById('error-price-msg').classList.add('hidden');
+
+      if (type === 'filled') {
+        document.getElementById('product-category').value = 'Hambúrgueres Artesanais';
+        document.getElementById('product-name').value = 'X-Burger Artesanal Bacon Melt';
+        document.getElementById('product-desc').value = 'Pão brioche fofinho tostado na manteiga, hambúrguer bovino angus 180g grelhado no fogo, generosa camada de cheddar derretido, tiras de bacon crocante, alface americana e molho especial do chef.';
+        document.getElementById('product-price').value = '32,90';
+        document.getElementById('product-availability').checked = true;
+        restorePhoto();
+      } else if (type === 'empty') {
+        document.getElementById('product-name').value = '';
+        document.getElementById('product-desc').value = '';
+        document.getElementById('product-price').value = '';
+        removePhoto();
+      } else if (type === 'no_photo') {
+        document.getElementById('product-name').value = 'Batata Frita Rústica Crocante';
+        document.getElementById('product-desc').value = 'Porção individual temperada com sal fino e alecrim fresco.';
+        document.getElementById('product-price').value = '18,90';
+        removePhoto();
+      } else if (type === 'error_category') {
+        document.getElementById('error-category-msg').classList.remove('hidden');
+      } else if (type === 'saving') {
+        handleSubmit();
+      }
+
+      updatePreview();
+    }
+
+    // Inicialização
+    window.addEventListener('DOMContentLoaded', () => {
+      updatePreview();
+    });
+  </script>
+</body>
+</html>

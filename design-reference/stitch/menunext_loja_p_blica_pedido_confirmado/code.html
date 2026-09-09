@@ -1,0 +1,224 @@
+<!DOCTYPE html><html lang="pt-BR"><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>MenuNext - Pedido #1048 Confirmado</title>
+<!-- Google Fonts: Plus Jakarta Sans -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              orange: '#F95721',
+              'orange-hover': '#e44a17',
+              'orange-light': '#FFF5F2',
+              dark: '#121826',
+              gray: '#64748B',
+              border: '#E2E8F0',
+              bg: '#F8FAFC',
+              success: '#10B981',
+              'success-light': '#ECFDF5',
+              warning: '#F59E0B',
+              'warning-light': '#FFFBEB'
+            }
+          },
+          boxShadow: {
+            'soft': '0 4px 20px -2px rgba(18, 24, 38, 0.05)',
+            'card': '0 1px 3px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.03)',
+            'floating': '0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05)'
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-scroll-and-animations">
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+    .pulse-animation {
+      animation: pulse-dot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-brand-dark font-sans antialiased min-h-screen selection:bg-brand-orange selection:text-white">
+<!-- BEGIN: MainHeader -->
+
+<!-- END: MainHeader -->
+<!-- BEGIN: MainContent -->
+<main class="max-w-[420px] mx-auto min-h-screen bg-white shadow-2xl border-x border-slate-100 p-4 pb-12 flex flex-col gap-4">
+  <!-- Mini Header Brand & Status -->
+  <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+    <div class="flex items-center gap-2">
+      <div class="w-8 h-8 rounded-full bg-brand-orange/10 text-brand-orange flex items-center justify-center font-bold text-xs">
+        NB
+      </div>
+      <div>
+        <h2 class="text-xs font-bold text-slate-800 tracking-tight">Next Burger Express</h2>
+        <span class="inline-flex items-center gap-1 text-[10px] text-emerald-600 font-semibold">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 pulse-animation"></span> Pedido Ativo
+        </span>
+      </div>
+    </div>
+    <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">Delivery</span>
+  </div>
+
+  <!-- Topo com ícone de sucesso em verde esmeralda (#10B981) e destaque no número do pedido #1048 -->
+  <section class="text-center py-2">
+    <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-emerald-100 text-[#10B981] shadow-inner mb-2">
+      <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+        <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"></path>
+      </svg>
+    </div>
+    <h1 class="text-xl font-extrabold text-slate-900 tracking-tight">Pedido recebido com sucesso!</h1>
+    <p class="text-xs text-slate-500 mt-0.5">Transmitido diretamente para a cozinha</p>
+    <div class="mt-2.5 inline-flex items-center gap-2 bg-orange-50 border border-orange-200 px-3 py-1.5 rounded-xl">
+      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Pedido:</span>
+      <span class="text-lg font-extrabold text-brand-orange">#1048</span>
+      <span class="text-[11px] font-medium text-slate-500 pl-1 border-l border-orange-200">Hoje às 19:14</span>
+    </div>
+  </section>
+
+  <!-- Bloco Prioritário de Pagamento via Pix com QR code centralizado e feedback instantâneo de cópia -->
+  <section class="bg-slate-50 border border-slate-200 rounded-2xl p-4 flex flex-col items-center text-center">
+    <div class="w-full flex items-center justify-between mb-3">
+      <div class="flex items-center gap-1.5">
+        <span class="w-6 h-6 rounded bg-emerald-100 text-emerald-700 flex items-center justify-center text-xs font-bold">❖</span>
+        <span class="text-xs font-bold text-slate-800">Pagamento via Pix</span>
+      </div>
+      <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+        <span class="w-1.5 h-1.5 rounded-full bg-amber-500 pulse-animation"></span> Aguardando
+      </span>
+    </div>
+
+    <!-- QR Code Centralizado e legível -->
+    <div class="bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm flex flex-col items-center justify-center">
+      <div class="w-32 h-32 p-1.5 bg-slate-900 rounded-lg grid grid-cols-4 gap-1">
+        <div class="bg-white rounded-sm"></div>
+        <div class="bg-white rounded-sm"></div>
+        <div class="bg-slate-900"></div>
+        <div class="bg-white rounded-sm"></div>
+        <div class="bg-white rounded-sm"></div>
+        <div class="bg-slate-900"></div>
+        <div class="bg-white rounded-sm"></div>
+        <div class="bg-white rounded-sm"></div>
+        <div class="bg-white rounded-sm"></div>
+        <div class="bg-white rounded-sm"></div>
+        <div class="bg-white rounded-sm"></div>
+        <div class="bg-slate-900"></div>
+        <div class="bg-white rounded-sm"></div>
+        <div class="bg-slate-900"></div>
+        <div class="bg-white rounded-sm"></div>
+        <div class="bg-white rounded-sm"></div>
+      </div>
+      <span class="text-[10px] font-bold text-slate-400 mt-1 uppercase tracking-wider">Aponte a câmera do banco</span>
+    </div>
+
+    <!-- Valor -->
+    <div class="mt-2.5">
+      <span class="text-xs text-slate-500">Valor a pagar:</span>
+      <span class="text-base font-extrabold text-slate-900 ml-1">R$ 101,70</span>
+    </div>
+
+    <!-- Campo Protegido Copia e Cola -->
+    <div class="w-full mt-2.5 text-left">
+      <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1 block">Pix Copia e Cola:</label>
+      <div class="bg-white border border-slate-200 rounded-lg p-2 font-mono text-[10px] text-slate-600 truncate select-all select-none">
+        00020126580014br.gov.bcb.pix0136menunext-nextburger-pix-10170-ped10485204000053039865405101.705802BR
+      </div>
+    </div>
+
+    <!-- Botão de toque único com feedback visual instantâneo -->
+    <button id="btn-copiar-pix" onclick="navigator.clipboard.writeText('00020126580014br.gov.bcb.pix0136menunext-nextburger-pix-10170-ped10485204000053039865405101.705802BR'); var b=this; b.innerHTML='✓ Código Pix copiado!'; b.classList.remove('bg-slate-900'); b.classList.add('bg-emerald-600'); setTimeout(function(){ b.innerHTML='Copiar código Pix'; b.classList.remove('bg-emerald-600'); b.classList.add('bg-slate-900'); }, 3000);" type="button" class="w-full mt-3 py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-bold flex items-center justify-center gap-1.5 transition shadow-sm">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+      </svg>
+      <span class="">Copiar código Pix</span>
+    </button>
+    <p class="text-[10px] text-slate-400 mt-2">Confirmação automática em poucos segundos após o pagamento.</p>
+  </section>
+
+  <!-- Resumo Compacto dos Itens do Pedido -->
+  <section class="border border-slate-100 rounded-2xl p-3.5 bg-white shadow-sm">
+    <div class="flex items-center justify-between border-b border-slate-100 pb-2 mb-2">
+      <span class="text-xs font-bold text-slate-800">Resumo do Pedido (3 itens)</span>
+      <span class="text-xs font-extrabold text-brand-orange">Total: R$ 101,70</span>
+    </div>
+    <div class="space-y-2 text-xs divide-y divide-slate-50">
+      <div class="flex justify-between items-start pt-1.5">
+        <div>
+          <p class="font-semibold text-slate-800"><span class="text-brand-orange font-bold mr-1">1x</span>Almoço Executivo Completo</p>
+          <p class="text-[10px] text-slate-500">Filé Parmegiana • Batata • Frita extra • Suco</p>
+        </div>
+        <span class="font-bold text-slate-800 text-[11px] whitespace-nowrap ml-2">R$ 38,90</span>
+      </div>
+      <div class="flex justify-between items-start pt-1.5">
+        <div>
+          <p class="font-semibold text-slate-800"><span class="text-brand-orange font-bold mr-1">1x</span>Combo Família Artesanal</p>
+          <p class="text-[10px] text-slate-500">Pizza G Meia/Meia • Borda Catupiry • Guaraná 2L</p>
+        </div>
+        <span class="font-bold text-slate-800 text-[11px] whitespace-nowrap ml-2">R$ 67,80</span>
+      </div>
+    </div>
+    <!-- Mini Subtotal e Entrega -->
+    <div class="mt-2.5 pt-2 border-t border-slate-100 text-[11px] text-slate-500 space-y-1">
+      <div class="flex justify-between">
+        <span class="">Taxa de entrega (Moema 🛵)</span>
+        <span class="">R$ 5,00</span>
+      </div>
+      <div class="flex justify-between text-emerald-600 font-medium">
+        <span class="">Cupom PRIMEIRACOMPRA</span>
+        <span class="">- R$ 10,00</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Resumo Compacto do Endereço de Entrega -->
+  <section class="border border-slate-100 rounded-2xl p-3.5 bg-white shadow-sm text-xs">
+    <div class="flex items-center gap-1.5 mb-1.5 text-slate-400">
+      <svg class="w-3.5 h-3.5 text-brand-orange" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+        <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+      </svg>
+      <span class="text-[10px] font-bold uppercase tracking-wider text-slate-500">Endereço de Entrega</span>
+    </div>
+    <p class="font-bold text-slate-800 text-xs">João da Silva • (11) 99999-9999</p>
+    <p class="text-slate-600 text-[11px] mt-0.5 leading-snug">Alameda dos Anapurus, 1200 — Apto 42B (Bloco C), Moema</p>
+    <div class="mt-2 bg-slate-50 p-2 rounded-lg text-[10px] text-slate-500">
+      <strong class="text-slate-700">Obs:</strong> "Por favor, enviar talheres descartáveis e guardanapos extras."
+    </div>
+  </section>
+
+  <!-- Botão de Ação Principal em Destaque: Direcionando para tela de rastreamento SCREEN_26 -->
+  <div class="pt-1">
+    <a href="#" onclick="alert('Redirecionando para acompanhamento em tempo real (SCREEN_26)...');" class="w-full py-3.5 px-4 rounded-xl bg-[#F95721] hover:bg-[#e44a17] text-white text-sm font-extrabold shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition duration-200 text-center">
+      <span class="">Acompanhar pedido em tempo real</span>
+      <span class="">→</span>
+    </a>
+  </div>
+
+  <!-- Link discreto de suporte direto -->
+  <div class="text-center pt-1">
+    <a class="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-emerald-700 transition" href="https://api.whatsapp.com/send?phone=5511988887777&amp;text=Ol%C3%A1,%20gostaria%20de%20tirar%20d%C3%BAvidas%20sobre%20meu%20pedido%20%231048" target="_blank">
+      <svg class="w-3.5 h-3.5 text-emerald-600 fill-current" viewBox="0 0 24 24">
+        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"></path>
+      </svg>
+      <span class="">Dúvidas? Fale no WhatsApp com o restaurante</span>
+    </a>
+  </div>
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: BottomNavigationMobile -->
+
+<!-- END: BottomNavigationMobile -->
+
+
+</body></html>

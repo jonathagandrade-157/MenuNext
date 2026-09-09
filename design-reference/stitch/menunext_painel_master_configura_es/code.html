@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MenuNext — Painel Master: Configurações</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              DEFAULT: '#F95721',
+              hover: '#e04816',
+              light: '#fff3ee',
+              border: '#ffdcd1'
+            },
+            graphite: {
+              900: '#0e131f',
+              800: '#121826',
+              700: '#232b3e',
+              500: '#64748b',
+              400: '#94a3b8',
+              100: '#f1f5f9',
+              50: '#f8fafc'
+            },
+            emerald: {
+              500: '#10B981',
+              50: '#ecfdf5',
+              100: '#d1fae5',
+              700: '#047857'
+            },
+            amber: {
+              500: '#F59E0B',
+              50: '#fffbeb',
+              700: '#b45309'
+            },
+            red: {
+              500: '#EF4444',
+              50: '#fef2f2',
+              700: '#b91c1c'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #F8FAFC;
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #F1F5F9;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #CBD5E1;
+      border-radius: 9999px;
+    }
+  </style>
+</head>
+<body class="text-graphite-800 bg-[#f8fafc] min-h-screen flex antialiased">
+
+  <!-- ================= SIDEBAR MASTER ================= -->
+  <aside class="w-64 bg-white border-r border-slate-200/80 flex flex-col fixed inset-y-0 left-0 z-30 shadow-[1px_0_10px_rgba(0,0,0,0.02)]">
+    <!-- Brand / Master Logo -->
+    <div class="h-20 px-6 flex items-center border-b border-slate-100 justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-9 h-9 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand font-bold shadow-sm">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 8h1a4 4 0 0 1 0 8h-1"></path>
+            <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path>
+            <line x1="6" y1="1" x2="6" y2="4"></line>
+            <line x1="10" y1="1" x2="10" y2="4"></line>
+            <line x1="14" y1="1" x2="14" y2="4"></line>
+          </svg>
+        </div>
+        <div>
+          <span class="font-extrabold text-lg tracking-tight text-graphite-900 block leading-tight">Menu<span class="text-brand">Next</span></span>
+          <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Plataforma SaaS</span>
+        </div>
+      </div>
+      <span class="px-2 py-0.5 text-[10px] font-bold bg-brand/10 text-brand rounded-full border border-brand/20 uppercase tracking-wide">Master</span>
+    </div>
+
+    <!-- Navigation Menu -->
+    <div class="flex-1 overflow-y-auto px-3.5 py-4 space-y-1 custom-scrollbar">
+      <div class="px-3 pb-2 text-[10px] font-bold tracking-wider uppercase text-slate-400">Controle Global</div>
+
+      <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+        <span class="text-base">🏠</span>
+        <span>Início</span>
+      </a>
+
+      <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+        <div class="flex items-center gap-3">
+          <span class="text-base">🏪</span>
+          <span>Restaurantes</span>
+        </div>
+        <span class="text-xs bg-slate-100 text-slate-600 font-bold px-2 py-0.5 rounded-full">248</span>
+      </a>
+
+      <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+        <span class="text-base">💳</span>
+        <span>Assinaturas</span>
+      </a>
+
+      <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+        <span class="text-base">📦</span>
+        <span>Planos</span>
+      </a>
+
+      <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+        <span class="text-base">🧾</span>
+        <span>Pedidos</span>
+      </a>
+
+      <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+        <span class="text-base">👥</span>
+        <span>Usuários</span>
+      </a>
+
+      <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+        <span class="text-base">📊</span>
+        <span>Métricas</span>
+      </a>
+
+      <a href="#" class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors">
+        <div class="flex items-center gap-3">
+          <span class="text-base">🎧</span>
+          <span>Suporte</span>
+        </div>
+        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+      </a>
+
+      <!-- Configurações - ACTIVE -->
+      <a href="#" class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-bold bg-brand text-white shadow-sm shadow-brand/20 transition-all">
+        <span class="text-base">⚙️</span>
+        <span>Configurações</span>
+      </a>
+    </div>
+
+    <!-- Master Admin User / Footer -->
+    <div class="p-3 border-t border-slate-100 bg-slate-50/50">
+      <div class="p-3 bg-white rounded-xl border border-slate-200/80 shadow-xs flex items-center justify-between">
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-9 h-9 rounded-lg bg-graphite-800 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+            AM
+          </div>
+          <div class="truncate">
+            <div class="text-xs font-bold text-slate-900 truncate">Administrador Master</div>
+            <div class="text-[10px] text-slate-500 truncate">admin@menunext.com.br</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-1 shrink-0">
+          <button title="Meu Perfil" class="text-slate-400 hover:text-slate-700 p-1 rounded-md hover:bg-slate-100 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+          </button>
+          <button title="Sair" class="text-slate-400 hover:text-red-500 p-1 rounded-md hover:bg-slate-100 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ================= MAIN CONTENT WRAPPER ================= -->
+  <main class="flex-1 ml-64 flex flex-col min-h-screen">
+    
+    <!-- HEADER -->
+    <header class="h-20 bg-white border-b border-slate-200/80 px-8 flex items-center justify-between sticky top-0 z-20 shadow-xs">
+      <div>
+        <div class="flex items-center gap-3">
+          <h1 class="text-2xl font-extrabold text-graphite-900 tracking-tight">Configurações</h1>
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-100">
+            <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+            Plataforma Operacional
+          </span>
+        </div>
+        <p class="text-xs text-slate-500 font-medium mt-0.5">Gerencie as configurações gerais, comerciais e operacionais da plataforma MenuNext.</p>
+      </div>
+
+      <div class="flex items-center gap-3.5">
+        <!-- Notificações -->
+        <button class="relative p-2.5 text-slate-500 hover:text-slate-700 bg-slate-50 hover:bg-slate-100 rounded-xl border border-slate-200/80 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
+          </svg>
+          <span class="absolute top-2 right-2 w-2 h-2 bg-brand rounded-full ring-2 ring-white"></span>
+        </button>
+
+        <!-- Admin Master Info -->
+        <div class="flex items-center gap-2.5 px-3 py-1.5 bg-slate-50 rounded-xl border border-slate-200/80">
+          <div class="w-7 h-7 rounded-lg bg-graphite-800 text-white flex items-center justify-center font-bold text-xs">
+            AM
+          </div>
+          <span class="text-xs font-bold text-slate-700">Administrador Master</span>
+        </div>
+
+        <!-- Botão Salvar Alterações -->
+        <button class="flex items-center gap-2 px-5 py-2.5 bg-brand hover:bg-brand-hover text-white text-xs font-bold rounded-xl shadow-sm shadow-brand/20 transition-all active:scale-[0.98]">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg>
+          Salvar alterações
+        </button>
+      </div>
+    </header>
+
+    <!-- CONTENT BODY -->
+    <div class="p-8 space-y-8 max-w-7xl">
+
+      <!-- Informative Conceptual Banner -->
+      <div class="bg-blue-50/70 border border-blue-200/80 rounded-2xl p-4.5 flex items-start gap-4 text-xs">
+        <div class="w-8 h-8 rounded-xl bg-blue-500 text-white flex items-center justify-center shrink-0 shadow-xs font-bold">
+          ℹ️
+        </div>
+        <div class="space-y-1">
+          <h4 class="font-bold text-blue-950 text-sm">Centro de Controle Master & Segregação Financeira</h4>
+          <p class="text-blue-900/80 leading-relaxed">
+            As opções desta página controlam as diretrizes globais do <strong>MenuNext SaaS</strong>. O faturamento configurado aqui refere-se unicamente às <strong>assinaturas pagas pelos restaurantes à plataforma</strong> (recorrente B2B). Os pagamentos de pedidos dos clientes aos restaurantes continuam configurados individualmente no painel de cada lojista.
+          </p>
+        </div>
+      </div>
+
+      <!-- GRID LAYOUT -->
+      <div class="grid grid-cols-1 xl:grid-cols-12 gap-8">
+
+        <!-- COLUNA ESQUERDA (7 Colunas) -->
+        <div class="xl:col-span-7 space-y-8">
+
+          <!-- CARD 1: Informações da Plataforma -->
+          <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-700 font-bold">
+                  🌐
+                </div>
+                <div>
+                  <h3 class="text-base font-extrabold text-graphite-900">Informações da plataforma</h3>
+                  <p class="text-xs text-slate-500 font-medium">Dados institucionais de identificação do SaaS</p>
+                </div>
+              </div>
+              <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                🟢 Plataforma operacional
+              </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Nome da plataforma</label>
+                <input type="text" value="MenuNext" class="w-full px-3.5 py-2 text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all text-slate-800">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">URL principal</label>
+                <div class="flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3.5 py-2 text-xs font-semibold text-slate-800">
+                  <span class="text-slate-400 mr-1">https://</span>
+                  <input type="text" value="menunext.com.br" class="bg-transparent w-full focus:outline-none">
+                </div>
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">E-mail administrativo</label>
+                <input type="email" value="contato@menunext.com.br" class="w-full px-3.5 py-2 text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all text-slate-800">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">WhatsApp de suporte</label>
+                <input type="text" value="+55 (11) 98765-4321" class="w-full px-3.5 py-2 text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all text-slate-800">
+              </div>
+              <div class="md:col-span-2">
+                <label class="block text-xs font-bold text-slate-700 mb-1.5">Descrição da plataforma</label>
+                <textarea rows="2" class="w-full px-3.5 py-2 text-xs font-semibold bg-slate-50 border border-slate-200 rounded-xl focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all text-slate-800">A plataforma definitiva de pedidos online, KDS e autoatendimento inteligente para restaurantes e dark kitchens.</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 2: Cadastro e Novos Restaurantes -->
+          <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-5">
+            <div class="flex items-center gap-3 pb-3 border-b border-slate-100">
+              <div class="w-9 h-9 rounded-xl bg-orange-50 text-brand flex items-center justify-center font-bold">
+                🏪
+              </div>
+              <div>
+                <h3 class="text-base font-extrabold text-graphite-900">Regras de cadastro</h3>
+                <p class="text-xs text-slate-500 font-medium">Essas configurações controlam como novos restaurantes entram no MenuNext.</p>
+              </div>
+            </div>
+
+            <div class="space-y-4">
+              <!-- Switch 1 -->
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-slate-100 hover:bg-slate-50 transition-colors">
+                <div>
+                  <div class="text-xs font-bold text-slate-800">Permitir novos cadastros</div>
+                  <div class="text-[11px] text-slate-500 font-medium">Restaurantes podem se cadastrar livremente pela Fanpage pública</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand"></div>
+                </label>
+              </div>
+
+              <!-- Switch 2 -->
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-slate-100 hover:bg-slate-50 transition-colors">
+                <div>
+                  <div class="text-xs font-bold text-slate-800">Permitir cadastro por convite</div>
+                  <div class="text-[11px] text-slate-500 font-medium">Possibilita que o Master envie links promocionais exclusivos</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand"></div>
+                </label>
+              </div>
+
+              <!-- Switch 3 -->
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-slate-100 hover:bg-slate-50 transition-colors">
+                <div>
+                  <div class="text-xs font-bold text-slate-800">Exigir confirmação de e-mail</div>
+                  <div class="text-[11px] text-slate-500 font-medium">Exige validação do link de ativação antes da publicação da loja</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand"></div>
+                </label>
+              </div>
+
+              <!-- Switch 4 -->
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-slate-100 hover:bg-slate-50 transition-colors">
+                <div>
+                  <div class="text-xs font-bold text-slate-800">Exigir confirmação de WhatsApp</div>
+                  <div class="text-[11px] text-slate-500 font-medium">Disparo de código OTP via WhatsApp durante o onboarding</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-brand"></div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 3: Trial (Período de Teste Destacado) -->
+          <div class="bg-gradient-to-br from-amber-50/40 via-white to-orange-50/30 rounded-2xl border-2 border-brand/30 p-6 shadow-xs space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-orange-100">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-brand text-white flex items-center justify-center font-bold shadow-sm shadow-brand/20">
+                  🎁
+                </div>
+                <div>
+                  <div class="flex items-center gap-2">
+                    <h3 class="text-base font-extrabold text-graphite-900">Período de teste (Trial Oficial)</h3>
+                    <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold bg-brand text-white uppercase">Regra Global</span>
+                  </div>
+                  <p class="text-xs text-slate-500 font-medium">Configuração padronizada para conversão de novos estabelecimentos</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-xs font-bold text-emerald-700">Trial Ativado</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" checked class="sr-only peer">
+                  <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+                </label>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3.5">
+              <div class="bg-white p-3.5 rounded-xl border border-orange-200/80 shadow-xs">
+                <div class="text-[11px] font-bold text-slate-500 uppercase">Duração Canônica</div>
+                <div class="text-lg font-black text-brand mt-0.5">30 dias grátis</div>
+                <div class="text-[10px] text-slate-400 font-medium">Sem redução para 14 dias</div>
+              </div>
+
+              <div class="bg-white p-3.5 rounded-xl border border-orange-200/80 shadow-xs">
+                <div class="text-[11px] font-bold text-slate-500 uppercase">Exigência de Cartão</div>
+                <div class="text-lg font-black text-graphite-900 mt-0.5">Sem cartão</div>
+                <div class="text-[10px] text-slate-400 font-medium">Acesso sem fricção inicial</div>
+              </div>
+
+              <div class="bg-white p-3.5 rounded-xl border border-orange-200/80 shadow-xs">
+                <div class="text-[11px] font-bold text-slate-500 uppercase">Limite por Entidade</div>
+                <div class="text-lg font-black text-graphite-900 mt-0.5">1 por CPF/CNPJ</div>
+                <div class="text-[10px] text-slate-400 font-medium">Anti-fraude de reativação</div>
+              </div>
+            </div>
+
+            <div class="p-3 bg-white/80 rounded-xl border border-orange-200/60 text-xs text-slate-600 flex items-center gap-2">
+              <span class="text-brand font-bold text-sm">✓</span>
+              <span><strong>Política transparente:</strong> O restaurante pode utilizar todo o período de teste de 30 dias sem informar dados de cartão de crédito.</span>
+            </div>
+          </div>
+
+          <!-- CARD 4: Comunicações Automáticas -->
+          <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                  ✉️
+                </div>
+                <div>
+                  <h3 class="text-base font-extrabold text-graphite-900">Comunicações automáticas</h3>
+                  <p class="text-xs text-slate-500 font-medium">Alertas transacionais disparados aos administradores das lojas</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-600">E-mail</span>
+                <span class="text-[11px] font-bold px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700">WhatsApp</span>
+              </div>
+            </div>
+
+            <div class="space-y-3">
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <span class="w-2 h-2 rounded-full bg-brand"></span>
+                  <div>
+                    <div class="text-xs font-bold text-slate-800">Boas-vindas após cadastro</div>
+                    <div class="text-[11px] text-slate-500 font-medium">Disparo com credenciais e link direto para o Onboarding</div>
+                  </div>
+                </div>
+                <input type="checkbox" checked class="w-4 h-4 text-brand rounded border-slate-300 focus:ring-brand">
+              </div>
+
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                  <div>
+                    <div class="text-xs font-bold text-slate-800">Aviso de trial terminando</div>
+                    <div class="text-[11px] text-slate-500 font-medium">Lembrete amigável enviado a 7 e 2 dias antes da expiração</div>
+                  </div>
+                </div>
+                <input type="checkbox" checked class="w-4 h-4 text-brand rounded border-slate-300 focus:ring-brand">
+              </div>
+
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                  <div>
+                    <div class="text-xs font-bold text-slate-800">Aviso de assinatura vencendo</div>
+                    <div class="text-[11px] text-slate-500 font-medium">Notificação de fatura ou tentativa de renovação recorrente</div>
+                  </div>
+                </div>
+                <input type="checkbox" checked class="w-4 h-4 text-brand rounded border-slate-300 focus:ring-brand">
+              </div>
+
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                  <div>
+                    <div class="text-xs font-bold text-slate-800">Confirmação de pagamento</div>
+                    <div class="text-[11px] text-slate-500 font-medium">Envio de recibo com liberação instantânea do ciclo mensal</div>
+                  </div>
+                </div>
+                <input type="checkbox" checked class="w-4 h-4 text-brand rounded border-slate-300 focus:ring-brand">
+              </div>
+
+              <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50/70 border border-slate-100">
+                <div class="flex items-center gap-3">
+                  <span class="w-2 h-2 rounded-full bg-red-500"></span>
+                  <div>
+                    <div class="text-xs font-bold text-slate-800">Aviso de pagamento pendente</div>
+                    <div class="text-[11px] text-slate-500 font-medium">Alerta em caso de cartão recusado com link para regularização</div>
+                  </div>
+                </div>
+                <input type="checkbox" checked class="w-4 h-4 text-brand rounded border-slate-300 focus:ring-brand">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- COLUNA DIREITA (5 Colunas) -->
+        <div class="xl:col-span-5 space-y-8">
+
+          <!-- CARD 5: Cobrança do MenuNext (EXCLUSIVO MASTER) -->
+          <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-5">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-brand/10 text-brand flex items-center justify-center font-bold">
+                  💳
+                </div>
+                <div>
+                  <h3 class="text-base font-extrabold text-graphite-900">Cobrança da plataforma</h3>
+                  <p class="text-xs text-slate-500 font-medium">Recebimento das assinaturas SaaS dos restaurantes</p>
+                </div>
+              </div>
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                🟢 Cobrança configurada
+              </span>
+            </div>
+
+            <p class="text-xs text-slate-600 leading-relaxed font-medium">
+              Configure como o <strong>MenuNext</strong> receberá os pagamentos das assinaturas dos restaurantes parceiros.
+            </p>
+
+            <div class="p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-3">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-xl bg-[#635BFF] text-white flex items-center justify-center font-extrabold text-xs shadow-xs">
+                    stripe
+                  </div>
+                  <div>
+                    <div class="text-xs font-extrabold text-graphite-900">Stripe Gateway</div>
+                    <div class="text-[10px] text-slate-500">acct_1NZxxxxxxx90K (Produção)</div>
+                  </div>
+                </div>
+                <span class="text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-100">
+                  Conectado
+                </span>
+              </div>
+
+              <div class="pt-2 border-t border-slate-200/60 flex items-center justify-between text-[11px] text-slate-500">
+                <span>Webhook de renovação:</span>
+                <span class="font-mono text-slate-700 font-bold">Ativo & Sincronizado</span>
+              </div>
+            </div>
+
+            <button onclick="document.getElementById('billing-drawer').classList.remove('hidden')" class="w-full py-2.5 px-4 bg-graphite-800 hover:bg-graphite-900 text-white text-xs font-bold rounded-xl flex items-center justify-center gap-2 shadow-sm transition-all">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+              Configurar cobrança da plataforma
+            </button>
+          </div>
+
+          <!-- CARD 6: Regras de Pagamento das Assinaturas -->
+          <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
+                  🔄
+                </div>
+                <div>
+                  <h3 class="text-base font-extrabold text-graphite-900">Regras de cobrança</h3>
+                  <p class="text-xs text-slate-500 font-medium">Parâmetros das renovações recorrentes</p>
+                </div>
+              </div>
+              <button class="text-xs font-bold text-brand hover:underline">
+                Editar regras
+              </button>
+            </div>
+
+            <div class="divide-y divide-slate-100 text-xs font-medium">
+              <div class="py-2.5 flex items-center justify-between">
+                <span class="text-slate-500">Ciclo padrão</span>
+                <span class="font-bold text-graphite-900">Mensal (30 dias)</span>
+              </div>
+              <div class="py-2.5 flex items-center justify-between">
+                <span class="text-slate-500">Renovação automática</span>
+                <span class="font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">Ativada</span>
+              </div>
+              <div class="py-2.5 flex items-center justify-between">
+                <span class="text-slate-500">Tentativas de cobrança</span>
+                <span class="font-bold text-graphite-900">3 tentativas (1x a cada 24h)</span>
+              </div>
+              <div class="py-2.5 flex items-center justify-between">
+                <span class="text-slate-500">Período de tolerância</span>
+                <span class="font-bold text-amber-600">3 dias após vencimento</span>
+              </div>
+              <div class="py-2.5 flex items-center justify-between">
+                <span class="text-slate-500">Suspensão após inadimplência</span>
+                <span class="font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded">Ativada</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 7: Segurança da Plataforma & Auditoria -->
+          <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center font-bold">
+                  🛡️
+                </div>
+                <div>
+                  <h3 class="text-base font-extrabold text-graphite-900">Segurança da plataforma</h3>
+                  <p class="text-xs text-slate-500 font-medium">Autenticação e auditoria das ações Master</p>
+                </div>
+              </div>
+              <button class="text-xs font-bold text-slate-700 hover:text-brand flex items-center gap-1">
+                Ver logs
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+              </button>
+            </div>
+
+            <div class="p-3 bg-slate-50 rounded-xl space-y-2 text-xs">
+              <div class="flex items-center justify-between text-slate-600">
+                <span>Autenticação Master:</span>
+                <span class="font-bold text-slate-900">2FA Ativo (Google Auth)</span>
+              </div>
+              <div class="flex items-center justify-between text-slate-600">
+                <span>Sessões ativas no momento:</span>
+                <span class="font-bold text-emerald-600">1 sessão (IP 177.92.xx.xx)</span>
+              </div>
+              <div class="flex items-center justify-between text-slate-600">
+                <span>Último acesso registrado:</span>
+                <span class="font-bold text-slate-900">Hoje, às 12:40</span>
+              </div>
+            </div>
+
+            <!-- Exemplos de auditoria compacta -->
+            <div class="space-y-2 pt-1">
+              <div class="text-[10px] uppercase font-extrabold text-slate-400">Últimos Registros Administrativos:</div>
+              <div class="text-[11px] p-2 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-between">
+                <span class="truncate font-semibold text-slate-700">• Administrador acessou Next Burger</span>
+                <span class="text-slate-400 shrink-0 text-[10px]">12:40</span>
+              </div>
+              <div class="text-[11px] p-2 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-between">
+                <span class="truncate font-semibold text-slate-700">• Plano Pro alterado para R$ 69,90</span>
+                <span class="text-slate-400 shrink-0 text-[10px]">Ontem</span>
+              </div>
+              <div class="text-[11px] p-2 rounded-lg bg-slate-50 border border-slate-100 flex items-center justify-between">
+                <span class="truncate font-semibold text-slate-700">• Restaurante Boteco do Zé suspenso</span>
+                <span class="text-slate-400 shrink-0 text-[10px]">05/09</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- CARD 8: Zona de Risco -->
+          <div class="bg-red-50/40 rounded-2xl border border-red-200/80 p-6 shadow-xs space-y-4">
+            <div class="flex items-center gap-3 pb-3 border-b border-red-100">
+              <div class="w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center font-bold">
+                ⚠️
+              </div>
+              <div>
+                <h3 class="text-base font-extrabold text-red-900">Zona de risco</h3>
+                <p class="text-xs text-red-600/80 font-medium">Ações de impacto global com confirmação obrigatória</p>
+              </div>
+            </div>
+
+            <div class="space-y-2.5">
+              <button class="w-full px-3.5 py-2.5 bg-white hover:bg-red-50 text-red-700 border border-red-200 rounded-xl text-xs font-bold flex items-center justify-between transition-colors">
+                <span>Modo manutenção (Interrompe navegação pública)</span>
+                <span class="text-[10px] uppercase font-black px-2 py-0.5 bg-red-100 text-red-800 rounded">Desativado</span>
+              </button>
+
+              <button class="w-full px-3.5 py-2.5 bg-white hover:bg-amber-50 text-amber-800 border border-amber-200 rounded-xl text-xs font-bold flex items-center justify-between transition-colors">
+                <span>Bloquear novos cadastros na Fanpage</span>
+                <span class="text-[10px] uppercase font-black px-2 py-0.5 bg-amber-100 text-amber-800 rounded">Desativado</span>
+              </button>
+
+              <button class="w-full px-3.5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition-all shadow-xs">
+                <span>Desativar temporariamente a plataforma</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- CARD 9: Estado da Plataforma (Health Check Geral) -->
+      <div class="bg-white rounded-2xl border border-slate-200/80 p-6 shadow-xs space-y-4">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div class="flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+              ⚡
+            </div>
+            <div>
+              <div class="flex items-center gap-2">
+                <h3 class="text-base font-extrabold text-graphite-900">Status do MenuNext</h3>
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  🟢 Todos os sistemas operacionais (99.98% Uptime)
+                </span>
+              </div>
+              <p class="text-xs text-slate-500 font-medium">Monitoramento em tempo real dos serviços críticos do ecossistema</p>
+            </div>
+          </div>
+          <span class="text-xs text-slate-400 font-medium">Atualizado há 1 minuto</span>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+            <div class="text-[11px] text-slate-500 font-bold">Aplicação Web</div>
+            <div class="text-xs font-extrabold text-emerald-600 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Operacional
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+            <div class="text-[11px] text-slate-500 font-bold">Banco de Dados</div>
+            <div class="text-xs font-extrabold text-emerald-600 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Operacional
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+            <div class="text-[11px] text-slate-500 font-bold">Core de Pedidos</div>
+            <div class="text-xs font-extrabold text-emerald-600 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Operacional
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+            <div class="text-[11px] text-slate-500 font-bold">Checkout Público</div>
+            <div class="text-xs font-extrabold text-emerald-600 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Operacional
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+            <div class="text-[11px] text-slate-500 font-bold">Realtime Engine</div>
+            <div class="text-xs font-extrabold text-emerald-600 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Operacional
+            </div>
+          </div>
+
+          <div class="p-3 bg-slate-50 rounded-xl border border-slate-100 space-y-1">
+            <div class="text-[11px] text-slate-500 font-bold">Cobrança SaaS</div>
+            <div class="text-xs font-extrabold text-emerald-600 flex items-center gap-1">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Operacional
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ================= DRAWER LATERAL: CONFIGURAÇÃO DE COBRANÇA ================= -->
+  <div id="billing-drawer" class="fixed inset-0 z-50 flex justify-end bg-graphite-900/40 backdrop-blur-xs transition-opacity duration-300">
+    <div class="w-full max-w-lg bg-white h-full shadow-2xl flex flex-col border-l border-slate-200 animate-slide-left">
+      
+      <!-- Drawer Header -->
+      <div class="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="text-lg font-black text-graphite-900">Cobrança do MenuNext</h3>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand/10 text-brand">Master</span>
+          </div>
+          <p class="text-xs text-slate-500 mt-1">Configuração do provedor para faturamento de assinaturas SaaS</p>
+        </div>
+        <button onclick="document.getElementById('billing-drawer').classList.add('hidden')" class="p-2 text-slate-400 hover:text-slate-700 rounded-lg hover:bg-slate-100 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <!-- Drawer Content -->
+      <div class="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+        
+        <!-- Alerta de Escopo Exclusivo -->
+        <div class="p-3.5 bg-orange-50/80 border border-brand/20 rounded-xl text-xs text-slate-700 leading-relaxed space-y-1">
+          <div class="font-extrabold text-brand flex items-center gap-1.5">
+            <span>🛡️</span> Configuração Exclusiva da Plataforma
+          </div>
+          <div>
+            Essas configurações pertencem exclusivamente à plataforma. Os restaurantes não precisam configurar gateway para pagar sua assinatura e nunca terão acesso a estes parâmetros.
+          </div>
+        </div>
+
+        <!-- Provedor -->
+        <div class="space-y-3">
+          <label class="block text-xs font-bold text-slate-700 uppercase">Provedor de Pagamento SaaS</label>
+          <div class="grid grid-cols-2 gap-2.5">
+            <!-- Opção Stripe (Selecionada) -->
+            <label class="p-3 rounded-xl border-2 border-brand bg-brand/5 flex flex-col gap-1 cursor-pointer transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold text-graphite-900">Stripe</span>
+                <span class="w-2.5 h-2.5 rounded-full bg-brand"></span>
+              </div>
+              <span class="text-[10px] text-slate-500 font-medium">Recomendado internacional / Cartão</span>
+            </label>
+
+            <!-- Opção Mercado Pago -->
+            <label class="p-3 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-50 flex flex-col gap-1 cursor-pointer transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold text-slate-700">Mercado Pago</span>
+                <span class="w-2 h-2 rounded-full border border-slate-300"></span>
+              </div>
+              <span class="text-[10px] text-slate-400 font-medium">Pix / Boleto / Cartão BR</span>
+            </label>
+
+            <!-- Opção PagBank -->
+            <label class="p-3 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-50 flex flex-col gap-1 cursor-pointer transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold text-slate-700">PagBank</span>
+                <span class="w-2 h-2 rounded-full border border-slate-300"></span>
+              </div>
+              <span class="text-[10px] text-slate-400 font-medium">Solução recorrente PagSeguro</span>
+            </label>
+
+            <!-- Opção Outro -->
+            <label class="p-3 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-50 flex flex-col gap-1 cursor-pointer transition-all">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-extrabold text-slate-700">Outro / Custom</span>
+                <span class="w-2 h-2 rounded-full border border-slate-300"></span>
+              </div>
+              <span class="text-[10px] text-slate-400 font-medium">Asaas, Iugu ou API direta</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Campos de Integração Stripe Ativa -->
+        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-4">
+          <div class="text-xs font-extrabold text-graphite-900 pb-2 border-b border-slate-200 flex items-center justify-between">
+            <span>Parâmetros de Conexão Stripe</span>
+            <span class="px-2 py-0.5 text-[10px] font-bold bg-emerald-100 text-emerald-800 rounded">Ativo</span>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Status da Conexão</label>
+            <div class="flex items-center gap-2 text-xs font-bold text-emerald-700 bg-emerald-50 px-3 py-2 rounded-lg border border-emerald-100">
+              <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+              Conectado via Stripe Connect OAuth
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Identificador da Conta (Account ID)</label>
+            <input type="text" readonly value="acct_1NZxxxxxxx90K" class="w-full px-3 py-2 text-xs font-mono font-bold bg-white border border-slate-200 rounded-lg text-slate-700">
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Ambiente de Operação</label>
+            <div class="grid grid-cols-2 gap-2">
+              <button class="py-1.5 text-xs font-extrabold bg-brand text-white rounded-lg shadow-xs">Produção (Live)</button>
+              <button class="py-1.5 text-xs font-semibold bg-white border border-slate-200 text-slate-600 rounded-lg hover:bg-slate-100">Sandbox (Teste)</button>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-slate-600 mb-1">Webhook Secret</label>
+            <input type="password" value="whsec_89324823908409238402" class="w-full px-3 py-2 text-xs font-mono bg-white border border-slate-200 rounded-lg text-slate-700">
+          </div>
+        </div>
+
+        <!-- Lembrete das Restrições Conceituais -->
+        <div class="text-[11px] text-slate-500 space-y-1 bg-slate-100/70 p-3 rounded-xl border border-slate-200/60">
+          <div class="font-bold text-slate-700">Nesta tela NÃO constam:</div>
+          <ul class="list-disc list-inside space-y-0.5 text-slate-500">
+            <li>Chaves Pix dos restaurantes ou de lojistas</li>
+            <li>Configurações de pagamento de pedidos dos clientes</li>
+            <li>Taxas de delivery ou cardápio</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Drawer Footer -->
+      <div class="p-6 border-t border-slate-200/80 bg-slate-50/50 flex items-center justify-end gap-3">
+        <button onclick="document.getElementById('billing-drawer').classList.add('hidden')" class="px-4 py-2.5 text-xs font-bold text-slate-600 hover:text-slate-900 border border-slate-200 bg-white rounded-xl hover:bg-slate-50 transition-colors">
+          Fechar
+        </button>
+        <button class="px-4 py-2.5 text-xs font-bold text-slate-700 border border-slate-200 bg-white hover:bg-slate-100 rounded-xl transition-colors flex items-center gap-1.5">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+          Testar conexão
+        </button>
+        <button onclick="document.getElementById('billing-drawer').classList.add('hidden')" class="px-5 py-2.5 text-xs font-bold text-white bg-brand hover:bg-brand-hover rounded-xl shadow-sm shadow-brand/20 transition-all">
+          Salvar configuração
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

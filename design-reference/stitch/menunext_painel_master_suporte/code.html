@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary-fixed-variant":"#005236","inverse-on-surface":"#edf0ff","outline":"#8f7067","secondary-container":"#d8391e","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#3f0400","on-secondary":"#ffffff","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-tint":"#af3100","inverse-surface":"#2a303f","tertiary":"#006947","on-primary-fixed":"#3a0a00","primary":"#ab2f00","error":"#ba1a1a","surface-bright":"#faf8ff","on-primary-fixed-variant":"#862300","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","primary-container":"#d53e02","surface-container-lowest":"#ffffff","outline-variant":"#e4beb4","on-primary-container":"#fffbff","primary-fixed":"#ffdbd1","on-surface":"#151b29","on-secondary-fixed-variant":"#8f1200","on-error-container":"#93000a","on-tertiary-container":"#f5fff6","primary-fixed-dim":"#ffb59f","on-error":"#ffffff","surface-container":"#e9edff","surface-container-high":"#e2e8fc","secondary":"#b41e04","surface-dim":"#d4d9ed","surface-variant":"#dde2f6","background":"#faf8ff","inverse-primary":"#ffb59f","error-container":"#ffdad6","surface":"#faf8ff","secondary-fixed-dim":"#ffb4a5","secondary-fixed":"#ffdad3","on-secondary-container":"#fffbff","surface-container-low":"#f1f3ff","on-background":"#151b29","tertiary-container":"#00855b","surface-container-highest":"#dde2f6","on-surface-variant":"#5b4139"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"container-max":"1440px","space-sm":"0.75rem","space-xl":"2rem","space-2xl":"3rem","space-3xl":"4rem","space-xs":"0.5rem","space-lg":"1.5rem","gutter":"1.5rem","space-2xs":"0.25rem","space-md":"1rem"},fontFamily:{"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-md":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-xs" data-path="landing-page" href="#"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></a><nav class="hidden lg:flex items-center gap-space-lg ml-space-md" data-active-classes="text-primary font-label-lg font-bold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="recursos" href="#">Recursos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="como-funciona" href="#">Como Funciona</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Planos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">FAQ</a></nav></div><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_3px_0_rgba(18,24,38,0.05)]" data-path="login" href="#">Entrar</a><a class="inline-flex items-center justify-center h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.3)]" data-path="cadastro" href="#">Criar minha loja grátis</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full">
+<!-- Top Global Alerts Bar (Master High Severity Pulse) -->
+<div class="w-full bg-secondary text-on-secondary px-gutter py-space-xs flex items-center justify-between text-body-sm font-body-sm shadow-sm">
+<div class="max-w-[1440px] mx-auto w-full flex items-center justify-between px-space-xs">
+<div class="flex items-center gap-space-sm">
+<span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-on-secondary/20 text-on-secondary animate-pulse">
+<span class="material-symbols-outlined text-[16px]">priority_high</span>
+</span>
+<span class="font-bold">Alerta Crítico em Produção:</span>
+<span>Sakura House (MN-0000982) reportou falha crítica no recebimento de pedidos via Webhook POS. Triagem imediata requerida.</span>
+</div>
+<div class="flex items-center gap-space-md">
+<button class="underline hover:text-on-secondary/80 font-bold transition-opacity" onclick="document.getElementById('ticket-row-2').scrollIntoView({behavior: 'smooth'})">
+          Ver chamado #SUP-1046 →
+        </button>
+</div>
+</div>
+</div>
+<!-- Master Content Wrapper: Persistent Collapsible Master Navigation + Executive Workspace -->
+<div class="max-w-[1440px] mx-auto w-full px-gutter py-space-xl flex flex-col lg:flex-row items-start gap-space-xl">
+<!-- MASTER CANONICAL SIDEBAR (260px) -->
+<aside class="w-full lg:w-[260px] shrink-0 flex flex-col gap-space-lg">
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+<!-- Master Brand Sub-Header -->
+<div class="flex items-center justify-between px-space-xs pb-space-xs">
+<div class="flex items-center gap-space-xs">
+<div class="w-7 h-7 rounded-lg bg-primary text-on-primary flex items-center justify-center font-bold text-label-md font-label-md">
+              M
+            </div>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold tracking-tight">MenuNext</span>
+</div>
+<span class="px-2 py-0.5 rounded-md bg-inverse-surface text-inverse-on-surface font-label-sm text-label-sm font-bold tracking-wider">
+            MASTER
+          </span>
+</div>
+<!-- Navigation Links Group -->
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-lg text-label-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span>Início</span>
+</a>
+<a class="flex items-center justify-between px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-lg text-label-lg transition-colors" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]">storefront</span>
+<span>Restaurantes</span>
+</div>
+<span class="font-label-sm text-label-sm px-1.5 py-0.5 rounded-full bg-surface-container-high text-on-surface">148</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-lg text-label-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">credit_card</span>
+<span>Assinaturas</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-lg text-label-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">sell</span>
+<span>Planos</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-lg text-label-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span>Pedidos</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-lg text-label-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span>Usuários</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-lg text-label-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span>Métricas</span>
+</a>
+<!-- Active Master Module: Suporte -->
+<a class="flex items-center justify-between px-space-sm py-2.5 rounded-lg bg-primary text-on-primary font-label-lg text-label-lg shadow-sm" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]">support_agent</span>
+<span>Suporte</span>
+</div>
+<span class="font-label-sm text-label-sm px-2 py-0.5 rounded-full bg-surface-container-lowest text-primary font-bold">
+              12
+            </span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface font-label-lg text-label-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span>Configurações</span>
+</a>
+</nav>
+<!-- Sidebar Internal User Status / Session Footer -->
+<div class="pt-space-sm mt-space-xs bg-surface-container-low p-space-sm rounded-xl flex flex-col gap-space-xs">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-primary-fixed text-primary flex items-center justify-center font-bold text-label-md font-label-md">
+              AM
+            </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate font-bold">Administrador Master</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">admin@menunext.com.br</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-2xs text-label-sm font-label-sm text-on-surface-variant">
+<a class="hover:text-primary transition-colors" href="#">Meu Perfil</a>
+<span>•</span>
+<a class="hover:text-error transition-colors" href="#">Encerrar Sessão</a>
+</div>
+</div>
+</div>
+<!-- Support SLA System Status Quick Pill Widget -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Status da Operação</span>
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Online 99.98%</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Gateways, KDS Cloud e Webhooks respondendo em 64ms.</span>
+</div>
+</aside>
+<!-- WORKSPACE / MAIN VIEWPORT (FLUID) -->
+<section class="flex-1 w-full min-w-0 flex flex-col gap-space-xl">
+<!-- TOP EXECUTIVE HEADER & PRIMARY CONTROLS -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-sm">
+<h1 class="font-headline-xl text-headline-xl text-on-surface font-bold tracking-tight">Suporte aos Restaurantes</h1>
+<span class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+              Atendimento Ativo
+            </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+            Acompanhe solicitações e ajude os restaurantes parceiros a resolver problemas de fluxo operacional rapidamente.
+          </p>
+</div>
+<div class="flex items-center gap-space-sm self-start sm:self-center">
+<!-- Notification Pill Trigger with Tooltip -->
+<div class="relative group">
+<button class="relative flex items-center justify-center w-11 h-11 rounded-xl bg-surface-container-lowest text-secondary shadow-sm hover:bg-surface-container transition-all active:scale-95">
+<span class="material-symbols-outlined text-[22px]">notifications_active</span>
+<span class="absolute top-2 right-2 w-2.5 h-2.5 rounded-full bg-error ring-2 ring-surface-container-lowest"></span>
+</button>
+<div class="absolute right-0 top-12 z-40 hidden group-hover:flex flex-col w-72 p-space-sm bg-inverse-surface text-inverse-on-surface rounded-xl shadow-xl text-body-sm font-body-sm pointer-events-none">
+<div class="flex items-center gap-space-xs font-bold text-error-container">
+<span class="material-symbols-outlined text-[16px]">crisis_alert</span>
+<span>1 chamado urgente pendente</span>
+</div>
+<span class="mt-1 text-surface-variant">Sakura House está com problema no recebimento de pedidos em tempo real via POS.</span>
+</div>
+</div>
+<!-- New Ticket Drawer Button -->
+<button class="inline-flex items-center justify-center gap-space-xs h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-md" onclick="document.getElementById('ticket-drawer').classList.remove('translate-x-full');">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Novo chamado</span>
+</button>
+</div>
+</div>
+<!-- SECTION 1: SUPPORT KPIS (4 CARDS) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-space-md">
+<!-- KPI 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-bold">Chamados abertos</span>
+<span class="material-symbols-outlined text-primary text-[22px]">folder_open</span>
+</div>
+<div class="mt-space-md flex items-baseline gap-space-sm">
+<span class="font-display text-display text-on-surface font-extrabold leading-none">12</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold">
+              8 pendentes
+            </span>
+</div>
+<span class="mt-space-xs font-body-sm text-body-sm text-on-surface-variant">Total acumulado na fila de espera</span>
+</div>
+<!-- KPI 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-bold">Em atendimento</span>
+<span class="material-symbols-outlined text-tertiary text-[22px]">headset_mic</span>
+</div>
+<div class="mt-space-md flex items-baseline gap-space-sm">
+<span class="font-display text-display text-on-surface font-extrabold leading-none">5</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm font-bold">
+              Tempo médio 18min
+            </span>
+</div>
+<span class="mt-space-xs font-body-sm text-body-sm text-on-surface-variant">SLA de primeiro toque: 4.2 min</span>
+</div>
+<!-- KPI 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-bold">Aguardando restaurante</span>
+<span class="material-symbols-outlined text-outline text-[22px]">hourglass_empty</span>
+</div>
+<div class="mt-space-md flex items-baseline gap-space-sm">
+<span class="font-display text-display text-on-surface font-extrabold leading-none">4</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold">
+              Cobrança de feedback
+            </span>
+</div>
+<span class="mt-space-xs font-body-sm text-body-sm text-on-surface-variant">Notificação de lembrete enviada</span>
+</div>
+<!-- KPI 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-bold">Resolvidos hoje</span>
+<span class="material-symbols-outlined text-tertiary text-[22px]">task_alt</span>
+</div>
+<div class="mt-space-md flex items-baseline gap-space-sm">
+<span class="font-display text-display text-on-surface font-extrabold leading-none">18</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">
+              ● 94% satisfação
+            </span>
+</div>
+<span class="mt-space-xs font-body-sm text-body-sm text-on-surface-variant">CSAT excelente nas últimas 24h</span>
+</div>
+</div>
+<!-- SECTION 2: FILTERS, STATUS TABS & SEARCH -->
+<div class="bg-surface-container-lowest rounded-xl p-space-md shadow-sm flex flex-col gap-space-md">
+<!-- Status Tabs Rhythm -->
+<div class="flex items-center justify-between overflow-x-auto pb-1">
+<div class="flex items-center gap-space-xs">
+<button class="px-space-md py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors">
+              Todos <span class="ml-1 opacity-70">(21)</span>
+</button>
+<button class="px-space-md py-2 rounded-lg font-label-md text-label-md bg-primary text-on-primary font-bold shadow-sm">
+              Abertos <span class="ml-1 font-extrabold bg-on-primary/20 px-1.5 py-0.5 rounded-full text-label-sm">12</span>
+</button>
+<button class="px-space-md py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors">
+              Em atendimento <span class="ml-1 opacity-70">(5)</span>
+</button>
+<button class="px-space-md py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors">
+              Aguardando restaurante <span class="ml-1 opacity-70">(4)</span>
+</button>
+<button class="px-space-md py-2 rounded-lg font-label-md text-label-md text-on-surface-variant hover:bg-surface-container transition-colors">
+              Resolvidos <span class="ml-1 opacity-70">(18)</span>
+</button>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-[18px]">sync</span>
+<span>Atualização ao vivo</span>
+</div>
+</div>
+<!-- Filter Dropdowns and Search Bar -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-space-sm items-center">
+<!-- Search input -->
+<div class="md:col-span-6 relative">
+<span class="material-symbols-outlined absolute left-3 top-3 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-11 pl-10 pr-10 rounded-xl bg-surface text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-inner" placeholder="Buscar por restaurante, chamado, cliente ou assunto..." type="text"/>
+<kbd class="absolute right-3 top-2.5 px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface-variant text-label-sm font-label-sm font-bold">/</kbd>
+</div>
+<!-- Dropdown 1: Prioridade -->
+<div class="md:col-span-2">
+<select class="w-full h-11 px-space-sm rounded-xl bg-surface text-on-surface font-label-md text-label-md focus:outline-none focus:ring-2 focus:ring-primary">
+<option>Todas as prioridades</option>
+<option>🔴 Urgente</option>
+<option>🟠 Alta</option>
+<option>⚪ Normal</option>
+<option>Baixa</option>
+</select>
+</div>
+<!-- Dropdown 2: Categoria -->
+<div class="md:col-span-2">
+<select class="w-full h-11 px-space-sm rounded-xl bg-surface text-on-surface font-label-md text-label-md focus:outline-none focus:ring-2 focus:ring-primary">
+<option>Todas as categorias</option>
+<option>Loja</option>
+<option>Pedidos</option>
+<option>Pagamentos</option>
+<option>Delivery</option>
+<option>Cardápio</option>
+<option>Assinatura</option>
+<option>Conta</option>
+<option>Configurações</option>
+</select>
+</div>
+<!-- Dropdown 3: Responsável -->
+<div class="md:col-span-2">
+<select class="w-full h-11 px-space-sm rounded-xl bg-surface text-on-surface font-label-md text-label-md focus:outline-none focus:ring-2 focus:ring-primary">
+<option>Todos os responsáveis</option>
+<option>Mariana Costa</option>
+<option>Lucas Martins</option>
+<option>Rafael Souza</option>
+<option>Não atribuído</option>
+</select>
+</div>
+</div>
+</div>
+<!-- SECTION 3: LISTA DE CHAMADOS (PREMIUM DATA TABLE) -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-space-sm px-space-md">Chamado</th>
+<th class="py-space-sm px-space-md">Restaurante</th>
+<th class="py-space-sm px-space-md">Assunto &amp; Resumo</th>
+<th class="py-space-sm px-space-md">Categoria</th>
+<th class="py-space-sm px-space-md">Prioridade</th>
+<th class="py-space-sm px-space-md">Status</th>
+<th class="py-space-sm px-space-md">Atualização</th>
+<th class="py-space-sm px-space-md">Responsável</th>
+<th class="py-space-sm px-space-md text-right">Ações Rápidas</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-high/30 font-body-md text-body-md">
+<!-- ROW 1: Active Selected Ticket #SUP-1048 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors bg-surface-container-low/30" id="ticket-row-1">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xs font-bold text-primary">
+<span class="material-symbols-outlined text-[18px]">confirmation_number</span>
+<span>#SUP-1048</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Next Burger</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant">MN-0001048</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-bold">Plano Pro</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md max-w-xs">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface truncate">Não consigo publicar minha loja</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Link público indicando fechada mesmo após abrir turno</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-1 rounded-md bg-surface-container text-on-surface font-label-sm text-label-sm">
+                    Loja
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold">
+<span>🟠</span> Alta
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm font-bold">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                    Em atendimento
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant font-body-sm text-body-sm whitespace-nowrap">
+                  Há 12 min
+                </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<div class="w-6 h-6 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center text-label-sm font-bold">
+                      MC
+                    </div>
+<span class="font-label-md text-label-md text-on-surface">Mariana Costa</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<div class="flex items-center justify-end gap-space-xs">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container text-primary hover:bg-primary hover:text-on-primary font-label-sm text-label-sm font-bold transition-all" onclick="document.getElementById('ticket-drawer').classList.remove('translate-x-full');">
+                      Ver chamado
+                    </button>
+<button class="px-2.5 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm transition-all" title="Gerenciar Loja">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- ROW 2: #SUP-1046 (Critical / Unassigned) -->
+<tr class="hover:bg-surface-container-low/50 transition-colors" id="ticket-row-2">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xs font-bold text-secondary">
+<span class="material-symbols-outlined text-[18px]">warning</span>
+<span>#SUP-1046</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Sakura House</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant">MN-0000982</span>
+<span class="px-1.5 py-0.5 rounded bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm font-bold">Plano Pro</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md max-w-xs">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface truncate">Pedido não apareceu no painel Kanban</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Cliente pagou Pix no balcão e pedido ficou retido</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-1 rounded-md bg-surface-container text-on-surface font-label-sm text-label-sm">
+                    Pedidos
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-error-container text-on-error-container font-label-sm text-label-sm font-bold">
+<span>🔴</span> Urgente
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold">
+<span class="w-2 h-2 rounded-full bg-secondary"></span>
+                    Aberto
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-secondary font-bold font-body-sm text-body-sm whitespace-nowrap">
+                  Há 4 min
+                </td>
+<td class="py-space-md px-space-md">
+<span class="text-on-surface-variant italic font-body-sm text-body-sm">Não atribuído</span>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<button class="px-3 py-1.5 rounded-lg bg-secondary text-on-secondary hover:bg-secondary-container font-label-sm text-label-sm font-bold transition-all shadow-sm">
+                    Atender agora
+                  </button>
+</td>
+</tr>
+<!-- ROW 3: #SUP-1047 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xs font-bold text-on-surface">
+<span class="material-symbols-outlined text-[18px]">receipt</span>
+<span>#SUP-1047</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Bella Massa</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant">MN-0001015</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold">Plano Plus</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md max-w-xs">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface truncate">Dúvida sobre renovação da assinatura anual</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Solicitou cálculo com desconto de fidelidade</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-1 rounded-md bg-surface-container text-on-surface font-label-sm text-label-sm">
+                    Assinatura
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm">
+<span>⚪</span> Normal
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold">
+<span class="w-2 h-2 rounded-full bg-outline"></span>
+                    Aguardando restaurante
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant font-body-sm text-body-sm whitespace-nowrap">
+                  Há 2 horas
+                </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<div class="w-6 h-6 rounded-full bg-surface-container text-on-surface flex items-center justify-center text-label-sm font-bold">
+                      LM
+                    </div>
+<span class="font-label-md text-label-md text-on-surface">Lucas Martins</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-label-sm text-label-sm font-bold transition-all">
+                    Ver chamado
+                  </button>
+</td>
+</tr>
+<!-- ROW 4: #SUP-1044 -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xs font-bold text-primary">
+<span class="material-symbols-outlined text-[18px]">qr_code_2</span>
+<span>#SUP-1044</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Açaí Point</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant">MN-0001090</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-bold">Plano Start</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md max-w-xs">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface truncate">Instabilidade no QR Code Pix do checkout</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">QR gerado com timeout inconsistente em 3 tentativas</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-1 rounded-md bg-surface-container text-on-surface font-label-sm text-label-sm">
+                    Pagamentos
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm font-bold">
+<span>🟠</span> Alta
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-high text-primary font-label-sm text-label-sm font-bold">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+                    Em atendimento
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant font-body-sm text-body-sm whitespace-nowrap">
+                  Há 45 min
+                </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<div class="w-6 h-6 rounded-full bg-surface-container text-on-surface flex items-center justify-center text-label-sm font-bold">
+                      RS
+                    </div>
+<span class="font-label-md text-label-md text-on-surface">Rafael Souza</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container text-primary hover:bg-primary hover:text-on-primary font-label-sm text-label-sm font-bold transition-all">
+                    Ver chamado
+                  </button>
+</td>
+</tr>
+<!-- ROW 5: #SUP-1045 (Resolved) -->
+<tr class="hover:bg-surface-container-low/50 transition-colors opacity-80">
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-space-xs font-bold text-tertiary">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span>#SUP-1045</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface">Marmita Boa Express</span>
+<div class="flex items-center gap-1.5 mt-0.5">
+<span class="font-label-sm text-label-sm text-on-surface-variant">MN-0000840</span>
+<span class="px-1.5 py-0.5 rounded bg-surface-container text-on-surface font-label-sm text-label-sm font-bold">Plano Start</span>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md max-w-xs">
+<div class="flex flex-col">
+<span class="font-bold text-on-surface truncate">Alterar horário de funcionamento especial feriado</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Horários extraordinários sincronizados com sucesso</span>
+</div>
+</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-1 rounded-md bg-surface-container text-on-surface font-label-sm text-label-sm">
+                    Configurações
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm">
+<span>⚪</span> Normal
+                  </span>
+</td>
+<td class="py-space-md px-space-md">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                    Resolvido
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-on-surface-variant font-body-sm text-body-sm whitespace-nowrap">
+                  Ontem às 18:20
+                </td>
+<td class="py-space-md px-space-md">
+<div class="flex items-center gap-1.5">
+<div class="w-6 h-6 rounded-full bg-tertiary-fixed text-on-tertiary-fixed flex items-center justify-center text-label-sm font-bold">
+                      MC
+                    </div>
+<span class="font-label-md text-label-md text-on-surface">Mariana Costa</span>
+</div>
+</td>
+<td class="py-space-md px-space-md text-right whitespace-nowrap">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm font-bold transition-all">
+                    Ver histórico
+                  </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Table Footer / Pagination Controls -->
+<div class="p-space-md bg-surface-container-low flex flex-col sm:flex-row items-center justify-between gap-space-sm text-body-sm font-body-sm text-on-surface-variant">
+<div class="flex items-center gap-space-xs">
+<span>Mostrando <strong class="text-on-surface font-bold">1 a 5</strong> de <strong class="text-on-surface font-bold">21 chamados</strong></span>
+<span class="mx-space-xs text-outline-variant">•</span>
+<span>Taxa de SLA ativa: <strong class="text-tertiary font-bold">98.2%</strong></span>
+</div>
+<div class="flex items-center gap-space-xs">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface opacity-50 cursor-not-allowed font-label-sm text-label-sm">
+              Anterior
+            </button>
+<button class="px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm font-bold shadow-sm">
+              1
+            </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-sm text-label-sm">
+              2
+            </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-sm text-label-sm">
+              3
+            </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-lowest text-on-surface hover:bg-surface-container font-label-sm text-label-sm">
+              Próximo
+            </button>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- SECTION 4: ACTIVE TICKET DETAIL DRAWER (SLIDE-OVER ON THE RIGHT) -->
+<!-- Fixed Overlay & Drawer Container -->
+<div class="fixed inset-y-0 right-0 z-50 w-full max-w-2xl bg-surface-container-lowest shadow-2xl transform transition-transform duration-300 ease-in-out flex flex-col overflow-hidden border-l border-surface-container-high" id="ticket-drawer">
+<!-- Impersonation Quick Notice Bar -->
+<div class="bg-primary-container text-on-primary-container px-space-md py-2 flex items-center justify-between text-body-sm font-body-sm">
+<div class="flex items-center gap-space-xs font-bold">
+<span class="material-symbols-outlined text-[18px]">admin_panel_settings</span>
+<span>Acesso de Triagem Master</span>
+</div>
+<span class="font-label-sm text-label-sm opacity-90">Operador: Mariana Costa (Suporte Técnico L2)</span>
+</div>
+<!-- Drawer Header -->
+<div class="p-space-lg bg-surface-container-low flex items-start justify-between gap-space-md">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-xs">
+<span class="px-2.5 py-0.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm font-bold">
+            Em atendimento
+          </span>
+<span class="font-headline-sm text-headline-sm text-primary font-extrabold tracking-tight">#SUP-1048</span>
+</div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold mt-1">
+          Não consigo publicar minha loja
+        </h2>
+<div class="flex flex-wrap items-center gap-space-xs text-body-sm font-body-sm text-on-surface-variant mt-1">
+<span class="font-bold text-on-surface">Next Burger</span>
+<span>(ID: MN-0001048)</span>
+<span>•</span>
+<span>Criado 09/09/2026 às 09:42</span>
+<span>•</span>
+<span>Atualizado às 14:05</span>
+</div>
+</div>
+<button class="w-10 h-10 rounded-full hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-colors" onclick="document.getElementById('ticket-drawer').classList.add('translate-x-full')">
+<span class="material-symbols-outlined text-[24px]">close</span>
+</button>
+</div>
+<!-- Quick Action Bar -->
+<div class="px-space-lg py-space-sm bg-surface flex flex-wrap items-center gap-space-xs">
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm font-bold hover:bg-primary-container transition-colors shadow-sm" title="Abre Painel do Lojista como Next Burger">
+<span class="material-symbols-outlined text-[16px]">visibility</span>
+<span>Gerenciar Loja</span>
+</button>
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-label-sm text-label-sm font-bold transition-colors">
+<span class="material-symbols-outlined text-[16px]">storefront</span>
+<span>Ver no Master</span>
+</button>
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-label-sm text-label-sm font-bold transition-colors">
+<span class="material-symbols-outlined text-[16px]">credit_card</span>
+<span>Ver Assinatura</span>
+</button>
+<button class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface-container text-on-surface hover:bg-surface-container-high font-label-sm text-label-sm font-bold transition-colors">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span>
+<span>Ver Pedidos</span>
+</button>
+</div>
+<!-- Scrollable Drawer Body (Context + Conversation + Controls) -->
+<div class="flex-1 overflow-y-auto p-space-lg flex flex-col gap-space-lg">
+<!-- Restaurant Context Snapshot Card -->
+<div class="bg-surface-container-low rounded-xl p-space-md flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">
+            Contexto Operacional em Tempo Real
+          </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary animate-pulse"></span>
+            Loja Ativa
+          </span>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-space-sm pt-space-xs">
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Plano Cadastrado</span>
+<span class="font-bold text-on-surface">Pro (R$ 69,90/mês)</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Volume de Hoje</span>
+<span class="font-bold text-on-surface">24 pedidos concluídos</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Último Despacho</span>
+<span class="font-bold text-tertiary">Há 4 min</span>
+</div>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Faturamento Mensal</span>
+<span class="font-bold text-on-surface">R$ 18.420,00</span>
+</div>
+</div>
+<div class="mt-space-2xs text-[11px] text-on-surface-variant italic">
+          * Dados de telemetria operacional gerados automaticamente para acelerar a triagem e suporte sem exigir perguntas redundantes ao lojista.
+        </div>
+</div>
+<!-- Ticket Resolution & Control Metadata Grid -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm grid grid-cols-1 sm:grid-cols-2 gap-space-md">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant font-bold mb-1">Status do Atendimento</label>
+<select class="w-full h-10 px-space-sm rounded-lg bg-surface text-on-surface font-label-md text-label-md focus:ring-2 focus:ring-primary">
+<option>Aberto</option>
+<option selected="">Em atendimento</option>
+<option>Aguardando restaurante</option>
+<option>Resolvido</option>
+<option>Fechado</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant font-bold mb-1">
+            Prioridade
+            <span class="ml-1 text-secondary" title="Urgente requer bloqueio operacional total">ⓘ</span>
+</label>
+<select class="w-full h-10 px-space-sm rounded-lg bg-surface text-on-surface font-label-md text-label-md focus:ring-2 focus:ring-primary">
+<option>🔴 Urgente (Interrupção Total)</option>
+<option selected="">🟠 Alta (Degradação de Fluxo)</option>
+<option>⚪ Normal (Dúvida / Configuração)</option>
+<option>Baixa</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant font-bold mb-1">Categoria de Abertura</label>
+<select class="w-full h-10 px-space-sm rounded-lg bg-surface text-on-surface font-label-md text-label-md focus:ring-2 focus:ring-primary">
+<option selected="">Loja / Publicação</option>
+<option>Pedidos / KDS</option>
+<option>Pagamentos / Pix</option>
+<option>Delivery &amp; Taxas</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant font-bold mb-1">Responsável Interno</label>
+<select class="w-full h-10 px-space-sm rounded-lg bg-surface text-on-surface font-label-md text-label-md focus:ring-2 focus:ring-primary">
+<option selected="">Mariana Costa (Suporte)</option>
+<option>Lucas Martins</option>
+<option>Rafael Souza</option>
+</select>
+</div>
+</div>
+<!-- Conversation Timeline & Real-time Messages -->
+<div class="flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Histórico de Mensagens</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Canal: Portal Lojista Web</span>
+</div>
+<!-- Message 1 (Restaurante) -->
+<div class="flex flex-col items-start gap-1 max-w-[90%]">
+<div class="flex items-center gap-space-xs text-label-sm font-label-sm text-on-surface-variant">
+<span class="font-bold text-on-surface">Bruno Viana (Proprietário - Next Burger)</span>
+<span>09:42</span>
+</div>
+<div class="p-space-md rounded-2xl rounded-tl-none bg-surface-container-low text-on-surface text-body-md font-body-md">
+            Minha loja aparece como publicada no painel, mas quando acesso o link pelo celular ela mostra como fechada.
+          </div>
+</div>
+<!-- Message 2 (Suporte Master) -->
+<div class="flex flex-col items-end gap-1 max-w-[90%] self-end">
+<div class="flex items-center gap-space-xs text-label-sm font-label-sm text-on-surface-variant">
+<span>09:50</span>
+<span class="font-bold text-primary">Mariana Costa (Suporte MenuNext)</span>
+</div>
+<div class="p-space-md rounded-2xl rounded-tr-none bg-primary text-on-primary text-body-md font-body-md shadow-sm">
+            Olá Bruno! Vamos verificar a grade de horários cadastrada na aba "Horários de Funcionamento" para o turno de almoço.
+          </div>
+</div>
+<!-- Message 3 (Restaurante) -->
+<div class="flex flex-col items-start gap-1 max-w-[90%]">
+<div class="flex items-center gap-space-xs text-label-sm font-label-sm text-on-surface-variant">
+<span class="font-bold text-on-surface">Bruno Viana (Next Burger)</span>
+<span>10:14</span>
+</div>
+<div class="p-space-md rounded-2xl rounded-tl-none bg-surface-container-low text-on-surface text-body-md font-body-md">
+            Pode verificar por favor? Hoje abrimos às 11h, mas o cardápio ainda está travado para clientes.
+          </div>
+</div>
+<!-- Message 4 (Suporte Master) -->
+<div class="flex flex-col items-end gap-1 max-w-[90%] self-end">
+<div class="flex items-center gap-space-xs text-label-sm font-label-sm text-on-surface-variant">
+<span>10:20</span>
+<span class="font-bold text-primary">Mariana Costa (Suporte MenuNext)</span>
+</div>
+<div class="p-space-md rounded-2xl rounded-tr-none bg-primary text-on-primary text-body-md font-body-md shadow-sm">
+            Identificamos que o toggle da quarta-feira estava desmarcado. Reativamos e sincronizamos o cache de CDN. Pode testar o link agora?
+          </div>
+</div>
+</div>
+<!-- Quick Audit Log Snippet inside Drawer -->
+<div class="bg-surface rounded-xl p-space-md flex flex-col gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">
+          Auditoria Recente do Restaurante
+        </span>
+<ul class="divide-y divide-surface-container-high/40 text-body-sm font-body-sm">
+<li class="py-2 flex items-center justify-between">
+<span class="text-on-surface">Pedido #1048 recebido e despachado</span>
+<span class="text-on-surface-variant">há 4 min</span>
+</li>
+<li class="py-2 flex items-center justify-between">
+<span class="text-on-surface">Horário de funcionamento alterado pelo Suporte</span>
+<span class="text-on-surface-variant">há 22 min</span>
+</li>
+<li class="py-2 flex items-center justify-between">
+<span class="text-on-surface">Chamado #SUP-1048 aberto via painel</span>
+<span class="text-on-surface-variant">hoje às 09:42</span>
+</li>
+</ul>
+<a class="text-primary font-label-sm text-label-sm font-bold hover:underline mt-1" href="#">
+          Ver histórico completo de auditoria →
+        </a>
+</div>
+</div>
+<!-- Drawer Footer / Response Input Composer -->
+<div class="p-space-lg bg-surface-container-low flex flex-col gap-space-xs">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center gap-space-sm text-label-sm font-label-sm text-on-surface-variant">
+<button class="hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">attach_file</span> Anexar print
+          </button>
+<span>•</span>
+<button class="hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">bolt</span> Resposta rápida
+          </button>
+<span>•</span>
+<button class="hover:text-primary transition-colors flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">lock</span> Nota interna
+          </button>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Shift + Enter para nova linha</span>
+</div>
+<div class="relative">
+<textarea class="w-full p-space-sm pr-28 rounded-xl bg-surface-container-lowest text-on-surface font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-primary shadow-inner resize-none" placeholder="Escreva uma resposta para o restaurante..." rows="3"></textarea>
+<button class="absolute right-3 bottom-3 inline-flex items-center justify-center gap-1 px-4 py-2 rounded-lg bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-bold transition-all shadow-sm">
+<span>Enviar</span>
+<span class="material-symbols-outlined text-[16px]">send</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Micro-Interactions Client Script -->
+<script>
+  // Keyboard shortcut '/' to trigger search focus
+  document.addEventListener('keydown', function(e) {
+    if (e.key === '/' && document.activeElement.tagName !== 'INPUT' && document.activeElement.tagName !== 'TEXTAREA') {
+      e.preventDefault();
+      const searchInput = document.querySelector('input[type="text"]');
+      if (searchInput) {
+        searchInput.focus();
+      }
+    }
+    // ESC key closes the ticket drawer
+    if (e.key === 'Escape') {
+      const drawer = document.getElementById('ticket-drawer');
+      if (drawer && !drawer.classList.contains('translate-x-full')) {
+        drawer.classList.add('translate-x-full');
+      }
+    }
+  });
+</script></main><footer class="w-full bg-surface-container-low mt-space-3xl"><div class="max-w-[1440px] mx-auto px-gutter py-space-3xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl"><div class="lg:col-span-1 flex flex-col gap-space-md"><div class="flex items-center gap-space-xs"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">A plataforma definitiva de pedidos online, KDS e autoatendimento inteligente para restaurantes e dark kitchens que escalam com autonomia.</p><div class="flex items-center gap-space-xs mt-space-xs"><span class="inline-flex items-center px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>Infraestrutura Ativa</span></div></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Produto</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="cardapio-digital" href="#">Cardápio Digital QR</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="kds-cozinha" href="#">KDS Operacional</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="painel-gestao" href="#">Painel Gerencial</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="integracao-pos" href="#">Integrações POS &amp; iFood</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Tabela de Preços</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Empresa</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="sobre" href="#">Sobre o MenuNext</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="clientes" href="#">Histórias de Sucesso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="carreiras" href="#">Vagas e Carreiras</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="imprensa" href="#">Mídia &amp; Imprensa</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="parceiros" href="#">Programa de Parceiros</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Suporte</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="central-ajuda" href="#">Central de Ajuda 24/7</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="tutoriais" href="#">Vídeos e Tutoriais</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="status" href="#">Status dos Servidores</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">Perguntas Frequentes</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="fale-conosco" href="#">Contato com Consultor</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Legal</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="termos" href="#">Termos de Uso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade e LGPD</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="seguranca" href="#">Segurança da Informação</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="compliance" href="#">Políticas Comerciais</a></div></div><div class="mt-space-2xl pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><p>© 2025 MenuNext Tecnologia para Gastronomia Ltda. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</p><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade</a><a class="hover:text-on-surface transition-colors" data-path="termos" href="#">Termos</a></div></div></div></footer></body></html>

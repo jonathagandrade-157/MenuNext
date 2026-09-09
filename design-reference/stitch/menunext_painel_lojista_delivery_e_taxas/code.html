@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary-fixed-variant":"#005236","inverse-on-surface":"#edf0ff","outline":"#8f7067","secondary-container":"#d8391e","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#3f0400","on-secondary":"#ffffff","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-tint":"#af3100","inverse-surface":"#2a303f","tertiary":"#006947","on-primary-fixed":"#3a0a00","primary":"#ab2f00","error":"#ba1a1a","surface-bright":"#faf8ff","on-primary-fixed-variant":"#862300","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","primary-container":"#d53e02","surface-container-lowest":"#ffffff","outline-variant":"#e4beb4","on-primary-container":"#fffbff","primary-fixed":"#ffdbd1","on-surface":"#151b29","on-secondary-fixed-variant":"#8f1200","on-error-container":"#93000a","on-tertiary-container":"#f5fff6","primary-fixed-dim":"#ffb59f","on-error":"#ffffff","surface-container":"#e9edff","surface-container-high":"#e2e8fc","secondary":"#b41e04","surface-dim":"#d4d9ed","surface-variant":"#dde2f6","background":"#faf8ff","inverse-primary":"#ffb59f","error-container":"#ffdad6","surface":"#faf8ff","secondary-fixed-dim":"#ffb4a5","secondary-fixed":"#ffdad3","on-secondary-container":"#fffbff","surface-container-low":"#f1f3ff","on-background":"#151b29","tertiary-container":"#00855b","surface-container-highest":"#dde2f6","on-surface-variant":"#5b4139"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"container-max":"1440px","space-sm":"0.75rem","space-xl":"2rem","space-2xl":"3rem","space-3xl":"4rem","space-xs":"0.5rem","space-lg":"1.5rem","gutter":"1.5rem","space-2xs":"0.25rem","space-md":"1rem"},fontFamily:{"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-md":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-xs" data-path="landing-page" href="#"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></a><nav class="hidden lg:flex items-center gap-space-lg ml-space-md" data-active-classes="text-primary font-label-lg font-bold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="recursos" href="#">Recursos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="como-funciona" href="#">Como Funciona</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Planos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">FAQ</a></nav></div><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_3px_0_rgba(18,24,38,0.05)]" data-path="login" href="#">Entrar</a><a class="inline-flex items-center justify-center h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.3)]" data-path="cadastro" href="#">Criar minha loja grátis</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full">
+<!-- Sub-layout Container with Merchant Sidebar & Operational Workspace -->
+<div class="w-full flex bg-surface min-h-[calc(100vh-5rem)]">
+<!-- MERCHANT SIDEBAR (Collapsible Desktop SaaS Navigation) -->
+<aside class="w-64 shrink-0 bg-surface-container-lowest hidden lg:flex flex-col justify-between p-space-md shadow-sm z-20">
+<div class="flex flex-col gap-space-md">
+<!-- Store Context Switcher -->
+<div class="flex items-center gap-space-sm p-space-sm rounded-xl bg-surface-container-low hover:bg-surface-container transition-colors cursor-pointer">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-[0_2px_8px_rgba(171,47,0,0.25)]">
+<span class="material-symbols-outlined text-[22px]">lunch_dining</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold truncate">Next Burger Express</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Unidade Moema
+            </span>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px] ml-auto">unfold_more</span>
+</div>
+<!-- Navigation Categories -->
+<nav class="flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant/70 uppercase tracking-wider px-space-xs py-1">Operacional</span>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span>Início</span>
+</a>
+<a class="flex items-center justify-between px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span>Pedidos</span>
+</div>
+<span class="px-1.5 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm">4</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">restaurant_menu</span>
+<span>Cardápio</span>
+</a>
+<!-- ACTIVE LINK: DELIVERY -->
+<a class="flex items-center justify-between px-space-sm py-2 rounded-lg bg-primary/10 text-primary font-label-md text-label-md font-bold transition-all shadow-[0_2px_6px_rgba(171,47,0,0.08)]" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] text-primary" style="font-variation-settings: 'FILL' 1;">two_wheeler</span>
+<span>Delivery e Taxas</span>
+</div>
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+<span>Frente de Caixa (PDV)</span>
+</a>
+<span class="font-label-sm text-label-sm text-on-surface-variant/70 uppercase tracking-wider px-space-xs py-1 mt-space-sm">Gestão &amp; Finanças</span>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span>Clientes</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">trending_up</span>
+<span>Vendas &amp; Relatórios</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">campaign</span>
+<span>Marketing &amp; Cupons</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">palette</span>
+<span>Aparência da Loja</span>
+</a>
+<span class="font-label-sm text-label-sm text-on-surface-variant/70 uppercase tracking-wider px-space-xs py-1 mt-space-sm">Sistema</span>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">schedule</span>
+<span>Horários</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+<span>Pagamentos</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span>Configurações</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">help_center</span>
+<span>Ajuda &amp; Suporte</span>
+</a>
+</nav>
+</div>
+<!-- Merchant Profile Footer in Sidebar -->
+<div class="mt-space-md pt-space-md flex items-center justify-between p-space-xs bg-surface-container-low rounded-xl">
+<div class="flex items-center gap-space-xs min-w-0">
+<div class="w-8 h-8 rounded-full bg-primary/20 text-primary flex items-center justify-center font-bold text-label-md">
+            JD
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold truncate">Jonatha D.</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Administrador</span>
+</div>
+</div>
+<button aria-label="Sair" class="p-1.5 text-on-surface-variant hover:text-primary rounded-lg transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">logout</span>
+</button>
+</div>
+</aside>
+<!-- WORKSPACE / MAIN BODY -->
+<section class="flex-1 flex flex-col min-w-0">
+<!-- SUB-HEADER / STORE METRICS BAR -->
+<div class="w-full bg-surface-container-lowest px-gutter py-space-sm shadow-[0_1px_4px_rgba(0,0,0,0.03)] flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Next Burger Express</span>
+<span class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-semibold">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+              Loja Aberta
+            </span>
+</div>
+<span class="hidden md:inline-flex items-center gap-1 font-body-sm text-body-sm text-on-surface-variant bg-surface-container px-space-sm py-1 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+            Realtime Ativo
+          </span>
+</div>
+<div class="flex items-center gap-space-sm">
+<a class="inline-flex items-center gap-1.5 px-space-md py-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md font-semibold transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px] text-primary">visibility</span>
+<span>Ver Loja Pública</span>
+</a>
+<button aria-label="Notificações" class="relative w-10 h-10 rounded-xl bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary ring-2 ring-surface-container-lowest"></span>
+</button>
+</div>
+</div>
+<!-- PAGE HEADING & PRIMARY ACTIONS -->
+<div class="max-w-[1440px] w-full mx-auto px-gutter py-space-xl flex flex-col gap-space-xl">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-space-sm">
+<h1 class="font-headline-xl text-headline-xl text-on-surface font-extrabold tracking-tight">Delivery e Taxas de Entrega</h1>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm font-bold uppercase tracking-wider">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-ping"></span>
+                Delivery Ativo
+              </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+              Configure áreas de atendimento, taxas, tempo estimado e condições para entregar seus pedidos diretamente aos seus clientes via canal próprio.
+            </p>
+</div>
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="inline-flex items-center gap-space-xs px-space-lg py-2.5 rounded-xl bg-surface-container-lowest text-on-surface font-label-lg text-label-lg font-semibold hover:bg-surface-container transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+<span>Pré-visualizar no Checkout</span>
+</button>
+<button class="inline-flex items-center gap-space-xs px-space-xl py-2.5 rounded-xl bg-primary text-on-primary font-label-lg text-label-lg font-bold hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_16px_rgba(171,47,0,0.3)]" type="button">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+<span>Salvar alterações</span>
+</button>
+</div>
+</div>
+<!-- STATS / QUICK OPERATIONAL CARDS -->
+<div class="grid grid-cols-1 md:grid-cols-4 gap-space-md">
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-1">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Bairros Atendidos</span>
+<div class="flex items-baseline justify-between">
+<span class="font-headline-lg text-headline-lg font-extrabold text-on-surface">6 Regiões</span>
+<span class="text-tertiary font-label-sm text-label-sm font-bold">100% ativas</span>
+</div>
+</div>
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-1">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Taxa Média Aplicada</span>
+<div class="flex items-baseline justify-between">
+<span class="font-headline-lg text-headline-lg font-extrabold text-on-surface">R$ 7,50</span>
+<span class="text-on-surface-variant font-label-sm text-label-sm">R$ 5,00 a R$ 9,50</span>
+</div>
+</div>
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-1">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Tempo Médio Estimado</span>
+<div class="flex items-baseline justify-between">
+<span class="font-headline-lg text-headline-lg font-extrabold text-on-surface">35–50 min</span>
+<span class="text-tertiary font-label-sm text-label-sm font-semibold">Dentro do alvo</span>
+</div>
+</div>
+<div class="p-space-lg rounded-xl bg-surface-container-lowest shadow-sm flex flex-col gap-1">
+<span class="font-body-sm text-body-sm text-on-surface-variant font-medium">Gatilho Frete Grátis</span>
+<div class="flex items-baseline justify-between">
+<span class="font-headline-lg text-headline-lg font-extrabold text-primary">R$ 120,00</span>
+<span class="text-tertiary font-label-sm text-label-sm font-semibold">Conversão +22%</span>
+</div>
+</div>
+</div>
+<!-- MAIN TWO-COLUMN RESPONSIVE LAYOUT -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+<!-- LEFT COLUMN (MAIN SETTINGS & REGIONS TABLE - 8 COLS) -->
+<div class="lg:col-span-8 flex flex-col gap-space-xl">
+<!-- BLOCK 1: CHARGING MODE SELECTOR -->
+<div class="p-space-xl rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-lg">
+<div class="flex items-center justify-between">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Modo de Cobrança da Taxa de Entrega</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Escolha como a taxa de entrega será calculada para seus clientes.</p>
+</div>
+<span class="px-space-sm py-1 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-bold">
+                  Recomendado para Brasil
+                </span>
+</div>
+<!-- CARDS SELECTOR -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-space-md">
+<!-- OPTION 1: SELECTED -->
+<div class="relative p-space-md rounded-xl bg-surface-container-low cursor-pointer transition-all hover:bg-surface-container shadow-sm flex flex-col justify-between gap-space-md">
+<div class="flex flex-col gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-primary text-on-primary flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[22px]">map</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Por Bairros / Regiões</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Defina taxas fixas e tempos específicos para bairros cadastrados.</p>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-sm text-label-sm text-primary font-bold">Ativo no momento</span>
+<span class="material-symbols-outlined text-primary text-[20px]" style="font-variation-settings: 'FILL' 1;">radio_button_checked</span>
+</div>
+</div>
+<!-- OPTION 2 -->
+<div class="p-space-md rounded-xl bg-surface hover:bg-surface-container-low cursor-pointer transition-all flex flex-col justify-between gap-space-md opacity-80 hover:opacity-100">
+<div class="flex flex-col gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high text-on-surface flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[22px]">attach_money</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Taxa Fixa Única</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Mesmo valor padrão cobrado para qualquer entrega na cidade.</p>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Inativo</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">radio_button_unchecked</span>
+</div>
+</div>
+<!-- OPTION 3 -->
+<div class="p-space-md rounded-xl bg-surface hover:bg-surface-container-low cursor-pointer transition-all flex flex-col justify-between gap-space-md opacity-80 hover:opacity-100">
+<div class="flex flex-col gap-space-xs">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high text-on-surface flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[22px]">social_distance</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold leading-tight">Por Distância (km)</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Cálculo dinâmico baseado na quilometragem real até o cliente.</p>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant">Requer Google API</span>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">radio_button_unchecked</span>
+</div>
+</div>
+</div>
+</div>
+<!-- BLOCK 2: REGISTERED REGIONS TABLE -->
+<div class="p-space-xl rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Regiões e Bairros Cadastrados</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Gerencie os valores de frete, tempo de entrega e pedido mínimo por bairro.</p>
+</div>
+<button class="inline-flex items-center gap-space-xs px-space-md py-2.5 rounded-xl bg-primary text-on-primary font-label-md text-label-md font-bold hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_2px_8px_rgba(171,47,0,0.25)] shrink-0" type="button">
+<span class="material-symbols-outlined text-[18px]">add_location_alt</span>
+<span>Adicionar Nova Região</span>
+</button>
+</div>
+<!-- FILTER & SEARCH BAR -->
+<div class="flex flex-col sm:flex-row items-center gap-space-sm">
+<div class="relative flex-1 w-full">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-11 pl-11 pr-4 rounded-xl bg-surface text-on-surface font-body-md text-body-md focus:bg-surface-container-lowest focus:outline-none transition-all" placeholder="Buscar por nome do bairro ou região..." type="text"/>
+</div>
+<div class="flex items-center gap-space-xs w-full sm:w-auto">
+<button class="flex items-center gap-1.5 px-space-md h-11 rounded-xl bg-surface hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">filter_list</span>
+<span>Todos os status</span>
+</button>
+<button class="flex items-center gap-1.5 px-space-md h-11 rounded-xl bg-surface hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">sort_by_alpha</span>
+<span>Ordenar</span>
+</button>
+</div>
+</div>
+<!-- TABLE CONTAINER -->
+<div class="w-full overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-3.5 px-4 rounded-l-xl">Bairro / Região</th>
+<th class="py-3.5 px-4">Taxa de Entrega</th>
+<th class="py-3.5 px-4">Tempo Estimado</th>
+<th class="py-3.5 px-4">Pedido Mínimo</th>
+<th class="py-3.5 px-4 text-center">Status</th>
+<th class="py-3.5 px-4 text-right rounded-r-xl">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-transparent font-body-md text-body-md text-on-surface">
+<!-- Row 1: Moema -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-4 px-4 font-semibold">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary text-[18px]">near_me</span>
+<span>Moema</span>
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-bold">Origem</span>
+</div>
+</td>
+<td class="py-4 px-4 font-bold text-on-surface">R$ 5,00</td>
+<td class="py-4 px-4 text-on-surface-variant">30–45 min</td>
+<td class="py-4 px-4">R$ 25,00</td>
+<td class="py-4 px-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button aria-label="Editar" class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button aria-label="Excluir" class="p-1.5 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/30 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2: Vila Nova Conceição -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-4 px-4 font-semibold">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">location_on</span>
+<span>Vila Nova Conceição</span>
+</div>
+</td>
+<td class="py-4 px-4 font-bold text-on-surface">R$ 7,00</td>
+<td class="py-4 px-4 text-on-surface-variant">35–50 min</td>
+<td class="py-4 px-4">R$ 30,00</td>
+<td class="py-4 px-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button aria-label="Editar" class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button aria-label="Excluir" class="p-1.5 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/30 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3: Indianópolis -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-4 px-4 font-semibold">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">location_on</span>
+<span>Indianópolis</span>
+</div>
+</td>
+<td class="py-4 px-4 font-bold text-on-surface">R$ 6,50</td>
+<td class="py-4 px-4 text-on-surface-variant">30–45 min</td>
+<td class="py-4 px-4">R$ 30,00</td>
+<td class="py-4 px-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button aria-label="Editar" class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button aria-label="Excluir" class="p-1.5 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/30 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 4: Campo Belo -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-4 px-4 font-semibold">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">location_on</span>
+<span>Campo Belo</span>
+</div>
+</td>
+<td class="py-4 px-4 font-bold text-on-surface">R$ 8,00</td>
+<td class="py-4 px-4 text-on-surface-variant">40–55 min</td>
+<td class="py-4 px-4">R$ 35,00</td>
+<td class="py-4 px-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button aria-label="Editar" class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button aria-label="Excluir" class="p-1.5 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/30 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 5: Itaim Bibi -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-4 px-4 font-semibold">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">location_on</span>
+<span>Itaim Bibi</span>
+</div>
+</td>
+<td class="py-4 px-4 font-bold text-on-surface">R$ 9,00</td>
+<td class="py-4 px-4 text-on-surface-variant">40–60 min</td>
+<td class="py-4 px-4">R$ 40,00</td>
+<td class="py-4 px-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button aria-label="Editar" class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button aria-label="Excluir" class="p-1.5 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/30 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 6: Vila Olímpia -->
+<tr class="hover:bg-surface-container-low/60 transition-colors">
+<td class="py-4 px-4 font-semibold">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">location_on</span>
+<span>Vila Olímpia</span>
+</div>
+</td>
+<td class="py-4 px-4 font-bold text-on-surface">R$ 9,50</td>
+<td class="py-4 px-4 text-on-surface-variant">45–60 min</td>
+<td class="py-4 px-4">R$ 40,00</td>
+<td class="py-4 px-4 text-center">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</td>
+<td class="py-4 px-4 text-right">
+<div class="flex items-center justify-end gap-1">
+<button aria-label="Editar" class="p-1.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button aria-label="Excluir" class="p-1.5 rounded-lg text-on-surface-variant hover:text-error hover:bg-error-container/30 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- BULK IMPORT TIP -->
+<div class="flex items-center justify-between p-space-sm rounded-xl bg-surface-container-low text-on-surface-variant">
+<div class="flex items-center gap-2 font-body-sm text-body-sm">
+<span class="material-symbols-outlined text-primary text-[18px]">info</span>
+<span>Quer cadastrar todos os bairros da sua cidade em lote? Importe via planilha CSV.</span>
+</div>
+<button class="font-label-md text-label-md text-primary font-bold hover:underline" type="button">Importar Lista</button>
+</div>
+</div>
+<!-- BLOCK 3: FREE SHIPPING & PROMOTIONS -->
+<div class="p-space-xl rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-md">
+<div class="flex items-start justify-between gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-tertiary/10 text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">local_offer</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Regras de Entrega Grátis &amp; Promoções</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Incentive o aumento do ticket médio oferecendo isenção da taxa de entrega.</p>
+</div>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-12 h-6 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-lg pt-space-sm items-center">
+<div class="flex flex-col gap-space-xs">
+<label class="font-label-md text-label-md text-on-surface font-bold">Valor mínimo do pedido para Entrega Grátis</label>
+<div class="relative">
+<span class="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-on-surface-variant">R$</span>
+<input class="w-full h-11 pl-11 pr-4 rounded-xl bg-surface text-on-surface font-headline-sm text-headline-sm font-bold focus:bg-surface-container-lowest focus:outline-none" type="text" value="120,00"/>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Aplicado automaticamente para todos os bairros ativos.</span>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-start gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px] shrink-0 mt-0.5">verified</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+<strong class="text-on-surface font-semibold">Exibição de Alta Conversão:</strong> Uma barra de progresso e o badge <span class="px-2 py-0.5 rounded bg-tertiary text-on-tertiary font-bold text-[10px] uppercase">Frete Grátis</span> serão exibidos na sacola do cliente ao atingir este valor.
+                  </p>
+</div>
+</div>
+</div>
+<!-- BLOCK 4: DEFAULT DELIVERY TIME ESTIMATE -->
+<div class="p-space-xl rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-surface-container-high text-on-surface flex items-center justify-center">
+<span class="material-symbols-outlined text-[24px]">timer</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface font-bold">Tempo Médio Padrão de Entrega</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Configuração global exibida caso uma região específica não tenha tempo próprio informado.</p>
+</div>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-space-md pt-space-xs">
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface font-bold">Tempo Mínimo (minutos)</label>
+<input class="w-full h-11 px-4 rounded-xl bg-surface text-on-surface font-headline-sm text-headline-sm font-bold focus:bg-surface-container-lowest focus:outline-none" type="number" value="30"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface font-bold">Tempo Máximo (minutos)</label>
+<input class="w-full h-11 px-4 rounded-xl bg-surface text-on-surface font-headline-sm text-headline-sm font-bold focus:bg-surface-container-lowest focus:outline-none" type="number" value="45"/>
+</div>
+<div class="sm:col-span-2 md:col-span-1 flex flex-col justify-center">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wide">Como aparece no App:</span>
+<div class="inline-flex items-center gap-2 mt-1 px-space-md py-2 bg-surface-container-low rounded-xl text-on-surface font-bold font-label-md text-label-md">
+<span class="material-symbols-outlined text-primary text-[18px]">schedule</span>
+                    Previsão: 30–45 min
+                  </div>
+</div>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN (OPERATIONAL STATUS & ORIGIN ADDRESS - 4 COLS) -->
+<div class="lg:col-span-4 flex flex-col gap-space-xl">
+<!-- CARD 1: STORE OPERATIONAL STATUS -->
+<div class="p-space-xl rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-lg">
+<div class="flex items-center justify-between pb-space-sm border-b-0">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Status do Atendimento</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">toggle_on</span>
+</div>
+<!-- Item 1: Accepting Delivery -->
+<div class="flex items-start justify-between gap-space-sm">
+<div class="flex flex-col gap-1">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Recebendo Delivery</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Clientes podem escolher Entrega em Domicílio durante o checkout.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+<!-- Item 2: Takeaway / Balcao -->
+<div class="flex items-start justify-between gap-space-sm pt-space-sm">
+<div class="flex flex-col gap-1">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Permitir retirada no balcão</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Opção de Takeaway sem cobrança de taxas de frete para o cliente.</p>
+</div>
+<label class="relative inline-flex items-center cursor-pointer shrink-0 mt-1">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-5 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+<!-- Item 3: Pedido Minimo Global -->
+<div class="pt-space-sm flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Pedido Mínimo para Delivery</span>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-8 h-4 bg-surface-container-highest peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[1px] after:left-[1px] after:bg-white after:rounded-full after:h-3.5 after:w-3.5 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+<div class="relative mt-1">
+<span class="absolute left-3.5 top-1/2 -translate-y-1/2 font-bold text-on-surface-variant">R$</span>
+<input class="w-full h-11 pl-11 pr-4 rounded-xl bg-surface text-on-surface font-headline-sm text-headline-sm font-bold focus:bg-surface-container-lowest focus:outline-none" type="text" value="30,00"/>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Sacolas abaixo deste valor não avançam para o pagamento.</span>
+</div>
+</div>
+<!-- CARD 2: RESTAURANT ORIGIN ADDRESS -->
+<div class="p-space-xl rounded-2xl bg-surface-container-lowest shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center gap-space-sm">
+<div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[22px]">storefront</span>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Endereço de Origem</h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Ponto de partida das entregas</span>
+</div>
+</div>
+<!-- STATIC MAP PLACEHOLDER FOR LOCAL ROUTING CONTEXT -->
+<div class="w-full h-36 bg-cover bg-center rounded-xl shadow-inner relative overflow-hidden" data-location="Alameda dos Anapurus 1200, Moema, Sao Paulo" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCkT8jrw9w1bkbB3C6j8nXzXuxp1XtvmhOaRzwqSSvYG4Dp41HcHNHO-3o-xH9oZ32TBhORGsSK1KHui6nTIIqwQPaxTYKVdQwiB7khBs8oyYXU9kjqEK3RnII95awuO9LsF4DswCb-GDJ7yXS2_p18xL0L9S83PXANSjeFugBqzFzEKcwHUUvqovrd63uvAH0qlLkS9oEr4Zx1L9G2Ig4HkjIykT28pLd-q3hjA5WB6Ati3GKvWD0-');">
+<div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent flex items-end p-space-sm">
+<span class="px-2 py-1 rounded bg-surface-container-lowest/90 text-on-surface font-label-sm text-label-sm font-bold backdrop-blur-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-primary text-[14px]">pin_drop</span>
+                    Hub Moema Central
+                  </span>
+</div>
+</div>
+<div class="flex flex-col gap-1 pt-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Next Burger Express</span>
+<p class="font-body-md text-body-md text-on-surface">Alameda dos Anapurus, 1200</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Moema — São Paulo / SP • CEP 04087-003</p>
+</div>
+<div class="p-space-sm rounded-xl bg-surface-container-low flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-tertiary text-[18px]">route</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Todas as rotas e raios são traçados a partir deste CEP.</span>
+</div>
+<button class="w-full py-2.5 px-space-md rounded-xl bg-surface text-on-surface font-label-md text-label-md font-semibold hover:bg-surface-container transition-colors flex items-center justify-center gap-2" type="button">
+<span class="material-symbols-outlined text-[18px]">tune</span>
+<span>Alterar endereço nas Configurações</span>
+</button>
+</div>
+<!-- CARD 3: CONVERSION PRO TIP -->
+<div class="p-space-xl rounded-2xl bg-gradient-to-br from-primary to-primary-container text-on-primary shadow-md flex flex-col gap-space-sm">
+<div class="w-9 h-9 rounded-lg bg-on-primary/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-on-primary text-[20px]">insights</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm font-bold">Dica de Conversão Local</h4>
+<p class="font-body-sm text-body-sm text-on-primary/90 leading-relaxed">
+                Restaurantes que utilizam taxa fixa reduzida no próprio bairro de origem (ex: R$ 5,00 em Moema) aumentam a frequência de recompra semanal em 34%.
+              </p>
+<a class="mt-space-xs inline-flex items-center gap-1 font-label-md text-label-md text-on-primary font-bold hover:underline" href="#">
+<span>Ver relatório de retenção</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</div></main><footer class="w-full bg-surface-container-low mt-space-3xl"><div class="max-w-[1440px] mx-auto px-gutter py-space-3xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl"><div class="lg:col-span-1 flex flex-col gap-space-md"><div class="flex items-center gap-space-xs"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">A plataforma definitiva de pedidos online, KDS e autoatendimento inteligente para restaurantes e dark kitchens que escalam com autonomia.</p><div class="flex items-center gap-space-xs mt-space-xs"><span class="inline-flex items-center px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>Infraestrutura Ativa</span></div></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Produto</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="cardapio-digital" href="#">Cardápio Digital QR</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="kds-cozinha" href="#">KDS Operacional</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="painel-gestao" href="#">Painel Gerencial</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="integracao-pos" href="#">Integrações POS &amp; iFood</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Tabela de Preços</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Empresa</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="sobre" href="#">Sobre o MenuNext</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="clientes" href="#">Histórias de Sucesso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="carreiras" href="#">Vagas e Carreiras</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="imprensa" href="#">Mídia &amp; Imprensa</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="parceiros" href="#">Programa de Parceiros</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Suporte</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="central-ajuda" href="#">Central de Ajuda 24/7</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="tutoriais" href="#">Vídeos e Tutoriais</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="status" href="#">Status dos Servidores</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">Perguntas Frequentes</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="fale-conosco" href="#">Contato com Consultor</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Legal</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="termos" href="#">Termos de Uso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade e LGPD</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="seguranca" href="#">Segurança da Informação</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="compliance" href="#">Políticas Comerciais</a></div></div><div class="mt-space-2xl pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><p>© 2025 MenuNext Tecnologia para Gastronomia Ltda. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</p><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade</a><a class="hover:text-on-surface transition-colors" data-path="termos" href="#">Termos</a></div></div></div></footer></body></html>

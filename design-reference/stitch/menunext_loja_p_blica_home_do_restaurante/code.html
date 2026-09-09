@@ -1,0 +1,765 @@
+<!DOCTYPE html><html lang="pt-BR" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Next Burger Express • Cardápio Online</title>
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              DEFAULT: '#F95721',
+              dark: '#e04612',
+              light: '#fff3ed',
+              accent: '#FF5436'
+            },
+            graphite: {
+              DEFAULT: '#121826',
+              light: '#4B5563',
+              muted: '#6B7280'
+            },
+            emerald: {
+              DEFAULT: '#10B981',
+              light: '#E6F4EA'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif']
+          },
+          boxShadow: {
+            'soft': '0 4px 20px -2px rgba(18, 24, 38, 0.06)',
+            'float': '0 12px 32px -4px rgba(18, 24, 38, 0.16)'
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    /* Custom scrollbar for horizontal categories */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-[#121826] font-sans antialiased min-h-screen flex justify-center selection:bg-[#F95721] selection:text-white">
+<!-- TOP BRANDING BAR (Subtle MenuNext Powered By) -->
+<header class="bg-white/95 backdrop-blur border-b border-slate-100 py-2 px-3.5 sticky top-0 z-40 w-full">
+<div class="w-full max-w-md mx-auto flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold bg-emerald-light text-emerald-800 border border-emerald-200">
+<span class="w-2 h-2 rounded-full bg-emerald mr-1.5 animate-pulse"></span>
+          Loja Aberta
+        </span>
+<span class="text-xs text-slate-500 hidden sm:inline">• Recebendo pedidos normalmente</span>
+</div>
+<div class="flex items-center gap-1.5 text-xs text-slate-400 font-medium">
+<span class="">Loja oficial por</span>
+<div class="flex items-center gap-1 text-slate-700 font-bold tracking-tight">
+<svg class="w-3.5 h-3.5 text-[#F95721]" fill="currentColor" viewBox="0 0 24 24">
+<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 14h-2v-2h2v2zm0-4h-2V7h2v5z"></path>
+</svg>
+<span class="text-slate-800">Menu<span class="text-[#F95721]">Next</span></span>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN WRAPPER (Max 1024px for balanced desktop & mobile-first centered) -->
+<main class="w-full max-w-md mx-auto min-h-screen bg-white shadow-2xl relative border-x border-slate-200 pb-28">
+<!-- RESTAURANT COVER & HERO -->
+<section class="bg-white sm:rounded-3xl overflow-hidden shadow-soft border-b sm:border border-slate-100 relative">
+<!-- Capa Ampla -->
+<div class="relative h-44 w-full bg-slate-900 overflow-hidden">
+<img alt="Capa Next Burger Express" class="w-full h-full object-cover opacity-90 hover:scale-105 transition-transform duration-700" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+<div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+<!-- Badge de Status na Capa -->
+<div class="absolute top-4 right-4 bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-full shadow-md flex items-center gap-2 border border-white/40">
+<span class="w-2.5 h-2.5 rounded-full bg-emerald"></span>
+<span class="text-xs font-bold text-slate-800">Aberto agora</span>
+</div>
+</div>
+<!-- Informações do Restaurante -->
+<div class="px-4 pb-4 pt-0 relative">
+<div class="flex flex-col sm:flex-row sm:items-end justify-between -mt-12 sm:-mt-16 gap-4 mb-4">
+<!-- Logo & Nome -->
+<div class="flex items-end gap-4">
+<div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white p-1.5 shadow-float border-2 border-white relative z-10 flex-shrink-0">
+<div class="w-full h-full rounded-xl bg-gradient-to-br from-[#F95721] to-[#FF5436] flex items-center justify-center text-white shadow-inner">
+<span class="text-3xl font-extrabold tracking-tight">NB</span>
+</div>
+</div>
+<div class="pt-2 sm:pt-0">
+<h1 class="text-2xl sm:text-3xl font-extrabold text-[#121826] tracking-tight">Next Burger Express</h1>
+<p class="text-xs sm:text-sm text-slate-500 font-medium">Cardápio digital oficial • Restaurante próprio</p>
+</div>
+</div>
+<!-- Ações rápidas de contato -->
+<div class="flex items-center gap-2">
+<button class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700 transition">
+<svg class="w-4 h-4 text-emerald" fill="currentColor" viewBox="0 0 24 24"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.299.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.087-.179.183-.077.358.101.174.45 1.042 1.341 1.52.417.224.77.295.945.344.174.048.277.04.381-.077.104-.116.447-.521.567-.7.12-.178.239-.148.403-.087s1.048.494 1.229.584c.181.09.302.134.346.21.044.076.044.44-.1 1.045z"></path></svg>
+              WhatsApp
+            </button>
+<a class="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-xs font-semibold text-slate-700 transition" href="#sobre-restaurante">
+<svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Info
+            </a>
+</div>
+</div>
+<p class="text-sm text-slate-600 mb-5 leading-relaxed">
+          Comida artesanal feita na hora com ingredientes selecionados, carnes grelhadas no fogo e aquele sabor de comida de verdade.
+        </p>
+<!-- Pílulas de Informações Operacionais Configuradas -->
+<div class="grid grid-cols-2 gap-2 pt-3 border-t border-slate-100">
+<div class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-100/80">
+<div class="w-8 h-8 rounded-lg bg-orange-100 flex items-center justify-center text-[#F95721]">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<div class="text-[11px] text-slate-400 font-medium">Tempo estimado</div>
+<div class="text-xs font-bold text-slate-800">30–45 min</div>
+</div>
+</div>
+<div class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-100/80">
+<div class="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center text-emerald">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<div class="text-[11px] text-slate-400 font-medium">Taxa de entrega</div>
+<div class="text-xs font-bold text-slate-800">A partir de R$ 5,00</div>
+</div>
+</div>
+<div class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-100/80">
+<div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<div class="text-[11px] text-slate-400 font-medium">Pedido mínimo</div>
+<div class="text-xs font-bold text-slate-800">R$ 20,00</div>
+</div>
+</div>
+<div class="flex items-center gap-2.5 p-2.5 rounded-xl bg-slate-50 border border-slate-100/80">
+<div class="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<div class="text-[11px] text-slate-400 font-medium">Modalidade</div>
+<div class="text-xs font-bold text-slate-800">Delivery • Retirada</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- SEARCH BAR -->
+<div class="px-3.5 my-3">
+<div class="relative flex items-center">
+<svg class="w-5 h-5 text-slate-400 absolute left-4 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<input class="w-full bg-white border border-slate-200 pl-11 pr-10 py-3.5 rounded-2xl text-sm font-medium placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#F95721]/30 focus:border-[#F95721] shadow-soft transition" id="search-input" placeholder="Buscar pratos, bebidas, combos e sobremesas..." type="text">
+<button class="absolute right-3.5 text-xs text-slate-400 hover:text-slate-600 font-medium bg-slate-100 px-2 py-1 rounded-lg">
+          Filtrar
+        </button>
+</div>
+</div>
+<!-- STICKY HORIZONTAL CATEGORIES BAR -->
+<nav class="sticky top-[41px] z-30 bg-white/95 backdrop-blur-md py-2.5 px-3.5 border-y border-slate-100">
+<div class="flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth">
+<a class="whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-[#F95721] text-white shadow-sm transition" href="#destaques">
+          ⭐ Destaques
+        </a>
+<a class="whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition" href="#combos">
+          🍱 Combos &amp; Ofertas
+        </a>
+<a class="whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition" href="#pratos">
+          🍛 Pratos Principais
+        </a>
+<a class="whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition" href="#hamburgueres">
+          🍔 Hambúrgueres
+        </a>
+<a class="whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition" href="#entradas">
+          🥟 Entradas &amp; Porções
+        </a>
+<a class="whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition" href="#bebidas">
+          🥤 Bebidas
+        </a>
+<a class="whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 transition" href="#sobremesas">
+          🍰 Sobremesas
+        </a>
+</div>
+</nav>
+<!-- SECTION: BANNER DESTAQUE ESPECIAL (CONFIGURÁVEL) -->
+<div class="px-3.5 my-3">
+<div class="relative rounded-2xl sm:rounded-3xl overflow-hidden bg-gradient-to-r from-slate-900 to-stone-900 text-white p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6 shadow-soft border border-slate-800">
+<div class="max-w-md z-10">
+<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[#F95721] text-white uppercase tracking-wider mb-2.5">
+            🔥 Oferta Especial do Dia
+          </div>
+<h2 class="text-xl sm:text-2xl font-extrabold tracking-tight mb-1.5">Almoço Executivo Completo</h2>
+<p class="text-xs sm:text-sm text-slate-300 mb-4 leading-relaxed">
+            Filé à Parmegiana crocante acompanhado de arroz soltinho, batata rústica e suco de laranja natural geladinho.
+          </p>
+<div class="flex items-center gap-3">
+<span class="text-2xl font-black text-white">R$ 39,90</span>
+<span class="text-sm text-slate-400 line-through">R$ 48,90</span>
+<span class="px-2 py-0.5 rounded-md bg-emerald/20 text-emerald text-xs font-bold border border-emerald/30">
+              Economize R$ 9,00
+            </span>
+</div>
+</div>
+<div class="flex flex-col sm:flex-row items-center gap-3 z-10 w-full sm:w-auto">
+<button class="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-[#F95721] hover:bg-[#e04612] text-white font-bold text-sm shadow-md hover:shadow-lg transition flex items-center justify-center gap-2" onclick="abrirModalProduto('Almoço Executivo', '39,90', 'Filé crocante com molho artesanal, arroz branco e suco de laranja.')">
+<span class="">Aproveitar Oferta</span>
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<!-- Decorative subtle background glow -->
+<div class="absolute -right-16 -bottom-16 w-64 h-64 bg-[#F95721]/20 rounded-full blur-3xl pointer-events-none"></div>
+</div>
+</div>
+<!-- SECTION: COMBOS & OFERTAS (INTEGRADO COM PAINEL) -->
+<section class="px-3.5 my-6" id="combos">
+<div class="flex items-center justify-between mb-4">
+<div>
+<h2 class="text-lg sm:text-xl font-extrabold text-[#121826] tracking-tight">🍱 Combos &amp; Ofertas Especiais</h2>
+<p class="text-xs text-slate-500">Refeições completas com economia garantida</p>
+</div>
+<span class="text-xs font-semibold text-[#F95721] bg-orange-50 px-2.5 py-1 rounded-full border border-orange-100">
+          3 combos disponíveis
+        </span>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Combo 1 -->
+<div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft hover:shadow-md transition cursor-pointer flex flex-col justify-between group" onclick="abrirModalProduto('Almoço Executivo Parmegiana', '39,90', 'Filé à Parmegiana crocante + Arroz soltinho + Suco natural de laranja 400ml.')">
+<div>
+<div class="flex items-start justify-between gap-3 mb-2.5">
+<div class="flex-1">
+<div class="inline-flex items-center gap-1 text-[10px] font-bold text-[#F95721] uppercase tracking-wider mb-1">
+                  ⭐ Combo Mais Vendido
+                </div>
+<h3 class="text-base font-bold text-slate-900 group-hover:text-[#F95721] transition">Almoço Executivo</h3>
+<p class="text-xs text-slate-500 line-clamp-2 mt-1">Filé à Parmegiana crocante, arroz soltinho e suco natural bem gelado.</p>
+</div>
+<div class="w-20 h-20 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 relative">
+<img alt="Almoço Executivo" class="w-full h-full object-cover group-hover:scale-105 transition" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+<span class="absolute bottom-1 right-1 bg-black/70 text-white text-[10px] px-1 rounded font-bold">3 itens</span>
+</div>
+</div>
+<div class="text-[11px] text-slate-400 font-medium">Incluso: Filé Mignon • Arroz • Suco Natural</div>
+</div>
+<div class="flex items-center justify-between pt-3 mt-3 border-t border-slate-100">
+<div class="flex items-baseline gap-2">
+<span class="text-base font-black text-slate-900">R$ 39,90</span>
+<span class="text-xs text-slate-400 line-through">R$ 48,90</span>
+<span class="text-[10px] font-bold text-emerald bg-emerald-light px-1.5 py-0.5 rounded">Economize R$ 9,00</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-[#F95721] text-slate-600 group-hover:text-white flex items-center justify-center font-bold text-lg transition shadow-sm">
+              +
+            </button>
+</div>
+</div>
+<!-- Combo 2 -->
+<div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft hover:shadow-md transition cursor-pointer flex flex-col justify-between group" onclick="abrirModalProduto('Combo Família Artesanal', '79,90', 'Pizza Grande 8 fatias + Borda recheada grátis + Refrigerante 2L + Brownie artesanal.')">
+<div>
+<div class="flex items-start justify-between gap-3 mb-2.5">
+<div class="flex-1">
+<div class="inline-flex items-center gap-1 text-[10px] font-bold text-blue-600 uppercase tracking-wider mb-1">
+                  👨‍👩‍👧 Para Compartilhar
+                </div>
+<h3 class="text-base font-bold text-slate-900 group-hover:text-[#F95721] transition">Combo Família Artesanal</h3>
+<p class="text-xs text-slate-500 line-clamp-2 mt-1">Pizza grande crocante, guaraná gelado de 2 litros e sobremesa especial.</p>
+</div>
+<div class="w-20 h-20 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 relative">
+<img alt="Pizza Família" class="w-full h-full object-cover group-hover:scale-105 transition" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+<span class="absolute bottom-1 right-1 bg-black/70 text-white text-[10px] px-1 rounded font-bold">3 itens</span>
+</div>
+</div>
+<div class="text-[11px] text-slate-400 font-medium">Incluso: Pizza Grande • Borda • Refrigerante 2L</div>
+</div>
+<div class="flex items-center justify-between pt-3 mt-3 border-t border-slate-100">
+<div class="flex items-baseline gap-2">
+<span class="text-base font-black text-slate-900">R$ 79,90</span>
+<span class="text-xs text-slate-400 line-through">R$ 91,90</span>
+<span class="text-[10px] font-bold text-emerald bg-emerald-light px-1.5 py-0.5 rounded">Economize R$ 12,00</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-[#F95721] text-slate-600 group-hover:text-white flex items-center justify-center font-bold text-lg transition shadow-sm">
+              +
+            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: PRATOS PRINCIPAIS (GASTRONOMIA VARIADA) -->
+<section class="px-3.5 my-6" id="pratos">
+<div class="mb-4">
+<h2 class="text-lg sm:text-xl font-extrabold text-[#121826] tracking-tight">🍛 Pratos Principais</h2>
+<p class="text-xs text-slate-500">Carnes nobres, peixes grelhados e massas frescas</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Item 1: Filé Parmegiana -->
+<div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft hover:shadow-md transition cursor-pointer flex gap-3 group" onclick="abrirModalProduto('Filé à Parmegiana da Casa', '32,90', 'Filé empanado crocante coberto com molho de tomate caseiro e queijo derretido. Acompanha guarnições à escolha.')">
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="text-[10px] font-bold text-[#F95721] bg-orange-50 px-1.5 py-0.5 rounded">Mais pedido</span>
+</div>
+<h3 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#F95721] transition">Filé à Parmegiana da Casa</h3>
+<p class="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                Filé empanado crocante, molho de tomates frescos rústico e generoso queijo derretido.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="text-base font-black text-slate-900">R$ 32,90</span>
+<button class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-[#F95721] text-slate-600 group-hover:text-white flex items-center justify-center font-bold text-lg transition">
+                +
+              </button>
+</div>
+</div>
+<div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+<img alt="Parmegiana" class="w-full h-full object-cover group-hover:scale-105 transition" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+</div>
+</div>
+<!-- Item 2: Salmão Grelhado -->
+<div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft hover:shadow-md transition cursor-pointer flex gap-3 group" onclick="abrirModalProduto('Salmão Grelhado com Ervas', '42,90', 'Posta de salmão fresco grelhada na manteiga com ervas finas, legumes salteados e arroz com amêndoas.')">
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<h3 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#F95721] transition">Salmão Grelhado com Ervas</h3>
+<p class="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                Posta de salmão fresco grelhada na manteiga de ervas finas, acompanhada de legumes salteados.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="text-base font-black text-slate-900">R$ 42,90</span>
+<button class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-[#F95721] text-slate-600 group-hover:text-white flex items-center justify-center font-bold text-lg transition">
+                +
+              </button>
+</div>
+</div>
+<div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+<img alt="Salmão Grelhado" class="w-full h-full object-cover group-hover:scale-105 transition" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+</div>
+</div>
+<!-- Item 3: Feijoada Tradicional (DISPONIBILIDADE PROGRAMADA) -->
+<div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft flex gap-3 opacity-80 relative">
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                  ⏰ Disponibilidade Programada
+                </span>
+</div>
+<h3 class="text-sm sm:text-base font-bold text-slate-900">Feijoada Completa da Casa</h3>
+<p class="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                Feijão preto com carnes nobres selecionadas, couve refogada no alho, farofa crocante e laranja.
+              </p>
+</div>
+<div class="pt-2">
+<div class="flex items-center justify-between">
+<span class="text-base font-black text-slate-900">R$ 38,00</span>
+<span class="text-[11px] font-semibold text-slate-400 bg-slate-100 px-2 py-1 rounded-lg">
+                  Disponível Sextas e Sábados (11h–15h)
+                </span>
+</div>
+</div>
+</div>
+<div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 relative">
+<img alt="Feijoada" class="w-full h-full object-cover grayscale-[40%]" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+<div class="absolute inset-0 bg-black/30 flex items-center justify-center text-white text-[10px] font-bold text-center p-1">
+              Fora do horário
+            </div>
+</div>
+</div>
+<!-- Item 4: Frango Grelhado Fit -->
+<div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft hover:shadow-md transition cursor-pointer flex gap-3 group" onclick="abrirModalProduto('Peito de Frango ao Molho de Ervas', '28,90', 'Filé de peito de frango marinado em limão siciliano e ervas, grelhado suculento.')">
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<h3 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#F95721] transition">Peito de Frango ao Molho de Ervas</h3>
+<p class="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                Filé de peito grelhado suculento, marinado em ervas frescas e azeite extravirgem.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="text-base font-black text-slate-900">R$ 28,90</span>
+<button class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-[#F95721] text-slate-600 group-hover:text-white flex items-center justify-center font-bold text-lg transition">
+                +
+              </button>
+</div>
+</div>
+<div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+<img alt="Frango Grelhado" class="w-full h-full object-cover group-hover:scale-105 transition" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: HAMBÚRGUERES ARTESANAIS (PRODUTO CADASTRADO NO PAINEL) -->
+<section class="px-3.5 my-6" id="hamburgueres">
+<div class="mb-4">
+<h2 class="text-lg sm:text-xl font-extrabold text-[#121826] tracking-tight">🍔 Hambúrgueres Artesanais</h2>
+<p class="text-xs text-slate-500">Blends frescos grelhados no ponto perfeito com queijo derretido</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- X-Burger Bacon Melt (O produto criado no Painel) -->
+<div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft hover:shadow-md transition cursor-pointer flex gap-3 group" onclick="abrirModalProduto('X-Burger Bacon Melt', '27,90', 'Blend artesanal de 180g, queijo cheddar derretido, fatias crocantes de bacon defumado e molho especial da casa no pão brioche.', '32,90')">
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="text-[10px] font-bold text-white bg-[#F95721] px-1.5 py-0.5 rounded">15% OFF</span>
+<span class="text-[10px] font-bold text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded">Destaque</span>
+</div>
+<h3 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#F95721] transition">X-Burger Bacon Melt</h3>
+<p class="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                Blend artesanal 180g, queijo cheddar inglês derretido, bacon rústico crocante e maionese verde.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<div class="flex items-baseline gap-1.5">
+<span class="text-base font-black text-slate-900">R$ 27,90</span>
+<span class="text-xs text-slate-400 line-through">R$ 32,90</span>
+</div>
+<button class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-[#F95721] text-slate-600 group-hover:text-white flex items-center justify-center font-bold text-lg transition">
+                +
+              </button>
+</div>
+</div>
+<div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+<img alt="X-Burger Bacon Melt" class="w-full h-full object-cover group-hover:scale-105 transition" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+</div>
+</div>
+<!-- Classic Cheeseburger -->
+<div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft hover:shadow-md transition cursor-pointer flex gap-3 group" onclick="abrirModalProduto('Classic Cheeseburger Duplo', '26,90', 'Dois smash burgers de 90g com queijo prato cremoso, picles artesanais e maionese temperada no pão de batata.')">
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<h3 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#F95721] transition">Classic Cheeseburger Duplo</h3>
+<p class="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                Dois hambúrgueres smash no ponto, queijo prato derretido e picles artesanais crocantes.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="text-base font-black text-slate-900">R$ 26,90</span>
+<button class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-[#F95721] text-slate-600 group-hover:text-white flex items-center justify-center font-bold text-lg transition">
+                +
+              </button>
+</div>
+</div>
+<div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+<img alt="Cheeseburger" class="w-full h-full object-cover group-hover:scale-105 transition" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+</div>
+</div>
+<!-- Produto Indisponível (Demonstrando Estado Visual) -->
+<div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft flex gap-3 opacity-60 relative cursor-not-allowed">
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-1.5 mb-1">
+<span class="text-[10px] font-bold text-slate-500 bg-slate-100 px-1.5 py-0.5 rounded">Indisponível hoje</span>
+</div>
+<h3 class="text-sm sm:text-base font-bold text-slate-500">Truffled Gorgonzola Burger</h3>
+<p class="text-xs text-slate-400 line-clamp-2 mt-1 leading-relaxed">
+                Blend 200g, creme de gorgonzola dolce, cebola caramelizada e azeite trufado.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="text-base font-bold text-slate-400">R$ 36,90</span>
+<span class="text-xs font-semibold text-slate-400">Esgotado</span>
+</div>
+</div>
+<div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0 grayscale">
+<img alt="Burger Trufado" class="w-full h-full object-cover" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: ENTRADAS & PORÇÕES -->
+<section class="px-3.5 my-6" id="entradas">
+<div class="mb-4">
+<h2 class="text-lg sm:text-xl font-extrabold text-[#121826] tracking-tight">🥟 Entradas &amp; Porções</h2>
+<p class="text-xs text-slate-500">Aperitivos crocantes perfeitos para iniciar a refeição</p>
+</div>
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<!-- Batata Rústica da Casa -->
+<div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft hover:shadow-md transition cursor-pointer flex gap-3 group" onclick="abrirModalProduto('Batata Rústica com Alecrim e Páprica', '18,90', 'Porção de batatas com corte rústico, fritas sequinhas com alecrim fresco e páprica defumada.')">
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<h3 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#F95721] transition">Batata Rústica com Alecrim</h3>
+<p class="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                Batatas cortadas à mão, temperadas com sal grosso, alecrim fresco e páprica defumada.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="text-base font-black text-slate-900">R$ 18,90</span>
+<button class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-[#F95721] text-slate-600 group-hover:text-white flex items-center justify-center font-bold text-lg transition">
+                +
+              </button>
+</div>
+</div>
+<div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+<img alt="Batata Rústica" class="w-full h-full object-cover group-hover:scale-105 transition" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+</div>
+</div>
+<!-- Coxinha de Frango Cremosa -->
+<div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-soft hover:shadow-md transition cursor-pointer flex gap-3 group" onclick="abrirModalProduto('Coxinha de Frango Cremosa (6 un)', '16,90', 'Coxinhas artesanais crocantes com recheio cremoso de frango desfiado temperado com catupiry original.')">
+<div class="flex-1 flex flex-col justify-between">
+<div>
+<h3 class="text-sm sm:text-base font-bold text-slate-900 group-hover:text-[#F95721] transition">Coxinha Cremosa Artesanal (6 un)</h3>
+<p class="text-xs text-slate-500 line-clamp-2 mt-1 leading-relaxed">
+                Massa leve de mandioca, frango desfiado no ponto e requeijão cremoso.
+              </p>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="text-base font-black text-slate-900">R$ 16,90</span>
+<button class="w-8 h-8 rounded-full bg-slate-100 group-hover:bg-[#F95721] text-slate-600 group-hover:text-white flex items-center justify-center font-bold text-lg transition">
+                +
+              </button>
+</div>
+</div>
+<div class="w-24 h-24 sm:w-28 sm:h-28 rounded-xl overflow-hidden bg-slate-100 flex-shrink-0">
+<img alt="Coxinha" class="w-full h-full object-cover group-hover:scale-105 transition" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+</div>
+</div>
+</div>
+</section>
+<!-- SECTION: SOBRE O RESTAURANTE (TRANSPARÊNCIA E CONFIANÇA) -->
+<section class="px-3.5 my-8 pt-4 border-t border-slate-200" id="sobre-restaurante">
+<div class="bg-white rounded-3xl p-6 sm:p-8 border border-slate-100 shadow-soft">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-100">
+<div>
+<h2 class="text-xl font-extrabold text-slate-900">Sobre o Restaurante</h2>
+<p class="text-xs text-slate-500">Next Burger Express • Alimentação &amp; Gastronomia</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-bold bg-emerald-light text-emerald-800">
+              ● Aberto agora até às 23:00
+            </span>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-xs sm:text-sm text-slate-600">
+<div>
+<div class="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+<svg class="w-4 h-4 text-[#F95721]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Endereço para Retirada
+            </div>
+<p class="leading-relaxed text-slate-500">
+              Alameda dos Anapurus, 1200 - Moema<br>
+              São Paulo - SP • CEP 04087-003
+            </p>
+</div>
+<div>
+<div class="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+<svg class="w-4 h-4 text-[#F95721]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Horários de Atendimento
+            </div>
+<p class="leading-relaxed text-slate-500">
+              Segunda a Sexta: 11:00 às 23:00<br>
+              Sábados e Domingos: 11:30 às 23:30
+            </p>
+</div>
+<div>
+<div class="font-bold text-slate-900 mb-1 flex items-center gap-1.5">
+<svg class="w-4 h-4 text-[#F95721]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+              Formas de Pagamento
+            </div>
+<p class="leading-relaxed text-slate-500">
+              Pix online com desconto • Cartão de Crédito/Débito • Dinheiro na entrega
+            </p>
+</div>
+</div>
+</div>
+</section>
+<!-- FOOTER DA LOJA -->
+<footer class="text-center py-8 px-4 text-xs text-slate-400 pb-28">
+<div class="max-w-md mx-auto space-y-2">
+<p class="font-medium text-slate-500">Next Burger Express © 2025 • CNPJ 00.000.000/0001-00</p>
+<p class="text-[11px] text-slate-400">Cardápio digital direto sem taxas abusivas de intermediários.</p>
+<div class="pt-3 flex items-center justify-center gap-1.5 text-slate-400">
+<span class="">Tecnologia de pedidos online por</span>
+<span class="font-bold text-slate-600">Menu<span class="text-[#F95721]">Next</span></span>
+</div>
+</div>
+</footer>
+</main>
+<!-- FLOATING CART BAR (FIXA NO MOBILE / FLUTUANTE NO DESKTOP) -->
+<nav id="barra-navegacao-inferior" class="fixed bottom-0 left-0 right-0 z-50 pointer-events-auto flex justify-center">
+  <div class="w-full max-w-md bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-2xl px-3 py-2 flex items-center justify-around">
+    <!-- Tab Início -->
+    <a href="#" class="flex flex-1 flex-col items-center justify-center py-1 text-[#F95721] font-semibold transition group">
+      <div class="relative flex items-center justify-center mb-1">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"></path>
+        </svg>
+      </div>
+      <span class="text-[11px] font-bold tracking-tight">Início</span>
+    </a>
+
+    <!-- Tab Sacola com Badge e Valor -->
+    <button onclick="alert('Visualizar sacola (3 itens): R$ 67,80')" class="flex flex-1 flex-col items-center justify-center py-1 text-slate-700 hover:text-[#F95721] transition relative group">
+      <div class="relative flex items-center justify-center mb-1">
+        <svg class="w-5 h-5 text-slate-700 group-hover:text-[#F95721] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+        </svg>
+        <span class="absolute -top-1.5 -right-2 bg-[#F95721] text-white text-[10px] font-black w-4 h-4 rounded-full flex items-center justify-center shadow-sm">
+          3
+        </span>
+      </div>
+      <span class="text-[11px] font-medium text-slate-600 group-hover:text-[#F95721]">Sacola <span class="text-[10px] text-[#F95721] font-bold sm:inline hidden">• R$ 67,80</span></span>
+    </button>
+
+    <!-- Tab Pedidos (Sem login, consulta rápida) -->
+    <button onclick="alert('Consulte seus pedidos pelo WhatsApp ou número do pedido sem precisar criar conta!')" class="flex flex-1 flex-col items-center justify-center py-1 text-slate-500 hover:text-[#F95721] transition group">
+      <div class="relative flex items-center justify-center mb-1">
+        <svg class="w-5 h-5 text-slate-600 group-hover:text-[#F95721] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+        </svg>
+      </div>
+      <span class="text-[11px] font-medium text-slate-600 group-hover:text-[#F95721]">Pedidos</span>
+    </button>
+
+    <!-- Tab Perfil (Direto sem login obrigatório) -->
+    <button onclick="alert('Next Burger Express: Faça seus pedidos sem necessidade de criar conta ou login obrigatório!')" class="flex flex-1 flex-col items-center justify-center py-1 text-slate-500 hover:text-[#F95721] transition group">
+      <div class="relative flex items-center justify-center mb-1">
+        <svg class="w-5 h-5 text-slate-600 group-hover:text-[#F95721] transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+        </svg>
+      </div>
+      <span class="text-[11px] font-medium text-slate-600 group-hover:text-[#F95721]">Perfil</span>
+    </button>
+  </div>
+</nav>
+<!-- MODAL DE PRODUTO COM ADICIONAIS & PERSONALIZAÇÃO (REUTILIZA OS GRUPOS DO PAINEL) -->
+<div class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-end sm:items-center justify-center p-0 sm:p-4" id="modal-produto">
+<div class="bg-white w-full max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[90vh] overflow-y-auto shadow-2xl flex flex-col transform transition-all">
+<!-- Modal Header -->
+<div class="sticky top-0 bg-white/95 backdrop-blur border-b border-slate-100 p-4 flex items-center justify-between z-10">
+<h3 class="font-bold text-base text-slate-900 line-clamp-1" id="modal-nome">Personalizar Item</h3>
+<button class="w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500 font-bold transition" onclick="fecharModalProduto()">
+          ✕
+        </button>
+</div>
+<!-- Modal Body -->
+<div class="p-5 space-y-6">
+<!-- Imagem e Detalhes Base -->
+<div>
+<div class="h-44 rounded-2xl bg-slate-100 overflow-hidden mb-3">
+<img alt="Detalhe do prato" class="w-full h-full object-cover" id="modal-img" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg">
+</div>
+<div class="flex items-baseline justify-between mb-1">
+<h4 class="text-xl font-extrabold text-slate-900" id="modal-titulo-card">X-Burger Bacon Melt</h4>
+<span class="text-xl font-black text-[#F95721]" id="modal-preco-card">R$ 27,90</span>
+</div>
+<p class="text-xs text-slate-500 leading-relaxed" id="modal-descricao">
+            Blend artesanal grelhado no fogo de 180g, queijo cheddar inglês derretido, bacon defumado e maionese artesanal.
+          </p>
+</div>
+<!-- GRUPO DE ADICIONAL 1: Escolha do Ponto da Carne (Obrigatório 1 de 3) -->
+<div class="border-t border-slate-100 pt-4">
+<div class="flex items-center justify-between mb-2">
+<div>
+<span class="text-xs font-bold text-slate-900">Ponto da Carne</span>
+<p class="text-[11px] text-slate-400">Escolha 1 opção</p>
+</div>
+<span class="text-[10px] font-bold text-[#F95721] bg-orange-50 px-2 py-0.5 rounded-full border border-orange-200">
+              Obrigatório
+            </span>
+</div>
+<div class="space-y-2">
+<label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-[#F95721] cursor-pointer transition">
+<span class="text-xs font-medium text-slate-800">Ao Ponto (Vermelho no centro, bem suculento)</span>
+<input checked="" class="accent-[#F95721] w-4 h-4" name="ponto" type="radio">
+</label>
+<label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-[#F95721] cursor-pointer transition">
+<span class="text-xs font-medium text-slate-800">Bem Passado (Completamente grelhado)</span>
+<input class="accent-[#F95721] w-4 h-4" name="ponto" type="radio">
+</label>
+</div>
+</div>
+<!-- GRUPO DE ADICIONAL 2: Extras & Molhos (Opcional até 3) -->
+<div class="border-t border-slate-100 pt-4">
+<div class="flex items-center justify-between mb-2">
+<div>
+<span class="text-xs font-bold text-slate-900">Turbine com Extras</span>
+<p class="text-[11px] text-slate-400">Escolha até 3 opções adicionais</p>
+</div>
+<span class="text-[10px] font-medium text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+              Opcional
+            </span>
+</div>
+<div class="space-y-2">
+<label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-slate-300 cursor-pointer transition">
+<span class="text-xs font-medium text-slate-800">Bacon crocante extra em fatias</span>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-[#F95721]">+ R$ 5,00</span>
+<input class="accent-[#F95721] w-4 h-4 rounded" type="checkbox">
+</div>
+</label>
+<label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-slate-300 cursor-pointer transition">
+<span class="text-xs font-medium text-slate-800">Cheddar cremoso duplo</span>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-[#F95721]">+ R$ 3,50</span>
+<input class="accent-[#F95721] w-4 h-4 rounded" type="checkbox">
+</div>
+</label>
+<label class="flex items-center justify-between p-3 rounded-xl border border-slate-200 hover:border-slate-300 cursor-pointer transition">
+<span class="text-xs font-medium text-slate-800">Maionese verde artesanal (pote 50ml)</span>
+<div class="flex items-center gap-2">
+<span class="text-xs font-bold text-[#F95721]">+ R$ 3,00</span>
+<input class="accent-[#F95721] w-4 h-4 rounded" type="checkbox">
+</div>
+</label>
+</div>
+</div>
+<!-- Observações do Cliente -->
+<div class="border-t border-slate-100 pt-4">
+<label class="block text-xs font-bold text-slate-900 mb-1.5">Alguma observação especial?</label>
+<textarea class="w-full bg-slate-50 border border-slate-200 rounded-xl p-3 text-xs focus:outline-none focus:ring-2 focus:ring-[#F95721]/30 focus:border-[#F95721] resize-none h-20 placeholder:text-slate-400" placeholder="Ex.: sem cebola, ponto mais para mal passado, talheres descartáveis..."></textarea>
+</div>
+</div>
+<!-- Modal Footer (Quantidade & CTA) -->
+<div class="sticky bottom-0 bg-white border-t border-slate-100 p-4 flex items-center gap-4 z-10">
+<!-- Contador de Quantidade -->
+<div class="flex items-center border border-slate-200 rounded-xl bg-slate-50 p-1">
+<button class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center font-bold text-slate-700 hover:bg-slate-100">-</button>
+<span class="w-8 text-center font-bold text-xs text-slate-800">1</span>
+<button class="w-8 h-8 rounded-lg bg-white shadow-sm flex items-center justify-center font-bold text-slate-700 hover:bg-slate-100">+</button>
+</div>
+<!-- Botão Adicionar -->
+<button class="flex-1 py-3.5 rounded-xl bg-[#F95721] hover:bg-[#e04612] text-white font-bold text-xs sm:text-sm shadow-md transition flex items-center justify-between px-4" onclick="fecharModalProduto(); alert('Produto adicionado à sacola!');">
+<span class="">Adicionar ao pedido</span>
+<span id="modal-preco-btn" class="">R$ 27,90</span>
+</button>
+</div>
+</div>
+</div>
+<script>
+    function abrirModalProduto(nome, preco, desc, precoOriginal) {
+      document.getElementById('modal-nome').innerText = nome;
+      document.getElementById('modal-titulo-card').innerText = nome;
+      document.getElementById('modal-descricao').innerText = desc;
+      document.getElementById('modal-preco-card').innerText = 'R$ ' + preco;
+      document.getElementById('modal-preco-btn').innerText = 'R$ ' + preco;
+      document.getElementById('modal-produto').classList.remove('hidden');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function fecharModalProduto() {
+      document.getElementById('modal-produto').classList.add('hidden');
+      document.body.style.overflow = 'auto';
+    }
+
+    // Fechar clicando fora
+    document.getElementById('modal-produto').addEventListener('click', function(e) {
+      if (e.target === this) {
+        fecharModalProduto();
+      }
+    });
+  </script>
+
+
+
+
+
+
+</body></html>

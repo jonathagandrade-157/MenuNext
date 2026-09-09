@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MenuNext - Cadastro de Lojista</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              DEFAULT: '#F95721',
+              hover: '#e04612',
+              light: '#fff3ed',
+              dark: '#121826',
+            },
+            surface: {
+              50: '#faf8ff',
+              100: '#f1f3ff',
+              200: '#e5e8f5',
+            },
+            success: '#10B981',
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #FAFAFC;
+    }
+    .custom-shadow {
+      box-shadow: 0 20px 40px -15px rgba(18, 24, 38, 0.07), 0 0 1px 1px rgba(18, 24, 38, 0.04);
+    }
+    .focus-ring:focus-within {
+      border-color: #F95721;
+      box-shadow: 0 0 0 4px rgba(249, 87, 33, 0.12);
+    }
+  </style>
+</head>
+<body class="min-h-screen text-[#121826] flex flex-col justify-between antialiased selection:bg-brand selection:text-white">
+
+  <!-- TOP HEADER -->
+  <header class="w-full border-b border-gray-100 bg-white/90 backdrop-blur sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+      <!-- LOGO -->
+      <a href="#" class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#F95721] to-[#FF5436] flex items-center justify-center shadow-md shadow-orange-500/20 text-white font-black text-xl">
+          <i class="fa-solid fa-utensils text-sm"></i>
+        </div>
+        <div class="text-2xl font-extrabold tracking-tight text-[#121826]">
+          Menu<span class="text-[#F95721]">Next</span>
+        </div>
+      </a>
+
+      <!-- HEADER RIGHT INFO -->
+      <div class="flex items-center gap-4 text-sm font-medium">
+        <span class="hidden md:inline text-gray-500">Já possui sua loja?</span>
+        <a href="#login" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-gray-800 hover:text-[#F95721] hover:bg-orange-50 transition border border-gray-200">
+          <i class="fa-regular fa-user text-xs"></i>
+          <span>Fazer Login</span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN REGISTRATION SECTION -->
+  <main class="flex-grow flex items-center justify-center py-10 sm:py-14 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <!-- Subtle Background Elements -->
+    <div class="absolute -top-24 -right-24 w-96 h-96 rounded-full bg-orange-100/60 blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-24 -left-24 w-96 h-96 rounded-full bg-indigo-50/70 blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-6xl w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
+
+      <!-- LEFT COLUMN: Value Proposition & Future Store Preview -->
+      <div class="lg:col-span-5 lg:sticky lg:top-28 space-y-8 order-2 lg:order-1 pt-2">
+        <div class="space-y-3">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 border border-orange-200 text-[#F95721] text-xs font-bold tracking-wide uppercase">
+            <i class="fa-solid fa-bolt text-[10px]"></i>
+            Etapa 02 &bull; Cadastro Imediato
+          </div>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-[#121826] tracking-tight leading-tight">
+            Em poucos minutos seu restaurante estará <span class="text-[#F95721]">vendendo online</span>.
+          </h2>
+          <p class="text-gray-600 text-sm sm:text-base leading-relaxed">
+            Diga adeus às comissões abusivas. Crie seu cardápio próprio, configure delivery por bairros e receba pedidos no WhatsApp e painel em tempo real.
+          </p>
+        </div>
+
+        <!-- Mini Preview Card: Future Store & Order Feed -->
+        <div class="bg-white rounded-2xl p-5 border border-gray-200/80 custom-shadow space-y-4 relative">
+          <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-lg bg-orange-500 text-white flex items-center justify-center font-bold text-sm">
+                🍔
+              </div>
+              <div>
+                <div class="text-xs font-bold text-gray-900 flex items-center gap-1.5">
+                  <span id="previewStoreName">Seu Restaurante</span>
+                  <span class="w-2 h-2 rounded-full bg-[#10B981] inline-block animate-pulse"></span>
+                </div>
+                <div class="text-[11px] text-gray-500 font-medium">menunext.com.br/<span id="previewStoreSlug" class="text-orange-600">seurestaurante</span></div>
+              </div>
+            </div>
+            <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-50 text-[#10B981] border border-emerald-200">
+              ● Loja Ativa
+            </span>
+          </div>
+
+          <!-- Real-time Order Simulation -->
+          <div class="space-y-2">
+            <div class="text-[11px] font-bold uppercase tracking-wider text-gray-400">Notificação de primeiro pedido:</div>
+            <div class="bg-surface-50 border border-gray-200 rounded-xl p-3 flex items-center justify-between">
+              <div class="flex items-center gap-2.5">
+                <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs">
+                  <i class="fa-solid fa-bell"></i>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-gray-800">Pedido #001 &bull; Carlos M.</div>
+                  <div class="text-[10px] text-gray-500">2x Burger Especial + Coca Lata</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-xs font-bold text-[#10B981]">R$ 68,90</div>
+                <div class="text-[9px] font-semibold text-gray-400">Pix Automático</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick trust badges -->
+          <div class="pt-2 grid grid-cols-2 gap-2 text-[11px] text-gray-600 font-medium">
+            <div class="flex items-center gap-1.5 text-gray-700">
+              <i class="fa-solid fa-check text-[#10B981]"></i> Sem taxas por pedido
+            </div>
+            <div class="flex items-center gap-1.5 text-gray-700">
+              <i class="fa-solid fa-check text-[#10B981]"></i> Pix direto no seu banco
+            </div>
+            <div class="flex items-center gap-1.5 text-gray-700">
+              <i class="fa-solid fa-check text-[#10B981]"></i> Delivery próprio
+            </div>
+            <div class="flex items-center gap-1.5 text-gray-700">
+              <i class="fa-solid fa-check text-[#10B981]"></i> 30 dias para testar
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive State Demo Switcher for Evaluation -->
+        <div class="bg-gray-50/80 border border-gray-200 rounded-xl p-3 text-xs space-y-2">
+          <div class="font-bold text-gray-700 flex items-center justify-between">
+            <span><i class="fa-solid fa-sliders text-[#F95721] mr-1"></i> Testar Estados da Interface:</span>
+            <span class="text-[10px] text-gray-400 font-normal">Clique para testar</span>
+          </div>
+          <div class="flex flex-wrap gap-1.5">
+            <button type="button" onclick="setDemoState('normal')" class="px-2.5 py-1 bg-white border border-gray-200 rounded-lg hover:border-gray-400 font-medium text-[11px] transition">Normal</button>
+            <button type="button" onclick="setDemoState('filled')" class="px-2.5 py-1 bg-white border border-gray-200 rounded-lg hover:border-gray-400 font-medium text-[11px] transition">Preenchido</button>
+            <button type="button" onclick="setDemoState('errors')" class="px-2.5 py-1 bg-white border border-red-200 text-red-600 rounded-lg hover:bg-red-50 font-medium text-[11px] transition">Com Erros</button>
+            <button type="button" onclick="setDemoState('loading')" class="px-2.5 py-1 bg-white border border-orange-200 text-[#F95721] rounded-lg hover:bg-orange-50 font-medium text-[11px] transition">Processando</button>
+            <button type="button" onclick="setDemoState('success')" class="px-2.5 py-1 bg-white border border-emerald-200 text-emerald-700 rounded-lg hover:bg-emerald-50 font-medium text-[11px] transition">Concluído</button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Registration Form Card -->
+      <div class="lg:col-span-7 order-1 lg:order-2">
+        <div class="bg-white rounded-3xl border border-gray-200/90 custom-shadow p-6 sm:p-10 relative overflow-hidden">
+          
+          <!-- Processing Overlay (Hidden by default) -->
+          <div id="processingState" class="hidden absolute inset-0 bg-white/95 backdrop-blur-sm z-30 flex-col items-center justify-center p-8 text-center animate-fadeIn">
+            <div class="w-16 h-16 rounded-2xl bg-orange-50 flex items-center justify-center text-[#F95721] text-2xl mb-4 animate-bounce">
+              <i class="fa-solid fa-spinner fa-spin"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-900">Criando a infraestrutura do seu restaurante...</h3>
+            <p class="text-sm text-gray-500 max-w-sm mt-2">Estamos configurando seu cardápio, chaves multi-tenant e painel de pedidos em tempo real.</p>
+          </div>
+
+          <!-- Success Confirmation Overlay (State: Concluído) -->
+          <div id="successState" class="hidden absolute inset-0 bg-white z-30 flex-col items-center justify-center p-8 text-center animate-fadeIn">
+            <div class="w-20 h-20 rounded-full bg-emerald-50 border-4 border-emerald-100 flex items-center justify-center text-[#10B981] text-3xl mb-4">
+              <i class="fa-solid fa-check"></i>
+            </div>
+            <div class="inline-block px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-bold uppercase mb-2">Conta Criada com Sucesso</div>
+            <h3 class="text-2xl sm:text-3xl font-black text-gray-900">Bem-vindo ao MenuNext!</h3>
+            <p class="text-sm text-gray-600 max-w-md mt-2 mb-6">
+              Sua conta de administrador foi registrada. Vamos para a próxima etapa preparar os detalhes da sua loja (logo, produtos e entrega).
+            </p>
+            <div class="bg-surface-50 border border-gray-200 rounded-2xl p-4 w-full max-w-md text-left mb-6">
+              <div class="text-xs font-bold text-gray-500 uppercase tracking-wide">Próximo Passo</div>
+              <div class="text-base font-extrabold text-gray-900 mt-1 flex items-center justify-between">
+                <span>ETAPA 03 &bull; Onboarding do Restaurante</span>
+                <i class="fa-solid fa-arrow-right text-[#F95721]"></i>
+              </div>
+            </div>
+            <a href="#onboarding" class="w-full max-w-md py-4 px-6 rounded-2xl bg-[#F95721] hover:bg-[#e04612] text-white font-extrabold text-base shadow-lg shadow-orange-500/25 flex items-center justify-center gap-2 transition transform active:scale-95">
+              <span>Continuar para o Onboarding</span>
+              <i class="fa-solid fa-arrow-right text-sm"></i>
+            </a>
+          </div>
+
+          <!-- CARD HEADER -->
+          <div class="mb-8">
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-[#121826] tracking-tight">
+              Crie sua loja no MenuNext
+            </h1>
+            <p class="text-gray-500 text-sm sm:text-base mt-1.5 font-normal">
+              Comece agora e coloque seu restaurante para vender online.
+            </p>
+          </div>
+
+          <!-- FORM -->
+          <form id="registerForm" onsubmit="handleFormSubmit(event)" class="space-y-5">
+            
+            <!-- Linha 1: Nome Completo & Nome do Restaurante -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Nome Completo -->
+              <div>
+                <label for="fullName" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Nome completo <span class="text-[#F95721]">*</span>
+                </label>
+                <div class="relative rounded-xl border border-gray-300 bg-white transition focus-ring" id="fullNameWrapper">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                    <i class="fa-regular fa-user text-sm"></i>
+                  </div>
+                  <input 
+                    type="text" 
+                    id="fullName" 
+                    name="fullName" 
+                    placeholder="Ex: Roberto Silva" 
+                    class="block w-full pl-10 pr-3.5 py-3 rounded-xl text-sm bg-transparent outline-none text-gray-900 placeholder-gray-400 font-medium"
+                    required
+                  >
+                </div>
+                <p id="fullNameError" class="hidden text-xs text-red-600 mt-1 font-medium flex items-center gap-1">
+                  <i class="fa-solid fa-circle-exclamation text-[10px]"></i> Informe seu nome completo
+                </p>
+              </div>
+
+              <!-- Nome do Restaurante -->
+              <div>
+                <label for="restaurantName" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Nome do restaurante <span class="text-[#F95721]">*</span>
+                </label>
+                <div class="relative rounded-xl border border-gray-300 bg-white transition focus-ring" id="restaurantNameWrapper">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                    <i class="fa-solid fa-store text-sm"></i>
+                  </div>
+                  <input 
+                    type="text" 
+                    id="restaurantName" 
+                    name="restaurantName" 
+                    oninput="updateStorePreview(this.value)"
+                    placeholder="Ex: Donatello Pizzaria" 
+                    class="block w-full pl-10 pr-3.5 py-3 rounded-xl text-sm bg-transparent outline-none text-gray-900 placeholder-gray-400 font-medium"
+                    required
+                  >
+                </div>
+                <p id="restaurantNameError" class="hidden text-xs text-red-600 mt-1 font-medium flex items-center gap-1">
+                  <i class="fa-solid fa-circle-exclamation text-[10px]"></i> Informe o nome do restaurante
+                </p>
+              </div>
+            </div>
+
+            <!-- Linha 2: WhatsApp & E-mail -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- WhatsApp -->
+              <div>
+                <label for="whatsapp" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  WhatsApp do restaurante <span class="text-[#F95721]">*</span>
+                </label>
+                <div class="relative rounded-xl border border-gray-300 bg-white transition focus-ring" id="whatsappWrapper">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                    <i class="fa-brands fa-whatsapp text-sm text-emerald-600"></i>
+                  </div>
+                  <input 
+                    type="tel" 
+                    id="whatsapp" 
+                    name="whatsapp" 
+                    placeholder="(11) 99999-9999" 
+                    class="block w-full pl-10 pr-3.5 py-3 rounded-xl text-sm bg-transparent outline-none text-gray-900 placeholder-gray-400 font-medium"
+                    required
+                  >
+                </div>
+                <p id="whatsappError" class="hidden text-xs text-red-600 mt-1 font-medium flex items-center gap-1">
+                  <i class="fa-solid fa-circle-exclamation text-[10px]"></i> Digite um número de WhatsApp válido
+                </p>
+              </div>
+
+              <!-- E-mail -->
+              <div>
+                <label for="email" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  E-mail comercial <span class="text-[#F95721]">*</span>
+                </label>
+                <div class="relative rounded-xl border border-gray-300 bg-white transition focus-ring" id="emailWrapper">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                    <i class="fa-regular fa-envelope text-sm"></i>
+                  </div>
+                  <input 
+                    type="email" 
+                    id="email" 
+                    name="email" 
+                    placeholder="contato@restaurante.com.br" 
+                    class="block w-full pl-10 pr-3.5 py-3 rounded-xl text-sm bg-transparent outline-none text-gray-900 placeholder-gray-400 font-medium"
+                    required
+                  >
+                </div>
+                <p id="emailError" class="hidden text-xs text-red-600 mt-1 font-medium flex items-center gap-1">
+                  <i class="fa-solid fa-circle-exclamation text-[10px]"></i> Insira um endereço de e-mail válido
+                </p>
+              </div>
+            </div>
+
+            <!-- Linha 3: CPF ou CNPJ -->
+            <div>
+              <div class="flex items-center justify-between mb-1.5">
+                <label for="taxId" class="block text-xs font-bold text-gray-700 uppercase tracking-wider">
+                  CPF ou CNPJ do Titular <span class="text-[#F95721]">*</span>
+                </label>
+                <span class="text-[11px] text-gray-400 font-medium">Usado para emitir recebíveis e Pix</span>
+              </div>
+              <div class="relative rounded-xl border border-gray-300 bg-white transition focus-ring" id="taxIdWrapper">
+                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                  <i class="fa-regular fa-id-card text-sm"></i>
+                </div>
+                <input 
+                  type="text" 
+                  id="taxId" 
+                  name="taxId" 
+                  placeholder="000.000.000-00 ou 00.000.000/0001-00" 
+                  class="block w-full pl-10 pr-3.5 py-3 rounded-xl text-sm bg-transparent outline-none text-gray-900 placeholder-gray-400 font-medium"
+                  required
+                >
+              </div>
+              <p id="taxIdError" class="hidden text-xs text-red-600 mt-1 font-medium flex items-center gap-1">
+                <i class="fa-solid fa-circle-exclamation text-[10px]"></i> Informe um CPF ou CNPJ válido
+              </p>
+            </div>
+
+            <!-- Linha 4: Senha e Confirmar Senha -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <!-- Senha -->
+              <div>
+                <label for="password" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Senha <span class="text-[#F95721]">*</span>
+                </label>
+                <div class="relative rounded-xl border border-gray-300 bg-white transition focus-ring" id="passwordWrapper">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                    <i class="fa-solid fa-lock text-sm"></i>
+                  </div>
+                  <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Mínimo 8 caracteres" 
+                    class="block w-full pl-10 pr-10 py-3 rounded-xl text-sm bg-transparent outline-none text-gray-900 placeholder-gray-400 font-medium"
+                    required
+                  >
+                  <button type="button" onclick="togglePasswordVisibility('password', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                    <i class="fa-regular fa-eye text-sm"></i>
+                  </button>
+                </div>
+                <p id="passwordError" class="hidden text-xs text-red-600 mt-1 font-medium flex items-center gap-1">
+                  <i class="fa-solid fa-circle-exclamation text-[10px]"></i> A senha deve ter no mínimo 8 caracteres
+                </p>
+              </div>
+
+              <!-- Confirmar Senha -->
+              <div>
+                <label for="confirmPassword" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Confirmar senha <span class="text-[#F95721]">*</span>
+                </label>
+                <div class="relative rounded-xl border border-gray-300 bg-white transition focus-ring" id="confirmPasswordWrapper">
+                  <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-gray-400">
+                    <i class="fa-solid fa-shield-halved text-sm"></i>
+                  </div>
+                  <input 
+                    type="password" 
+                    id="confirmPassword" 
+                    name="confirmPassword" 
+                    placeholder="Repita a senha" 
+                    class="block w-full pl-10 pr-10 py-3 rounded-xl text-sm bg-transparent outline-none text-gray-900 placeholder-gray-400 font-medium"
+                    required
+                  >
+                  <button type="button" onclick="togglePasswordVisibility('confirmPassword', this)" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600">
+                    <i class="fa-regular fa-eye text-sm"></i>
+                  </button>
+                </div>
+                <p id="confirmPasswordError" class="hidden text-xs text-red-600 mt-1 font-medium flex items-center gap-1">
+                  <i class="fa-solid fa-circle-exclamation text-[10px]"></i> As senhas não conferem
+                </p>
+              </div>
+            </div>
+
+            <!-- Termos e Condições Checkbox -->
+            <div class="pt-1">
+              <label class="flex items-start gap-3 cursor-pointer group">
+                <input 
+                  type="checkbox" 
+                  id="terms" 
+                  name="terms" 
+                  checked
+                  class="mt-1 w-4 h-4 rounded border-gray-300 text-[#F95721] focus:ring-[#F95721]"
+                  required
+                >
+                <span class="text-xs sm:text-sm text-gray-600 leading-snug">
+                  Li e concordo com os <a href="#" class="text-[#121826] font-bold underline hover:text-[#F95721]">Termos de Uso</a> e a <a href="#" class="text-[#121826] font-bold underline hover:text-[#F95721]">Política de Privacidade</a> do MenuNext.
+                </span>
+              </label>
+            </div>
+
+            <!-- CTA PRINCIPAL -->
+            <div class="pt-2">
+              <button 
+                type="submit" 
+                id="submitBtn"
+                class="w-full py-4 px-6 rounded-2xl bg-gradient-to-r from-[#F95721] to-[#FF5436] hover:from-[#e04612] hover:to-[#e64627] text-white font-extrabold text-base tracking-wide shadow-lg shadow-orange-500/25 flex items-center justify-center gap-3 transition transform active:scale-[0.99]"
+              >
+                <span>Criar minha loja grátis</span>
+                <i class="fa-solid fa-arrow-right text-sm"></i>
+              </button>
+            </div>
+
+            <!-- BENEFÍCIOS AO REDOR DO BOTÃO -->
+            <div class="pt-1 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-gray-500 border-t border-gray-100 mt-5 pt-5">
+              <div class="flex items-center gap-1.5 text-gray-700">
+                <i class="fa-regular fa-calendar-check text-[#10B981]"></i>
+                <span>30 dias grátis</span>
+              </div>
+              <span class="text-gray-300">&bull;</span>
+              <div class="flex items-center gap-1.5 text-gray-700">
+                <i class="fa-regular fa-credit-card text-[#10B981]"></i>
+                <span>Sem cartão de crédito</span>
+              </div>
+              <span class="text-gray-300">&bull;</span>
+              <div class="flex items-center gap-1.5 text-gray-700">
+                <i class="fa-solid fa-percentage text-[#10B981]"></i>
+                <span>0% de comissão por pedido</span>
+              </div>
+            </div>
+
+            <!-- LOGIN LINK -->
+            <div class="text-center pt-2">
+              <p class="text-sm text-gray-600">
+                Já possui uma conta? 
+                <a href="#login" class="font-extrabold text-[#F95721] hover:underline ml-1">
+                  Entrar no painel
+                </a>
+              </p>
+            </div>
+
+          </form>
+
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="w-full border-t border-gray-200 bg-white py-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+      <div class="flex items-center gap-2 font-medium">
+        <span>&copy; 2026 MenuNext Tecnologia para Gastronomia Ltda.</span>
+        <span class="hidden sm:inline">&bull;</span>
+        <span class="hidden sm:inline">Ambiente Seguro 256-bit SSL</span>
+      </div>
+      <div class="flex items-center gap-5 font-semibold">
+        <a href="#" class="hover:text-gray-900 transition">Ajuda & Suporte</a>
+        <a href="#" class="hover:text-gray-900 transition">Termos</a>
+        <a href="#" class="hover:text-gray-900 transition">Privacidade</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- SCRIPT FOR FORM BEHAVIOR & INTERACTIVE DEMO STATES -->
+  <script>
+    function updateStorePreview(name) {
+      const storeName = name.trim() || 'Seu Restaurante';
+      document.getElementById('previewStoreName').innerText = storeName;
+      const slug = storeName.toLowerCase().replace(/[^a-z0-9]/g, '');
+      document.getElementById('previewStoreSlug').innerText = slug || 'seurestaurante';
+    }
+
+    function togglePasswordVisibility(fieldId, btn) {
+      const input = document.getElementById(fieldId);
+      const icon = btn.querySelector('i');
+      if (input.type === 'password') {
+        input.type = 'text';
+        icon.className = 'fa-regular fa-eye-slash text-sm';
+      } else {
+        input.type = 'password';
+        icon.className = 'fa-regular fa-eye text-sm';
+      }
+    }
+
+    function handleFormSubmit(e) {
+      e.preventDefault();
+      // Show processing state
+      document.getElementById('processingState').classList.remove('hidden');
+      document.getElementById('processingState').classList.add('flex');
+
+      setTimeout(() => {
+        document.getElementById('processingState').classList.remove('flex');
+        document.getElementById('processingState').classList.add('hidden');
+        document.getElementById('successState').classList.remove('hidden');
+        document.getElementById('successState').classList.add('flex');
+      }, 1200);
+    }
+
+    // STATE SWITCHER DEMO (Allows inspection of normal, filled, error, processing, and success states)
+    function setDemoState(state) {
+      const inputs = {
+        fullName: document.getElementById('fullName'),
+        restaurantName: document.getElementById('restaurantName'),
+        whatsapp: document.getElementById('whatsapp'),
+        email: document.getElementById('email'),
+        taxId: document.getElementById('taxId'),
+        password: document.getElementById('password'),
+        confirmPassword: document.getElementById('confirmPassword')
+      };
+
+      const wrappers = {
+        fullName: document.getElementById('fullNameWrapper'),
+        restaurantName: document.getElementById('restaurantNameWrapper'),
+        whatsapp: document.getElementById('whatsappWrapper'),
+        email: document.getElementById('emailWrapper'),
+        taxId: document.getElementById('taxIdWrapper'),
+        password: document.getElementById('passwordWrapper'),
+        confirmPassword: document.getElementById('confirmPasswordWrapper')
+      };
+
+      const errors = {
+        fullName: document.getElementById('fullNameError'),
+        restaurantName: document.getElementById('restaurantNameError'),
+        whatsapp: document.getElementById('whatsappError'),
+        email: document.getElementById('emailError'),
+        taxId: document.getElementById('taxIdError'),
+        password: document.getElementById('passwordError'),
+        confirmPassword: document.getElementById('confirmPasswordError')
+      };
+
+      const processing = document.getElementById('processingState');
+      const success = document.getElementById('successState');
+
+      // Reset overlays
+      processing.classList.remove('flex');
+      processing.classList.add('hidden');
+      success.classList.remove('flex');
+      success.classList.add('hidden');
+
+      // Reset styles
+      Object.keys(wrappers).forEach(key => {
+        wrappers[key].className = "relative rounded-xl border border-gray-300 bg-white transition focus-ring";
+        errors[key].classList.add('hidden');
+      });
+
+      if (state === 'normal') {
+        Object.keys(inputs).forEach(key => inputs[key].value = '');
+        updateStorePreview('Seu Restaurante');
+      } 
+      else if (state === 'filled') {
+        inputs.fullName.value = 'Roberto Santos';
+        inputs.restaurantName.value = 'Next Burger Artesanal';
+        inputs.whatsapp.value = '(11) 98765-4321';
+        inputs.email.value = 'roberto@nextburger.com.br';
+        inputs.taxId.value = '34.567.890/0001-23';
+        inputs.password.value = 'SenhaSegura#2026';
+        inputs.confirmPassword.value = 'SenhaSegura#2026';
+        updateStorePreview('Next Burger Artesanal');
+
+        // Give filled inputs a subtle positive border indicator
+        Object.keys(wrappers).forEach(key => {
+          wrappers[key].className = "relative rounded-xl border border-emerald-400/80 bg-emerald-50/20 transition focus-ring";
+        });
+      } 
+      else if (state === 'errors') {
+        inputs.fullName.value = 'Roberto';
+        inputs.restaurantName.value = '';
+        inputs.whatsapp.value = '1234';
+        inputs.email.value = 'email-invalido-sem-arroba';
+        inputs.taxId.value = '111.222';
+        inputs.password.value = '123';
+        inputs.confirmPassword.value = '456';
+
+        wrappers.email.className = "relative rounded-xl border border-red-500 bg-red-50/20 transition";
+        errors.email.classList.remove('hidden');
+
+        wrappers.taxId.className = "relative rounded-xl border border-red-500 bg-red-50/20 transition";
+        errors.taxId.classList.remove('hidden');
+
+        wrappers.password.className = "relative rounded-xl border border-red-500 bg-red-50/20 transition";
+        errors.password.classList.remove('hidden');
+
+        wrappers.confirmPassword.className = "relative rounded-xl border border-red-500 bg-red-50/20 transition";
+        errors.confirmPassword.classList.remove('hidden');
+      } 
+      else if (state === 'loading') {
+        processing.classList.remove('hidden');
+        processing.classList.add('flex');
+      } 
+      else if (state === 'success') {
+        success.classList.remove('hidden');
+        success.classList.add('flex');
+      }
+    }
+  </script>
+</body>
+</html>

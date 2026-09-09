@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+/*
+ * MenuNext — Design System oficial (fonte da verdade: especificação do produto).
+ * Diverge de propósito da paleta gerada automaticamente no DESIGN.md exportado
+ * do Stitch (tons de roxo/vermelho "Modern Gastronomy"): a especificação oficial
+ * tem prioridade sobre o material exportado (ver relatório da Sprint 0).
+ */
+:root {
+  --color-primary: #f95721;
+  --color-graphite: #121826;
+  --color-emerald: #10b981;
+  --color-amber: #f59e0b;
+  --color-red: #ef4444;
+  --color-blue: #3b82f6;
+
+  --color-surface: #f8fafc;
+  --color-surface-card: #ffffff;
+  --color-surface-subdued: #f1f5f9;
+  --color-border: #e2e8f0;
+  --color-text-muted: #64748b;
+
+  --font-plus-jakarta-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+}
+
+@theme inline {
+  --font-sans: var(--font-plus-jakarta-sans);
+
+  --color-primary: var(--color-primary);
+  --color-graphite: var(--color-graphite);
+  --color-emerald: var(--color-emerald);
+  --color-amber: var(--color-amber);
+  --color-red: var(--color-red);
+  --color-blue: var(--color-blue);
+
+  --color-surface: var(--color-surface);
+  --color-surface-card: var(--color-surface-card);
+  --color-surface-subdued: var(--color-surface-subdued);
+  --color-border: var(--color-border);
+  --color-text-muted: var(--color-text-muted);
+
+  --shadow-card: 0 1px 3px 0 rgb(18 24 38 / 0.05);
+  --shadow-modal: 0 20px 25px -5px rgb(18 24 38 / 0.1), 0 10px 10px -5px rgb(18 24 38 / 0.04);
+}
+
+body {
+  background: var(--color-surface);
+  color: var(--color-graphite);
+}

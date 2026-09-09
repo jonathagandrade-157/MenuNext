@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary-fixed-variant":"#005236","inverse-on-surface":"#edf0ff","outline":"#8f7067","secondary-container":"#d8391e","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#3f0400","on-secondary":"#ffffff","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-tint":"#af3100","inverse-surface":"#2a303f","tertiary":"#006947","on-primary-fixed":"#3a0a00","primary":"#ab2f00","error":"#ba1a1a","surface-bright":"#faf8ff","on-primary-fixed-variant":"#862300","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","primary-container":"#d53e02","surface-container-lowest":"#ffffff","outline-variant":"#e4beb4","on-primary-container":"#fffbff","primary-fixed":"#ffdbd1","on-surface":"#151b29","on-secondary-fixed-variant":"#8f1200","on-error-container":"#93000a","on-tertiary-container":"#f5fff6","primary-fixed-dim":"#ffb59f","on-error":"#ffffff","surface-container":"#e9edff","surface-container-high":"#e2e8fc","secondary":"#b41e04","surface-dim":"#d4d9ed","surface-variant":"#dde2f6","background":"#faf8ff","inverse-primary":"#ffb59f","error-container":"#ffdad6","surface":"#faf8ff","secondary-fixed-dim":"#ffb4a5","secondary-fixed":"#ffdad3","on-secondary-container":"#fffbff","surface-container-low":"#f1f3ff","on-background":"#151b29","tertiary-container":"#00855b","surface-container-highest":"#dde2f6","on-surface-variant":"#5b4139"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"container-max":"1440px","space-sm":"0.75rem","space-xl":"2rem","space-2xl":"3rem","space-3xl":"4rem","space-xs":"0.5rem","space-lg":"1.5rem","gutter":"1.5rem","space-2xs":"0.25rem","space-md":"1rem"},fontFamily:{"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-md":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-xs" data-path="landing-page" href="#"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></a><nav class="hidden lg:flex items-center gap-space-lg ml-space-md" data-active-classes="text-primary font-label-lg font-bold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="recursos" href="#">Recursos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="como-funciona" href="#">Como Funciona</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Planos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">FAQ</a></nav></div><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_3px_0_rgba(18,24,38,0.05)]" data-path="login" href="#">Entrar</a><a class="inline-flex items-center justify-center h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.3)]" data-path="cadastro" href="#">Criar minha loja grátis</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full">
+<!-- Sub-Header Operacional do Estabelecimento -->
+<div class="w-full bg-surface-container-lowest border-b border-surface-container-high/60">
+<div class="max-w-[1440px] mx-auto px-gutter py-space-sm flex flex-wrap items-center justify-between gap-space-md">
+<!-- Unidade e Status -->
+<div class="flex items-center gap-space-md flex-wrap">
+<div class="flex items-center gap-space-xs">
+<div class="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined text-[20px]">lunch_dining</span>
+</div>
+<div>
+<div class="flex items-center gap-space-2xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Next Burger Express</span>
+<span class="w-1 h-1 rounded-full bg-on-surface-variant/40"></span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Moema, SP</span>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant flex items-center gap-1">
+<span class="text-tertiary font-bold">CNPJ:</span> 44.912.831/0001-90
+            </p>
+</div>
+</div>
+<div class="h-6 w-[1px] bg-surface-container hidden sm:block"></div>
+<!-- Badges de Operação em Tempo Real -->
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-emerald-50 text-tertiary font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+            Loja Aberta
+          </span>
+<span class="hidden md:inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px] text-tertiary">bolt</span>
+            Realtime Ativo
+          </span>
+</div>
+</div>
+<!-- Quick Actions Header -->
+<div class="flex items-center gap-space-sm">
+<a class="inline-flex items-center gap-1.5 px-space-md py-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md transition-all" href="#">
+<span class="material-symbols-outlined text-[18px] text-primary">storefront</span>
+<span>Ver Loja Pública</span>
+</a>
+<button aria-label="Notificações" class="relative w-10 h-10 rounded-xl bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface-variant transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-secondary rounded-full"></span>
+</button>
+<div class="flex items-center gap-space-xs pl-space-xs border-l border-surface-container">
+<div class="w-9 h-9 rounded-xl bg-surface-container-high flex items-center justify-center font-headline-sm text-headline-sm text-on-surface font-bold text-[13px]">
+            JD
+          </div>
+<div class="hidden lg:block text-left">
+<p class="font-label-md text-label-md text-on-surface leading-tight font-bold">Jonatha D.</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Administrador</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Layout Principal com Sidebar de Navegação de Gestão -->
+<div class="max-w-[1440px] w-full mx-auto px-gutter py-space-lg flex flex-col lg:flex-row gap-space-xl">
+<!-- Sidebar Secundária de Módulos (Menu Lojista) -->
+<aside class="w-full lg:w-64 flex-shrink-0">
+<div class="bg-surface-container-lowest rounded-xl p-space-sm shadow-sm space-y-1">
+<div class="px-space-sm py-space-xs mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">Operação &amp; Canais</span>
+</div>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span>Dashboard Geral</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span>Pedidos (Kanban)</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">soup_kitchen</span>
+<span>KDS Cozinha</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">restaurant_menu</span>
+<span>Cardápio &amp; Estoque</span>
+</a>
+<div class="pt-space-sm px-space-sm py-space-xs mt-2 border-t border-surface-container">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">Relacionamento</span>
+</div>
+<!-- Item Ativo: Clientes -->
+<a class="flex items-center justify-between px-space-sm py-2.5 rounded-lg bg-orange-50/80 text-primary font-label-md text-label-md font-bold shadow-xs" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px] text-primary" style="font-variation-settings: 'FILL' 1;">group</span>
+<span>Clientes</span>
+</div>
+<span class="w-1.5 h-4 rounded-full bg-primary"></span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">campaign</span>
+<span>Fidelidade &amp; Cupons</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span>Relatórios de LTV</span>
+</a>
+<div class="pt-space-sm px-space-sm py-space-xs mt-2 border-t border-surface-container">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-bold">Configuração</span>
+</div>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+<span>Taxas &amp; Horários</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+<span>Integrações PDV</span>
+</a>
+</div>
+<!-- Card Informativo de Canais Próprios -->
+<div class="mt-space-md p-space-md rounded-xl bg-surface-container-low border border-surface-container text-on-surface flex flex-col gap-2">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-tertiary text-[18px]">verified</span>
+<span class="font-label-sm text-label-sm font-bold text-on-surface">Canal 100% Livre de Taxas</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant leading-snug">
+          Cada cliente que pede no seu link próprio é seu. Sem comissões de marketplace de até 27%.
+        </p>
+</div>
+</aside>
+<!-- Área de Conteúdo Central -->
+<section class="flex-1 min-w-0 flex flex-col gap-space-lg">
+<!-- 1. Cabeçalho da Página de Clientes -->
+<div class="flex flex-col md:flex-row md:items-center md:justify-between gap-space-md">
+<div>
+<div class="flex items-center gap-space-xs">
+<h1 class="font-headline-xl text-headline-xl text-on-surface font-extrabold tracking-tight">Clientes</h1>
+<span class="inline-flex items-center gap-1 px-space-xs py-0.5 rounded-full bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+              Base Ativa
+            </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+            Conheça quem compra do seu restaurante e acompanhe o histórico de pedidos gerados automaticamente pelo canal próprio.
+          </p>
+</div>
+<div class="flex items-center gap-space-xs flex-wrap">
+<button class="inline-flex items-center gap-2 px-space-md py-2.5 rounded-xl bg-surface-container-lowest border border-surface-container-high text-on-surface hover:bg-surface-container font-label-md text-label-md shadow-sm transition-all" id="btn-open-export" type="button">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">download</span>
+<span>Exportar clientes</span>
+</button>
+<button class="inline-flex items-center gap-1.5 px-space-md py-2.5 rounded-xl bg-surface-container-lowest border border-surface-container-high text-on-surface hover:bg-surface-container font-label-md text-label-md shadow-sm transition-all" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">person_add</span>
+<span>+ Adicionar manual</span>
+</button>
+</div>
+</div>
+<!-- Tag informativa de identificação automática -->
+<div class="inline-flex items-center gap-2 px-space-md py-2 rounded-xl bg-surface-container-low text-on-surface font-body-sm text-body-sm w-fit">
+<span class="material-symbols-outlined text-primary text-[18px]">bolt</span>
+<span><strong>Identificação automática:</strong> Clientes que concluem pedidos via Cardápio Digital ou PDV são salvos instantaneamente sem fricção de cadastro longo.</span>
+</div>
+<!-- 2. Cards de Métricas (KPIs de Clientes) -->
+<div class="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-5 gap-space-sm">
+<!-- KPI 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest border border-surface-container-high/70 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Clientes Cadastrados</span>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant/60">groups</span>
+</div>
+<div>
+<div class="font-headline-lg text-headline-lg font-extrabold text-on-surface">1.248</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Base consolidada do canal</p>
+</div>
+</div>
+<!-- KPI 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest border border-surface-container-high/70 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Novos este Mês</span>
+<span class="material-symbols-outlined text-[20px] text-secondary">trending_up</span>
+</div>
+<div>
+<div class="font-headline-lg text-headline-lg font-extrabold text-secondary">86</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Primeiro pedido recente</p>
+</div>
+</div>
+<!-- KPI 3 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest border border-surface-container-high/70 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Recorrentes</span>
+<span class="material-symbols-outlined text-[20px] text-tertiary">repeat</span>
+</div>
+<div>
+<div class="font-headline-lg text-headline-lg font-extrabold text-tertiary">642</div>
+<p class="font-body-sm text-body-sm text-tertiary font-bold mt-0.5">51.4% da base ativa</p>
+</div>
+</div>
+<!-- KPI 4 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest border border-surface-container-high/70 shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Ticket Médio</span>
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant/60">payments</span>
+</div>
+<div>
+<div class="font-headline-lg text-headline-lg font-extrabold text-on-surface">R$ 58,40</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Por cliente registrado</p>
+</div>
+</div>
+<!-- KPI 5 -->
+<div class="p-space-md rounded-xl bg-surface-container-lowest border border-surface-container-high/70 shadow-sm flex flex-col justify-between col-span-2 sm:col-span-1 xl:col-span-1">
+<div class="flex items-center justify-between text-on-surface-variant mb-space-xs">
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-wider">Pedidos Totais</span>
+<span class="material-symbols-outlined text-[20px] text-primary">local_shipping</span>
+</div>
+<div>
+<div class="font-headline-lg text-headline-lg font-extrabold text-on-surface">3.487</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5">Delivery, Retirada &amp; Balcão</p>
+</div>
+</div>
+</div>
+<!-- 4. Mini Banner de Contexto Operacional (Fluxo Conceitual) -->
+<div class="rounded-xl p-space-md bg-gradient-to-r from-orange-50/70 via-surface-container-low to-emerald-50/40 border border-orange-100/80 flex flex-col md:flex-row md:items-center justify-between gap-space-sm">
+<div class="flex items-start gap-space-sm">
+<div class="w-8 h-8 rounded-lg bg-primary/10 flex-shrink-0 flex items-center justify-center text-primary mt-0.5">
+<span class="material-symbols-outlined text-[20px]">lightbulb</span>
+</div>
+<div class="font-body-sm text-body-sm text-on-surface">
+<p class="font-bold text-on-surface">Como seus clientes nascem no MenuNext:</p>
+<p class="text-on-surface-variant mt-0.5">
+              Pedido via Loja Própria ou Balcão <span class="text-primary font-bold">➔</span> Identificação sem login forçado (Convidado ou Conta) <span class="text-primary font-bold">➔</span> Perfil enriquecido no primeiro checkout <span class="text-primary font-bold">➔</span> Histórico e LTV em tempo real.
+            </p>
+</div>
+</div>
+<div class="flex items-center gap-space-xs pl-space-md md:pl-0 flex-shrink-0">
+<a class="font-label-sm text-label-sm text-primary hover:underline font-bold flex items-center gap-1" href="#">
+<span>Ver no Marketing</span>
+<span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+</a>
+<span class="text-on-surface-variant/40">•</span>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-on-surface font-bold" href="#">
+            Ver Vendas
+          </a>
+</div>
+</div>
+<!-- 3. Barra de Busca, Filtros e Período -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl border border-surface-container-high/70 shadow-sm flex flex-col gap-space-md">
+<div class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-md">
+<!-- Campo de Busca Largo com Shortcut -->
+<div class="relative flex-1">
+<span class="material-symbols-outlined absolute left-3.5 top-1/2 -translate-y-1/2 text-on-surface-variant text-[20px]">search</span>
+<input class="w-full h-11 pl-11 pr-20 rounded-xl bg-surface-container-low/60 border border-surface-container text-on-surface placeholder:text-on-surface-variant/70 font-body-sm text-body-sm focus:bg-surface-container-lowest focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all outline-none" id="search-input" placeholder="Buscar por nome, WhatsApp ou nº do pedido (#1048)..." type="text"/>
+<div class="absolute right-3 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-1 px-1.5 py-0.5 rounded bg-surface-container border border-surface-container-high text-on-surface-variant font-label-sm text-label-sm text-[10px]">
+              Ctrl+K
+            </div>
+</div>
+<!-- Seletores de Período e Ordenação -->
+<div class="flex items-center gap-space-xs flex-wrap">
+<div class="flex items-center gap-1.5 px-space-sm h-11 rounded-xl bg-surface-container-low border border-surface-container text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">calendar_today</span>
+<select class="bg-transparent text-on-surface font-label-sm text-label-sm outline-none cursor-pointer">
+<option selected="">Todo período</option>
+<option>Últimos 30 dias</option>
+<option>Últimos 7 dias</option>
+<option>Hoje</option>
+</select>
+</div>
+<div class="flex items-center gap-1.5 px-space-sm h-11 rounded-xl bg-surface-container-low border border-surface-container text-on-surface font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">sort</span>
+<select class="bg-transparent text-on-surface font-label-sm text-label-sm outline-none cursor-pointer">
+<option selected="">Mais recentes</option>
+<option>Mais pedidos</option>
+<option>Maior valor gasto</option>
+<option>Maior ticket médio</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Filtros em Pill Buttons -->
+<div class="flex items-center gap-space-xs overflow-x-auto pb-1 text-label-sm font-label-sm">
+<button class="filter-pill active px-3.5 py-1.5 rounded-full bg-primary text-on-primary font-bold shadow-xs whitespace-nowrap transition-all" type="button">
+            Todos (1.248)
+          </button>
+<button class="filter-pill px-3.5 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant whitespace-nowrap transition-all flex items-center gap-1.5" type="button">
+<span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+<span>Recorrentes (642)</span>
+</button>
+<button class="filter-pill px-3.5 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant whitespace-nowrap transition-all flex items-center gap-1.5" type="button">
+<span class="w-2 h-2 rounded-full bg-orange-500"></span>
+<span>Novos (86)</span>
+</button>
+<button class="filter-pill px-3.5 py-1.5 rounded-full bg-surface-container-low hover:bg-surface-container text-on-surface-variant whitespace-nowrap transition-all flex items-center gap-1.5" type="button">
+<span class="w-2 h-2 rounded-full bg-slate-400"></span>
+<span>Inativos (520)</span>
+</button>
+</div>
+</div>
+<!-- 5 & 6. Container Split Layout: Tabela de Clientes + Drawer de Detalhes -->
+<div class="grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
+<!-- Coluna da Tabela Principal -->
+<div class="xl:col-span-7 bg-surface-container-lowest rounded-xl border border-surface-container-high/70 shadow-sm overflow-hidden flex flex-col">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/70 border-b border-surface-container text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-3.5 px-space-md font-bold">Cliente</th>
+<th class="py-3.5 px-space-sm font-bold">Contato</th>
+<th class="py-3.5 px-space-sm font-bold text-center">Pedidos</th>
+<th class="py-3.5 px-space-sm font-bold text-right">Total</th>
+<th class="py-3.5 px-space-sm font-bold text-right">Ticket</th>
+<th class="py-3.5 px-space-sm font-bold">Último Pedido</th>
+<th class="py-3.5 px-space-sm font-bold">Status</th>
+<th class="py-3.5 px-space-sm font-bold text-center">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container font-body-sm text-body-sm text-on-surface" id="table-rows">
+<!-- Linha 1: João da Silva (SELECIONADO / EM DESTAQUE) -->
+<tr class="customer-row bg-orange-50/50 hover:bg-orange-50/80 transition-colors cursor-pointer border-l-4 border-l-primary" data-customer-id="1">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-9 h-9 rounded-full bg-orange-100 text-primary font-bold flex items-center justify-center font-label-sm text-label-sm flex-shrink-0">
+                        JS
+                      </div>
+<div class="min-w-0">
+<div class="flex items-center gap-1.5">
+<p class="font-label-md text-label-md font-bold text-on-surface truncate">João da Silva</p>
+<span class="w-2 h-2 rounded-full bg-tertiary" title="Ativo hoje"></span>
+</div>
+<span class="inline-block px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px]">
+                          Convidado frequente
+                        </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<div class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">chat</span>
+<span class="font-label-sm text-label-sm">(11) 99999-1234</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm text-center whitespace-nowrap">
+<span class="font-bold text-on-surface">12</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full mx-auto mt-1 overflow-hidden">
+<div class="h-full bg-primary rounded-full w-4/5"></div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm text-right whitespace-nowrap font-bold text-on-surface">
+                    R$ 1.248,70
+                  </td>
+<td class="py-3.5 px-space-sm text-right whitespace-nowrap text-on-surface-variant">
+                    R$ 104,06
+                  </td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<p class="font-label-sm text-label-sm font-bold text-on-surface">Hoje às 19:14</p>
+<p class="font-label-sm text-label-sm text-primary">#1048</p>
+</td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-tertiary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                      Recorrente
+                    </span>
+</td>
+<td class="py-3.5 px-space-sm text-center whitespace-nowrap">
+<button class="btn-select-customer px-2.5 py-1 rounded-lg bg-primary text-on-primary font-label-sm text-label-sm font-bold hover:bg-primary-container shadow-xs transition-all" type="button">
+                      Ver
+                    </button>
+</td>
+</tr>
+<!-- Linha 2: Mariana Oliveira -->
+<tr class="customer-row hover:bg-surface-container-low/60 transition-colors cursor-pointer" data-customer-id="2">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-9 h-9 rounded-full bg-purple-100 text-purple-700 font-bold flex items-center justify-center font-label-sm text-label-sm flex-shrink-0">
+                        MO
+                      </div>
+<div class="min-w-0">
+<p class="font-label-md text-label-md font-bold text-on-surface truncate">Mariana Oliveira</p>
+<span class="inline-block px-1.5 py-0.5 rounded bg-blue-50 text-blue-700 font-label-sm text-label-sm text-[10px]">
+                          Conta MenuNext
+                        </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<div class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">chat</span>
+<span class="font-label-sm text-label-sm">(11) 98888-4567</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm text-center whitespace-nowrap">
+<span class="font-bold text-on-surface">7</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full mx-auto mt-1 overflow-hidden">
+<div class="h-full bg-primary/70 rounded-full w-3/5"></div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm text-right whitespace-nowrap font-bold text-on-surface">
+                    R$ 486,30
+                  </td>
+<td class="py-3.5 px-space-sm text-right whitespace-nowrap text-on-surface-variant">
+                    R$ 69,47
+                  </td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<p class="font-label-sm text-label-sm text-on-surface">Ontem às 21:05</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">#1042</p>
+</td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-tertiary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                      Recorrente
+                    </span>
+</td>
+<td class="py-3.5 px-space-sm text-center whitespace-nowrap">
+<button class="btn-select-customer px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold transition-all" type="button">
+                      Ver
+                    </button>
+</td>
+</tr>
+<!-- Linha 3: Carlos Henrique -->
+<tr class="customer-row hover:bg-surface-container-low/60 transition-colors cursor-pointer" data-customer-id="3">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-9 h-9 rounded-full bg-amber-100 text-amber-800 font-bold flex items-center justify-center font-label-sm text-label-sm flex-shrink-0">
+                        CH
+                      </div>
+<div class="min-w-0">
+<p class="font-label-md text-label-md font-bold text-on-surface truncate">Carlos Henrique</p>
+<span class="inline-block px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px]">
+                          Convidado
+                        </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<div class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">chat</span>
+<span class="font-label-sm text-label-sm">(11) 97777-8899</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm text-center whitespace-nowrap">
+<span class="font-bold text-on-surface">1</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full mx-auto mt-1 overflow-hidden">
+<div class="h-full bg-secondary rounded-full w-1/5"></div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm text-right whitespace-nowrap font-bold text-on-surface">
+                    R$ 45,90
+                  </td>
+<td class="py-3.5 px-space-sm text-right whitespace-nowrap text-on-surface-variant">
+                    R$ 45,90
+                  </td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<p class="font-label-sm text-label-sm text-on-surface">Hoje às 18:30</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">#1047</p>
+</td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-50 text-secondary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+                      Novo
+                    </span>
+</td>
+<td class="py-3.5 px-space-sm text-center whitespace-nowrap">
+<button class="btn-select-customer px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold transition-all" type="button">
+                      Ver
+                    </button>
+</td>
+</tr>
+<!-- Linha 4: Fernanda Lima -->
+<tr class="customer-row hover:bg-surface-container-low/60 transition-colors cursor-pointer" data-customer-id="4">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-9 h-9 rounded-full bg-rose-100 text-rose-700 font-bold flex items-center justify-center font-label-sm text-label-sm flex-shrink-0">
+                        FL
+                      </div>
+<div class="min-w-0">
+<p class="font-label-md text-label-md font-bold text-on-surface truncate">Fernanda Lima</p>
+<span class="inline-block px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px]">
+                          Convidado
+                        </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<div class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">chat</span>
+<span class="font-label-sm text-label-sm">(11) 98123-7744</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm text-center whitespace-nowrap">
+<span class="font-bold text-on-surface">5</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full mx-auto mt-1 overflow-hidden">
+<div class="h-full bg-primary/60 rounded-full w-2/5"></div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm text-right whitespace-nowrap font-bold text-on-surface">
+                    R$ 342,00
+                  </td>
+<td class="py-3.5 px-space-sm text-right whitespace-nowrap text-on-surface-variant">
+                    R$ 68,40
+                  </td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<p class="font-label-sm text-label-sm text-on-surface">3 dias atrás</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">#1025</p>
+</td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-tertiary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                      Recorrente
+                    </span>
+</td>
+<td class="py-3.5 px-space-sm text-center whitespace-nowrap">
+<button class="btn-select-customer px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold transition-all" type="button">
+                      Ver
+                    </button>
+</td>
+</tr>
+<!-- Linha 5: Ricardo Alves -->
+<tr class="customer-row hover:bg-surface-container-low/60 transition-colors cursor-pointer" data-customer-id="5">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-9 h-9 rounded-full bg-sky-100 text-sky-800 font-bold flex items-center justify-center font-label-sm text-label-sm flex-shrink-0">
+                        RA
+                      </div>
+<div class="min-w-0">
+<p class="font-label-md text-label-md font-bold text-on-surface truncate">Ricardo Alves</p>
+<span class="inline-block px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px]">
+                          Convidado
+                        </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<div class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">chat</span>
+<span class="font-label-sm text-label-sm">(11) 97321-9988</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm text-center whitespace-nowrap">
+<span class="font-bold text-on-surface">3</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full mx-auto mt-1 overflow-hidden">
+<div class="h-full bg-primary/40 rounded-full w-1/4"></div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm text-right whitespace-nowrap font-bold text-on-surface">
+                    R$ 215,80
+                  </td>
+<td class="py-3.5 px-space-sm text-right whitespace-nowrap text-on-surface-variant">
+                    R$ 71,93
+                  </td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<p class="font-label-sm text-label-sm text-on-surface">12 dias atrás</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">#994</p>
+</td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 text-tertiary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                      Recorrente
+                    </span>
+</td>
+<td class="py-3.5 px-space-sm text-center whitespace-nowrap">
+<button class="btn-select-customer px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold transition-all" type="button">
+                      Ver
+                    </button>
+</td>
+</tr>
+<!-- Linha 6: Ana Beatriz -->
+<tr class="customer-row hover:bg-surface-container-low/60 transition-colors cursor-pointer" data-customer-id="6">
+<td class="py-3.5 px-space-md">
+<div class="flex items-center gap-space-xs">
+<div class="w-9 h-9 rounded-full bg-slate-200 text-slate-700 font-bold flex items-center justify-center font-label-sm text-label-sm flex-shrink-0">
+                        AB
+                      </div>
+<div class="min-w-0">
+<p class="font-label-md text-label-md font-bold text-on-surface truncate">Ana Beatriz</p>
+<span class="inline-block px-1.5 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-sm text-label-sm text-[10px]">
+                          Convidado
+                        </span>
+</div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<div class="flex items-center gap-1 text-on-surface">
+<span class="material-symbols-outlined text-[16px] text-emerald-600">chat</span>
+<span class="font-label-sm text-label-sm">(11) 96666-5544</span>
+</div>
+</td>
+<td class="py-3.5 px-space-sm text-center whitespace-nowrap">
+<span class="font-bold text-on-surface">4</span>
+<div class="w-12 h-1.5 bg-surface-container rounded-full mx-auto mt-1 overflow-hidden">
+<div class="h-full bg-slate-400 rounded-full w-1/3"></div>
+</div>
+</td>
+<td class="py-3.5 px-space-sm text-right whitespace-nowrap font-bold text-on-surface">
+                    R$ 238,00
+                  </td>
+<td class="py-3.5 px-space-sm text-right whitespace-nowrap text-on-surface-variant">
+                    R$ 59,50
+                  </td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<p class="font-label-sm text-label-sm text-on-surface">35 dias atrás</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">#890</p>
+</td>
+<td class="py-3.5 px-space-sm whitespace-nowrap">
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                      Inativo
+                    </span>
+</td>
+<td class="py-3.5 px-space-sm text-center whitespace-nowrap">
+<button class="btn-select-customer px-2.5 py-1 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold transition-all" type="button">
+                      Ver
+                    </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Paginação do Rodapé -->
+<div class="p-space-md border-t border-surface-container flex flex-col sm:flex-row items-center justify-between gap-space-sm bg-surface-container-lowest">
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+              Mostrando <strong class="text-on-surface">1–6</strong> de <strong class="text-on-surface">1.248</strong> clientes
+            </span>
+<div class="flex items-center gap-1">
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface-variant hover:bg-surface-container font-label-sm text-label-sm disabled:opacity-40" disabled="" type="button">
+                Anterior
+              </button>
+<button class="w-8 h-8 rounded-lg bg-primary text-on-primary font-bold font-label-sm text-label-sm flex items-center justify-center shadow-xs" type="button">
+                1
+              </button>
+<button class="w-8 h-8 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm flex items-center justify-center" type="button">
+                2
+              </button>
+<button class="w-8 h-8 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm flex items-center justify-center" type="button">
+                3
+              </button>
+<span class="px-1 text-on-surface-variant font-label-sm text-label-sm">...</span>
+<button class="w-8 h-8 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm flex items-center justify-center" type="button">
+                25
+              </button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-low text-on-surface hover:bg-surface-container font-label-sm text-label-sm" type="button">
+                Próximo
+              </button>
+</div>
+</div>
+</div>
+<!-- 6. DRAWER / PAINEL LATERAL DE DETALHE DO CLIENTE (Visível em Split Layout Profissional) -->
+<div class="xl:col-span-5 bg-surface-container-lowest rounded-xl border border-surface-container-high/80 shadow-md p-space-md md:p-space-lg flex flex-col gap-space-md" id="customer-drawer">
+<!-- Header do Drawer com Avatar Grande e Quick Actions -->
+<div class="flex items-start justify-between gap-space-sm border-b border-surface-container pb-space-md">
+<div class="flex items-center gap-space-md">
+<div class="w-14 h-14 rounded-2xl bg-orange-100 text-primary font-extrabold flex items-center justify-center font-headline-md text-headline-md shadow-inner">
+                JS
+              </div>
+<div>
+<div class="flex items-center gap-2">
+<h3 class="font-headline-md text-headline-md font-bold text-on-surface">João da Silva</h3>
+</div>
+<div class="flex items-center gap-1.5 mt-1 flex-wrap">
+<span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-emerald-50 text-tertiary font-label-sm text-label-sm">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                    Cliente Recorrente
+                  </span>
+<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm" title="Realizou compras sem login obrigatório via checkout">
+<span class="material-symbols-outlined text-[14px]">info</span>
+                    Pedido como convidado
+                  </span>
+</div>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded-lg hover:bg-surface-container transition-colors" title="Fechar detalhes" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<!-- Ações Rápidas de Contato e Operação -->
+<div class="grid grid-cols-3 gap-space-xs">
+<a class="flex items-center justify-center gap-1.5 py-2 px-space-xs rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 font-label-sm text-label-sm font-bold border border-emerald-200/60 transition-all" href="https://wa.me/5511999991234" rel="noopener noreferrer" target="_blank">
+<span class="material-symbols-outlined text-[18px] text-emerald-600">chat</span>
+<span>WhatsApp</span>
+</a>
+<a class="flex items-center justify-center gap-1.5 py-2 px-space-xs rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm font-bold border border-surface-container transition-all" href="tel:11999991234">
+<span class="material-symbols-outlined text-[18px] text-on-surface-variant">call</span>
+<span>Ligar</span>
+</a>
+<a class="flex items-center justify-center gap-1.5 py-2 px-space-xs rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-sm text-label-sm font-bold border border-surface-container transition-all" href="#">
+<span class="material-symbols-outlined text-[18px] text-primary">view_kanban</span>
+<span>Kanban</span>
+</a>
+</div>
+<!-- Mini Resumo de Métricas do João -->
+<div class="grid grid-cols-2 sm:grid-cols-3 gap-space-xs p-space-sm rounded-xl bg-surface-container-low/70 border border-surface-container">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase font-bold">Total Gasto</p>
+<p class="font-headline-sm text-headline-sm font-extrabold text-on-surface mt-0.5">R$ 1.248,70</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase font-bold">Pedidos</p>
+<p class="font-headline-sm text-headline-sm font-extrabold text-primary mt-0.5">12 pedidos</p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase font-bold">Ticket Médio</p>
+<p class="font-headline-sm text-headline-sm font-extrabold text-on-surface mt-0.5">R$ 104,06</p>
+</div>
+<div class="col-span-2 sm:col-span-3 pt-2 mt-1 border-t border-surface-container flex items-center justify-between text-on-surface-variant font-label-sm text-label-sm">
+<span>Cliente desde: <strong>12/03/2026</strong></span>
+<span class="text-tertiary font-bold">Último pedido: Hoje às 19:14</span>
+</div>
+</div>
+<!-- Seção: Endereços Utilizados -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-primary">location_on</span>
+                Endereços de Entrega (2)
+              </span>
+</div>
+<!-- Endereço 1 (Principal) -->
+<div class="p-space-sm rounded-xl bg-surface-container-lowest border border-orange-200/80 bg-orange-50/20 flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-bold text-on-surface flex items-center gap-1">
+<span>📍 Casa (Principal)</span>
+<span class="text-on-surface-variant text-[11px] font-normal">• 10 pedidos</span>
+</span>
+<span class="px-2 py-0.5 rounded-full bg-orange-100 text-primary font-label-sm text-label-sm text-[10px] font-bold">
+                  Mais frequente
+                </span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">Alameda dos Anapurus, 1200 - Moema, São Paulo/SP</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">CEP 04087-001 • Apto 142 Bloco B</p>
+</div>
+<!-- Endereço 2 -->
+<div class="p-space-sm rounded-xl bg-surface-container-lowest border border-surface-container flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-bold text-on-surface flex items-center gap-1">
+<span>📍 Trabalho</span>
+<span class="text-on-surface-variant text-[11px] font-normal">• 2 pedidos</span>
+</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface">Av. Ibirapuera, 2500 - Conj. 804 - São Paulo/SP</p>
+</div>
+</div>
+<!-- Seção: Histórico Recente de Pedidos -->
+<div class="flex flex-col gap-space-xs">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-tertiary">history</span>
+                Histórico Recente de Pedidos
+              </span>
+<a class="font-label-sm text-label-sm text-primary hover:underline font-bold" href="#">Ver todos (12)</a>
+</div>
+<!-- Card Pedido #1048 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low/60 border border-surface-container flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-bold text-primary">#1048</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">• Hoje, 19:14</span>
+<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-label-sm text-label-sm text-[10px] font-bold">PIX • Pago</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">R$ 101,70</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">
+                1x Next Bacon Burger Artesanal + 1x Batata Rústica Paprika + 1x Coca-Cola Zero
+              </p>
+<div class="flex items-center justify-between pt-1 border-t border-surface-container/80 text-[12px]">
+<span class="text-tertiary font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">moped</span> Delivery entregue
+                </span>
+<button class="font-label-sm text-label-sm text-primary hover:underline font-bold" type="button">Ver no Kanban ➔</button>
+</div>
+</div>
+<!-- Card Pedido #1032 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low/60 border border-surface-container flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-bold text-on-surface">#1032</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">• 02/09, 20:18</span>
+<span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-label-sm text-label-sm text-[10px] font-bold">Cartão • Pago</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">R$ 89,90</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">
+                2x Smash Cheddar Duplo + 1x Maionese Verde Extra
+              </p>
+<div class="flex items-center justify-between pt-1 border-t border-surface-container/80 text-[12px]">
+<span class="text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">done_all</span> Concluído
+                </span>
+<button class="font-label-sm text-label-sm text-primary hover:underline font-bold" type="button">Ver pedido ➔</button>
+</div>
+</div>
+<!-- Card Pedido #998 -->
+<div class="p-space-sm rounded-xl bg-surface-container-low/60 border border-surface-container flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-bold text-on-surface">#998</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">• 28/08, 19:45</span>
+<span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-label-sm text-label-sm text-[10px] font-bold">PIX • Pago</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">R$ 72,50</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1">
+                1x Combo Família Smash + Suco de Laranja Natural
+              </p>
+<div class="flex items-center justify-between pt-1 border-t border-surface-container/80 text-[12px]">
+<span class="text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">shopping_bag</span> Retirada no Balcão
+                </span>
+<button class="font-label-sm text-label-sm text-primary hover:underline font-bold" type="button">Ver pedido ➔</button>
+</div>
+</div>
+</div>
+<!-- Seção: Observações Internas da Cozinha / Equipe -->
+<div class="flex flex-col gap-space-xs pt-space-xs border-t border-surface-container">
+<span class="font-label-md text-label-md font-bold text-on-surface flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[18px] text-secondary">sticky_note_2</span>
+              Observações Internas (Visível apenas para a equipe)
+            </span>
+<div class="p-space-sm rounded-xl bg-amber-50/70 border border-amber-200/80 text-on-surface font-body-sm text-body-sm flex items-start gap-2">
+<span class="material-symbols-outlined text-amber-700 text-[18px] flex-shrink-0 mt-0.5">warning</span>
+<p class="text-amber-900 leading-snug">
+                Preferência de contato direto via WhatsApp. Não colocar cebola nos burgers. Cliente muito pontual e educado ao retirar.
+              </p>
+</div>
+<!-- Input rápido de nova nota -->
+<div class="flex items-center gap-2 mt-1">
+<input class="flex-1 h-9 px-space-sm rounded-lg bg-surface-container-low border border-surface-container text-on-surface placeholder:text-on-surface-variant/70 font-body-sm text-body-sm outline-none focus:border-primary" placeholder="+ Adicionar nova nota interna..." type="text"/>
+<button class="px-3 h-9 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold transition-colors" type="button">
+                Salvar
+              </button>
+</div>
+</div>
+<!-- Rodapé de Conformidade LGPD & Privacidade -->
+<div class="pt-space-sm border-t border-surface-container flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm text-[11px] leading-tight">
+<span class="material-symbols-outlined text-[16px] text-tertiary">lock</span>
+<span>Dados protegidos e utilizados estritamente para atendimento de pedidos e comunicação operacional do restaurante conforme a LGPD.</span>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- 7. Modal de Exportação de Clientes (Oculto por padrão, ativável via JS) -->
+<div class="fixed inset-0 z-50 bg-inverse-surface/60 backdrop-blur-sm hidden items-center justify-center p-gutter transition-all" id="export-modal">
+<div class="bg-surface-container-lowest max-w-md w-full rounded-2xl p-space-xl border border-surface-container-high shadow-2xl flex flex-col gap-space-md animate-in fade-in zoom-in-95 duration-150">
+<div class="flex items-center justify-between border-b border-surface-container pb-space-sm">
+<div class="flex items-center gap-2">
+<div class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-[20px]">download</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm font-bold text-on-surface">Exportar Base de Clientes</h4>
+</div>
+<button class="text-on-surface-variant hover:text-on-surface p-1 rounded-lg hover:bg-surface-container" id="btn-close-export" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+        Faça o download do arquivo estruturado (CSV / Excel) para utilizar em campanhas de WhatsApp, tráfego pago ou integrações de CRM.
+      </p>
+<div class="space-y-space-xs font-label-md text-label-md">
+<label class="font-bold text-on-surface text-label-sm block">Selecione o segmento a exportar:</label>
+<label class="flex items-center gap-3 p-space-sm rounded-xl border border-surface-container hover:bg-surface-container-low cursor-pointer">
+<input checked="" class="text-primary focus:ring-primary" name="export-segment" type="radio"/>
+<div class="flex-1">
+<p class="font-bold text-on-surface">Todos os Clientes (1.248)</p>
+<p class="text-on-surface-variant text-label-sm font-normal">Base integral desde o primeiro dia de canal próprio</p>
+</div>
+</label>
+<label class="flex items-center gap-3 p-space-sm rounded-xl border border-surface-container hover:bg-surface-container-low cursor-pointer">
+<input class="text-primary focus:ring-primary" name="export-segment" type="radio"/>
+<div class="flex-1">
+<p class="font-bold text-on-surface">Clientes Recorrentes (642)</p>
+<p class="text-on-surface-variant text-label-sm font-normal">Mais de 2 pedidos realizados no cardápio</p>
+</div>
+</label>
+<label class="flex items-center gap-3 p-space-sm rounded-xl border border-surface-container hover:bg-surface-container-low cursor-pointer">
+<input class="text-primary focus:ring-primary" name="export-segment" type="radio"/>
+<div class="flex-1">
+<p class="font-bold text-on-surface">Novos deste Mês (86)</p>
+<p class="text-on-surface-variant text-label-sm font-normal">Ideais para mensagem de boas-vindas e segundo pedido</p>
+</div>
+</label>
+</div>
+<div class="flex items-center gap-space-xs pt-space-sm border-t border-surface-container justify-end">
+<button class="px-space-md py-2 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md transition-colors" id="btn-cancel-export" type="button">
+          Cancelar
+        </button>
+<button class="inline-flex items-center gap-2 px-space-lg py-2 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-md text-label-md font-bold shadow-sm transition-all" id="btn-confirm-export" type="button">
+<span class="material-symbols-outlined text-[18px]">file_download</span>
+<span>Baixar CSV</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Micro-interações nativas em JS -->
+<script>
+    (function() {
+      // Controle do Modal de Exportação
+      const btnOpenExport = document.getElementById('btn-open-export');
+      const btnCloseExport = document.getElementById('btn-close-export');
+      const btnCancelExport = document.getElementById('btn-cancel-export');
+      const btnConfirmExport = document.getElementById('btn-confirm-export');
+      const exportModal = document.getElementById('export-modal');
+
+      function openModal() {
+        if (exportModal) {
+          exportModal.classList.remove('hidden');
+          exportModal.classList.add('flex');
+        }
+      }
+
+      function closeModal() {
+        if (exportModal) {
+          exportModal.classList.add('hidden');
+          exportModal.classList.remove('flex');
+        }
+      }
+
+      if (btnOpenExport) btnOpenExport.addEventListener('click', openModal);
+      if (btnCloseExport) btnCloseExport.addEventListener('click', closeModal);
+      if (btnCancelExport) btnCancelExport.addEventListener('click', closeModal);
+      if (btnConfirmExport) {
+        btnConfirmExport.addEventListener('click', function() {
+          const originalText = btnConfirmExport.innerHTML;
+          btnConfirmExport.innerHTML = '<span class="material-symbols-outlined text-[18px] animate-spin">refresh</span> Gerando CSV...';
+          setTimeout(function() {
+            btnConfirmExport.innerHTML = '<span class="material-symbols-outlined text-[18px]">check</span> Pronto!';
+            setTimeout(closeModal, 600);
+            setTimeout(function() {
+              btnConfirmExport.innerHTML = originalText;
+            }, 1000);
+          }, 800);
+        });
+      }
+
+      // Atalho de teclado Ctrl+K para focar no campo de busca
+      window.addEventListener('keydown', function(e) {
+        if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+          e.preventDefault();
+          const searchInput = document.getElementById('search-input');
+          if (searchInput) {
+            searchInput.focus();
+            searchInput.select();
+          }
+        }
+      });
+
+      // Alternância de filtros em Pill Buttons
+      const filterPills = document.querySelectorAll('.filter-pill');
+      filterPills.forEach(function(pill) {
+        pill.addEventListener('click', function() {
+          filterPills.forEach(function(p) {
+            p.classList.remove('bg-primary', 'text-on-primary', 'font-bold');
+            p.classList.add('bg-surface-container-low', 'text-on-surface-variant');
+          });
+          pill.classList.remove('bg-surface-container-low', 'text-on-surface-variant');
+          pill.classList.add('bg-primary', 'text-on-primary', 'font-bold');
+        });
+      });
+
+      // Seleção de linhas na tabela
+      const rows = document.querySelectorAll('.customer-row');
+      rows.forEach(function(row) {
+        row.addEventListener('click', function() {
+          rows.forEach(function(r) {
+            r.classList.remove('bg-orange-50/50', 'border-l-4', 'border-l-primary');
+          });
+          row.classList.add('bg-orange-50/50', 'border-l-4', 'border-l-primary');
+        });
+      });
+    })();
+  </script>
+</div></main><footer class="w-full bg-surface-container-low mt-space-3xl"><div class="max-w-[1440px] mx-auto px-gutter py-space-3xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl"><div class="lg:col-span-1 flex flex-col gap-space-md"><div class="flex items-center gap-space-xs"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">A plataforma definitiva de pedidos online, KDS e autoatendimento inteligente para restaurantes e dark kitchens que escalam com autonomia.</p><div class="flex items-center gap-space-xs mt-space-xs"><span class="inline-flex items-center px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>Infraestrutura Ativa</span></div></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Produto</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="cardapio-digital" href="#">Cardápio Digital QR</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="kds-cozinha" href="#">KDS Operacional</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="painel-gestao" href="#">Painel Gerencial</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="integracao-pos" href="#">Integrações POS &amp; iFood</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Tabela de Preços</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Empresa</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="sobre" href="#">Sobre o MenuNext</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="clientes" href="#">Histórias de Sucesso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="carreiras" href="#">Vagas e Carreiras</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="imprensa" href="#">Mídia &amp; Imprensa</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="parceiros" href="#">Programa de Parceiros</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Suporte</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="central-ajuda" href="#">Central de Ajuda 24/7</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="tutoriais" href="#">Vídeos e Tutoriais</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="status" href="#">Status dos Servidores</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">Perguntas Frequentes</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="fale-conosco" href="#">Contato com Consultor</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Legal</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="termos" href="#">Termos de Uso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade e LGPD</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="seguranca" href="#">Segurança da Informação</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="compliance" href="#">Políticas Comerciais</a></div></div><div class="mt-space-2xl pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><p>© 2025 MenuNext Tecnologia para Gastronomia Ltda. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</p><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade</a><a class="hover:text-on-surface transition-colors" data-path="termos" href="#">Termos</a></div></div></div></footer></body></html>

@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary-fixed-variant":"#005236","inverse-on-surface":"#edf0ff","outline":"#8f7067","secondary-container":"#d8391e","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#3f0400","on-secondary":"#ffffff","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-tint":"#af3100","inverse-surface":"#2a303f","tertiary":"#006947","on-primary-fixed":"#3a0a00","primary":"#ab2f00","error":"#ba1a1a","surface-bright":"#faf8ff","on-primary-fixed-variant":"#862300","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","primary-container":"#d53e02","surface-container-lowest":"#ffffff","outline-variant":"#e4beb4","on-primary-container":"#fffbff","primary-fixed":"#ffdbd1","on-surface":"#151b29","on-secondary-fixed-variant":"#8f1200","on-error-container":"#93000a","on-tertiary-container":"#f5fff6","primary-fixed-dim":"#ffb59f","on-error":"#ffffff","surface-container":"#e9edff","surface-container-high":"#e2e8fc","secondary":"#b41e04","surface-dim":"#d4d9ed","surface-variant":"#dde2f6","background":"#faf8ff","inverse-primary":"#ffb59f","error-container":"#ffdad6","surface":"#faf8ff","secondary-fixed-dim":"#ffb4a5","secondary-fixed":"#ffdad3","on-secondary-container":"#fffbff","surface-container-low":"#f1f3ff","on-background":"#151b29","tertiary-container":"#00855b","surface-container-highest":"#dde2f6","on-surface-variant":"#5b4139"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"container-max":"1440px","space-sm":"0.75rem","space-xl":"2rem","space-2xl":"3rem","space-3xl":"4rem","space-xs":"0.5rem","space-lg":"1.5rem","gutter":"1.5rem","space-2xs":"0.25rem","space-md":"1rem"},fontFamily:{"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-md":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-xs" data-path="landing-page" href="#"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></a><nav class="hidden lg:flex items-center gap-space-lg ml-space-md" data-active-classes="text-primary font-label-lg font-bold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="recursos" href="#">Recursos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="como-funciona" href="#">Como Funciona</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Planos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">FAQ</a></nav></div><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_3px_0_rgba(18,24,38,0.05)]" data-path="login" href="#">Entrar</a><a class="inline-flex items-center justify-center h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.3)]" data-path="cadastro" href="#">Criar minha loja grátis</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full">
+<!-- Master Application Container (Sidebar + Content Workspace) -->
+<div class="flex flex-col lg:flex-row w-full max-w-[1440px] mx-auto px-gutter py-space-lg gap-space-lg">
+<!-- MASTER SIDEBAR NAVIGATION (260px Fixed Width on Desktop) -->
+<aside class="w-full lg:w-[260px] flex-shrink-0 flex flex-col justify-between bg-surface-container-lowest rounded-xl shadow-sm p-space-md min-h-[calc(100vh-8rem)]">
+<div class="flex flex-col gap-space-md">
+<!-- Master Brand Identifier -->
+<div class="flex items-center justify-between px-space-xs py-space-xs pb-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="font-headline-sm text-headline-sm text-on-surface font-extrabold tracking-tight">MenuNext</span>
+<span class="inline-flex items-center px-2 py-0.5 rounded-full bg-primary-container text-on-primary font-label-sm text-label-sm tracking-wider uppercase font-bold">Master</span>
+</div>
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary animate-pulse" title="SaaS Core Ativo"></span>
+</div>
+<!-- Navigation Links -->
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors font-label-lg text-label-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span>Início</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors font-label-lg text-label-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">storefront</span>
+<span>Restaurantes</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors font-label-lg text-label-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">loyalty</span>
+<span>Assinaturas</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors font-label-lg text-label-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">sell</span>
+<span>Planos</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors font-label-lg text-label-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span>Pedidos</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors font-label-lg text-label-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span>Usuários</span>
+</a>
+<!-- Active Page: Métricas -->
+<a class="flex items-center justify-between px-space-sm py-2.5 rounded-lg bg-primary/10 text-primary font-bold font-label-lg text-label-lg shadow-sm" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">analytics</span>
+<span>Métricas</span>
+</div>
+<span class="w-1.5 h-4 rounded-full bg-primary"></span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors font-label-lg text-label-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">support_agent</span>
+<span>Suporte</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-lg text-on-surface-variant hover:text-on-surface hover:bg-surface-container-low transition-colors font-label-lg text-label-lg" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span>Configurações</span>
+</a>
+</nav>
+</div>
+<!-- Master User Profile Footer -->
+<div class="flex flex-col gap-space-xs bg-surface-container-low rounded-xl p-space-sm mt-space-md">
+<div class="flex items-center gap-space-xs min-w-0">
+<div class="w-9 h-9 rounded-full bg-primary flex-shrink-0 flex items-center justify-center text-on-primary font-bold font-label-md text-label-md">
+            AM
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface font-bold truncate">Admin Master</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">admin@menunext.com.br</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<a class="hover:text-primary transition-colors" href="#">Meu Perfil</a>
+<span>•</span>
+<a class="text-error hover:underline transition-colors flex items-center gap-0.5" href="#">
+<span class="material-symbols-outlined text-[14px]">logout</span> Sair
+          </a>
+</div>
+</div>
+</aside>
+<!-- MASTER WORKSPACE CONTENT -->
+<section class="flex-1 flex flex-col gap-space-lg min-w-0">
+<!-- TOP EXECUTIVE HEADER -->
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md bg-surface-container-lowest p-space-lg rounded-xl shadow-sm">
+<div>
+<div class="flex items-center gap-space-xs">
+<h1 class="font-headline-lg text-headline-lg text-on-surface font-bold tracking-tight">Métricas da Plataforma</h1>
+<span class="px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-bold flex items-center gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Em tempo real
+            </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">
+            Acompanhe crescimento, ativação, receita e retenção dos restaurantes cadastrados.
+          </p>
+</div>
+<!-- Controls & Datepicker Filter -->
+<div class="flex items-center flex-wrap gap-space-xs">
+<!-- Range Dropdown Filter -->
+<div class="relative inline-block text-left">
+<button class="h-10 px-space-md bg-surface-container-low text-on-surface rounded-xl font-label-md text-label-md font-semibold inline-flex items-center gap-space-xs hover:bg-surface-container transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px] text-primary">calendar_today</span>
+<span>Últimos 30 dias</span>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</button>
+</div>
+<!-- Export Action Button -->
+<button class="h-10 px-space-md bg-surface-container text-on-surface rounded-xl font-label-md text-label-md font-semibold inline-flex items-center gap-space-xs hover:bg-surface-container-high transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">download</span>
+<span>Exportar dados</span>
+</button>
+<!-- Notifications Alert -->
+<button class="h-10 w-10 relative bg-surface-container-low text-on-surface rounded-xl flex items-center justify-center hover:bg-surface-container transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary"></span>
+</button>
+</div>
+</div>
+<!-- EXECUTIVE FILTER CHIPS ROW -->
+<div class="bg-surface-container-lowest p-space-md rounded-xl shadow-sm flex flex-wrap items-center justify-between gap-space-md">
+<div class="flex flex-wrap items-center gap-space-md">
+<!-- Filter: Plano -->
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-bold">Plano:</span>
+<div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-lg">
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-primary font-label-sm text-label-sm font-bold shadow-xs">Todos</button>
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium">Start</button>
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium">Pro</button>
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium">Plus</button>
+</div>
+</div>
+<!-- Filter: Status -->
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-bold">Status:</span>
+<div class="flex items-center gap-1 bg-surface-container-low p-1 rounded-lg">
+<button class="px-2.5 py-1 rounded bg-surface-container-lowest text-primary font-label-sm text-label-sm font-bold shadow-xs">Todos</button>
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium">Ativos</button>
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium">Trials</button>
+<button class="px-2.5 py-1 rounded text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm font-medium">Cancelados</button>
+</div>
+</div>
+<!-- Filter: Origem -->
+<div class="flex items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-bold">Origem:</span>
+<select class="bg-surface-container-low text-on-surface font-label-sm text-label-sm font-medium py-1 px-2.5 rounded-lg outline-none cursor-pointer">
+<option>Todas as origens</option>
+<option>Orgânico</option>
+<option>Indicação</option>
+<option>Campanha Paga</option>
+<option>Convite Direto</option>
+</select>
+</div>
+</div>
+<div class="flex items-center gap-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[16px] text-tertiary">check_circle</span>
+<span>Filtros sincronizados</span>
+</div>
+</div>
+<!-- 1. GRID DE 6 KPIS PRINCIPAIS (Executive Summary) -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-md">
+<!-- Card 1: MRR -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between relative overflow-hidden">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-bold uppercase tracking-wider">MRR Consolidado</span>
+<span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> +8,4%
+            </span>
+</div>
+<div class="my-space-sm">
+<span class="font-headline-xl text-headline-xl text-on-surface font-extrabold tracking-tight">R$ 14.780,00</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Receita recorrente mensal consolidada
+          </p>
+</div>
+<!-- Card 2: Restaurantes Ativos -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-bold uppercase tracking-wider">Restaurantes Ativos</span>
+<span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-bold">
+              +14 no período
+            </span>
+</div>
+<div class="my-space-sm">
+<span class="font-headline-xl text-headline-xl text-on-surface font-extrabold tracking-tight">211</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Restaurantes operando com plano ativo
+          </p>
+</div>
+<!-- Card 3: Novos Restaurantes -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-bold uppercase tracking-wider">Novos Restaurantes</span>
+<span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> +18,5%
+            </span>
+</div>
+<div class="my-space-sm">
+<span class="font-headline-xl text-headline-xl text-on-surface font-extrabold tracking-tight">32</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Entraram nos últimos 30 dias
+          </p>
+</div>
+<!-- Card 4: Taxa de Ativação -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-bold uppercase tracking-wider">Taxa de Ativação</span>
+<span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-bold">
+              Meta: 65% (Superada)
+            </span>
+</div>
+<div class="my-space-sm">
+<span class="font-headline-xl text-headline-xl text-on-surface font-extrabold tracking-tight">68,4%</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Chegaram ao primeiro valor real de uso
+          </p>
+</div>
+<!-- Card 5: Conversão Trial -> Pago -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-bold uppercase tracking-wider">Conversão Trial → Pago</span>
+<span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-bold">
+              +3,2 p.p.
+            </span>
+</div>
+<div class="my-space-sm">
+<span class="font-headline-xl text-headline-xl text-on-surface font-extrabold tracking-tight">42,8%</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Média de conversão após período de 30 dias
+          </p>
+</div>
+<!-- Card 6: Churn Mensal -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md text-on-surface-variant font-bold uppercase tracking-wider">Churn Mensal</span>
+<span class="inline-flex items-center gap-0.5 px-2 py-0.5 rounded-full bg-secondary-fixed text-secondary font-label-sm text-label-sm font-bold">
+              Sob controle
+            </span>
+</div>
+<div class="my-space-sm">
+<span class="font-headline-xl text-headline-xl text-on-surface font-extrabold tracking-tight">2,1%</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> Taxa de cancelamento líquida do período
+          </p>
+</div>
+</div>
+<!-- 2. SEÇÃO DE CRESCIMENTO & MRR (2 Colunas: 2/3 & 1/3) -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-space-lg">
+<!-- Evolução do MRR (2/3 Coluna) -->
+<div class="lg:col-span-2 bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs pb-space-md">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Evolução do MRR</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Últimos 12 meses • Destaque: <strong class="text-tertiary">+251%</strong> de crescimento total</p>
+</div>
+<div class="flex items-center gap-space-xs">
+<span class="inline-flex items-center gap-1.5 font-label-sm text-label-sm text-on-surface font-bold bg-surface-container-low px-3 py-1.5 rounded-full">
+<span class="w-2 h-2 rounded-full bg-primary"></span> MRR Consolidado
+              </span>
+</div>
+</div>
+<!-- SVG Area Chart -->
+<div class="w-full h-64 relative mt-space-sm flex flex-col justify-end">
+<svg class="w-full h-full overflow-visible" preserveaspectratio="none" viewbox="0 0 780 220">
+<defs>
+<lineargradient id="mrrGradient" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#ab2f00" stop-opacity="0.35"></stop>
+<stop offset="100%" stop-color="#ab2f00" stop-opacity="0.0"></stop>
+</lineargradient>
+</defs>
+<!-- Subtle horizontal guides -->
+<line stroke="#e2e8fc" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="780" y1="40" y2="40"></line>
+<line stroke="#e2e8fc" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="780" y1="100" y2="100"></line>
+<line stroke="#e2e8fc" stroke-dasharray="4 4" stroke-width="1" x1="0" x2="780" y1="160" y2="160"></line>
+<!-- Fill Area -->
+<path d="M 0,185 
+                       L 70,175 
+                       L 140,160 
+                       L 210,145 
+                       L 280,135 
+                       L 350,118 
+                       L 420,105 
+                       L 490,88 
+                       L 560,76 
+                       L 630,64 
+                       L 700,58 
+                       L 770,40 
+                       L 770,220 
+                       L 0,220 Z" fill="url(#mrrGradient)"></path>
+<!-- Line Path -->
+<path d="M 0,185 
+                       L 70,175 
+                       L 140,160 
+                       L 210,145 
+                       L 280,135 
+                       L 350,118 
+                       L 420,105 
+                       L 490,88 
+                       L 560,76 
+                       L 630,64 
+                       L 700,58 
+                       L 770,40" fill="none" stroke="#ab2f00" stroke-linecap="round" stroke-width="3"></path>
+<!-- Highlight Indicator Point (Current Month: Set/26) -->
+<circle cx="770" cy="40" fill="#ab2f00" r="6" stroke="#ffffff" stroke-width="2.5"></circle>
+</svg>
+<!-- Tooltip simulation for active month -->
+<div class="absolute right-0 top-2 bg-inverse-surface text-inverse-on-surface px-3 py-1.5 rounded-lg shadow-md font-label-sm text-label-sm font-bold flex flex-col items-end">
+<span>Set/2026</span>
+<span class="text-primary-fixed-dim">R$ 14.780,00</span>
+</div>
+</div>
+<!-- X-Axis Labels -->
+<div class="flex justify-between items-center pt-space-xs text-on-surface-variant font-label-sm text-label-sm">
+<span>Out/25</span>
+<span>Nov</span>
+<span>Dez</span>
+<span>Jan/26</span>
+<span>Fev</span>
+<span>Mar</span>
+<span>Abr</span>
+<span>Mai</span>
+<span>Jun</span>
+<span>Jul</span>
+<span>Ago</span>
+<span class="font-bold text-primary">Set/26</span>
+</div>
+</div>
+<!-- Crescimento de Restaurantes (1/3 Coluna) -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-space-xs">
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Saldo de Restaurantes</h2>
+<span class="px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-bold">+28 líquido</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Balanço operacional dos últimos 30 dias</p>
+</div>
+<!-- Comparison Bar Visualizer -->
+<div class="flex flex-col gap-space-md my-space-md">
+<!-- Novos -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-semibold flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-on-surface"></span> Novos restaurantes
+                </span>
+<span class="font-bold text-on-surface">32</span>
+</div>
+<div class="w-full bg-surface-container-low h-3 rounded-full overflow-hidden">
+<div class="bg-on-surface h-full rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<!-- Ativados -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-semibold flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-tertiary"></span> Ativados (1º Pedido)
+                </span>
+<span class="font-bold text-tertiary">22</span>
+</div>
+<div class="w-full bg-surface-container-low h-3 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 68.7%;"></div>
+</div>
+</div>
+<!-- Cancelados -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm">
+<span class="text-on-surface font-semibold flex items-center gap-1.5">
+<span class="w-2.5 h-2.5 rounded-sm bg-error"></span> Cancelados (Churn)
+                </span>
+<span class="font-bold text-error">4</span>
+</div>
+<div class="w-full bg-surface-container-low h-3 rounded-full overflow-hidden">
+<div class="bg-error h-full rounded-full" style="width: 12.5%;"></div>
+</div>
+</div>
+</div>
+<!-- Summary Note -->
+<div class="p-space-sm rounded-lg bg-surface-container-low flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium">Saldo líquido apurado:</span>
+<span class="font-headline-sm text-headline-sm text-tertiary font-bold">+28 lojas</span>
+</div>
+</div>
+</div>
+<!-- 3. FUNIL DE ATIVAÇÃO & CONVERSÃO DE TRIAL (2 Colunas) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+<!-- Funil de Ativação -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-space-xs">
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Funil de Ativação de Restaurantes</h2>
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">Macro de Sucesso</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Jornada de onboarding até o primeiro pedido transacionado</p>
+</div>
+<!-- Horizontal Stage Funnel Steps -->
+<div class="flex flex-col gap-space-sm my-space-md">
+<!-- Stage 1 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface">
+<span class="font-semibold">1. Cadastro da Conta</span>
+<span class="font-bold">320 lojas (100%)</span>
+</div>
+<div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+<!-- Stage 2 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface">
+<span class="font-semibold">2. Criaram loja digital</span>
+<span class="font-bold">275 lojas (86%)</span>
+</div>
+<div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 86%;"></div>
+</div>
+</div>
+<!-- Stage 3 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface">
+<span class="font-semibold">3. Adicionaram produtos</span>
+<span class="font-bold">250 lojas (78%)</span>
+</div>
+<div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 78%;"></div>
+</div>
+</div>
+<!-- Stage 4 -->
+<div class="flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface">
+<span class="font-semibold">4. Publicaram a loja / QR Code</span>
+<span class="font-bold">230 lojas (72%)</span>
+</div>
+<div class="w-full bg-surface-container-low h-2.5 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 72%;"></div>
+</div>
+</div>
+<!-- Stage 5 (Goal) -->
+<div class="p-space-sm rounded-xl bg-primary/5 flex flex-col gap-1">
+<div class="flex justify-between font-label-sm text-label-sm text-primary">
+<span class="font-bold flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">stars</span> 5. Primeiro Pedido Recebido (Ativação Real)
+                </span>
+<span class="font-extrabold">219 lojas (68,4%)</span>
+</div>
+<div class="w-full bg-primary/20 h-3 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 68.4%;"></div>
+</div>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-tertiary">verified</span>
+            Consideramos o restaurante ativado quando publica sua loja e recebe seu primeiro pedido real.
+          </p>
+</div>
+<!-- Conversão de Trial (30 dias grátis) -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-space-xs">
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Conversão do Trial (30 dias grátis)</h2>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold">Período de Testes</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Acompanhamento contínuo de leads em experimentação</p>
+</div>
+<div class="grid grid-cols-2 gap-space-sm my-space-md">
+<div class="bg-surface-container-low p-space-md rounded-xl">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Trials Iniciados</span>
+<p class="font-headline-lg text-headline-lg text-on-surface font-extrabold mt-1">86</p>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Últimos 30 dias</span>
+</div>
+<div class="bg-surface-container-low p-space-md rounded-xl">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Trials Ativos Hoje</span>
+<p class="font-headline-lg text-headline-lg text-primary font-extrabold mt-1">37</p>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Dentro da janela</span>
+</div>
+<div class="bg-surface-container-low p-space-md rounded-xl">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Convertidos em Pagantes</span>
+<p class="font-headline-lg text-headline-lg text-tertiary font-extrabold mt-1">36</p>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">42,8% de conversão</span>
+</div>
+<div class="bg-surface-container-low p-space-md rounded-xl">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-semibold">Expirados sem Assinatura</span>
+<p class="font-headline-lg text-headline-lg text-on-surface-variant font-extrabold mt-1">13</p>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Oportunidade win-back</span>
+</div>
+</div>
+<!-- Retention Warning Banner -->
+<div class="p-space-sm rounded-xl bg-secondary-fixed flex items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-xs">
+<span class="material-symbols-outlined text-secondary text-[20px]">warning</span>
+<span class="font-label-sm text-label-sm text-on-secondary-fixed font-bold">
+                12 trials vencem nos próximos 7 dias
+              </span>
+</div>
+<a class="h-8 px-3 rounded-lg bg-surface-container-lowest text-on-surface hover:text-primary transition-colors font-label-sm text-label-sm font-bold inline-flex items-center shadow-xs" href="#">
+              Ver trials no Master →
+            </a>
+</div>
+</div>
+</div>
+<!-- 4. DISTRIBUIÇÃO POR PLANO & RETENÇÃO/CHURN (2 Colunas) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+<!-- Distribuição por Plano -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between pb-space-xs">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Distribuição por Plano</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">211 restaurantes com assinatura ativa</p>
+</div>
+<a class="text-primary hover:underline font-label-sm text-label-sm font-bold flex items-center gap-0.5" href="#">
+              Ver planos →
+            </a>
+</div>
+<!-- Progress Bars Breakdown -->
+<div class="flex flex-col gap-space-md my-space-md">
+<!-- Pro (Mais Utilizado) -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-label-md text-label-md">
+<span class="text-on-surface font-bold flex items-center gap-2">
+                  Plano Pro 
+                  <span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-extrabold uppercase">Mais Utilizado</span>
+</span>
+<span class="font-extrabold text-on-surface">124 lojas (58,8%)</span>
+</div>
+<div class="w-full bg-surface-container-low h-3 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 58.8%;"></div>
+</div>
+</div>
+<!-- Start -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-label-md text-label-md">
+<span class="text-on-surface font-bold">Plano Start</span>
+<span class="font-extrabold text-on-surface">68 lojas (32,2%)</span>
+</div>
+<div class="w-full bg-surface-container-low h-3 rounded-full overflow-hidden">
+<div class="bg-outline h-full rounded-full" style="width: 32.2%;"></div>
+</div>
+</div>
+<!-- Plus -->
+<div class="flex flex-col gap-1">
+<div class="flex items-center justify-between font-label-md text-label-md">
+<span class="text-on-surface font-bold">Plano Plus (Enterprise)</span>
+<span class="font-extrabold text-on-surface">19 lojas (9,0%)</span>
+</div>
+<div class="w-full bg-surface-container-low h-3 rounded-full overflow-hidden">
+<div class="bg-tertiary h-full rounded-full" style="width: 9.0%;"></div>
+</div>
+</div>
+</div>
+<div class="pt-space-xs text-on-surface-variant font-body-sm text-body-sm">
+            O tíquete médio do Plano Pro sustenta a maior margem bruta da plataforma, representando 71% da receita líquida recorrente.
+          </div>
+</div>
+<!-- Retenção e Churn -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between pb-space-xs">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Retenção e Churn</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Índice de permanência na base de lojistas</p>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-bold">97,9% Retenção</span>
+</div>
+<div class="grid grid-cols-2 gap-space-sm my-space-md">
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-bold">Cancelamentos</span>
+<p class="font-headline-lg text-headline-lg text-error font-extrabold mt-1">4 lojas</p>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Taxa de Churn: 2,1%</span>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-bold">Recuperados</span>
+<p class="font-headline-lg text-headline-lg text-tertiary font-extrabold mt-1">2 lojas</p>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Reativação ativa</span>
+</div>
+</div>
+<!-- Operational Notice -->
+<div class="p-space-sm rounded-xl bg-surface-container-low flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-medium flex items-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-primary">schedule</span>
+              2 cancelamentos ocorreram nos últimos 7 dias
+            </span>
+<a class="text-primary hover:underline font-label-sm text-label-sm font-bold" href="#">
+              Ver histórico →
+            </a>
+</div>
+</div>
+</div>
+<!-- 5. OPERAÇÃO DOS RESTAURANTES & INSIGHTS (2 Colunas) -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-space-lg">
+<!-- Volume Operacional Transacionado -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-space-xs">
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Volume Operacional Transacionado</h2>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold">Lojistas</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Tráfego de vendas processado pelo ecossistema MenuNext</p>
+</div>
+<div class="grid grid-cols-2 gap-space-sm my-space-md">
+<div class="p-space-md rounded-xl bg-surface-container-low">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-bold">Total de Pedidos</span>
+<p class="font-headline-lg text-headline-lg text-on-surface font-extrabold mt-1">3.487</p>
+<span class="font-body-sm text-body-sm text-on-surface-variant">No período de 30 dias</span>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-bold">Valor Transacionado</span>
+<p class="font-headline-lg text-headline-lg text-tertiary font-extrabold mt-1">R$ 181.420</p>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Vendas dos restaurantes</span>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-bold">Ticket Médio Geral</span>
+<p class="font-headline-lg text-headline-lg text-on-surface font-extrabold mt-1">R$ 52,03</p>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Por pedido emitido</span>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase font-bold">Lojas em Operação</span>
+<p class="font-headline-lg text-headline-lg text-primary font-extrabold mt-1">186 / 211</p>
+<span class="font-body-sm text-body-sm text-on-surface-variant">88,1% de engajamento</span>
+</div>
+</div>
+<!-- Segregation Disclaimer -->
+<div class="p-space-sm rounded-lg bg-surface-container text-on-surface-variant font-label-sm text-label-sm flex items-start gap-2">
+<span class="material-symbols-outlined text-[18px] text-primary flex-shrink-0">info</span>
+<span>Volume monetário transacionado diretamente pelos restaurantes clientes. Não representa faturamento direto do MenuNext SaaS.</span>
+</div>
+</div>
+<!-- Insights Automáticos da Plataforma -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between pb-space-xs">
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Insights Automáticos da Plataforma</h2>
+<span class="material-symbols-outlined text-primary text-[20px]">lightbulb</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Diagnósticos baseados em IA e telemetria comportamental</p>
+</div>
+<div class="flex flex-col gap-space-sm my-space-md">
+<!-- Insight 1: Crescimento -->
+<div class="p-space-sm rounded-xl bg-surface-container-low flex items-start gap-space-sm">
+<span class="w-3 h-3 rounded-full bg-tertiary flex-shrink-0 mt-1"></span>
+<div>
+<span class="font-label-sm text-label-sm text-tertiary font-bold uppercase tracking-wider">Crescimento de Receita</span>
+<p class="font-body-md text-body-md text-on-surface mt-0.5">
+                  O MRR cresceu <strong>8,4%</strong> nos últimos 30 dias, majoritariamente impulsionado pelo <strong>Plano Pro</strong> em dark kitchens.
+                </p>
+</div>
+</div>
+<!-- Insight 2: Ativação -->
+<div class="p-space-sm rounded-xl bg-surface-container-low flex items-start gap-space-sm">
+<span class="w-3 h-3 rounded-full bg-tertiary flex-shrink-0 mt-1"></span>
+<div>
+<span class="font-label-sm text-label-sm text-tertiary font-bold uppercase tracking-wider">Janela Crítica de Ativação</span>
+<p class="font-body-md text-body-md text-on-surface mt-0.5">
+                  Restaurantes que publicam a loja nas <strong>primeiras 24 horas</strong> possuem <strong>2.4x mais chances</strong> de receber pedidos no primeiro mês.
+                </p>
+</div>
+</div>
+<!-- Insight 3: Atenção -->
+<div class="p-space-sm rounded-xl bg-secondary-fixed flex items-start gap-space-sm">
+<span class="w-3 h-3 rounded-full bg-secondary flex-shrink-0 mt-1"></span>
+<div>
+<span class="font-label-sm text-label-sm text-secondary font-bold uppercase tracking-wider">Atenção Comercial</span>
+<p class="font-body-md text-body-md text-on-secondary-fixed mt-0.5">
+<strong>12 trials terminam nos próximos 7 dias</strong> — oportunidade para intervenção proativa da equipe de Customer Success.
+                </p>
+</div>
+</div>
+</div>
+<div class="pt-space-xs flex justify-end">
+<a class="text-primary hover:underline font-label-sm text-label-sm font-bold flex items-center gap-1" href="#">
+              Ver relatório de inteligência completo →
+            </a>
+</div>
+</div>
+</div>
+<!-- 6. TABELA: RESTAURANTES EM DESTAQUE (Mais Ativos no SaaS) -->
+<div class="bg-surface-container-lowest p-space-lg rounded-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-xs">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface font-bold">Restaurantes em Destaque no SaaS</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Lojas gerando maior volume de pedidos e engajamento no MenuNext</p>
+</div>
+<a class="h-9 px-space-md rounded-xl bg-surface-container-low text-on-surface hover:bg-surface-container transition-colors font-label-md text-label-md font-semibold inline-flex items-center gap-1 shadow-xs" href="#">
+<span>Ver todos os 211 restaurantes</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+<!-- Responsive Table Container -->
+<div class="overflow-x-auto w-full">
+<table class="w-full text-left font-body-md text-body-md">
+<thead>
+<tr class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm uppercase tracking-wider">
+<th class="py-space-sm px-space-md rounded-l-lg">Restaurante</th>
+<th class="py-space-sm px-space-md">Volume de Pedidos</th>
+<th class="py-space-sm px-space-md">Vendas Transacionadas</th>
+<th class="py-space-sm px-space-md">Plano Atual</th>
+<th class="py-space-sm px-space-md">Último Pedido</th>
+<th class="py-space-sm px-space-md text-right rounded-r-lg">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y-0">
+<!-- Row 1: Next Burger -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-md px-space-md font-bold text-on-surface">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-extrabold text-label-sm">
+                      NB
+                    </div>
+<div>
+<span>Next Burger</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-normal">Hamburgueria • São Paulo/SP</p>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md font-semibold text-on-surface">312 pedidos</td>
+<td class="py-space-md px-space-md font-bold text-tertiary">R$ 16.280,00</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-bold">Pro</span>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1 text-tertiary font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Há 4 min
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<button class="h-8 px-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold transition-colors">
+                    Gerenciar
+                  </button>
+</td>
+</tr>
+<!-- Row 2: Bella Massa -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-md px-space-md font-bold text-on-surface">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-tertiary/10 text-tertiary flex items-center justify-center font-extrabold text-label-sm">
+                      BM
+                    </div>
+<div>
+<span>Bella Massa</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-normal">Pizzaria • Curitiba/PR</p>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md font-semibold text-on-surface">284 pedidos</td>
+<td class="py-space-md px-space-md font-bold text-tertiary">R$ 14.920,00</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-0.5 rounded-full bg-tertiary/10 text-tertiary font-label-sm text-label-sm font-bold">Plus</span>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1 text-tertiary font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Há 12 min
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<button class="h-8 px-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold transition-colors">
+                    Gerenciar
+                  </button>
+</td>
+</tr>
+<!-- Row 3: Sakura House -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-md px-space-md font-bold text-on-surface">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-extrabold text-label-sm">
+                      SH
+                    </div>
+<div>
+<span>Sakura House</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-normal">Japonês • Rio de Janeiro/RJ</p>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md font-semibold text-on-surface">241 pedidos</td>
+<td class="py-space-md px-space-md font-bold text-tertiary">R$ 13.480,00</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-0.5 rounded-full bg-primary/10 text-primary font-label-sm text-label-sm font-bold">Pro</span>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1 text-tertiary font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span> Há 25 min
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<button class="h-8 px-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold transition-colors">
+                    Gerenciar
+                  </button>
+</td>
+</tr>
+<!-- Row 4: Marmita Boa Express -->
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="py-space-md px-space-md font-bold text-on-surface">
+<div class="flex items-center gap-space-xs">
+<div class="w-8 h-8 rounded-lg bg-outline/20 text-on-surface flex items-center justify-center font-extrabold text-label-sm">
+                      MB
+                    </div>
+<div>
+<span>Marmita Boa Express</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant font-normal">Comida Caseira • Belo Horizonte/MG</p>
+</div>
+</div>
+</td>
+<td class="py-space-md px-space-md font-semibold text-on-surface">198 pedidos</td>
+<td class="py-space-md px-space-md font-bold text-tertiary">R$ 9.870,00</td>
+<td class="py-space-md px-space-md">
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold">Start</span>
+</td>
+<td class="py-space-md px-space-md font-body-sm text-body-sm text-on-surface-variant">
+<span class="inline-flex items-center gap-1 text-on-surface-variant font-medium">
+<span class="w-1.5 h-1.5 rounded-full bg-outline"></span> Há 1 hora
+                  </span>
+</td>
+<td class="py-space-md px-space-md text-right">
+<button class="h-8 px-2.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface font-label-sm text-label-sm font-semibold transition-colors">
+                    Gerenciar
+                  </button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- MASTER AUDIT LOG & REFRESH FOOTNOTE -->
+<div class="flex flex-col sm:flex-row items-center justify-between gap-space-sm p-space-md bg-surface-container-lowest rounded-xl shadow-sm text-on-surface-variant font-body-sm text-body-sm">
+<div class="flex items-center gap-space-xs">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>Última sincronização global com bancos de dados: <strong>hoje às 16:42</strong></span>
+</div>
+<div class="flex items-center gap-space-md">
+<button class="hover:text-primary transition-colors flex items-center gap-1 font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[16px]">refresh</span> Atualizar métricas
+          </button>
+<span class="text-outline-variant">•</span>
+<a class="hover:text-on-surface transition-colors font-label-sm text-label-sm" href="#">Auditoria Master</a>
+</div>
+</div>
+</section>
+</div>
+</div></main><footer class="w-full bg-surface-container-low mt-space-3xl"><div class="max-w-[1440px] mx-auto px-gutter py-space-3xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl"><div class="lg:col-span-1 flex flex-col gap-space-md"><div class="flex items-center gap-space-xs"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">A plataforma definitiva de pedidos online, KDS e autoatendimento inteligente para restaurantes e dark kitchens que escalam com autonomia.</p><div class="flex items-center gap-space-xs mt-space-xs"><span class="inline-flex items-center px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>Infraestrutura Ativa</span></div></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Produto</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="cardapio-digital" href="#">Cardápio Digital QR</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="kds-cozinha" href="#">KDS Operacional</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="painel-gestao" href="#">Painel Gerencial</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="integracao-pos" href="#">Integrações POS &amp; iFood</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Tabela de Preços</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Empresa</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="sobre" href="#">Sobre o MenuNext</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="clientes" href="#">Histórias de Sucesso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="carreiras" href="#">Vagas e Carreiras</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="imprensa" href="#">Mídia &amp; Imprensa</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="parceiros" href="#">Programa de Parceiros</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Suporte</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="central-ajuda" href="#">Central de Ajuda 24/7</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="tutoriais" href="#">Vídeos e Tutoriais</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="status" href="#">Status dos Servidores</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">Perguntas Frequentes</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="fale-conosco" href="#">Contato com Consultor</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Legal</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="termos" href="#">Termos de Uso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade e LGPD</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="seguranca" href="#">Segurança da Informação</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="compliance" href="#">Políticas Comerciais</a></div></div><div class="mt-space-2xl pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><p>© 2025 MenuNext Tecnologia para Gastronomia Ltda. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</p><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade</a><a class="hover:text-on-surface transition-colors" data-path="termos" href="#">Termos</a></div></div></div></footer></body></html>

@@ -1,0 +1,852 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary-fixed-variant":"#005236","inverse-on-surface":"#edf0ff","outline":"#8f7067","secondary-container":"#d8391e","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#3f0400","on-secondary":"#ffffff","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-tint":"#af3100","inverse-surface":"#2a303f","tertiary":"#006947","on-primary-fixed":"#3a0a00","primary":"#ab2f00","error":"#ba1a1a","surface-bright":"#faf8ff","on-primary-fixed-variant":"#862300","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","primary-container":"#d53e02","surface-container-lowest":"#ffffff","outline-variant":"#e4beb4","on-primary-container":"#fffbff","primary-fixed":"#ffdbd1","on-surface":"#151b29","on-secondary-fixed-variant":"#8f1200","on-error-container":"#93000a","on-tertiary-container":"#f5fff6","primary-fixed-dim":"#ffb59f","on-error":"#ffffff","surface-container":"#e9edff","surface-container-high":"#e2e8fc","secondary":"#b41e04","surface-dim":"#d4d9ed","surface-variant":"#dde2f6","background":"#faf8ff","inverse-primary":"#ffb59f","error-container":"#ffdad6","surface":"#faf8ff","secondary-fixed-dim":"#ffb4a5","secondary-fixed":"#ffdad3","on-secondary-container":"#fffbff","surface-container-low":"#f1f3ff","on-background":"#151b29","tertiary-container":"#00855b","surface-container-highest":"#dde2f6","on-surface-variant":"#5b4139"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"container-max":"1440px","space-sm":"0.75rem","space-xl":"2rem","space-2xl":"3rem","space-3xl":"4rem","space-xs":"0.5rem","space-lg":"1.5rem","gutter":"1.5rem","space-2xs":"0.25rem","space-md":"1rem"},fontFamily:{"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-md":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-xs" data-path="landing-page" href="#"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></a><nav class="hidden lg:flex items-center gap-space-lg ml-space-md" data-active-classes="text-primary font-label-lg font-bold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="recursos" href="#">Recursos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="como-funciona" href="#">Como Funciona</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Planos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">FAQ</a></nav></div><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_3px_0_rgba(18,24,38,0.05)]" data-path="login" href="#">Entrar</a><a class="inline-flex items-center justify-center h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.3)]" data-path="cadastro" href="#">Criar minha loja grátis</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full">
+<!-- Sub-layout wrapper: Sidebar + Operational Dashboard Workspace -->
+<div class="flex w-full min-h-[calc(100vh-5rem)] bg-surface">
+<!-- PERSISTENT RESTAURANT B2B SIDEBAR -->
+<aside class="hidden xl:flex flex-col w-64 bg-surface-container-lowest shrink-0 shadow-[1px_0_4px_rgba(21,27,41,0.04)] justify-between">
+<div class="flex flex-col p-space-md">
+<!-- Store Identity Badge -->
+<div class="flex items-center gap-space-sm p-space-sm rounded-xl bg-surface-container-low mb-space-lg">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed flex items-center justify-center text-primary font-headline-sm font-extrabold shadow-sm shrink-0">
+            NB
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface truncate">Next Burger</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant flex items-center gap-1.5">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span> Unidade Express
+            </span>
+</div>
+</div>
+<!-- Navigation items list -->
+<nav class="flex flex-col gap-1">
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span>Início</span>
+</a>
+<a class="flex items-center justify-between px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-[20px]">receipt_long</span>
+<span>Pedidos</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm">4 novos</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">restaurant_menu</span>
+<span>Cardápio</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">two_wheeler</span>
+<span>Delivery e Taxas</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">point_of_sale</span>
+<span>Frente de Caixa (PDV)</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span>Clientes</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">insights</span>
+<span>Vendas &amp; Relatórios</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">loyalty</span>
+<span>Marketing &amp; Cupons</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">palette</span>
+<span>Aparência da Loja</span>
+</a>
+<!-- ACTIVE ITEM: HORÁRIOS -->
+<a class="flex items-center gap-space-sm px-space-sm py-2.5 rounded-xl bg-primary-fixed/60 text-primary font-label-lg text-label-lg shadow-sm" href="#">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">schedule</span>
+<span>Horários</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">payments</span>
+<span>Pagamentos</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">tune</span>
+<span>Configurações</span>
+</a>
+<a class="flex items-center gap-space-sm px-space-sm py-2 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[20px]">contact_support</span>
+<span>Ajuda &amp; Suporte</span>
+</a>
+</nav>
+</div>
+<!-- Profile Section in Sidebar Footer -->
+<div class="p-space-md bg-surface-container-low/60 m-space-sm rounded-xl">
+<div class="flex items-center gap-space-sm">
+<div class="w-9 h-9 rounded-full bg-surface-container-high flex items-center justify-center text-on-surface font-label-md font-bold shrink-0">
+            JD
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md text-on-surface truncate">Jonatha D.</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Administrador</span>
+</div>
+<button class="ml-auto text-on-surface-variant hover:text-on-surface p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">more_vert</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- OPERATIONAL WORKSPACE BODY -->
+<div class="flex-1 flex flex-col min-w-0">
+<!-- Operational Sub-Topbar -->
+<div class="w-full bg-surface-container-lowest px-gutter py-space-sm flex flex-wrap items-center justify-between gap-space-sm shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
+<div class="flex items-center gap-space-md">
+<div class="flex items-center gap-space-xs">
+<span class="w-3 h-3 rounded-full bg-tertiary animate-pulse"></span>
+<span class="font-label-lg text-label-lg text-tertiary">Loja Aberta</span>
+</div>
+<span class="w-1.5 h-1.5 rounded-full bg-surface-variant"></span>
+<div class="flex items-center gap-1 text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-tertiary text-[16px]">sensors</span>
+<span>Realtime Ativo</span>
+</div>
+<span class="w-1.5 h-1.5 rounded-full bg-surface-variant"></span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Next Burger Express</span>
+</div>
+<div class="flex items-center gap-space-sm">
+<a class="inline-flex items-center gap-1.5 px-space-sm py-1.5 rounded-xl bg-surface-container text-on-surface hover:bg-surface-container-high text-label-md font-label-md transition-all shadow-sm" href="#">
+<span class="material-symbols-outlined text-[16px]">storefront</span>
+<span>Ver Loja Pública</span>
+</a>
+<button class="relative w-9 h-9 rounded-xl bg-surface-container-low flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container transition-all" type="button">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary"></span>
+</button>
+</div>
+</div>
+<!-- Main Scrollable Dashboard Content -->
+<div class="max-w-[1440px] w-full mx-auto px-gutter py-space-xl flex flex-col gap-space-xl">
+<!-- Page Header Block -->
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-space-md bg-surface-container-lowest p-space-xl rounded-xl shadow-sm">
+<div class="flex flex-col gap-1 max-w-2xl">
+<div class="flex items-center gap-space-sm">
+<h1 class="font-headline-xl text-headline-xl text-on-surface font-extrabold tracking-tight">Horários de Funcionamento</h1>
+<span class="inline-flex items-center gap-1 px-space-sm py-0.5 rounded-full bg-tertiary-container/15 text-tertiary font-label-sm text-label-sm">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+                Loja configurada
+              </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+              Defina quando seu restaurante estará aberto para receber pedidos e configure regras de atendimento para Delivery e Retirada.
+            </p>
+</div>
+<!-- Quick Actions -->
+<div class="flex items-center gap-space-sm shrink-0">
+<button class="inline-flex items-center gap-2 h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container hover:bg-surface-container-high transition-colors shadow-sm" type="button">
+<span class="material-symbols-outlined text-[18px]">visibility</span>
+<span>Pré-visualizar loja</span>
+</button>
+<button class="inline-flex items-center gap-2 h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.3)]" type="button">
+<span class="material-symbols-outlined text-[18px]">save</span>
+<span>Salvar alterações</span>
+</button>
+</div>
+</div>
+<!-- 2-Column Responsive Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+<!-- LEFT / PRIMARY COLUMN (~65% -> 8 cols) -->
+<div class="lg:col-span-8 flex flex-col gap-space-xl">
+<!-- SECTION 1: Horários Semanais -->
+<section class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col gap-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md pb-space-sm">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Horários Semanais</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                    Configure os turnos habituais de atendimento. Adicione múltiplos períodos para almoço e jantar.
+                  </p>
+</div>
+<div class="flex items-center gap-space-xs shrink-0">
+<button class="inline-flex items-center gap-1.5 px-space-sm py-1.5 rounded-lg bg-surface-container text-primary font-label-md text-label-md hover:bg-primary-fixed/30 transition-colors" onclick="document.getElementById('modal-copy').classList.remove('hidden')" type="button">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+<span>Copiar horários...</span>
+</button>
+<button class="inline-flex items-center gap-1 px-space-sm py-1.5 rounded-lg text-on-surface-variant hover:text-on-surface font-label-md text-label-md" type="button">
+<span class="material-symbols-outlined text-[16px]">unfold_more</span>
+<span>Expandir todos</span>
+</button>
+</div>
+</div>
+<!-- Intelligent Smart Alert -->
+<div class="flex items-start gap-space-sm p-space-md rounded-xl bg-surface-container-low text-on-surface">
+<span class="material-symbols-outlined text-secondary text-[20px] shrink-0 mt-0.5">schedule</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold">Intervalo de intervalo detectado</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                    Existe um intervalo entre 15:00 e 18:00 (Seg a Sex). A loja ficará pausada para preparação da equipe durante esse período.
+                  </span>
+</div>
+</div>
+<!-- Days Matrix Container -->
+<div class="flex flex-col gap-space-sm">
+<!-- SEGUNDA-FEIRA -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-[140px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Segunda-feira</span>
+<span class="font-label-sm text-label-sm text-tertiary">Aberto</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-space-xs">
+<!-- Turno 1 -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant w-14">Almoço:</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1.5 rounded-lg shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">11:00</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">às</span>
+<span class="font-label-md text-label-md text-on-surface">15:00</span>
+</div>
+<button class="text-on-surface-variant hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Turno 2 -->
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant w-14">Jantar:</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1.5 rounded-lg shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">18:00</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">às</span>
+<span class="font-label-md text-label-md text-on-surface">23:00</span>
+</div>
+<button class="text-on-surface-variant hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<button class="text-primary hover:bg-primary-fixed/20 px-space-sm py-1 rounded-lg font-label-sm text-label-sm self-start md:self-center transition-colors" type="button">
+                    + Adicionar período
+                  </button>
+</div>
+<!-- TERÇA-FEIRA -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-[140px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Terça-feira</span>
+<span class="font-label-sm text-label-sm text-tertiary">Aberto</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-space-xs">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant w-14">Turno 1:</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1.5 rounded-lg shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">11:00</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">às</span>
+<span class="font-label-md text-label-md text-on-surface">15:00</span>
+</div>
+<button class="text-on-surface-variant hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant w-14">Turno 2:</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1.5 rounded-lg shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">18:00</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">às</span>
+<span class="font-label-md text-label-md text-on-surface">23:00</span>
+</div>
+<button class="text-on-surface-variant hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<button class="text-primary hover:bg-primary-fixed/20 px-space-sm py-1 rounded-lg font-label-sm text-label-sm self-start md:self-center transition-colors" type="button">
+                    + Adicionar período
+                  </button>
+</div>
+<!-- QUARTA-FEIRA -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-[140px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Quarta-feira</span>
+<span class="font-label-sm text-label-sm text-tertiary">Aberto</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-space-xs">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant w-14">Turno 1:</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1.5 rounded-lg shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">11:00</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">às</span>
+<span class="font-label-md text-label-md text-on-surface">15:00</span>
+</div>
+<button class="text-on-surface-variant hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant w-14">Turno 2:</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1.5 rounded-lg shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">18:00</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">às</span>
+<span class="font-label-md text-label-md text-on-surface">23:00</span>
+</div>
+<button class="text-on-surface-variant hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<button class="text-primary hover:bg-primary-fixed/20 px-space-sm py-1 rounded-lg font-label-sm text-label-sm self-start md:self-center transition-colors" type="button">
+                    + Adicionar período
+                  </button>
+</div>
+<!-- QUINTA-FEIRA -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-[140px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Quinta-feira</span>
+<span class="font-label-sm text-label-sm text-tertiary">Aberto</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-space-xs">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant w-14">Turno 1:</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1.5 rounded-lg shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">11:00</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">às</span>
+<span class="font-label-md text-label-md text-on-surface">15:00</span>
+</div>
+<button class="text-on-surface-variant hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant w-14">Turno 2:</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1.5 rounded-lg shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">18:00</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">às</span>
+<span class="font-label-md text-label-md text-on-surface">23:00</span>
+</div>
+<button class="text-on-surface-variant hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<button class="text-primary hover:bg-primary-fixed/20 px-space-sm py-1 rounded-lg font-label-sm text-label-sm self-start md:self-center transition-colors" type="button">
+                    + Adicionar período
+                  </button>
+</div>
+<!-- SEXTA-FEIRA -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-[140px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Sexta-feira</span>
+<span class="font-label-sm text-label-sm text-tertiary">Aberto</span>
+</div>
+</div>
+<div class="flex-1 flex flex-col gap-space-xs">
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant w-14">Turno 1:</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1.5 rounded-lg shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">11:00</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">às</span>
+<span class="font-label-md text-label-md text-on-surface">15:00</span>
+</div>
+<button class="text-on-surface-variant hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<div class="flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant w-14">Turno 2:</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1.5 rounded-lg shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">18:00</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">às</span>
+<span class="font-label-md text-label-md text-on-surface">00:00</span>
+</div>
+<span class="font-label-sm text-label-sm text-primary font-bold">(Estendido)</span>
+<button class="text-on-surface-variant hover:text-error p-1" type="button">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+</div>
+<button class="text-primary hover:bg-primary-fixed/20 px-space-sm py-1 rounded-lg font-label-sm text-label-sm self-start md:self-center transition-colors" type="button">
+                    + Adicionar período
+                  </button>
+</div>
+<!-- SÁBADO -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-[140px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Sábado</span>
+<span class="font-label-sm text-label-sm text-tertiary">Aberto</span>
+</div>
+</div>
+<div class="flex-1 flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant w-14">Contínuo:</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1.5 rounded-lg shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">11:00</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">às</span>
+<span class="font-label-md text-label-md text-on-surface">00:00</span>
+</div>
+<span class="font-label-sm text-label-sm text-tertiary font-bold">(Direto sem pausa)</span>
+</div>
+<button class="text-primary hover:bg-primary-fixed/20 px-space-sm py-1 rounded-lg font-label-sm text-label-sm self-start md:self-center transition-colors" type="button">
+                    + Adicionar período
+                  </button>
+</div>
+<!-- DOMINGO -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col md:flex-row md:items-center justify-between gap-space-md">
+<div class="flex items-center gap-space-md min-w-[140px]">
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-10 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Domingo</span>
+<span class="font-label-sm text-label-sm text-tertiary">Aberto</span>
+</div>
+</div>
+<div class="flex-1 flex flex-wrap items-center gap-space-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant w-14">Contínuo:</span>
+<div class="flex items-center gap-1 bg-surface-container-lowest px-space-sm py-1.5 rounded-lg shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">12:00</span>
+<span class="text-on-surface-variant text-label-sm font-label-sm">às</span>
+<span class="font-label-md text-label-md text-on-surface">22:00</span>
+</div>
+</div>
+<button class="text-primary hover:bg-primary-fixed/20 px-space-sm py-1 rounded-lg font-label-sm text-label-sm self-start md:self-center transition-colors" type="button">
+                    + Adicionar período
+                  </button>
+</div>
+</div>
+</section>
+<!-- SECTION 2: Horários por Modalidade (Delivery & Retirada) -->
+<section class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col gap-space-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Horários por Modalidade</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                  Gerencie se a entrega em domicílio e a retirada no balcão operam em sincronia ou em horários descompassados.
+                </p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+<!-- Option 1: Simultaneous -->
+<div class="p-space-lg rounded-xl bg-primary-fixed/20 flex flex-col gap-space-sm relative">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<input checked="" class="w-4 h-4 text-primary" id="sync-hours" name="channel_hours" type="radio"/>
+<label class="font-label-lg text-label-lg text-on-surface font-bold cursor-pointer" for="sync-hours">
+                        Sincronizados (Recomendado)
+                      </label>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm">Padrão</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                    Delivery e Retirada operam simultaneamente conforme os turnos gerais configurados acima.
+                  </p>
+</div>
+<!-- Option 2: Differentiated -->
+<div class="p-space-lg rounded-xl bg-surface-container-low flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<input class="w-4 h-4 text-primary" id="custom-hours" name="channel_hours" type="radio"/>
+<label class="font-label-lg text-label-lg text-on-surface font-bold cursor-pointer" for="custom-hours">
+                        Diferenciados por canal
+                      </label>
+</div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                    Exemplo prático: Encerrar o Delivery 30 minutos antes para o despacho final de motoboys e manter balcão.
+                  </p>
+</div>
+</div>
+<!-- Route to Delivery Config -->
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low">
+<div class="flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[22px]">local_shipping</span>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-surface">Configurações avançadas de Raio e Taxa</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Ajuste valores de km, bairros de atendimento e tempo estimado.</span>
+</div>
+</div>
+<a class="inline-flex items-center gap-1 font-label-md text-label-md text-primary hover:underline" href="#">
+<span>Configurar Delivery</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</section>
+<!-- SECTION 3: Regras de Pedidos & Antecedência -->
+<section class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col gap-space-lg">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Regras de Pedidos &amp; Antecedência</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                  Defina o comportamento do checkout antes da abertura e agendamento de pedidos.
+                </p>
+</div>
+<div class="flex flex-col gap-space-md">
+<!-- Config 1: Pré-abertura -->
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low">
+<div class="flex flex-col gap-0.5">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Pré-abertura de pedidos</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                      Aceitar pedidos 15 minutos antes da abertura da cozinha (entra na fila inicial de despacho).
+                    </span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer ml-4">
+<input class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+<!-- Config 2: Pedidos agendados -->
+<div class="flex items-center justify-between p-space-md rounded-xl bg-surface-container-low">
+<div class="flex flex-col gap-0.5">
+<div class="flex items-center gap-space-xs">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">Permitir pedidos agendados</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm">Recomendado</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">
+                      Clientes poderão programar entrega ou retirada para horários futuros com antecedência mínima de 30 minutos.
+                    </span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer ml-4">
+<input checked="" class="sr-only peer" type="checkbox"/>
+<div class="w-11 h-6 bg-surface-variant peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-tertiary"></div>
+</label>
+</div>
+</div>
+</section>
+<!-- SECTION 4: Exceções e Datas Especiais -->
+<section class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col gap-space-lg">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-space-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-bold">Exceções e Datas Especiais</h2>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                    Feriados, comemorações e pausas sazonais com funcionamento customizado.
+                  </p>
+</div>
+<button class="inline-flex items-center gap-1.5 px-space-md py-2 rounded-xl bg-primary-fixed/30 text-primary font-label-md text-label-md hover:bg-primary-fixed/50 transition-colors shrink-0" onclick="document.getElementById('modal-exception').classList.remove('hidden')" type="button">
+<span class="material-symbols-outlined text-[18px]">add</span>
+<span>Adicionar exceção</span>
+</button>
+</div>
+<!-- Exceptions Cards List -->
+<div class="flex flex-col gap-space-sm">
+<!-- Exceção 1 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-on-surface shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">event_busy</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">12/10/2026</span>
+<span class="text-on-surface-variant text-body-sm font-body-sm">— Nossa Senhora Aparecida</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Feriado Nacional</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md justify-between sm:justify-end">
+<span class="inline-flex items-center gap-1 px-space-sm py-1 rounded-full bg-error-container text-error font-label-sm text-label-sm font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-error"></span>
+                      Fechado o dia todo
+                    </span>
+<div class="flex items-center gap-1">
+<button class="p-1 text-on-surface-variant hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-error" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Exceção 2 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-on-surface shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">event_available</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">15/11/2026</span>
+<span class="text-on-surface-variant text-body-sm font-body-sm">— Proclamação da República</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Turno reduzido</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md justify-between sm:justify-end">
+<span class="inline-flex items-center gap-1 px-space-sm py-1 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                      Horário Especial (12:00 — 18:00)
+                    </span>
+<div class="flex items-center gap-1">
+<button class="p-1 text-on-surface-variant hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-error" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Exceção 3 -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex flex-col sm:flex-row sm:items-center justify-between gap-space-sm">
+<div class="flex items-center gap-space-md">
+<div class="w-10 h-10 rounded-xl bg-surface-container-lowest flex items-center justify-center text-on-surface shrink-0 shadow-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">event_available</span>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-label-lg text-label-lg text-on-surface font-bold">31/12/2026</span>
+<span class="text-on-surface-variant text-body-sm font-body-sm">— Véspera de Ano Novo</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Almoço especial</span>
+</div>
+</div>
+<div class="flex items-center gap-space-md justify-between sm:justify-end">
+<span class="inline-flex items-center gap-1 px-space-sm py-1 rounded-full bg-primary-fixed text-primary font-label-sm text-label-sm font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-primary"></span>
+                      Horário Especial (11:00 — 16:00)
+                    </span>
+<div class="flex items-center gap-1">
+<button class="p-1 text-on-surface-variant hover:text-on-surface" type="button">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1 text-on-surface-variant hover:text-error" type="button">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- RIGHT / SECONDARY COLUMN (~35% -> 4 cols) -->
+<div class="lg:col-span-4 flex flex-col gap-space-xl">
+<!-- CARD 1: Status Operacional da Loja -->
+<div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Status Operacional</span>
+<span class="inline-flex items-center gap-1.5 px-space-sm py-1 rounded-full bg-tertiary-container/20 text-tertiary font-label-sm text-label-sm font-bold">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                  ABERTA AGORA
+                </span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">Canal Próprio em Operação</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                  Recebendo pedidos normalmente pelo cardápio digital e balcão.
+                </p>
+</div>
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center gap-space-sm">
+<span class="material-symbols-outlined text-primary text-[20px]">timelapse</span>
+<div class="flex flex-col text-on-surface">
+<span class="font-label-sm text-label-sm font-bold">Próximo Marco:</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Fecha hoje às 23:00 (início do turno noturno às 18:00)</span>
+</div>
+</div>
+<!-- Quick Contingency Actions -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<button class="w-full flex items-center justify-center gap-2 h-10 px-space-md rounded-xl font-label-md text-label-md text-on-surface bg-surface-container hover:bg-surface-container-high transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">pause_circle</span>
+<span>Pausar pedidos temporariamente</span>
+</button>
+<button class="w-full flex items-center justify-center gap-2 h-10 px-space-md rounded-xl font-label-md text-label-md text-error bg-error-container/30 hover:bg-error-container/50 transition-colors" type="button">
+<span class="material-symbols-outlined text-[18px]">door_front</span>
+<span>Fechar loja hoje</span>
+</button>
+</div>
+</div>
+<!-- CARD 2: Próximos Horários & Previsão -->
+<div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Linha do Tempo Hoje</h3>
+<span class="material-symbols-outlined text-on-surface-variant text-[18px]">history</span>
+</div>
+<!-- Compact Timeline -->
+<div class="flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-sm text-body-sm font-body-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary shrink-0"></span>
+<span class="text-on-surface font-bold">Hoje (Turno Tarde):</span>
+<span class="text-on-surface-variant ml-auto">Fechamento às 15:00</span>
+</div>
+<div class="flex items-center gap-space-sm text-body-sm font-body-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-primary shrink-0"></span>
+<span class="text-on-surface font-bold">Hoje (Turno Noite):</span>
+<span class="text-on-surface-variant ml-auto">18:00 às 23:00</span>
+</div>
+<div class="flex items-center gap-space-sm text-body-sm font-body-sm">
+<span class="w-2.5 h-2.5 rounded-full bg-surface-variant shrink-0"></span>
+<span class="text-on-surface">Amanhã (Sexta):</span>
+<span class="text-on-surface-variant ml-auto">11h–15h e 18h–00h</span>
+</div>
+</div>
+<!-- Punctuality KPI Widget -->
+<div class="p-space-md rounded-xl bg-surface-container-low flex items-center justify-between mt-space-xs">
+<div class="flex flex-col">
+<span class="font-headline-md text-headline-md text-tertiary font-extrabold">99.4%</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Pontualidade nos horários</span>
+</div>
+<!-- Inline SVG Sparkline -->
+<svg class="w-20 h-8 text-tertiary" fill="none" viewbox="0 0 100 40">
+<path d="M0 35 L20 30 L40 28 L60 15 L80 12 L100 8" stroke="currentColor" stroke-linecap="round" stroke-width="3"></path>
+</svg>
+</div>
+</div>
+<!-- CARD 3: Como o Cliente Vê na Loja Pública -->
+<div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col gap-space-md">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface font-bold">Como o Cliente Vê</h3>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">Ao Vivo</span>
+</div>
+<!-- Realistic Mockup of the Public Customer Store -->
+<div class="rounded-xl overflow-hidden bg-surface-container-low shadow-sm">
+<!-- Mini Hero Banner -->
+<div class="h-20 bg-primary-container relative">
+<div class="absolute -bottom-4 left-3 w-10 h-10 rounded-lg bg-surface-container-lowest shadow-md flex items-center justify-center font-bold text-primary font-headline-sm">
+                    NB
+                  </div>
+</div>
+<div class="pt-5 p-3 flex flex-col gap-2">
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Next Burger Express</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Burgers Artesanais &amp; Batatas Rústicas</span>
+</div>
+<!-- Dynamic Pill Preview -->
+<div class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-tertiary-container/15 text-tertiary text-label-sm font-label-sm">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+<span>Aberto agora • Pedidos até 23:00</span>
+</div>
+<div class="p-2 rounded-lg bg-surface-container-lowest text-on-surface-variant font-body-sm text-[11px] leading-tight flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px] text-primary">info</span>
+<span>Se fechado: exibe "Voltamos hoje às 18:00 (Aceitando agendamentos)"</span>
+</div>
+</div>
+</div>
+<a class="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-primary font-label-md text-label-md hover:bg-primary-fixed/20 transition-colors" href="#">
+<span>Ver Loja Pública Completa</span>
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+</a>
+</div>
+<!-- CARD 4: Disponibilidade de Produtos Específicos -->
+<div class="bg-surface-container-lowest p-space-xl rounded-xl shadow-sm flex flex-col gap-space-sm">
+<div class="flex items-center gap-space-xs text-on-surface">
+<span class="material-symbols-outlined text-primary text-[22px]">lunch_dining</span>
+<span class="font-headline-sm text-headline-sm font-bold">Horários por Produto</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                Você sabia? Pratos executivos de almoço ou itens de edição limitada podem ter horários exclusivos definidos diretamente no cadastro do produto.
+              </p>
+<a class="inline-flex items-center gap-1 text-primary font-label-md text-label-md font-bold hover:underline pt-space-xs" href="#">
+<span>Gerenciar cardápio</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- INTERACTIVE MODAL / DIALOG: COPIAR HORÁRIOS (Hidden by default, triggered by button) -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/60 backdrop-blur-sm p-4" id="modal-copy">
+<div class="bg-surface-container-lowest max-w-md w-full rounded-2xl p-space-xl shadow-xl flex flex-col gap-space-lg">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold">Copiar Horários</h3>
+<button class="p-1 text-on-surface-variant hover:text-on-surface" onclick="document.getElementById('modal-copy').classList.add('hidden')" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant">
+        Copie a configuração de <strong>Segunda-feira (11h–15h e 18h–23h)</strong> para os seguintes dias:
+      </p>
+<div class="flex flex-col gap-space-xs">
+<label class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-container-low cursor-pointer">
+<input checked="" class="w-4 h-4 text-primary" type="checkbox"/>
+<span class="font-label-lg text-label-lg text-on-surface">Terça-feira</span>
+</label>
+<label class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-container-low cursor-pointer">
+<input checked="" class="w-4 h-4 text-primary" type="checkbox"/>
+<span class="font-label-lg text-label-lg text-on-surface">Quarta-feira</span>
+</label>
+<label class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-container-low cursor-pointer">
+<input checked="" class="w-4 h-4 text-primary" type="checkbox"/>
+<span class="font-label-lg text-label-lg text-on-surface">Quinta-feira</span>
+</label>
+<label class="flex items-center gap-space-sm p-space-sm rounded-lg bg-surface-container-low cursor-pointer">
+<input class="w-4 h-4 text-primary" type="checkbox"/>
+<span class="font-label-lg text-label-lg text-on-surface">Sexta-feira</span>
+</label>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-sm">
+<button class="px-space-md py-2 rounded-xl text-on-surface-variant hover:text-on-surface font-label-md text-label-md" onclick="document.getElementById('modal-copy').classList.add('hidden')" type="button">
+          Cancelar
+        </button>
+<button class="px-space-lg py-2 rounded-xl bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container shadow-md" onclick="document.getElementById('modal-copy').classList.add('hidden')" type="button">
+          Aplicar replicação
+        </button>
+</div>
+</div>
+</div>
+<!-- INTERACTIVE MODAL / DIALOG: ADICIONAR EXCEÇÃO -->
+<div class="hidden fixed inset-0 z-50 flex items-center justify-center bg-inverse-surface/60 backdrop-blur-sm p-4" id="modal-exception">
+<div class="bg-surface-container-lowest max-w-lg w-full rounded-2xl p-space-xl shadow-xl flex flex-col gap-space-lg">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-md text-headline-md text-on-surface font-bold">Nova Exceção de Horário</h3>
+<button class="p-1 text-on-surface-variant hover:text-on-surface" onclick="document.getElementById('modal-exception').classList.add('hidden')" type="button">
+<span class="material-symbols-outlined text-[20px]">close</span>
+</button>
+</div>
+<div class="flex flex-col gap-space-md">
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface">Data da exceção</label>
+<input class="h-11 px-3 rounded-xl bg-surface-container-low text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40 font-body-md text-body-md" type="date" value="2026-12-25"/>
+</div>
+<div class="flex flex-col gap-1">
+<label class="font-label-md text-label-md text-on-surface">Nome da data comemorativa / motivo</label>
+<input class="h-11 px-3 rounded-xl bg-surface-container-low text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/40 font-body-md text-body-md" placeholder="Ex: Natal ou Férias Coletivas" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-md text-label-md text-on-surface">Tipo de funcionamento</label>
+<div class="grid grid-cols-2 gap-space-sm">
+<label class="flex items-center gap-2 p-space-sm rounded-xl bg-surface-container-low cursor-pointer">
+<input checked="" class="text-primary" name="modal_tipo" type="radio"/>
+<span class="font-label-sm text-label-sm font-bold text-on-surface">Fechado o dia todo</span>
+</label>
+<label class="flex items-center gap-2 p-space-sm rounded-xl bg-surface-container-low cursor-pointer">
+<input class="text-primary" name="modal_tipo" type="radio"/>
+<span class="font-label-sm text-label-sm font-bold text-on-surface">Horário Especial</span>
+</label>
+</div>
+</div>
+</div>
+<div class="flex items-center justify-end gap-space-sm pt-space-sm">
+<button class="px-space-md py-2 rounded-xl text-on-surface-variant hover:text-on-surface font-label-md text-label-md" onclick="document.getElementById('modal-exception').classList.add('hidden')" type="button">
+          Cancelar
+        </button>
+<button class="px-space-lg py-2 rounded-xl bg-primary text-on-primary font-label-md text-label-md hover:bg-primary-container shadow-md" onclick="document.getElementById('modal-exception').classList.add('hidden')" type="button">
+          Salvar data especial
+        </button>
+</div>
+</div>
+</div>
+</div></main><footer class="w-full bg-surface-container-low mt-space-3xl"><div class="max-w-[1440px] mx-auto px-gutter py-space-3xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl"><div class="lg:col-span-1 flex flex-col gap-space-md"><div class="flex items-center gap-space-xs"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">A plataforma definitiva de pedidos online, KDS e autoatendimento inteligente para restaurantes e dark kitchens que escalam com autonomia.</p><div class="flex items-center gap-space-xs mt-space-xs"><span class="inline-flex items-center px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>Infraestrutura Ativa</span></div></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Produto</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="cardapio-digital" href="#">Cardápio Digital QR</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="kds-cozinha" href="#">KDS Operacional</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="painel-gestao" href="#">Painel Gerencial</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="integracao-pos" href="#">Integrações POS &amp; iFood</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Tabela de Preços</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Empresa</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="sobre" href="#">Sobre o MenuNext</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="clientes" href="#">Histórias de Sucesso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="carreiras" href="#">Vagas e Carreiras</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="imprensa" href="#">Mídia &amp; Imprensa</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="parceiros" href="#">Programa de Parceiros</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Suporte</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="central-ajuda" href="#">Central de Ajuda 24/7</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="tutoriais" href="#">Vídeos e Tutoriais</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="status" href="#">Status dos Servidores</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">Perguntas Frequentes</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="fale-conosco" href="#">Contato com Consultor</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Legal</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="termos" href="#">Termos de Uso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade e LGPD</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="seguranca" href="#">Segurança da Informação</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="compliance" href="#">Políticas Comerciais</a></div></div><div class="mt-space-2xl pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><p>© 2025 MenuNext Tecnologia para Gastronomia Ltda. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</p><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade</a><a class="hover:text-on-surface transition-colors" data-path="termos" href="#">Termos</a></div></div></div></footer></body></html>

@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base{html,body{margin:0;padding:0;}body{overscroll-behavior:none;}main>:first-child{margin-top:0!important;}main>:last-child{margin-bottom:0!important;}}::-webkit-scrollbar{display:none;}</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config={darkMode:"class",theme:{extend:{colors:{"on-tertiary-fixed-variant":"#005236","inverse-on-surface":"#edf0ff","outline":"#8f7067","secondary-container":"#d8391e","tertiary-fixed":"#6ffbbe","on-secondary-fixed":"#3f0400","on-secondary":"#ffffff","on-tertiary":"#ffffff","on-primary":"#ffffff","surface-tint":"#af3100","inverse-surface":"#2a303f","tertiary":"#006947","on-primary-fixed":"#3a0a00","primary":"#ab2f00","error":"#ba1a1a","surface-bright":"#faf8ff","on-primary-fixed-variant":"#862300","tertiary-fixed-dim":"#4edea3","on-tertiary-fixed":"#002113","primary-container":"#d53e02","surface-container-lowest":"#ffffff","outline-variant":"#e4beb4","on-primary-container":"#fffbff","primary-fixed":"#ffdbd1","on-surface":"#151b29","on-secondary-fixed-variant":"#8f1200","on-error-container":"#93000a","on-tertiary-container":"#f5fff6","primary-fixed-dim":"#ffb59f","on-error":"#ffffff","surface-container":"#e9edff","surface-container-high":"#e2e8fc","secondary":"#b41e04","surface-dim":"#d4d9ed","surface-variant":"#dde2f6","background":"#faf8ff","inverse-primary":"#ffb59f","error-container":"#ffdad6","surface":"#faf8ff","secondary-fixed-dim":"#ffb4a5","secondary-fixed":"#ffdad3","on-secondary-container":"#fffbff","surface-container-low":"#f1f3ff","on-background":"#151b29","tertiary-container":"#00855b","surface-container-highest":"#dde2f6","on-surface-variant":"#5b4139"},borderRadius:{"DEFAULT":"0.25rem","lg":"0.5rem","xl":"0.75rem","full":"9999px"},spacing:{"container-max":"1440px","space-sm":"0.75rem","space-xl":"2rem","space-2xl":"3rem","space-3xl":"4rem","space-xs":"0.5rem","space-lg":"1.5rem","gutter":"1.5rem","space-2xs":"0.25rem","space-md":"1rem"},fontFamily:{"label-sm":["Plus Jakarta Sans"],"label-md":["Plus Jakarta Sans"],"headline-xl":["Plus Jakarta Sans"],"label-lg":["Plus Jakarta Sans"],"headline-sm":["Plus Jakarta Sans"],"headline-lg":["Plus Jakarta Sans"],"display":["Plus Jakarta Sans"],"headline-md":["Plus Jakarta Sans"],"body-sm":["Plus Jakarta Sans"],"body-md":["Plus Jakarta Sans"],"body-lg":["Plus Jakarta Sans"]},fontSize:{"label-sm":["11px",{"lineHeight":"14px","letterSpacing":"0.04em","fontWeight":"700"}],"label-md":["12px",{"lineHeight":"16px","letterSpacing":"0.02em","fontWeight":"600"}],"headline-xl":["36px",{"lineHeight":"44px","letterSpacing":"-0.025em","fontWeight":"700"}],"label-lg":["14px",{"lineHeight":"20px","letterSpacing":"0.01em","fontWeight":"600"}],"headline-sm":["18px",{"lineHeight":"26px","letterSpacing":"-0.01em","fontWeight":"600"}],"headline-lg":["28px",{"lineHeight":"36px","letterSpacing":"-0.02em","fontWeight":"700"}],"display":["48px",{"lineHeight":"56px","letterSpacing":"-0.03em","fontWeight":"800"}],"headline-md":["22px",{"lineHeight":"30px","letterSpacing":"-0.015em","fontWeight":"600"}],"body-sm":["12px",{"lineHeight":"18px","letterSpacing":"0.005em","fontWeight":"400"}],"body-md":["14px",{"lineHeight":"20px","letterSpacing":"0em","fontWeight":"400"}],"body-lg":["16px",{"lineHeight":"24px","letterSpacing":"-0.005em","fontWeight":"400"}]}}}};</script></head><body class="bg-surface font-body-md text-on-surface"><header class="fixed top-0 left-0 w-full z-50 bg-surface-container-lowest/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]"><div class="h-20 max-w-[1440px] mx-auto px-gutter flex items-center justify-between gap-space-md"><div class="flex items-center gap-space-lg"><a class="flex items-center gap-space-xs" data-path="landing-page" href="#"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></a><nav class="hidden lg:flex items-center gap-space-lg ml-space-md" data-active-classes="text-primary font-label-lg font-bold"><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="recursos" href="#">Recursos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="como-funciona" href="#">Como Funciona</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Planos</a><a class="font-label-lg text-label-lg text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">FAQ</a></nav></div><div class="flex items-center gap-space-sm"><a class="hidden sm:inline-flex items-center justify-center h-11 px-space-md rounded-xl font-label-lg text-label-lg text-on-surface bg-surface-container-lowest hover:bg-surface-container hover:text-on-surface transition-colors shadow-[0_1px_3px_0_rgba(18,24,38,0.05)]" data-path="login" href="#">Entrar</a><a class="inline-flex items-center justify-center h-11 px-space-lg rounded-xl font-label-lg text-label-lg text-on-primary bg-primary hover:bg-primary-container transition-all active:scale-[0.98] shadow-[0_4px_14px_rgba(171,47,0,0.3)]" data-path="cadastro" href="#">Criar minha loja grátis</a><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center ml-space-xs"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="w-full pt-20 bg-surface"><div class="flex flex-col w-full">
+<!-- Master Application Container -->
+<div class="min-h-screen flex bg-surface text-on-surface antialiased">
+<!-- MASTER PERSISTENT SIDEBAR -->
+<aside class="w-[270px] shrink-0 bg-surface-container-lowest flex flex-col justify-between shadow-[1px_0_4px_rgba(18,24,38,0.03)] z-20">
+<div class="flex flex-col">
+<!-- Sidebar Brand / Logo Bar -->
+<div class="h-20 px-6 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-on-primary shadow-[0_4px_12px_rgba(171,47,0,0.25)]">
+<span class="material-symbols-outlined text-[24px]">lunch_dining</span>
+</div>
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm font-extrabold tracking-tight text-on-surface">MenuNext</span>
+<span class="font-label-sm text-label-sm text-outline tracking-wider uppercase font-bold">Plataforma SaaS</span>
+</div>
+</div>
+</div>
+<!-- Master Badge Section -->
+<div class="px-6 pb-4">
+<div class="flex items-center justify-between px-3 py-2 rounded-lg bg-surface-container text-on-surface">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-primary animate-ping"></span>
+<span class="font-label-sm text-label-sm tracking-wide font-extrabold uppercase text-primary">Painel Master</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-lowest text-on-surface-variant font-label-sm text-[10px] font-bold">v2.4</span>
+</div>
+</div>
+<!-- Master Navigation Items -->
+<nav class="px-3 flex flex-col gap-1 mt-2">
+<!-- Início -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">home</span>
+<span>Início</span>
+</div>
+</a>
+<!-- Restaurantes (ACTIVE) -->
+<a class="relative flex items-center justify-between px-3.5 py-2.5 rounded-xl bg-primary-fixed/40 text-primary font-bold transition-all shadow-sm" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] text-primary" style="font-variation-settings: 'FILL' 1;">storefront</span>
+<span class="font-label-lg text-label-lg text-primary">Restaurantes</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-primary text-on-primary font-label-sm text-label-sm">248</span>
+<div class="absolute left-0 top-1.5 bottom-1.5 w-1 rounded-r-full bg-primary"></div>
+</a>
+<!-- Assinaturas -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">credit_card</span>
+<span>Assinaturas</span>
+</div>
+</a>
+<!-- Planos -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">inventory_2</span>
+<span>Planos</span>
+</div>
+</a>
+<!-- Pedidos -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">receipt_long</span>
+<span>Pedidos</span>
+</div>
+</a>
+<!-- Usuários -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">group</span>
+<span>Usuários</span>
+</div>
+</a>
+<!-- Métricas -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">bar_chart</span>
+<span>Métricas</span>
+</div>
+</a>
+<!-- Suporte -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">support_agent</span>
+<span>Suporte</span>
+</div>
+<span class="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm font-bold">2</span>
+</a>
+<!-- Configurações -->
+<a class="flex items-center justify-between px-3.5 py-2.5 rounded-xl text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-colors font-label-lg text-label-lg" href="#">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-[20px] text-on-surface-variant">settings</span>
+<span>Configurações</span>
+</div>
+</a>
+</nav>
+</div>
+<!-- Sidebar Footer: Session Info -->
+<div class="p-4 mx-3 mb-4 rounded-xl bg-surface-container-low flex flex-col gap-3">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-xl bg-inverse-surface text-inverse-on-surface flex items-center justify-center font-bold text-label-md">
+            AM
+          </div>
+<div class="flex flex-col min-w-0 flex-1">
+<span class="font-label-md text-label-md font-bold text-on-surface truncate">Admin Master</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant truncate">admin@menunext.com.br</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-2">
+<span class="inline-flex items-center gap-1.5 font-label-sm text-[11px] text-tertiary font-bold">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+            Sessão Ativa
+          </span>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-primary transition-colors" href="#">Sair</a>
+</div>
+</div>
+</aside>
+<!-- MASTER WORKSPACE AREA -->
+<div class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+<!-- MASTER TOP HEADER -->
+<header class="w-full bg-surface-container-lowest px-8 py-4 flex flex-col gap-4 shadow-[0_1px_4px_rgba(18,24,38,0.03)] sticky top-0 z-10">
+<div class="flex items-center justify-between">
+<!-- Breadcrumb / Back Action -->
+<div class="flex flex-col gap-1">
+<a class="inline-flex items-center gap-1.5 text-on-surface-variant hover:text-primary transition-colors font-label-md text-label-md" href="#">
+<span class="material-symbols-outlined text-[16px]">arrow_back</span>
+<span>Voltar para todos os restaurantes</span>
+</a>
+<div class="flex items-center gap-3 mt-1">
+<h1 class="font-headline-lg text-headline-lg font-extrabold text-on-surface tracking-tight">Next Burger</h1>
+<span class="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm font-semibold">Loja Parceira</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Detalhes, métricas e situação cadastral do restaurante no ecossistema MenuNext.</p>
+</div>
+<!-- Header Right Actions & Operator Status -->
+<div class="flex items-center gap-4">
+<!-- Platform Date Pill -->
+<div class="hidden xl:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface-container-low text-on-surface-variant font-label-md text-label-md">
+<span class="material-symbols-outlined text-[18px]">calendar_today</span>
+<span>09 de Setembro de 2026</span>
+</div>
+<!-- Notifications Action -->
+<button class="relative w-10 h-10 rounded-xl bg-surface-container-low text-on-surface flex items-center justify-center hover:bg-surface-container transition-colors" title="Notificações Master">
+<span class="material-symbols-outlined text-[20px]">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-primary ring-2 ring-surface-container-lowest"></span>
+</button>
+<!-- Quick Jump to Merchant Panel -->
+<button class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg transition-all shadow-[0_4px_14px_rgba(171,47,0,0.25)] active:scale-[0.98]">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+<span>Gerenciar Restaurante</span>
+</button>
+</div>
+</div>
+</header>
+<!-- PAGE BODY CONTENT -->
+<div class="p-8 max-w-[1400px] w-full mx-auto flex flex-col gap-6">
+<!-- MASTER OPERATOR MODE BANNER -->
+<div class="p-4 rounded-xl bg-surface-container-low shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg bg-primary-fixed flex items-center justify-center text-primary shrink-0">
+<span class="material-symbols-outlined text-[20px]">admin_panel_settings</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-lg text-label-lg font-bold text-on-surface">Modo de Operador Master Habilitado</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Você tem privilégios de auditoria para visualizar configurações, assinaturas e atuar em nome deste restaurante mantendo a barra master de retorno.</p>
+</div>
+</div>
+<div class="flex items-center gap-2 self-end sm:self-auto shrink-0">
+<span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm font-bold">ID MN-0001048</span>
+</div>
+</div>
+<!-- CARD 1: RESTAURANT HERO IDENTIFICATION CARD -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+<div class="flex items-start sm:items-center gap-5">
+<!-- Restaurant Monogram / Visual Shield -->
+<div class="relative w-20 h-20 rounded-2xl bg-surface-container-high flex items-center justify-center text-primary shrink-0 shadow-inner">
+<span class="material-symbols-outlined text-[42px]">lunch_dining</span>
+<div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-tertiary flex items-center justify-center text-on-tertiary ring-2 ring-surface-container-lowest">
+<span class="material-symbols-outlined text-[12px] font-bold">check</span>
+</div>
+</div>
+<!-- Details -->
+<div class="flex flex-col gap-1.5">
+<div class="flex flex-wrap items-center gap-2">
+<h2 class="font-headline-md text-headline-md font-bold text-on-surface">Next Burger</h2>
+<span class="font-body-md text-body-md text-on-surface-variant">@nextburger</span>
+<!-- ID Copy Pill -->
+<button class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-surface-container text-on-surface-variant hover:text-on-surface font-label-sm text-label-sm transition-colors" onclick="navigator.clipboard.writeText('MN-0001048')" title="Clique para copiar ID">
+<span>MN-0001048</span>
+<span class="material-symbols-outlined text-[14px]">content_copy</span>
+</button>
+</div>
+<!-- Tags / Status Pills -->
+<div class="flex flex-wrap items-center gap-2 pt-1">
+<span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">
+<span class="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+                  Ativo na Plataforma
+                </span>
+<span class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px]">workspace_premium</span>
+                  Plano Pro (R$ 69,90/mês)
+                </span>
+<span class="inline-flex items-center gap-1 px-3 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm">
+<span class="material-symbols-outlined text-[14px]">event</span>
+                  Criado em 09/09/2026
+                </span>
+</div>
+</div>
+</div>
+<!-- Main Actions -->
+<div class="flex flex-wrap items-center gap-3">
+<a class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-lg text-label-lg transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+<span>Acessar loja pública</span>
+</a>
+<button class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg transition-all shadow-[0_4px_12px_rgba(171,47,0,0.3)] active:scale-[0.98]">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+<span>Gerenciar restaurante</span>
+</button>
+</div>
+</div>
+<!-- CARD 2: EXECUTIVE SUMMARY METRICS (4 KPIs GRID) -->
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
+<!-- Metric 1: Pedidos -->
+<div class="p-5 rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-3">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-bold text-on-surface-variant uppercase tracking-wider">Pedidos</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">+18 este mês</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl font-extrabold text-on-surface">248</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">pedidos</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Total de pedidos transacionados</span>
+</div>
+<!-- Metric 2: MRR -->
+<div class="p-5 rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-3">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-bold text-on-surface-variant uppercase tracking-wider">MRR</span>
+<span class="px-2 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed-variant font-label-sm text-label-sm font-bold">Plano Pro</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl font-extrabold text-on-surface">R$ 69,90</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">/mês</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Receita recorrente gerada</span>
+</div>
+<!-- Metric 3: Clientes -->
+<div class="p-5 rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-3">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-bold text-on-surface-variant uppercase tracking-wider">Clientes</span>
+<span class="px-2 py-0.5 rounded-full bg-surface-container text-on-surface font-label-sm text-label-sm font-bold">Base ativa</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl font-extrabold text-on-surface">186</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">únicos</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Clientes cadastrados na loja</span>
+</div>
+<!-- Metric 4: Última Atividade -->
+<div class="p-5 rounded-xl bg-surface-container-lowest shadow-sm flex flex-col justify-between gap-3">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-bold text-on-surface-variant uppercase tracking-wider">Última Atividade</span>
+<span class="px-2 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">Online</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-headline-xl text-headline-xl font-extrabold text-on-surface">Hoje, 12:42</span>
+</div>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Última movimentação no painel</span>
+</div>
+</div>
+<!-- MAIN 2-COLUMN STRUCTURE -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+<!-- LEFT COLUMN (Approx 60-65% width = 7 of 12 cols on desktop) -->
+<div class="lg:col-span-7 flex flex-col gap-6">
+<!-- CARD 3: STATUS DA CONTA & ASSINATURA -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-6">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Status da Conta &amp; Assinatura</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Informações de faturamento recorrente e ciclo de vida SaaS.</p>
+</div>
+<!-- State Simulation Selector -->
+<div class="flex items-center gap-1 p-1 rounded-lg bg-surface-container-low self-start">
+<span class="font-label-sm text-[10px] text-on-surface-variant px-1.5 uppercase font-bold">Simular:</span>
+<button class="px-2 py-0.5 rounded text-label-sm font-bold bg-surface-container-lowest text-tertiary shadow-xs">Ativo</button>
+<button class="px-2 py-0.5 rounded text-label-sm text-on-surface-variant hover:text-on-surface">Trial</button>
+<button class="px-2 py-0.5 rounded text-label-sm text-on-surface-variant hover:text-on-surface">Cancelado</button>
+</div>
+</div>
+<!-- Subscription Data Rows -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Situação da Assinatura</span>
+<div class="flex items-center gap-2 mt-1">
+<span class="w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<span class="font-label-lg text-label-lg font-bold text-tertiary">Assinatura Regular e Ativa</span>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Plano Atual</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface mt-1">MenuNext Pro (Mensal)</span>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Valor Cobrado</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface mt-1">R$ 69,90 / mês</span>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Próxima Renovação</span>
+<span class="font-label-lg text-label-lg font-bold text-on-surface mt-1">09 de Outubro de 2026</span>
+</div>
+</div>
+<!-- Payment Method Section -->
+<div class="p-4 rounded-xl bg-surface-container-low flex items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container-lowest flex items-center justify-center text-on-surface shadow-xs">
+<span class="material-symbols-outlined text-[24px]">payment</span>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-surface">Mastercard final •••• 4242</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Cobrança automática cadastrada via Stripe Gateway</span>
+</div>
+</div>
+<span class="px-2.5 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">Válido</span>
+</div>
+<!-- Card Action Button -->
+<div class="flex justify-end pt-2">
+<a class="inline-flex items-center gap-1.5 font-label-lg text-label-lg text-primary hover:text-primary-container transition-colors font-bold" href="#">
+<span>Ver detalhes da assinatura e faturas</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+<!-- CARD 4: HEALTH OF ACTIVATION (PROGRESS STEPPER / FUNNEL) -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-6">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Progresso de Ativação na Plataforma</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Acompanhamento do funil de ativação do lojista desde a criação.</p>
+</div>
+<span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold self-start">
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+                  100% Ativado
+                </span>
+</div>
+<!-- Activation Banner Message -->
+<div class="p-3.5 rounded-xl bg-tertiary-fixed/30 text-on-tertiary-fixed-variant flex items-center gap-3">
+<span class="material-symbols-outlined text-tertiary text-[20px]">check_circle</span>
+<span class="font-body-sm text-body-sm font-semibold">Este restaurante completou com sucesso todas as etapas essenciais de ativação no MenuNext.</span>
+</div>
+<!-- Stepper List -->
+<div class="flex flex-col gap-3">
+<!-- Step 1 -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[16px]">done</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">Conta criada e verificada</span>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">09/09/2026</span>
+</div>
+<!-- Step 2 -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[16px]">done</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">Onboarding de configuração concluído (7/7 passos)</span>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">09/09/2026</span>
+</div>
+<!-- Step 3 -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[16px]">done</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">Loja configurada (Horários, Áreas &amp; Taxas)</span>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">09/09/2026</span>
+</div>
+<!-- Step 4 -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[16px]">done</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">Loja pública publicada e DNS propagado</span>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Hoje, 09:48</span>
+</div>
+<!-- Step 5 -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[16px]">done</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">Primeiro pedido transacionado (#1048)</span>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Hoje, 10:32</span>
+</div>
+<!-- Step 6 -->
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low">
+<div class="flex items-center gap-3">
+<div class="w-7 h-7 rounded-full bg-tertiary text-on-tertiary flex items-center justify-center font-bold">
+<span class="material-symbols-outlined text-[16px]">done</span>
+</div>
+<span class="font-label-md text-label-md font-bold text-on-surface">Assinatura Pro convertida e ativa</span>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Ontem, 18:41</span>
+</div>
+</div>
+</div>
+<!-- CARD 5: RESUMO DE PEDIDOS (AGGREGATIONS ONLY - COMPLIANT WITH MASTER VIEW) -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-6">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Volume de Pedidos (Agregações)</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Métricas consolidadas transacionadas pelo restaurante (sem dados operacionais locais).</p>
+</div>
+</div>
+<!-- 3 Metrics Boxes -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+<div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Hoje</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-extrabold text-on-surface">24</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">pedidos</span>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Este Mês</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-extrabold text-on-surface">248</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">pedidos</span>
+</div>
+</div>
+<div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant font-bold uppercase tracking-wider">Total Acumulado</span>
+<div class="flex items-baseline gap-1 mt-1">
+<span class="font-headline-md text-headline-md font-extrabold text-on-surface">1.248</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">pedidos</span>
+</div>
+</div>
+</div>
+<!-- Health and Completion Rate Bar -->
+<div class="p-4 rounded-xl bg-surface-container-low flex flex-col gap-2">
+<div class="flex items-center justify-between">
+<span class="font-label-md text-label-md font-bold text-on-surface">Taxa de Conclusão de Pedidos</span>
+<span class="font-label-md text-label-md font-extrabold text-tertiary">96.4% Entregues</span>
+</div>
+<div class="w-full h-2.5 rounded-full bg-surface-container-highest overflow-hidden">
+<div class="h-full bg-tertiary rounded-full" style="width: 96.4%"></div>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Apenas 3.6% de cancelamentos ou reembolsos registrados no histórico.</span>
+</div>
+<!-- Navigation to Orders Master with filter -->
+<div class="flex justify-end pt-2">
+<a class="inline-flex items-center gap-1.5 font-label-lg text-label-lg text-primary hover:text-primary-container transition-colors font-bold" href="#">
+<span>Ver todos os pedidos deste restaurante no painel Master</span>
+<span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+</a>
+</div>
+</div>
+</div>
+<!-- RIGHT COLUMN (Approx 35-40% width = 5 of 12 cols on desktop) -->
+<div class="lg:col-span-5 flex flex-col gap-6">
+<!-- CARD 6: INFORMAÇÕES ADMINISTRATIVAS & CADASTRAIS -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-5">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Informações Cadastrais</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Dados de contato do titular e registro do lojista.</p>
+</div>
+<div class="flex flex-col gap-3">
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Nome Comercial:</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">Next Burger</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Slug URL:</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">/nextburger</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<span class="font-body-sm text-body-sm text-on-surface-variant">ID do Restaurante:</span>
+<span class="font-label-md text-label-md font-bold text-primary">MN-0001048</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Responsável Legal:</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">João da Silva</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<span class="font-body-sm text-body-sm text-on-surface-variant">WhatsApp / Telefone:</span>
+<div class="flex items-center gap-2">
+<span class="font-label-md text-label-md font-bold text-on-surface">(11) 99999-9999</span>
+<a class="p-1 rounded-md bg-tertiary-fixed text-on-tertiary-fixed hover:bg-tertiary-fixed-dim transition-colors" href="https://wa.me/5511999999999" target="_blank" title="Conversar no WhatsApp">
+<span class="material-symbols-outlined text-[14px]">chat</span>
+</a>
+</div>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<span class="font-body-sm text-body-sm text-on-surface-variant">E-mail Titular:</span>
+<span class="font-label-md text-label-md font-bold text-on-surface truncate max-w-[180px]">contato@nextburger.com.br</span>
+</div>
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-surface-container-low">
+<span class="font-body-sm text-body-sm text-on-surface-variant">Data de Entrada:</span>
+<span class="font-label-md text-label-md font-bold text-on-surface">09/09/2026 às 08:30</span>
+</div>
+</div>
+</div>
+<!-- CARD 7: LOJA PÚBLICA & DIVULGAÇÃO -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-5">
+<div class="flex items-center justify-between">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Loja Pública Oficial</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Página de cardápio digital do cliente.</p>
+</div>
+<span class="px-2.5 py-0.5 rounded-full bg-tertiary-fixed text-on-tertiary-fixed font-label-sm text-label-sm font-bold">Publicada</span>
+</div>
+<!-- URL Box -->
+<div class="p-3 rounded-xl bg-surface-container-low flex items-center justify-between gap-2">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-primary text-[18px]">link</span>
+<span class="font-label-md text-label-md font-bold text-on-surface truncate">menunext.com.br/nextburger</span>
+</div>
+<button class="p-1.5 rounded-lg bg-surface-container hover:bg-surface-container-high text-on-surface transition-colors shrink-0" onclick="navigator.clipboard.writeText('https://menunext.com.br/nextburger')" title="Copiar Link">
+<span class="material-symbols-outlined text-[16px]">content_copy</span>
+</button>
+</div>
+<!-- QR Code Preview Representation -->
+<div class="p-4 rounded-xl bg-surface-container-low flex items-center gap-4">
+<div class="w-16 h-16 rounded-lg bg-surface-container-lowest p-1.5 shadow-xs flex items-center justify-center shrink-0">
+<svg class="w-full h-full text-on-surface" fill="currentColor" viewbox="0 0 24 24">
+<path d="M3 3h7v7H3V3zm2 2v3h3V5H5zm8-2h7v7h-7V3zm2 2v3h3V5h-3zM3 13h7v7H3v-7zm2 2v3h3v-3H5zm11 1h2v2h-2v-2zm-3-3h2v2h-2v-2zm2 5h2v2h-2v-2zm3-2h2v2h-2v-2zm-2-3h2v2h-2v-2zm3-2h2v2h-2v-2z"></path>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-surface">QR Code de Balcão e Mesas</span>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Pronto para impressão em displays físicos ou adesivos.</span>
+</div>
+</div>
+<a class="w-full py-2.5 rounded-xl bg-surface-container-high hover:bg-surface-container text-on-surface font-label-lg text-label-lg flex items-center justify-center gap-2 transition-colors" href="#">
+<span class="material-symbols-outlined text-[18px]">open_in_new</span>
+<span>Abrir Loja Pública em Nova Guia</span>
+</a>
+</div>
+<!-- CARD 8: ATIVIDADE RECENTE (TIMELINE AUDIT) -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-5">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Atividade Recente da Loja</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Eventos operacionais mais recentes registrados.</p>
+</div>
+<!-- Compact Timeline -->
+<div class="flex flex-col gap-4 relative pl-3">
+<div class="absolute left-4 top-2 bottom-2 w-0.5 bg-surface-container"></div>
+<!-- Event 1 -->
+<div class="flex items-start gap-3 relative">
+<div class="w-2.5 h-2.5 rounded-full bg-tertiary ring-4 ring-surface-container-lowest mt-1.5 shrink-0 z-10"></div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-surface">Primeiro pedido recebido</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Pedido #1048 despachado com sucesso.</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Hoje, 10:32</span>
+</div>
+</div>
+<!-- Event 2 -->
+<div class="flex items-start gap-3 relative">
+<div class="w-2.5 h-2.5 rounded-full bg-tertiary ring-4 ring-surface-container-lowest mt-1.5 shrink-0 z-10"></div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-surface">Loja pública publicada</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Domínio liberado e cardápio online.</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Hoje, 09:48</span>
+</div>
+</div>
+<!-- Event 3 -->
+<div class="flex items-start gap-3 relative">
+<div class="w-2.5 h-2.5 rounded-full bg-primary ring-4 ring-surface-container-lowest mt-1.5 shrink-0 z-10"></div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-surface">Produto adicionado ao cardápio</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Item "Next Smash Burger" publicado.</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Hoje, 09:22</span>
+</div>
+</div>
+<!-- Event 4 -->
+<div class="flex items-start gap-3 relative">
+<div class="w-2.5 h-2.5 rounded-full bg-surface-container-highest ring-4 ring-surface-container-lowest mt-1.5 shrink-0 z-10"></div>
+<div class="flex flex-col">
+<span class="font-label-md text-label-md font-bold text-on-surface">Assinatura Pro confirmada</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Cartão de crédito aprovado (Mastercard).</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant mt-0.5">Ontem, 18:41</span>
+</div>
+</div>
+</div>
+</div>
+<!-- CARD 9: AUDITORIA MASTER (ÚLTIMAS AÇÕES ADMINISTRATIVAS) -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-4">
+<div>
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Auditoria Administrativa (Master)</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Rastreabilidade de intervenções de administradores.</p>
+</div>
+<div class="flex flex-col gap-2.5">
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-bold text-on-surface">Acesso ao Painel Lojista</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Hoje, 12:40</span>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Admin Master acessou o painel em modo operador.</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-bold text-on-surface">Consulta de Faturamento</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Hoje, 11:18</span>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Detalhes do Plano Pro consultados para conciliação.</span>
+</div>
+<div class="p-3 rounded-lg bg-surface-container-low flex flex-col gap-1">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm font-bold text-on-surface">Provisionamento Inicial</span>
+<span class="font-body-sm text-[11px] text-on-surface-variant">09/09/2026, 08:30</span>
+</div>
+<span class="font-body-sm text-[12px] text-on-surface-variant">Conta criada via auto-cadastro com validação de e-mail.</span>
+</div>
+</div>
+<span class="font-body-sm text-[11px] text-on-surface-variant">Histórico completo auditável disponível em Configurações &gt; Auditoria.</span>
+</div>
+<!-- CARD 10: AÇÕES RÁPIDAS ADMINISTRATIVAS MASTER -->
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm flex flex-col gap-4">
+<h3 class="font-headline-sm text-headline-sm font-bold text-on-surface">Ações do Master</h3>
+<div class="grid grid-cols-2 gap-3">
+<button class="col-span-2 py-3 px-4 rounded-xl bg-primary hover:bg-primary-container text-on-primary font-label-lg text-label-lg flex items-center justify-center gap-2 transition-all shadow-[0_4px_12px_rgba(171,47,0,0.25)]">
+<span class="material-symbols-outlined text-[18px]">bolt</span>
+<span>Gerenciar Restaurante</span>
+</button>
+<a class="py-2.5 px-3 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center gap-1.5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">open_in_new</span>
+<span>Acessar Loja</span>
+</a>
+<a class="py-2.5 px-3 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center gap-1.5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">credit_card</span>
+<span>Ver Assinatura</span>
+</a>
+<a class="col-span-2 py-2.5 px-3 rounded-xl bg-surface-container-low hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center gap-1.5 transition-colors" href="#">
+<span class="material-symbols-outlined text-[16px]">receipt_long</span>
+<span>Ver Pedidos no Painel Master</span>
+</a>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div></main><footer class="w-full bg-surface-container-low mt-space-3xl"><div class="max-w-[1440px] mx-auto px-gutter py-space-3xl"><div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-space-xl"><div class="lg:col-span-1 flex flex-col gap-space-md"><div class="flex items-center gap-space-xs"><img alt="MenuNext Brand Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1UORNwMmRvImLNAQsE7UHc--eQjxc4Zop9JRoc4Pylvjgz0mnWCXY5jeqQpEiBaEiviJRRtztg-MQv-dP0PoRpB1n1pKpcR8ZEvEG1AK449taZtpmxSk95Cp3IH5x_K-0qWX-wo-pj6AafkXgU5AzsH8KjC7CTxPuIlucvTRcHD5NrKr_x4bAopcNxb95mArSgzyocXYBo6CTBcF9PdyNTsMjp4LobbXIhEBrBK6Wypu_8dzkBeexmxTu8"/><span class="font-headline-sm text-headline-sm text-on-surface font-bold">MenuNext</span></div><p class="font-body-sm text-body-sm text-on-surface-variant">A plataforma definitiva de pedidos online, KDS e autoatendimento inteligente para restaurantes e dark kitchens que escalam com autonomia.</p><div class="flex items-center gap-space-xs mt-space-xs"><span class="inline-flex items-center px-space-sm py-1 rounded-full bg-surface-container-high text-on-surface font-label-sm text-label-sm"><span class="w-2 h-2 rounded-full bg-tertiary mr-1.5 animate-pulse"></span>Infraestrutura Ativa</span></div></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Produto</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="cardapio-digital" href="#">Cardápio Digital QR</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="kds-cozinha" href="#">KDS Operacional</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="painel-gestao" href="#">Painel Gerencial</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="integracao-pos" href="#">Integrações POS &amp; iFood</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="planos" href="#">Tabela de Preços</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Empresa</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="sobre" href="#">Sobre o MenuNext</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="clientes" href="#">Histórias de Sucesso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="carreiras" href="#">Vagas e Carreiras</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="imprensa" href="#">Mídia &amp; Imprensa</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="parceiros" href="#">Programa de Parceiros</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Suporte</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="central-ajuda" href="#">Central de Ajuda 24/7</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="tutoriais" href="#">Vídeos e Tutoriais</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="status" href="#">Status dos Servidores</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="faq" href="#">Perguntas Frequentes</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="fale-conosco" href="#">Contato com Consultor</a></div><div class="flex flex-col gap-space-sm"><span class="font-label-lg text-label-lg text-on-surface font-bold">Legal</span><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="termos" href="#">Termos de Uso</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade e LGPD</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="seguranca" href="#">Segurança da Informação</a><a class="font-body-md text-body-md text-on-surface-variant hover:text-on-surface transition-colors" data-path="compliance" href="#">Políticas Comerciais</a></div></div><div class="mt-space-2xl pt-space-lg flex flex-col sm:flex-row items-center justify-between gap-space-md text-on-surface-variant font-body-sm text-body-sm"><p>© 2025 MenuNext Tecnologia para Gastronomia Ltda. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</p><div class="flex items-center gap-space-lg"><a class="hover:text-on-surface transition-colors" data-path="privacidade" href="#">Privacidade</a><a class="hover:text-on-surface transition-colors" data-path="termos" href="#">Termos</a></div></div></div></footer></body></html>
