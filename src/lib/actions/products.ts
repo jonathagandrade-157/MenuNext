@@ -212,6 +212,22 @@ export async function moveProductAction(
 export async function deleteProductAction(productId: string): Promise<{ ok: boolean; error?: string }> {
   const { supabase } = await requireRestaurant();
 
+  // products -> combo_items não tem cascade (Fase 2.4): o próprio banco já
+  // recusaria a exclusão de um produto usado em algum combo. A contagem
+  // aqui só dá uma mensagem amigável com o número real de combos, em vez de
+  // deixar o erro de FK estourar cru para o usuário.
+  const { count: comboCount, error: comboCountError } = await supabase
+    .from("combo_items")
+    .select("combo_id", { count: "exact", head: true })
+    .eq("product_id", productId);
+  if (comboCountError) return { ok: false, error: "Não foi possível verificar combos vinculados." };
+  if (comboCount && comboCount > 0) {
+    return {
+      ok: false,
+      error: `Este produto faz parte de ${comboCount} combo${comboCount > 1 ? "s" : ""}. Remova-o dos combos antes de excluir.`,
+    };
+  }
+
   const { data: images, error: fetchError } = await supabase
     .from("product_images")
     .select("storage_path")

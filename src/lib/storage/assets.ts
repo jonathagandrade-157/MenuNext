@@ -128,6 +128,10 @@ export function bannerPath(restaurantId: string, assetId: string, extension: str
   return `${restaurantId}/banners/${assetId}.${extension}`;
 }
 
+export function comboImagePath(restaurantId: string, comboId: string, extension: string): string {
+  return `${restaurantId}/combos/${comboId}/image.${extension}`;
+}
+
 // ---------------------------------------------------------------------------
 // Upload/leitura — sempre via cliente autenticado comum (anon key + sessão
 // do usuário); nunca service_role. RLS + as policies do bucket fazem a
@@ -208,6 +212,49 @@ export async function uploadProductImage(
     return { ok: false, error: "Não foi possível salvar a imagem do produto. Tente novamente." };
   }
   return { ok: true, path };
+}
+
+/**
+ * Imagem única do combo (não é galeria, ao contrário de produto): substitui
+ * qualquer arquivo anterior no mesmo path fixo ({restaurant_id}/combos/
+ * {combo_id}/image.{ext}) e grava o path em combos.image_path — mesmo
+ * padrão de uploadRestaurantLogo/uploadRestaurantCover.
+ */
+export async function uploadComboImage(
+  supabase: SupabaseClient,
+  params: { restaurantId: string; comboId: string; file: File }
+): Promise<UploadResult> {
+  const { restaurantId, comboId, file } = params;
+
+  const validation = await validateImageFile(file);
+  if (!validation.ok) return validation;
+
+  const path = comboImagePath(restaurantId, comboId, validation.extension);
+  const uploaded = await uploadToBucket(supabase, path, file, validation.mimeType);
+  if (!uploaded.ok) return uploaded;
+
+  const { error } = await supabase.from("combos").update({ image_path: path }).eq("id", comboId);
+  if (error) {
+    await supabase.storage.from(RESTAURANT_ASSETS_BUCKET).remove([path]);
+    return { ok: false, error: "Não foi possível salvar a imagem do combo. Tente novamente." };
+  }
+  return { ok: true, path };
+}
+
+export async function deleteComboImage(
+  supabase: SupabaseClient,
+  params: { comboId: string; imagePath: string }
+): Promise<{ ok: true } | { ok: false; error: string }> {
+  const { error: storageError } = await supabase.storage.from(RESTAURANT_ASSETS_BUCKET).remove([params.imagePath]);
+  if (storageError) {
+    return { ok: false, error: "Não foi possível remover o arquivo. Tente novamente." };
+  }
+
+  const { error: updateError } = await supabase.from("combos").update({ image_path: null }).eq("id", params.comboId);
+  if (updateError) {
+    return { ok: false, error: "Arquivo removido, mas não foi possível atualizar o registro. Tente novamente." };
+  }
+  return { ok: true };
 }
 
 export async function deleteProductImage(

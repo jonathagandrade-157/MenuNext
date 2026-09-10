@@ -170,6 +170,23 @@ export type Product = {
 
 export type ProductWithImages = Product & { product_images: ProductImage[] };
 
+/** Lista enxuta de produtos do restaurante, sem imagens — usada onde só o
+ * cadastro básico do produto importa (ex.: seletor de produtos ao montar a
+ * composição de um combo). */
+export async function getProducts(supabase: SupabaseClient, restaurantId: string): Promise<Product[]> {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*")
+    .eq("restaurant_id", restaurantId)
+    .order("display_order");
+  if (error) throw error;
+  return (data ?? []).map((row) => ({
+    ...row,
+    price: Number(row.price),
+    cost: row.cost === null ? null : Number(row.cost),
+  })) as Product[];
+}
+
 /**
  * Produtos do restaurante com suas imagens já embutidas (join via a FK
  * product_images.product_id -> products.id). `price`/`cost` chegam do
@@ -275,6 +292,61 @@ export async function getProductAddonGroupsForRestaurant(
     .order("display_order");
   if (error) throw error;
   return (data ?? []) as ProductAddonGroupWithGroup[];
+}
+
+export type Combo = {
+  id: string;
+  restaurant_id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  image_path: string | null;
+  is_available: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ComboItem = {
+  id: string;
+  restaurant_id: string;
+  combo_id: string;
+  product_id: string;
+  quantity: number;
+  display_order: number;
+  created_at: string;
+};
+
+export type ComboItemWithProduct = ComboItem & { product: Product };
+
+export type ComboWithItems = Combo & { combo_items: ComboItemWithProduct[] };
+
+/**
+ * Combos do restaurante com sua composição já embutida (join via combo_id e,
+ * dentro de cada item, o produto referenciado). `price`/`product.price`/
+ * `product.cost` chegam do PostgREST como string (numeric) — convertidos
+ * aqui para number, mesmo padrão de getProductsWithImages/getAddonGroupsWithAddons.
+ * Um produto usado no combo que tenha ficado indisponível (product.is_available
+ * = false) continua vindo normalmente aqui — a UI decide como sinalizar isso,
+ * o combo nunca é excluído/alterado por causa disso.
+ */
+export async function getCombosWithItems(supabase: SupabaseClient, restaurantId: string): Promise<ComboWithItems[]> {
+  const { data, error } = await supabase
+    .from("combos")
+    .select("*, combo_items(*, product:products(*))")
+    .eq("restaurant_id", restaurantId)
+    .order("display_order");
+  if (error) throw error;
+  return (data ?? []).map((row) => ({
+    ...row,
+    price: Number(row.price),
+    combo_items: ((row.combo_items ?? []) as (ComboItem & { product: Product & { price: string; cost: string | null } })[])
+      .map((item) => ({
+        ...item,
+        product: { ...item.product, price: Number(item.product.price), cost: item.product.cost === null ? null : Number(item.product.cost) },
+      }))
+      .sort((a, b) => a.display_order - b.display_order),
+  })) as ComboWithItems[];
 }
 
 /**

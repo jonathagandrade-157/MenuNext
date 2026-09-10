@@ -29,6 +29,10 @@ export const initialProductState: ProductActionState = { status: "idle" };
 export type AddonActionState = { status: "idle" | "success" | "error"; message?: string };
 export const initialAddonState: AddonActionState = { status: "idle" };
 
+// Mesmo formato de CategoryActionState/ProductActionState/AddonActionState.
+export type ComboActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialComboState: ComboActionState = { status: "idle" };
+
 export const WEEK_DAYS = [
   { value: 0, label: "Domingo" },
   { value: 1, label: "Segunda" },
