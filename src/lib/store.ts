@@ -9,7 +9,18 @@
  */
 
 import type { SupabaseClient } from "@supabase/supabase-js";
-import type { BusinessHour, Combo, ComboItem, Product, ProductImage, RestaurantStatus } from "@/lib/tenant";
+import type {
+  Addon,
+  AddonGroup,
+  AddonGroupWithAddons,
+  BusinessHour,
+  Combo,
+  ComboItem,
+  Product,
+  ProductAddonGroup,
+  ProductImage,
+  RestaurantStatus,
+} from "@/lib/tenant";
 
 export type PublicRestaurant = {
   id: string;
@@ -119,6 +130,75 @@ export async function getPublicCombosWithItems(
       }))
       .sort((a, b) => a.display_order - b.display_order),
   })) as PublicCombo[];
+}
+
+export type PublicProductImage = { url: string; display_order: number };
+export type PublicProductAddonGroup = AddonGroupWithAddons;
+
+export type PublicProductDetail = Product & {
+  images: PublicProductImage[];
+  addonGroups: PublicProductAddonGroup[];
+};
+
+/**
+ * Detalhe público de UM produto — sempre valida estruturalmente que o
+ * produto pertence ao restaurante do slug (`.eq("id", ...).eq("restaurant_id",
+ * ...)` na mesma query, nunca só por id). Retorna null se o produto não
+ * existir OU pertencer a outro restaurante — nos dois casos a resposta é a
+ * mesma, sem vazar qual.
+ *
+ * Os grupos de adicionais vêm só da associação deste produto
+ * (product_addon_groups), na ordem em que o lojista organizou no painel —
+ * nunca "todos os adicionais do restaurante" filtrados no frontend. As
+ * policies públicas (Fase 3.2) já garantem grupo ativo + adicional
+ * disponível na origem.
+ */
+export async function getPublicProductDetail(
+  supabase: SupabaseClient,
+  restaurantId: string,
+  productId: string,
+  getImageUrl: (path: string) => string
+): Promise<PublicProductDetail | null> {
+  const { data: product, error: productError } = await supabase
+    .from("products")
+    .select("*, product_images(*)")
+    .eq("id", productId)
+    .eq("restaurant_id", restaurantId)
+    .maybeSingle();
+  if (productError) throw productError;
+  if (!product) return null;
+
+  const images = ((product.product_images ?? []) as ProductImage[])
+    .slice()
+    .sort((a, b) => a.display_order - b.display_order)
+    .map((image) => ({ url: getImageUrl(image.storage_path), display_order: image.display_order }));
+
+  const { data: associations, error: associationsError } = await supabase
+    .from("product_addon_groups")
+    .select("*, addon_group:addon_groups(*, addons(*))")
+    .eq("product_id", productId)
+    .eq("restaurant_id", restaurantId)
+    .order("display_order");
+  if (associationsError) throw associationsError;
+
+  const addonGroups: PublicProductAddonGroup[] = (
+    (associations ?? []) as (ProductAddonGroup & { addon_group: AddonGroup & { addons: Addon[] } })[]
+  )
+    .filter((association) => association.addon_group !== null)
+    .map((association) => ({
+      ...association.addon_group,
+      addons: [...association.addon_group.addons]
+        .map((addon) => ({ ...addon, price: Number(addon.price) }))
+        .sort((a, b) => a.display_order - b.display_order),
+    }));
+
+  return {
+    ...product,
+    price: Number(product.price),
+    cost: product.cost === null ? null : Number(product.cost),
+    images,
+    addonGroups,
+  } as PublicProductDetail;
 }
 
 export async function getPublicBusinessHours(supabase: SupabaseClient, restaurantId: string): Promise<BusinessHour[]> {

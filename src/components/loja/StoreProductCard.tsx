@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { formatCurrencyBRL } from "@/lib/store";
 
 function ImagePlaceholderIcon() {
@@ -14,12 +15,14 @@ function ImagePlaceholderIcon() {
  * mas claramente marcado — nunca representado como disponível para compra
  * (o fluxo de adicionar à sacola só chega numa fase futura). */
 export function StoreProductCard({
+  href,
   name,
   description,
   price,
   imageUrl,
   isAvailable,
 }: {
+  href: string;
   name: string;
   description: string | null;
   price: number;
@@ -27,8 +30,9 @@ export function StoreProductCard({
   isAvailable: boolean;
 }) {
   return (
-    <div
-      className={`flex gap-3 rounded-2xl border border-border bg-surface-card p-3 ${!isAvailable ? "opacity-60" : ""}`}
+    <Link
+      href={href}
+      className={`flex gap-3 rounded-2xl border border-border bg-surface-card p-3 transition-colors hover:bg-surface-subdued/60 ${!isAvailable ? "opacity-60" : ""}`}
     >
       <div className="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-surface-subdued">
         {imageUrl ? (
@@ -52,6 +56,6 @@ export function StoreProductCard({
           )}
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

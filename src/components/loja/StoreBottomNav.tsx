@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useBag } from "@/contexts/BagContext";
 
 function HomeIcon() {
   return (
@@ -43,6 +46,8 @@ function UserIcon() {
  * inertes (não removidos, só sem destino até a fase que os implementar).
  */
 export function StoreBottomNav({ slug }: { slug: string }) {
+  const { totalItemCount } = useBag();
+
   return (
     <nav className="fixed inset-x-0 bottom-0 z-50 flex justify-center border-t border-border bg-surface-card/95 px-3 py-2 backdrop-blur-md">
       <div className="flex w-full max-w-[420px] items-center justify-around">
@@ -52,9 +57,16 @@ export function StoreBottomNav({ slug }: { slug: string }) {
         </Link>
         <Link
           href={`/loja/${slug}/sacola`}
-          className="flex flex-1 flex-col items-center gap-1 py-1 text-text-muted hover:text-primary"
+          className="relative flex flex-1 flex-col items-center gap-1 py-1 text-text-muted hover:text-primary"
         >
-          <BagIcon />
+          <span className="relative">
+            <BagIcon />
+            {totalItemCount > 0 && (
+              <span className="absolute -right-2 -top-2 flex h-4 min-w-4 items-center justify-center rounded-full bg-primary px-1 text-[9px] font-bold text-white">
+                {totalItemCount}
+              </span>
+            )}
+          </span>
           <span className="text-[11px] font-semibold">Sacola</span>
         </Link>
         <button

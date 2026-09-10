@@ -89,6 +89,7 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
                   {category.products.map((product) => (
                     <StoreProductCard
                       key={product.id}
+                      href={`/loja/${slug}/produto/${product.id}`}
                       name={product.name}
                       description={product.description}
                       price={product.price}
