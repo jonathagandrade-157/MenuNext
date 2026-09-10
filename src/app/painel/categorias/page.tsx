@@ -1,13 +1,15 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { redirect } from "next/navigation";
+import { getAuthedUser, getMyRestaurant, getCategories } from "@/lib/tenant";
+import { CategoriasClient } from "@/components/painel/categorias/CategoriasClient";
 
-export default function Page() {
-  return (
-    <ScreenPlaceholder
-      screenId="SCREEN_35"
-      title="Categorias do cardápio"
-      description="Organização dos produtos por categoria (ex.: Burgers, Combos, Bebidas)."
-      backHref="/painel"
-      backLabel="Voltar ao dashboard"
-    />
-  );
+export default async function CategoriasPage() {
+  const { supabase, user } = await getAuthedUser();
+  if (!user) redirect("/cadastro");
+
+  const restaurant = await getMyRestaurant(supabase);
+  if (!restaurant) redirect("/onboarding/passo-1");
+
+  const categories = await getCategories(supabase, restaurant.id);
+
+  return <CategoriasClient initialCategories={categories} />;
 }

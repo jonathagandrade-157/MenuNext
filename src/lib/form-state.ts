@@ -11,6 +11,13 @@ export type AuthActionState = {
 };
 export const initialAuthState: AuthActionState = { status: "idle" };
 
+// Diferente de StepActionState: aqui precisamos distinguir "sucesso" do
+// estado inicial "idle" (o formulário fica na mesma página, num modal, em
+// vez de navegar para o próximo passo — não dá pra usar "voltou pra idle"
+// como sinal de sucesso).
+export type CategoryActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialCategoryState: CategoryActionState = { status: "idle" };
+
 export const WEEK_DAYS = [
   { value: 0, label: "Domingo" },
   { value: 1, label: "Segunda" },

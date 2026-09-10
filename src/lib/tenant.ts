@@ -110,6 +110,27 @@ export async function getBusinessHours(supabase: SupabaseClient, restaurantId: s
   return (data ?? []) as BusinessHour[];
 }
 
+export type Category = {
+  id: string;
+  restaurant_id: string;
+  name: string;
+  description: string | null;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function getCategories(supabase: SupabaseClient, restaurantId: string): Promise<Category[]> {
+  const { data, error } = await supabase
+    .from("categories")
+    .select("*")
+    .eq("restaurant_id", restaurantId)
+    .order("display_order");
+  if (error) throw error;
+  return (data ?? []) as Category[];
+}
+
 /**
  * Guarda de acesso autoritativa para um passo do onboarding (chamada no
  * início de cada página `/onboarding/passo-N`). Redireciona para:
