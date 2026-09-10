@@ -94,7 +94,7 @@ export async function savePasso1Action(_prev: StepActionState, formData: FormDat
     return { status: "error", message: "Escolha uma URL com pelo menos 3 caracteres (letras, números e hífen)." };
   }
 
-  const { error } = await supabase.rpc("create_restaurant", { p_name: name, p_slug: slug });
+  const { data: restaurant, error } = await supabase.rpc("create_restaurant", { p_name: name, p_slug: slug });
 
   if (error) {
     if (error.code === "23505" || error.message.includes("slug_taken")) {
@@ -106,7 +106,12 @@ export async function savePasso1Action(_prev: StepActionState, formData: FormDat
     return { status: "error", message: "Não foi possível salvar. Tente novamente." };
   }
 
-  redirect("/onboarding/passo-2");
+  // A RPC cria onboarding_progress com current_step = 1. Sem passar por
+  // advanceStep aqui, o passo nunca avança: o guard de /onboarding/passo-2
+  // (requireOnboardingStep) vê current_step ainda em 1 e manda de volta
+  // para o passo-1 — é exatamente o bug de "não navega para a Etapa 2".
+  await advanceStep(supabase, restaurant as Restaurant, 1);
+  return { status: "idle" };
 }
 
 // ---------------------------------------------------------------------------
