@@ -34,6 +34,9 @@ export type PublicRestaurant = {
   service_pickup: boolean;
   delivery_fee: number | null;
   delivery_radius_km: number | null;
+  payment_pix: boolean;
+  payment_cash: boolean;
+  payment_card: boolean;
 };
 
 /** Busca o restaurante pelo slug via RPC pública — null se não existir ou não estiver publicado. */
@@ -209,6 +212,65 @@ export async function getPublicBusinessHours(supabase: SupabaseClient, restauran
     .order("day_of_week");
   if (error) throw error;
   return (data ?? []) as BusinessHour[];
+}
+
+export type PublicOrderItemAddon = { addon_name: string; unit_price: number; subtotal: number };
+export type PublicOrderItem = {
+  product_name: string;
+  unit_price: number;
+  quantity: number;
+  observation: string | null;
+  subtotal: number;
+  addons: PublicOrderItemAddon[];
+};
+
+export type PublicOrder = {
+  public_id: string;
+  order_number: number;
+  status: string;
+  fulfillment_type: "delivery" | "pickup";
+  payment_method: "pix" | "cash" | "card";
+  change_for: number | null;
+  customer_name: string;
+  customer_phone: string;
+  delivery_zip: string | null;
+  delivery_street: string | null;
+  delivery_number: string | null;
+  delivery_complement: string | null;
+  delivery_neighborhood: string | null;
+  delivery_city: string | null;
+  delivery_state: string | null;
+  delivery_reference: string | null;
+  observation: string | null;
+  subtotal: number;
+  delivery_fee: number;
+  total: number;
+  created_at: string;
+  restaurant_name: string;
+  pix_key: string | null;
+  items: PublicOrderItem[];
+};
+
+/**
+ * Pedido público (tela de confirmação/rastreamento) — sempre via RPC
+ * SECURITY DEFINER amarrada a slug + public_id ao mesmo tempo (nunca uma
+ * policy de SELECT irrestrita em `orders` para o cliente anônimo). Retorna
+ * null se o pedido não existir OU pertencer a outro restaurante — a chave
+ * Pix só vem preenchida quando o pagamento do próprio pedido é Pix.
+ */
+export async function getPublicOrder(supabase: SupabaseClient, slug: string, publicId: string): Promise<PublicOrder | null> {
+  const { data, error } = await supabase.rpc("get_public_order", { p_slug: slug, p_public_id: publicId });
+  if (error) throw error;
+  const row = data?.[0];
+  if (!row) return null;
+  return {
+    ...row,
+    change_for: row.change_for === null ? null : Number(row.change_for),
+    subtotal: Number(row.subtotal),
+    delivery_fee: Number(row.delivery_fee),
+    total: Number(row.total),
+    items: (row.items ?? []) as PublicOrderItem[],
+  } as PublicOrder;
 }
 
 // ---------------------------------------------------------------------------

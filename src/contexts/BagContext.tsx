@@ -8,6 +8,7 @@ type BagContextValue = {
   addItem: (item: BagItem) => void;
   removeItem: (key: string) => void;
   updateItemQuantity: (key: string, quantity: number) => void;
+  clearBag: () => void;
   totalItemCount: number;
   totalPrice: number;
 };
@@ -72,6 +73,13 @@ export function BagProvider({ slug, children }: { slug: string; children: React.
     setItems((prev) => prev.filter((i) => i.key !== key));
   }, []);
 
+  // Só esvazia a sacola DESTA loja (o provider já é uma instância por slug,
+  // com sua própria chave de localStorage) — nunca afeta a sacola de outro
+  // restaurante. Chamada só depois de um pedido criado com sucesso.
+  const clearBag = useCallback(() => {
+    setItems([]);
+  }, []);
+
   const updateItemQuantity = useCallback((key: string, quantity: number) => {
     setItems((prev) =>
       prev.map((i) =>
@@ -86,8 +94,8 @@ export function BagProvider({ slug, children }: { slug: string; children: React.
   const totalPrice = useMemo(() => items.reduce((sum, i) => sum + i.subtotal, 0), [items]);
 
   const value = useMemo(
-    () => ({ items, addItem, removeItem, updateItemQuantity, totalItemCount, totalPrice }),
-    [items, addItem, removeItem, updateItemQuantity, totalItemCount, totalPrice]
+    () => ({ items, addItem, removeItem, updateItemQuantity, clearBag, totalItemCount, totalPrice }),
+    [items, addItem, removeItem, updateItemQuantity, clearBag, totalItemCount, totalPrice]
   );
 
   return <BagContext.Provider value={value}>{children}</BagContext.Provider>;
