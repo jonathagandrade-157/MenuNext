@@ -1,5 +1,12 @@
 import { redirect } from "next/navigation";
-import { getAuthedUser, getCategories, getMyRestaurant, getProductsWithImages } from "@/lib/tenant";
+import {
+  getAddonGroupsWithAddons,
+  getAuthedUser,
+  getCategories,
+  getMyRestaurant,
+  getProductAddonGroupsForRestaurant,
+  getProductsWithImages,
+} from "@/lib/tenant";
 import { getPublicAssetUrl } from "@/lib/storage/assets";
 import { ProdutosClient } from "@/components/painel/produtos/ProdutosClient";
 
@@ -10,9 +17,11 @@ export default async function ProdutosPage() {
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) redirect("/onboarding/passo-1");
 
-  const [products, categories] = await Promise.all([
+  const [products, categories, addonGroups, productAddonGroups] = await Promise.all([
     getProductsWithImages(supabase, restaurant.id),
     getCategories(supabase, restaurant.id),
+    getAddonGroupsWithAddons(supabase, restaurant.id),
+    getProductAddonGroupsForRestaurant(supabase, restaurant.id),
   ]);
 
   const productsWithUrls = products.map((product) => ({
@@ -22,5 +31,12 @@ export default async function ProdutosPage() {
       .map((image) => ({ ...image, url: getPublicAssetUrl(supabase, image.storage_path) })),
   }));
 
-  return <ProdutosClient initialProducts={productsWithUrls} categories={categories} />;
+  return (
+    <ProdutosClient
+      initialProducts={productsWithUrls}
+      categories={categories}
+      addonGroups={addonGroups}
+      productAddonGroups={productAddonGroups}
+    />
+  );
 }

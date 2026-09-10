@@ -23,6 +23,12 @@ export const initialCategoryState: CategoryActionState = { status: "idle" };
 export type ProductActionState = { status: "idle" | "success" | "error"; message?: string };
 export const initialProductState: ProductActionState = { status: "idle" };
 
+// Mesmo formato de CategoryActionState/ProductActionState — grupos e itens
+// de adicionais evoluem juntos (mesma tela), então compartilham um único
+// tipo de estado de formulário.
+export type AddonActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialAddonState: AddonActionState = { status: "idle" };
+
 export const WEEK_DAYS = [
   { value: 0, label: "Domingo" },
   { value: 1, label: "Segunda" },

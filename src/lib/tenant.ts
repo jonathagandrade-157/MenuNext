@@ -195,6 +195,88 @@ export async function getProductsWithImages(
   })) as ProductWithImages[];
 }
 
+export type AddonGroup = {
+  id: string;
+  restaurant_id: string;
+  name: string;
+  description: string | null;
+  min_selections: number;
+  max_selections: number;
+  is_required: boolean;
+  is_active: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type Addon = {
+  id: string;
+  restaurant_id: string;
+  addon_group_id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  is_available: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type AddonGroupWithAddons = AddonGroup & { addons: Addon[] };
+
+export type ProductAddonGroup = {
+  id: string;
+  restaurant_id: string;
+  product_id: string;
+  addon_group_id: string;
+  display_order: number;
+  created_at: string;
+};
+
+export type ProductAddonGroupWithGroup = ProductAddonGroup & { addon_group: AddonGroup };
+
+/**
+ * Grupos de adicionais do restaurante, cada um com seus itens já embutidos
+ * (join via addon_group_id). `price` chega do PostgREST como string (numeric
+ * é serializado assim para não perder precisão) — convertido aqui para
+ * number, mesmo padrão usado em getProductsWithImages.
+ */
+export async function getAddonGroupsWithAddons(
+  supabase: SupabaseClient,
+  restaurantId: string
+): Promise<AddonGroupWithAddons[]> {
+  const { data, error } = await supabase
+    .from("addon_groups")
+    .select("*, addons(*)")
+    .eq("restaurant_id", restaurantId)
+    .order("display_order");
+  if (error) throw error;
+  return (data ?? []).map((row) => ({
+    ...row,
+    addons: ((row.addons ?? []) as Addon[])
+      .map((addon) => ({ ...addon, price: Number(addon.price) }))
+      .sort((a, b) => a.display_order - b.display_order),
+  })) as AddonGroupWithAddons[];
+}
+
+/**
+ * Associações produto <-> grupo de todo o restaurante, com o grupo já
+ * embutido (usadas pela seção "Adicionais" no editor de produto — evita uma
+ * consulta por produto).
+ */
+export async function getProductAddonGroupsForRestaurant(
+  supabase: SupabaseClient,
+  restaurantId: string
+): Promise<ProductAddonGroupWithGroup[]> {
+  const { data, error } = await supabase
+    .from("product_addon_groups")
+    .select("*, addon_group:addon_groups(*)")
+    .eq("restaurant_id", restaurantId)
+    .order("display_order");
+  if (error) throw error;
+  return (data ?? []) as ProductAddonGroupWithGroup[];
+}
+
 /**
  * Guarda de acesso autoritativa para um passo do onboarding (chamada no
  * início de cada página `/onboarding/passo-N`). Redireciona para:

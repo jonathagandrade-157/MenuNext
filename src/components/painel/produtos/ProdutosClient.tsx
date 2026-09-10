@@ -9,7 +9,8 @@ import { EmptyState, ErrorState } from "@/components/ui/States";
 import { Modal } from "@/components/ui/Modal";
 import { deleteProductAction, moveProductAction, toggleProductAvailableAction, updateProductAction } from "@/lib/actions/products";
 import { formatCurrencyBRL } from "@/lib/products";
-import type { Category, Product, ProductImage } from "@/lib/tenant";
+import type { AddonGroup, Category, Product, ProductAddonGroupWithGroup, ProductImage } from "@/lib/tenant";
+import { ProductAddonGroupsManager } from "./ProductAddonGroupsManager";
 import { ProductFormFields } from "./ProductFormFields";
 import { ProductImagesManager } from "./ProductImagesManager";
 
@@ -47,9 +48,13 @@ function ImagePlaceholderIcon() {
 export function ProdutosClient({
   initialProducts,
   categories,
+  addonGroups,
+  productAddonGroups,
 }: {
   initialProducts: ProductUI[];
   categories: Category[];
+  addonGroups: AddonGroup[];
+  productAddonGroups: ProductAddonGroupWithGroup[];
 }) {
   // Sincroniza com initialProducts quando o Server Component busca dados
   // novos (após revalidatePath), ajustando durante o render (não em efeito).
@@ -103,6 +108,16 @@ export function ProdutosClient({
       return true;
     });
   }, [sorted, search, statusFilter, categoryFilter]);
+
+  const associationsByProduct = useMemo(() => {
+    const map = new Map<string, ProductAddonGroupWithGroup[]>();
+    for (const association of productAddonGroups) {
+      const list = map.get(association.product_id) ?? [];
+      list.push(association);
+      map.set(association.product_id, list);
+    }
+    return map;
+  }, [productAddonGroups]);
 
   const availableCount = products.filter((p) => p.is_available).length;
   const unavailableCount = products.length - availableCount;
@@ -367,6 +382,13 @@ export function ProdutosClient({
                 categories={categories}
                 submitLabel="Salvar alterações"
                 onSuccess={() => setEditingId(null)}
+              />
+            </div>
+            <div className="border-t border-border pt-4">
+              <ProductAddonGroupsManager
+                productId={editingProduct.id}
+                restaurantAddonGroups={addonGroups}
+                associations={associationsByProduct.get(editingProduct.id) ?? []}
               />
             </div>
           </div>
