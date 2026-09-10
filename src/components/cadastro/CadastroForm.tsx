@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/Button";
 import { signInAction, signUpAction } from "@/lib/actions/auth";
 import { initialAuthState } from "@/lib/form-state";
+import { maskDocument } from "@/lib/document";
 
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
@@ -19,6 +20,7 @@ function SubmitButton({ label }: { label: string }) {
 export function CadastroForm({ mode }: { mode: "signup" | "login" }) {
   const [signUpState, signUpFormAction] = useActionState(signUpAction, initialAuthState);
   const [signInState, signInFormAction] = useActionState(signInAction, initialAuthState);
+  const [docInput, setDocInput] = useState("");
 
   if (mode === "login") {
     return (
@@ -57,8 +59,28 @@ export function CadastroForm({ mode }: { mode: "signup" | "login" }) {
       </div>
 
       <form action={signUpFormAction} className="space-y-4">
+        <Field label="Nome da loja" name="storeName" type="text" autoComplete="organization" required />
         <Field label="Nome completo" name="name" type="text" autoComplete="name" required />
         <Field label="E-mail" name="email" type="email" autoComplete="email" required />
+        <Field label="Telefone" name="phone" type="tel" autoComplete="tel" required />
+
+        <label className="block">
+          <span className="mb-1.5 block text-sm font-semibold text-graphite">CPF ou CNPJ</span>
+          <input
+            name="document"
+            type="text"
+            inputMode="numeric"
+            required
+            value={docInput}
+            onChange={(e) => setDocInput(maskDocument(e.target.value))}
+            placeholder="000.000.000-00"
+            className="h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          />
+          <p className="mt-1.5 text-xs text-text-muted">
+            Cada CPF ou CNPJ tem direito a um único período de teste grátis no MenuNext.
+          </p>
+        </label>
+
         <Field label="Senha" name="password" type="password" autoComplete="new-password" required minLength={6} />
         <Field
           label="Confirmar senha"
@@ -69,9 +91,14 @@ export function CadastroForm({ mode }: { mode: "signup" | "login" }) {
           minLength={6}
         />
 
+        <label className="flex items-start gap-2 text-xs text-text-muted">
+          <input type="checkbox" name="terms" required className="mt-0.5 h-4 w-4 rounded border-border" />
+          <span>Li e aceito os Termos de Uso e a Política de Privacidade do MenuNext.</span>
+        </label>
+
         {signUpState.status === "error" && <ErrorMessage message={signUpState.message} />}
 
-        <SubmitButton label="Criar minha loja grátis" />
+        <SubmitButton label="Começar 30 dias grátis" />
 
         <p className="text-center text-xs text-text-muted">
           30 dias grátis &bull; Sem cartão de crédito &bull; 0% de comissão por pedido

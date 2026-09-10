@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState, useTransition } from "react";
+import { useActionState, useEffect, useState, useTransition } from "react";
 import { checkSlugAvailability, savePasso1Action } from "@/lib/actions/onboarding";
 import { initialStepState } from "@/lib/form-state";
 import { FieldLabel, inputClass, ErrorMessage } from "@/components/onboarding/OnboardingShell";
@@ -15,10 +15,12 @@ function normalizePreview(input: string) {
     .replace(/^-+|-+$/g, "");
 }
 
-export function Passo1Form() {
+export function Passo1Form({ suggestedName = "" }: { suggestedName?: string }) {
   const [state, formAction] = useActionState(savePasso1Action, initialStepState);
-  const [slug, setSlug] = useState("");
-  const [slugStatus, setSlugStatus] = useState<"idle" | "checking" | "available" | "taken">("idle");
+  const [slug, setSlug] = useState(() => normalizePreview(suggestedName));
+  const [slugStatus, setSlugStatus] = useState<"idle" | "checking" | "available" | "taken">(() =>
+    normalizePreview(suggestedName).length >= 3 ? "checking" : "idle"
+  );
   const [, startTransition] = useTransition();
 
   function handleSlugChange(value: string) {
@@ -33,6 +35,17 @@ export function Passo1Form() {
     });
   }
 
+  // Se o slug já veio pré-preenchido (nome da loja informado no cadastro),
+  // confere a disponibilidade dele assim que o formulário monta.
+  useEffect(() => {
+    if (slug.length < 3) return;
+    startTransition(async () => {
+      const result = await checkSlugAvailability(slug);
+      setSlugStatus(result.available ? "available" : "taken");
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <form action={formAction} className="space-y-5">
       <div>
@@ -41,6 +54,7 @@ export function Passo1Form() {
           name="name"
           type="text"
           required
+          defaultValue={suggestedName}
           placeholder="Ex.: Next Burger Artesanal"
           className={inputClass}
           onChange={(e) => {
