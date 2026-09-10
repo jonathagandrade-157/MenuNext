@@ -47,18 +47,6 @@ export function CadastroForm({ mode }: { mode: "signup" | "login" }) {
     );
   }
 
-  if (signUpState.status === "confirm_email") {
-    return (
-      <div className="space-y-4 text-center">
-        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-[#ECFDF5] text-emerald">
-          ✓
-        </span>
-        <h1 className="text-xl font-extrabold text-graphite">Quase lá!</h1>
-        <p className="text-sm text-text-muted">{signUpState.message}</p>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6">
       <div>

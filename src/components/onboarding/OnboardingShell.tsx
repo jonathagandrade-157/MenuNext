@@ -14,11 +14,13 @@ export function OnboardingShell({
   step,
   title,
   description,
+  successMessage,
   children,
 }: {
   step: number;
   title: string;
   description: string;
+  successMessage?: string;
   children: React.ReactNode;
 }) {
   const percent = Math.round((step / 7) * 100);
@@ -35,6 +37,8 @@ export function OnboardingShell({
       </header>
 
       <div className="mx-auto max-w-3xl px-6 py-10">
+        {successMessage && <SuccessMessage message={successMessage} />}
+
         <div className="mb-8">
           <div className="mb-2 text-xs font-semibold text-text-muted">{percent}% concluído</div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-surface-subdued">
@@ -85,6 +89,15 @@ export function ErrorMessage({ message }: { message?: string }) {
   if (!message) return null;
   return (
     <div className="rounded-lg border border-[#FEF2F2] bg-[#FEF2F2] px-3 py-2 text-sm font-medium text-red">
+      {message}
+    </div>
+  );
+}
+
+export function SuccessMessage({ message }: { message?: string }) {
+  if (!message) return null;
+  return (
+    <div className="mb-6 rounded-lg border border-[#ECFDF5] bg-[#ECFDF5] px-4 py-3 text-sm font-medium text-emerald">
       {message}
     </div>
   );

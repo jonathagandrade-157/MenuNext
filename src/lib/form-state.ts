@@ -6,7 +6,7 @@ export type StepActionState = { status: "idle" | "error"; message?: string };
 export const initialStepState: StepActionState = { status: "idle" };
 
 export type AuthActionState = {
-  status: "idle" | "error" | "confirm_email";
+  status: "idle" | "error";
   message?: string;
 };
 export const initialAuthState: AuthActionState = { status: "idle" };

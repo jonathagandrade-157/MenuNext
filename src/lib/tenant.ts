@@ -138,6 +138,21 @@ export async function requireOnboardingStep(step: number) {
   return { supabase, restaurant, progress };
 }
 
+/**
+ * Para onde mandar um usuário já autenticado: sem restaurante -> Passo 1;
+ * onboarding incompleto -> o passo salvo; concluído -> /painel. Usada por
+ * /cadastro para não reenviar quem já tem sessão ao formulário.
+ */
+export async function resolvePostAuthPath(supabase: SupabaseClient): Promise<string> {
+  const restaurant = await getMyRestaurant(supabase);
+  if (!restaurant) return "/onboarding/passo-1";
+  if (!restaurant.onboarding_completed) {
+    const progress = await getOnboardingProgress(supabase, restaurant.id);
+    return ONBOARDING_STEP_PATHS[progress?.current_step ?? 1];
+  }
+  return "/painel";
+}
+
 /** Guarda de acesso para /onboarding/loja-pronta. */
 export async function requireOnboardingCompleted() {
   const { supabase, user } = await getAuthedUser();

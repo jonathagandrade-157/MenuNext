@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { CadastroForm } from "@/components/cadastro/CadastroForm";
 import { CheckCircleIcon } from "@/components/ui/icons";
-import { getAuthedUser, getMyRestaurant, getOnboardingProgress, ONBOARDING_STEP_PATHS } from "@/lib/tenant";
+import { getAuthedUser, resolvePostAuthPath } from "@/lib/tenant";
 
 const BENEFITS = [
   "Pix direto no seu banco, sem taxa por pedido",
@@ -13,13 +13,7 @@ const BENEFITS = [
 export default async function CadastroPage(props: PageProps<"/cadastro">) {
   const { supabase, user } = await getAuthedUser();
   if (user) {
-    const restaurant = await getMyRestaurant(supabase);
-    if (!restaurant) redirect("/onboarding/passo-1");
-    if (!restaurant.onboarding_completed) {
-      const progress = await getOnboardingProgress(supabase, restaurant.id);
-      redirect(ONBOARDING_STEP_PATHS[progress?.current_step ?? 1]);
-    }
-    redirect("/painel");
+    redirect(await resolvePostAuthPath(supabase));
   }
 
   const searchParams = await props.searchParams;

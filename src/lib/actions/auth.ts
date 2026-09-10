@@ -53,17 +53,17 @@ export async function signUpAction(
     return { status: "error", message: friendlyAuthError(error.message) };
   }
 
-  // Se o projeto Supabase exigir confirmação de e-mail, signUp() não retorna
-  // uma sessão ativa. O restaurante só é criado no Passo 1 (usuário já
-  // autenticado), então aqui apenas avisamos o lojista.
+  // Confirmação de e-mail está desativada no projeto Supabase, então signUp()
+  // já retorna uma sessão ativa. O restaurante é criado no Passo 1 do
+  // onboarding (usuário já autenticado), não aqui.
   if (!data.session) {
     return {
-      status: "confirm_email",
-      message: "Enviamos um link de confirmação para o seu e-mail. Confirme para continuar o cadastro.",
+      status: "error",
+      message: "Não foi possível concluir o cadastro. Tente novamente.",
     };
   }
 
-  redirect("/onboarding/passo-1");
+  redirect("/onboarding/passo-1?welcome=1");
 }
 
 export async function signInAction(
