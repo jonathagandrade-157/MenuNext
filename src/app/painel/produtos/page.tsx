@@ -1,13 +1,26 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { redirect } from "next/navigation";
+import { getAuthedUser, getCategories, getMyRestaurant, getProductsWithImages } from "@/lib/tenant";
+import { getPublicAssetUrl } from "@/lib/storage/assets";
+import { ProdutosClient } from "@/components/painel/produtos/ProdutosClient";
 
-export default function Page() {
-  return (
-    <ScreenPlaceholder
-      screenId="SCREEN_34"
-      title="Produtos"
-      description="Lista de produtos do cardápio, com foto, preço e disponibilidade."
-      backHref="/painel"
-      backLabel="Voltar ao dashboard"
-    />
-  );
+export default async function ProdutosPage() {
+  const { supabase, user } = await getAuthedUser();
+  if (!user) redirect("/cadastro");
+
+  const restaurant = await getMyRestaurant(supabase);
+  if (!restaurant) redirect("/onboarding/passo-1");
+
+  const [products, categories] = await Promise.all([
+    getProductsWithImages(supabase, restaurant.id),
+    getCategories(supabase, restaurant.id),
+  ]);
+
+  const productsWithUrls = products.map((product) => ({
+    ...product,
+    product_images: [...product.product_images]
+      .sort((a, b) => a.display_order - b.display_order)
+      .map((image) => ({ ...image, url: getPublicAssetUrl(supabase, image.storage_path) })),
+  }));
+
+  return <ProdutosClient initialProducts={productsWithUrls} categories={categories} />;
 }

@@ -34,7 +34,13 @@ function ChevronDownIcon() {
   );
 }
 
-export function CategoriasClient({ initialCategories }: { initialCategories: Category[] }) {
+export function CategoriasClient({
+  initialCategories,
+  productCounts,
+}: {
+  initialCategories: Category[];
+  productCounts: Record<string, number>;
+}) {
   // Sincroniza com initialCategories quando o Server Component busca dados
   // novos (após revalidatePath numa Server Action) — ajuste durante o
   // render, não em efeito, para não disparar um segundo render extra.
@@ -218,8 +224,9 @@ export function CategoriasClient({ initialCategories }: { initialCategories: Cat
 
                       <div className="flex items-center justify-between md:col-span-2 md:justify-center">
                         <span className="md:hidden text-xs font-medium text-text-muted">Produtos:</span>
-                        {/* Produtos ainda não existe nesta fase (sem products.category_id) — contagem real chega junto com o CRUD de Produtos. */}
-                        <Badge tone="neutral">0 produtos</Badge>
+                        <Badge tone="neutral">
+                          {productCounts[category.id] ?? 0} produto{(productCounts[category.id] ?? 0) === 1 ? "" : "s"}
+                        </Badge>
                       </div>
 
                       <div className="flex items-center justify-between gap-3 md:col-span-2 md:justify-center">

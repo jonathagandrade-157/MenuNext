@@ -18,6 +18,11 @@ export const initialAuthState: AuthActionState = { status: "idle" };
 export type CategoryActionState = { status: "idle" | "success" | "error"; message?: string };
 export const initialCategoryState: CategoryActionState = { status: "idle" };
 
+// Mesmo formato de CategoryActionState — mantido separado (não compartilhado)
+// porque produto e categoria evoluem por sprints diferentes e podem divergir.
+export type ProductActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialProductState: ProductActionState = { status: "idle" };
+
 export const WEEK_DAYS = [
   { value: 0, label: "Domingo" },
   { value: 1, label: "Segunda" },

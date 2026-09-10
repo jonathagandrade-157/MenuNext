@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getAuthedUser, getMyRestaurant, getCategories } from "@/lib/tenant";
+import { getAuthedUser, getMyRestaurant, getCategories, getCategoryProductCounts } from "@/lib/tenant";
 import { CategoriasClient } from "@/components/painel/categorias/CategoriasClient";
 
 export default async function CategoriasPage() {
@@ -9,7 +9,10 @@ export default async function CategoriasPage() {
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) redirect("/onboarding/passo-1");
 
-  const categories = await getCategories(supabase, restaurant.id);
+  const [categories, productCounts] = await Promise.all([
+    getCategories(supabase, restaurant.id),
+    getCategoryProductCounts(supabase, restaurant.id),
+  ]);
 
-  return <CategoriasClient initialCategories={categories} />;
+  return <CategoriasClient initialCategories={categories} productCounts={productCounts} />;
 }

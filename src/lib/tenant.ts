@@ -131,6 +131,70 @@ export async function getCategories(supabase: SupabaseClient, restaurantId: stri
   return (data ?? []) as Category[];
 }
 
+/** Quantos produtos (reais, não mockados) cada categoria do restaurante tem. */
+export async function getCategoryProductCounts(
+  supabase: SupabaseClient,
+  restaurantId: string
+): Promise<Record<string, number>> {
+  const { data, error } = await supabase.from("products").select("category_id").eq("restaurant_id", restaurantId);
+  if (error) throw error;
+  const counts: Record<string, number> = {};
+  for (const row of data ?? []) {
+    counts[row.category_id] = (counts[row.category_id] ?? 0) + 1;
+  }
+  return counts;
+}
+
+export type ProductImage = {
+  id: string;
+  restaurant_id: string;
+  product_id: string;
+  storage_path: string;
+  display_order: number;
+  created_at: string;
+};
+
+export type Product = {
+  id: string;
+  restaurant_id: string;
+  category_id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  cost: number | null;
+  is_available: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export type ProductWithImages = Product & { product_images: ProductImage[] };
+
+/**
+ * Produtos do restaurante com suas imagens já embutidas (join via a FK
+ * product_images.product_id -> products.id). `price`/`cost` chegam do
+ * PostgREST como string (numeric é serializado assim para não perder
+ * precisão) — convertidos aqui para number, já que exibimos/formatamos
+ * esses valores na UI.
+ */
+export async function getProductsWithImages(
+  supabase: SupabaseClient,
+  restaurantId: string
+): Promise<ProductWithImages[]> {
+  const { data, error } = await supabase
+    .from("products")
+    .select("*, product_images(*)")
+    .eq("restaurant_id", restaurantId)
+    .order("display_order");
+  if (error) throw error;
+  return (data ?? []).map((row) => ({
+    ...row,
+    price: Number(row.price),
+    cost: row.cost === null ? null : Number(row.cost),
+    product_images: (row.product_images ?? []) as ProductImage[],
+  })) as ProductWithImages[];
+}
+
 /**
  * Guarda de acesso autoritativa para um passo do onboarding (chamada no
  * início de cada página `/onboarding/passo-N`). Redireciona para:

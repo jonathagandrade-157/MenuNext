@@ -136,15 +136,26 @@ export async function toggleCategoryActiveAction(
 }
 
 // ---------------------------------------------------------------------------
-// Excluir — NOTA IMPORTANTE: o CRUD de Produtos ainda não existe nesta fase
-// (products não tem `category_id`), então hoje é estruturalmente impossível
-// existir um produto vinculado a uma categoria. Quando a fase de Produtos
-// adicionar `products.category_id`, o bloqueio "não permitir excluir
-// categoria com produtos" precisa ser adicionado AQUI, antes do DELETE
-// abaixo — ver migration add_categories.sql e o relatório da Fase 2.1.
+// Excluir — desde a Fase 2.2, products.category_id existe e tem uma FK sem
+// cascade (products -> categories), então o próprio banco já recusaria o
+// DELETE se houvesse produtos vinculados. A contagem aqui é só para dar uma
+// mensagem amigável com o número real de produtos, em vez de deixar o erro
+// de FK estourar cru para o usuário.
 // ---------------------------------------------------------------------------
 export async function deleteCategoryAction(categoryId: string): Promise<{ ok: boolean; error?: string }> {
   const { supabase } = await requireRestaurant();
+
+  const { count, error: countError } = await supabase
+    .from("products")
+    .select("id", { count: "exact", head: true })
+    .eq("category_id", categoryId);
+  if (countError) return { ok: false, error: "Não foi possível verificar produtos vinculados." };
+  if (count && count > 0) {
+    return {
+      ok: false,
+      error: `Esta categoria possui ${count} produto${count > 1 ? "s" : ""}. Mova os produtos para outra categoria antes de excluir.`,
+    };
+  }
 
   const { data, error } = await supabase.from("categories").delete().eq("id", categoryId).select("id");
 
