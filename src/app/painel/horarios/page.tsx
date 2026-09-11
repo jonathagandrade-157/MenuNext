@@ -1,13 +1,9 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { redirect } from "next/navigation";
 
+// Horários são configurados no Passo 5 do onboarding — que agora funciona
+// como tela de edição reutilizável a qualquer momento (Fase de
+// reestruturação do onboarding). Em vez de duplicar o mesmo formulário
+// aqui, este item do menu leva direto para lá.
 export default function Page() {
-  return (
-    <ScreenPlaceholder
-      screenId="SCREEN_22"
-      title="Horários de funcionamento"
-      description="Dias e turnos de funcionamento da loja, com pausa de emergência."
-      backHref="/painel"
-      backLabel="Voltar ao dashboard"
-    />
-  );
+  redirect("/onboarding/passo-5");
 }

@@ -1,13 +1,9 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { redirect } from "next/navigation";
 
+// Formas de pagamento são configuradas no Passo 6 do onboarding — que agora
+// funciona como tela de edição reutilizável a qualquer momento (Fase de
+// reestruturação do onboarding). Em vez de duplicar o mesmo formulário
+// aqui, este item do menu leva direto para lá.
 export default function Page() {
-  return (
-    <ScreenPlaceholder
-      screenId="SCREEN_21"
-      title="Pagamentos"
-      description="Chave Pix do restaurante e formas de pagamento aceitas."
-      backHref="/painel"
-      backLabel="Voltar ao dashboard"
-    />
-  );
+  redirect("/onboarding/passo-6");
 }
