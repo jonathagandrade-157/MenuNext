@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { PanelSidebar, type NavGroup } from "@/components/layout/PanelSidebar";
 import { PanelTopbar } from "@/components/layout/PanelTopbar";
-import { getAuthedUser, getMyRestaurant, getOnboardingProgress, ONBOARDING_STEP_PATHS } from "@/lib/tenant";
+import { getAuthedUser, getMyRestaurant } from "@/lib/tenant";
 
 const NAV_GROUPS: NavGroup[] = [
   {
@@ -50,18 +50,16 @@ const NAV_GROUPS: NavGroup[] = [
 ];
 
 export default async function PainelLayout({ children }: { children: React.ReactNode }) {
-  // Checagem autoritativa (não apenas o proxy): sem sessão, sem restaurante
-  // ou onboarding incompleto, o usuário não acessa o painel de verdade.
+  // Checagem autoritativa (não apenas o proxy): sem sessão ou sem
+  // restaurante, o usuário não acessa o painel de verdade. Onboarding
+  // incompleto NÃO bloqueia mais o acesso — o onboarding é um guia
+  // opcional; o painel (com o checklist de configuração) é onde o lojista
+  // completa a loja no próprio ritmo. Ver reestruturação do onboarding.
   const { supabase, user } = await getAuthedUser();
   if (!user) redirect("/cadastro");
 
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) redirect("/onboarding/passo-1");
-
-  if (!restaurant.onboarding_completed) {
-    const progress = await getOnboardingProgress(supabase, restaurant.id);
-    redirect(ONBOARDING_STEP_PATHS[progress?.current_step ?? 1]);
-  }
 
   return (
     <div className="flex min-h-screen bg-surface">

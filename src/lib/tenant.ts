@@ -26,6 +26,8 @@ export type Restaurant = {
   payment_pix_key: string | null;
   payment_cash: boolean;
   payment_card: boolean;
+  logo_path: string | null;
+  cover_path: string | null;
   created_at: string;
   updated_at: string;
 };
@@ -350,12 +352,18 @@ export async function getCombosWithItems(supabase: SupabaseClient, restaurantId:
 }
 
 /**
- * Guarda de acesso autoritativa para um passo do onboarding (chamada no
- * início de cada página `/onboarding/passo-N`). Redireciona para:
- * - /cadastro, se não autenticado;
- * - /onboarding/passo-1, se o restaurante ainda não existe (e o passo pedido não é o 1);
- * - /onboarding/loja-pronta, se o onboarding já foi concluído;
- * - o passo salvo em onboarding_progress, se `step` pedir para pular à frente.
+ * Guarda de acesso para uma página `/onboarding/passo-N`. Redireciona para
+ * /cadastro se não autenticado, e para /onboarding/passo-1 se o restaurante
+ * ainda não existe (passo 1 é a única etapa que não pode ser pulada — é ela
+ * que cria o restaurante, sem o qual nenhuma outra etapa faz sentido).
+ *
+ * Reestruturação do onboarding: NENHUM passo mais bloqueia o acesso aos
+ * outros. Um restaurante com onboarding_completed = true ou com
+ * current_step à frente do passo pedido continua podendo revisitar
+ * qualquer passo (por "Voltar" ou por um link "Configurar" vindo do
+ * checklist do painel) — os passos viram telas de edição reaproveitáveis a
+ * qualquer momento, não só na primeira passagem. Ver Fase de reestruturação
+ * do onboarding + checklist de configuração.
  */
 export async function requireOnboardingStep(step: number) {
   const { supabase, user } = await getAuthedUser();
@@ -367,43 +375,34 @@ export async function requireOnboardingStep(step: number) {
     return { supabase, restaurant: null as Restaurant | null, progress: null as OnboardingProgress | null };
   }
 
-  if (restaurant.onboarding_completed) redirect("/onboarding/loja-pronta");
-
   const progress = await getOnboardingProgress(supabase, restaurant.id);
-  const currentStep = progress?.current_step ?? 1;
-
-  if (step > currentStep) redirect(ONBOARDING_STEP_PATHS[currentStep]);
-
   return { supabase, restaurant, progress };
 }
 
 /**
- * Para onde mandar um usuário já autenticado: sem restaurante -> Passo 1;
- * onboarding incompleto -> o passo salvo; concluído -> /painel. Usada por
- * /cadastro para não reenviar quem já tem sessão ao formulário.
+ * Para onde mandar um usuário já autenticado: sem restaurante -> Passo 1
+ * (única etapa obrigatória); com restaurante -> painel, mesmo que o
+ * onboarding guiado não tenha sido concluído. O painel é onde a
+ * configuração é completada (checklist); o onboarding é só um guia inicial
+ * opcional. Usada por /cadastro para não reenviar quem já tem sessão ao
+ * formulário.
  */
 export async function resolvePostAuthPath(supabase: SupabaseClient): Promise<string> {
   const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) return "/onboarding/passo-1";
-  if (!restaurant.onboarding_completed) {
-    const progress = await getOnboardingProgress(supabase, restaurant.id);
-    return ONBOARDING_STEP_PATHS[progress?.current_step ?? 1];
-  }
-  return "/painel";
+  return restaurant ? "/painel" : "/onboarding/passo-1";
 }
 
-/** Guarda de acesso para /onboarding/loja-pronta. */
+/** Guarda de acesso para /onboarding/loja-pronta — a tela de celebração só
+ * faz sentido logo após concluir/pular a última etapa; sem restaurante ou
+ * com onboarding ainda incompleto, manda para o lugar certo em vez de
+ * mostrar uma celebração que não aconteceu. */
 export async function requireOnboardingCompleted() {
   const { supabase, user } = await getAuthedUser();
   if (!user) redirect("/cadastro");
 
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) redirect("/onboarding/passo-1");
-
-  if (!restaurant.onboarding_completed) {
-    const progress = await getOnboardingProgress(supabase, restaurant.id);
-    redirect(ONBOARDING_STEP_PATHS[progress?.current_step ?? 1]);
-  }
+  if (!restaurant.onboarding_completed) redirect("/painel");
 
   return { supabase, restaurant };
 }

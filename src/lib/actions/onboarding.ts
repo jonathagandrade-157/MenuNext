@@ -6,6 +6,8 @@ import { createClient } from "@/lib/supabase/server";
 import { getMyRestaurant, getOnboardingProgress, ONBOARDING_STEP_PATHS, type Restaurant } from "@/lib/tenant";
 import type { StepActionState } from "@/lib/form-state";
 import { WEEK_DAYS } from "@/lib/form-state";
+import { validateProductDescription, validateProductName, validateProductPrice } from "@/lib/products";
+import { uploadProductImage } from "@/lib/storage/assets";
 
 export type { StepActionState };
 
@@ -40,15 +42,33 @@ async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaura
   return { supabase, restaurant };
 }
 
-/** Marca o passo como concluído e avança (ou finaliza, no passo 7). */
-async function advanceStep(supabase: SupabaseClient, restaurant: Restaurant, completedStep: number) {
-  const isLastStep = completedStep >= 7;
-  const nextStep = Math.min(completedStep + 1, 7);
+/**
+ * Avança para o próximo passo (ou finaliza o onboarding guiado, no passo 7)
+ * — usada tanto por um envio real de formulário (`markCompleted = true`,
+ * marca o passo em `completed_steps`) quanto por "Pular por enquanto"
+ * (`markCompleted = false`: avança current_step normalmente, mas NUNCA
+ * marca o passo como concluído — "pular" significa "vou fazer depois", não
+ * "está configurado". A conclusão real de cada área é sempre calculada a
+ * partir dos dados de verdade no checklist do painel, nunca deste array).
+ *
+ * Chegar ao fim do passo 7 (concluindo ou pulando) sempre finaliza o
+ * onboarding guiado (onboarding_completed = true, status = 'active') — é o
+ * único gatilho de ativação da loja hoje; o checklist do painel continua
+ * guiando o lojista a completar o resto depois, sem bloquear nada.
+ */
+async function advanceStep(
+  supabase: SupabaseClient,
+  restaurant: Restaurant,
+  step: number,
+  markCompleted: boolean
+) {
+  const isLastStep = step >= 7;
+  const nextStep = Math.min(step + 1, 7);
 
   const progress = await getOnboardingProgress(supabase, restaurant.id);
-  const completedSteps = Array.from(new Set([...(progress?.completed_steps ?? []), completedStep])).sort(
-    (a, b) => a - b
-  );
+  const completedSteps = markCompleted
+    ? Array.from(new Set([...(progress?.completed_steps ?? []), step])).sort((a, b) => a - b)
+    : (progress?.completed_steps ?? []);
 
   await supabase
     .from("onboarding_progress")
@@ -63,6 +83,18 @@ async function advanceStep(supabase: SupabaseClient, restaurant: Restaurant, com
   await supabase.from("restaurants").update(restaurantUpdate).eq("id", restaurant.id);
 
   redirect(isLastStep ? "/onboarding/loja-pronta" : ONBOARDING_STEP_PATHS[nextStep]);
+}
+
+/**
+ * "Pular por enquanto" — mesma ação para qualquer passo 2-7 (usada via
+ * `.bind(null, step)` como `formAction` de um botão dentro do mesmo
+ * `<form>` do passo, com `formNoValidate` para nunca exigir os campos
+ * obrigatórios daquele passo). Nunca apaga dado já preenchido (não
+ * sobrescreve nenhuma coluna), só avança o progresso.
+ */
+export async function skipOnboardingStepAction(step: number): Promise<void> {
+  const { supabase, restaurant } = await requireRestaurant();
+  await advanceStep(supabase, restaurant, step, false);
 }
 
 // ---------------------------------------------------------------------------
@@ -110,7 +142,7 @@ export async function savePasso1Action(_prev: StepActionState, formData: FormDat
   // advanceStep aqui, o passo nunca avança: o guard de /onboarding/passo-2
   // (requireOnboardingStep) vê current_step ainda em 1 e manda de volta
   // para o passo-1 — é exatamente o bug de "não navega para a Etapa 2".
-  await advanceStep(supabase, restaurant as Restaurant, 1);
+  await advanceStep(supabase, restaurant as Restaurant, 1, true);
   return { status: "idle" };
 }
 
@@ -138,7 +170,7 @@ export async function savePasso2Action(_prev: StepActionState, formData: FormDat
   const { error } = await supabase.from("restaurants").update(address).eq("id", restaurant.id);
   if (error) return { status: "error", message: "Não foi possível salvar o endereço. Tente novamente." };
 
-  await advanceStep(supabase, restaurant, 2);
+  await advanceStep(supabase, restaurant, 2, true);
   return { status: "idle" };
 }
 
@@ -162,7 +194,7 @@ export async function savePasso3Action(_prev: StepActionState, formData: FormDat
     .eq("id", restaurant.id);
   if (error) return { status: "error", message: "Não foi possível salvar. Tente novamente." };
 
-  await advanceStep(supabase, restaurant, 3);
+  await advanceStep(supabase, restaurant, 3, true);
   return { status: "idle" };
 }
 
@@ -194,7 +226,7 @@ export async function savePasso4Action(_prev: StepActionState, formData: FormDat
     .eq("id", restaurant.id);
   if (error) return { status: "error", message: "Não foi possível salvar. Tente novamente." };
 
-  await advanceStep(supabase, restaurant, 4);
+  await advanceStep(supabase, restaurant, 4, true);
   return { status: "idle" };
 }
 
@@ -228,7 +260,7 @@ export async function savePasso5Action(_prev: StepActionState, formData: FormDat
     .upsert(rows, { onConflict: "restaurant_id,day_of_week" });
   if (error) return { status: "error", message: "Não foi possível salvar os horários. Tente novamente." };
 
-  await advanceStep(supabase, restaurant, 5);
+  await advanceStep(supabase, restaurant, 5, true);
   return { status: "idle" };
 }
 
@@ -262,7 +294,7 @@ export async function savePasso6Action(_prev: StepActionState, formData: FormDat
     .eq("id", restaurant.id);
   if (error) return { status: "error", message: "Não foi possível salvar. Tente novamente." };
 
-  await advanceStep(supabase, restaurant, 6);
+  await advanceStep(supabase, restaurant, 6, true);
   return { status: "idle" };
 }
 
@@ -270,28 +302,79 @@ export async function savePasso6Action(_prev: StepActionState, formData: FormDat
 // Passo 7 — primeiro produto (finaliza o onboarding)
 // ---------------------------------------------------------------------------
 
+/**
+ * Cadastra o primeiro produto (opcional) e finaliza o onboarding guiado —
+ * reaproveita a mesma RPC create_product (restaurant_id/display_order
+ * determinados no servidor) e o mesmo helper de upload real de imagem
+ * (uploadProductImage, bucket restaurant-assets) já usados em
+ * src/lib/actions/products.ts, nunca uma segunda implementação. Como
+ * products.category_id é NOT NULL e o onboarding não tem uma etapa própria
+ * de categorias, cria idempotentemente uma categoria padrão ("Cardápio") se
+ * o restaurante ainda não tiver nenhuma — só quando necessário, nunca
+ * duplicando se já existir alguma.
+ */
 export async function savePasso7Action(_prev: StepActionState, formData: FormData): Promise<StepActionState> {
   const { supabase, restaurant } = await requireRestaurant();
 
   const name = String(formData.get("name") ?? "").trim();
-  const description = String(formData.get("description") ?? "").trim() || null;
+  const description = String(formData.get("description") ?? "").trim();
   const priceRaw = String(formData.get("price") ?? "").replace(",", ".");
-  const imageUrl = String(formData.get("image_url") ?? "").trim() || null;
+  const categoryIdInput = String(formData.get("categoryId") ?? "").trim();
+  const imageFile = formData.get("image");
 
-  if (!name) return { status: "error", message: "Informe o nome do produto." };
-  if (!priceRaw || Number.isNaN(Number(priceRaw)) || Number(priceRaw) < 0) {
-    return { status: "error", message: "Informe um preço válido." };
+  const nameValidation = validateProductName(name);
+  if (!nameValidation.ok) return { status: "error", message: nameValidation.error };
+  const descriptionValidation = validateProductDescription(description);
+  if (!descriptionValidation.ok) return { status: "error", message: descriptionValidation.error };
+  const priceValidation = validateProductPrice(priceRaw);
+  if (!priceValidation.ok) return { status: "error", message: priceValidation.error };
+
+  let categoryId = categoryIdInput;
+  if (!categoryId) {
+    const { count, error: countError } = await supabase
+      .from("categories")
+      .select("id", { count: "exact", head: true })
+      .eq("restaurant_id", restaurant.id);
+    if (countError) return { status: "error", message: "Não foi possível verificar as categorias. Tente novamente." };
+
+    if (count && count > 0) {
+      return { status: "error", message: "Selecione uma categoria." };
+    }
+
+    const { data: defaultCategory, error: categoryError } = await supabase.rpc("create_category", {
+      p_restaurant_id: restaurant.id,
+      p_name: "Cardápio",
+    });
+    if (categoryError) return { status: "error", message: "Não foi possível criar a categoria padrão. Tente novamente." };
+    categoryId = (defaultCategory as { id: string }).id;
   }
 
-  const { error } = await supabase.from("products").insert({
-    restaurant_id: restaurant.id,
-    name,
-    description,
-    price: Number(priceRaw),
-    image_url: imageUrl,
+  const { data: product, error } = await supabase.rpc("create_product", {
+    p_restaurant_id: restaurant.id,
+    p_category_id: categoryId,
+    p_name: name,
+    p_description: description || null,
+    p_price: priceValidation.value,
+    p_cost: null,
+    p_is_available: true,
   });
   if (error) return { status: "error", message: "Não foi possível salvar o produto. Tente novamente." };
 
-  await advanceStep(supabase, restaurant, 7);
+  if (imageFile instanceof File && imageFile.size > 0) {
+    const uploadResult = await uploadProductImage(supabase, {
+      restaurantId: restaurant.id,
+      productId: product.id,
+      displayOrder: 1,
+      file: imageFile,
+    });
+    if (!uploadResult.ok) {
+      // Produto parcialmente configurado não é uma opção — mesma regra de
+      // createProductAction: desfaz o produto se a foto falhar ao salvar.
+      await supabase.from("products").delete().eq("id", product.id);
+      return { status: "error", message: uploadResult.error };
+    }
+  }
+
+  await advanceStep(supabase, restaurant, 7, true);
   return { status: "idle" };
 }

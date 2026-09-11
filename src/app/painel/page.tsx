@@ -1,8 +1,10 @@
 import { redirect } from "next/navigation";
 import { getAuthedUser, getMyRestaurant, getMyMembership } from "@/lib/tenant";
 import { formatCurrencyBRL, getDashboardOrderMetrics } from "@/lib/orders";
+import { getSetupChecklist } from "@/lib/setup";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
+import { SetupChecklistCard } from "@/components/painel/SetupChecklistCard";
 
 const STATUS_LABEL: Record<string, string> = {
   draft: "Rascunho",
@@ -19,12 +21,19 @@ export default async function PainelDashboardPage() {
   if (!restaurant) redirect("/onboarding/passo-1");
 
   const membership = await getMyMembership(supabase, restaurant.id);
-  const metrics = await getDashboardOrderMetrics(supabase, restaurant.id);
+  const [metrics, checklist] = await Promise.all([
+    getDashboardOrderMetrics(supabase, restaurant.id),
+    getSetupChecklist(supabase, restaurant),
+  ]);
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-10">
       <h1 className="text-2xl font-extrabold text-graphite">Olá, bem-vindo ao {restaurant.name}</h1>
       <p className="mt-1 text-sm text-text-muted">Aqui está o resumo real da operação de hoje.</p>
+
+      <div className="mt-6">
+        <SetupChecklistCard checklist={checklist} storeSlug={restaurant.slug} />
+      </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-4">
         <Card className="p-5">

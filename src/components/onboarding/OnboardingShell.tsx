@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SubmitButton } from "@/components/onboarding/SubmitButton";
 
 const STEP_LABELS = [
   "Restaurante",
@@ -32,7 +33,15 @@ export function OnboardingShell({
           <Link href="/" className="text-base font-extrabold text-graphite">
             Menu<span className="text-primary">Next</span>
           </Link>
-          <span className="text-xs font-semibold text-text-muted">Etapa {step} de 7</span>
+          <div className="flex items-center gap-4">
+            <span className="text-xs font-semibold text-text-muted">Etapa {step} de 7</span>
+            {/* O onboarding nunca é uma barreira: o lojista pode entrar no
+                painel a qualquer momento e completar a configuração depois,
+                pelo checklist. */}
+            <Link href="/painel" className="text-xs font-semibold text-primary hover:underline">
+              Ir para o painel
+            </Link>
+          </div>
         </div>
       </header>
 
@@ -99,6 +108,43 @@ export function SuccessMessage({ message }: { message?: string }) {
   return (
     <div className="mb-6 rounded-lg border border-[#ECFDF5] bg-[#ECFDF5] px-4 py-3 text-sm font-medium text-emerald">
       {message}
+    </div>
+  );
+}
+
+/**
+ * Rodapé padrão de navegação de um passo do onboarding — Voltar (link puro,
+ * nenhum dado é perdido) + Pular por enquanto (mesmo <form>, via
+ * `formAction`/`formNoValidate` — não valida os campos exigidos do passo,
+ * já que pular nunca deveria exigir preenchê-los) + o submit normal do
+ * passo. Reaproveitado por todos os Passos 2-7 para nunca ter uma lógica
+ * de "pular" diferente por tela.
+ */
+export function StepNavigation({
+  backHref,
+  skipAction,
+  submitLabel,
+}: {
+  backHref: string;
+  skipAction: (formData: FormData) => void | Promise<void>;
+  submitLabel: string;
+}) {
+  return (
+    <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex items-center gap-4">
+        <Link href={backHref} className="text-sm font-semibold text-text-muted hover:text-graphite">
+          ← Voltar
+        </Link>
+        <button
+          type="submit"
+          formAction={skipAction}
+          formNoValidate
+          className="text-sm font-semibold text-text-muted hover:text-graphite"
+        >
+          Pular por enquanto
+        </button>
+      </div>
+      <SubmitButton label={submitLabel} />
     </div>
   );
 }

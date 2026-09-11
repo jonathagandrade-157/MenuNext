@@ -1,11 +1,12 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { savePasso6Action } from "@/lib/actions/onboarding";
+import { savePasso6Action, skipOnboardingStepAction } from "@/lib/actions/onboarding";
 import { initialStepState } from "@/lib/form-state";
-import { FieldLabel, inputClass, ErrorMessage } from "@/components/onboarding/OnboardingShell";
-import { SubmitButton } from "@/components/onboarding/SubmitButton";
+import { FieldLabel, inputClass, ErrorMessage, StepNavigation } from "@/components/onboarding/OnboardingShell";
 import type { Restaurant } from "@/lib/tenant";
+
+const skipStep6 = skipOnboardingStepAction.bind(null, 6);
 
 export function Passo6Form({ restaurant }: { restaurant: Restaurant }) {
   const [state, formAction] = useActionState(savePasso6Action, initialStepState);
@@ -61,7 +62,7 @@ export function Passo6Form({ restaurant }: { restaurant: Restaurant }) {
 
       <ErrorMessage message={state.status === "error" ? state.message : undefined} />
 
-      <SubmitButton label="Salvar e continuar" />
+      <StepNavigation backHref="/onboarding/passo-5" skipAction={skipStep6} submitLabel="Salvar e continuar" />
     </form>
   );
 }

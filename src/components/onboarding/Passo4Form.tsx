@@ -1,11 +1,12 @@
 "use client";
 
 import { useActionState } from "react";
-import { savePasso4Action } from "@/lib/actions/onboarding";
+import { savePasso4Action, skipOnboardingStepAction } from "@/lib/actions/onboarding";
 import { initialStepState } from "@/lib/form-state";
-import { FieldLabel, inputClass, ErrorMessage } from "@/components/onboarding/OnboardingShell";
-import { SubmitButton } from "@/components/onboarding/SubmitButton";
+import { FieldLabel, inputClass, ErrorMessage, StepNavigation } from "@/components/onboarding/OnboardingShell";
 import type { Restaurant } from "@/lib/tenant";
+
+const skipStep4 = skipOnboardingStepAction.bind(null, 4);
 
 export function Passo4Form({ restaurant }: { restaurant: Restaurant }) {
   const [state, formAction] = useActionState(savePasso4Action, initialStepState);
@@ -17,7 +18,7 @@ export function Passo4Form({ restaurant }: { restaurant: Restaurant }) {
           Você configurou apenas retirada no local no passo anterior, então não é preciso definir taxa ou raio de
           entrega agora. Você pode ativar o delivery depois no painel.
         </p>
-        <SubmitButton label="Continuar" />
+        <StepNavigation backHref="/onboarding/passo-3" skipAction={skipStep4} submitLabel="Continuar" />
       </form>
     );
   }
@@ -52,7 +53,7 @@ export function Passo4Form({ restaurant }: { restaurant: Restaurant }) {
 
       <ErrorMessage message={state.status === "error" ? state.message : undefined} />
 
-      <SubmitButton label="Salvar e continuar" />
+      <StepNavigation backHref="/onboarding/passo-3" skipAction={skipStep4} submitLabel="Salvar e continuar" />
     </form>
   );
 }

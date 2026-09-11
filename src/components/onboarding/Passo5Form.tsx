@@ -1,11 +1,12 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { savePasso5Action } from "@/lib/actions/onboarding";
+import { savePasso5Action, skipOnboardingStepAction } from "@/lib/actions/onboarding";
 import { initialStepState, WEEK_DAYS } from "@/lib/form-state";
-import { ErrorMessage } from "@/components/onboarding/OnboardingShell";
-import { SubmitButton } from "@/components/onboarding/SubmitButton";
+import { ErrorMessage, StepNavigation } from "@/components/onboarding/OnboardingShell";
 import type { BusinessHour } from "@/lib/tenant";
+
+const skipStep5 = skipOnboardingStepAction.bind(null, 5);
 
 export function Passo5Form({ businessHours }: { businessHours: BusinessHour[] }) {
   const [state, formAction] = useActionState(savePasso5Action, initialStepState);
@@ -56,7 +57,7 @@ export function Passo5Form({ businessHours }: { businessHours: BusinessHour[] })
 
       <ErrorMessage message={state.status === "error" ? state.message : undefined} />
 
-      <SubmitButton label="Salvar e continuar" />
+      <StepNavigation backHref="/onboarding/passo-4" skipAction={skipStep5} submitLabel="Salvar e continuar" />
     </form>
   );
 }
