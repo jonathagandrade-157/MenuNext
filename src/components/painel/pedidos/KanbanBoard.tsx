@@ -1,0 +1,164 @@
+"use client";
+
+import { useCallback, useEffect, useRef, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { advanceOrderStatusAction } from "@/lib/actions/orders";
+import {
+  KANBAN_COLUMNS,
+  getKanbanColumnForStatus,
+  getOrderWithItems,
+  normalizeOrderFields,
+  orderTrackingChannelName,
+  type Order,
+  type OrderWithItems,
+} from "@/lib/orders";
+import { playNewOrderChime } from "@/lib/sound";
+import { OrderCard } from "./OrderCard";
+import { OrderDetailModal } from "./OrderDetailModal";
+
+const TERMINAL_STATUSES = new Set(["delivered", "picked_up", "cancelled"]);
+const NEW_ORDER_HIGHLIGHT_MS = 6000;
+
+/**
+ * Kanban real (Fase 3.4) — fonte única de verdade é `orders` (+ order_items
+ * + order_item_addons), lida uma vez no servidor (initialOrders, via
+ * getActiveOrdersForKanban) e mantida em sincronia por Supabase Realtime
+ * (postgres_changes em `orders`, filtrado por restaurant_id). A policy
+ * "orders_select_members" (Fase 3.3) é o que garante que este canal nunca
+ * entrega evento de outro restaurante — nenhum filtro de frontend é a
+ * proteção real, só uma conveniência de UI.
+ */
+export function KanbanBoard({ restaurantId, initialOrders }: { restaurantId: string; initialOrders: OrderWithItems[] }) {
+  const [orders, setOrders] = useState<OrderWithItems[]>(initialOrders);
+  const [newOrderIds, setNewOrderIds] = useState<Set<string>>(new Set());
+  const [advancingId, setAdvancingId] = useState<string | null>(null);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const supabaseRef = useRef(createClient());
+
+  useEffect(() => {
+    const supabase = supabaseRef.current;
+
+    const channel = supabase
+      .channel(`kanban-orders-${restaurantId}`)
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "orders", filter: `restaurant_id=eq.${restaurantId}` },
+        async (payload) => {
+          const orderId = (payload.new as { id: string }).id;
+          const full = await getOrderWithItems(supabase, orderId);
+          if (!full) return;
+          setOrders((prev) => (prev.some((o) => o.id === full.id) ? prev : [...prev, full]));
+          setNewOrderIds((prev) => new Set(prev).add(full.id));
+          playNewOrderChime();
+          setTimeout(() => {
+            setNewOrderIds((prev) => {
+              const next = new Set(prev);
+              next.delete(full.id);
+              return next;
+            });
+          }, NEW_ORDER_HIGHLIGHT_MS);
+        }
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "orders", filter: `restaurant_id=eq.${restaurantId}` },
+        (payload) => {
+          const updated = normalizeOrderFields(payload.new as Order);
+          setOrders((prev) => {
+            if (TERMINAL_STATUSES.has(updated.status)) {
+              return prev.filter((o) => o.id !== updated.id);
+            }
+            return prev.map((o) => (o.id === updated.id ? { ...o, ...updated } : o));
+          });
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [restaurantId]);
+
+  const handleAdvance = useCallback(async (order: OrderWithItems) => {
+    setErrorMessage(null);
+    setAdvancingId(order.id);
+    const result = await advanceOrderStatusAction(order.id);
+    setAdvancingId(null);
+
+    if (result.status === "error") {
+      setErrorMessage(result.message);
+      return;
+    }
+
+    const updated = result.order;
+    setOrders((prev) => {
+      if (TERMINAL_STATUSES.has(updated.status)) return prev.filter((o) => o.id !== order.id);
+      return prev.map((o) => (o.id === order.id ? { ...o, ...updated } : o));
+    });
+
+    // Broadcast best-effort para o tracking público (canal não-privado,
+    // aberto: o public_id no nome do canal já é a autorização — ver
+    // migration add_order_status_transitions.sql, seção 4). Se falhar
+    // (ninguém ouvindo, rede instável), o tracking ainda mostra o status
+    // certo no próximo carregamento via get_public_order — nunca depende
+    // só disto.
+    try {
+      const trackingChannel = supabaseRef.current.channel(orderTrackingChannelName(updated.public_id));
+      await trackingChannel.send({ type: "broadcast", event: "status_changed", payload: { status: updated.status } });
+      supabaseRef.current.removeChannel(trackingChannel);
+    } catch {
+      // best-effort — sem impacto funcional, ver comentário acima.
+    }
+  }, []);
+
+  const selectedOrder = orders.find((o) => o.id === selectedOrderId) ?? null;
+
+  return (
+    <div className="flex h-full flex-col">
+      {errorMessage && (
+        <div className="mx-4 mt-3 rounded-lg border border-red/20 bg-red/10 px-3.5 py-2 text-xs font-semibold text-red">
+          {errorMessage}
+        </div>
+      )}
+
+      <div className="flex flex-1 gap-4 overflow-x-auto p-4">
+        {KANBAN_COLUMNS.map((column) => {
+          const columnOrders = orders.filter((o) => getKanbanColumnForStatus(o.status) === column.id);
+          return (
+            <div key={column.id} className="flex w-72 shrink-0 flex-col rounded-xl bg-surface-subdued">
+              <div className="flex items-center justify-between px-3.5 py-3">
+                <h2 className="text-sm font-extrabold text-graphite">{column.title}</h2>
+                <span className="rounded-full bg-surface-card px-2 py-0.5 text-xs font-bold text-text-muted">
+                  {columnOrders.length}
+                </span>
+              </div>
+              <div className="flex-1 space-y-2.5 overflow-y-auto px-2.5 pb-3">
+                {columnOrders.length === 0 && (
+                  <p className="px-1 py-6 text-center text-xs text-text-muted">Nenhum pedido</p>
+                )}
+                {columnOrders.map((order) => (
+                  <OrderCard
+                    key={order.id}
+                    order={order}
+                    isNew={newOrderIds.has(order.id)}
+                    isAdvancing={advancingId === order.id}
+                    onOpenDetails={() => setSelectedOrderId(order.id)}
+                    onAdvance={() => handleAdvance(order)}
+                  />
+                ))}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <OrderDetailModal
+        order={selectedOrder}
+        isAdvancing={advancingId === selectedOrder?.id}
+        onClose={() => setSelectedOrderId(null)}
+        onAdvance={() => selectedOrder && handleAdvance(selectedOrder)}
+      />
+    </div>
+  );
+}

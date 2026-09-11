@@ -1,7 +1,9 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { CreateOrderItemPayload } from "@/lib/checkout";
+import type { Order } from "@/lib/orders";
 
 export type SubmitOrderDeliveryInput = {
   zip: string;
@@ -112,4 +114,46 @@ export async function submitOrderAction(input: SubmitOrderInput): Promise<Submit
   }
 
   return { status: "success", publicId: row.public_id, orderNumber: row.order_number };
+}
+
+export type AdvanceOrderStatusResult = { status: "success"; order: Order } | { status: "error"; message: string };
+
+function friendlyAdvanceStatusError(message: string): string {
+  const normalized = message.toLowerCase();
+  if (normalized.includes("not_authenticated") || normalized.includes("not_authorized")) {
+    return "Você não tem permissão para operar este pedido.";
+  }
+  if (normalized.includes("order_not_found")) return "Pedido não encontrado.";
+  if (normalized.includes("invalid_transition")) {
+    return "Este pedido já está numa etapa final e não pode avançar mais.";
+  }
+  return "Não foi possível atualizar o status do pedido. Tente novamente.";
+}
+
+/**
+ * Avança o pedido UM passo na esteira (Fase 3.4) — nunca aceita o status de
+ * destino do cliente, a RPC advance_order_status calcula o próximo passo a
+ * partir do status atual real no banco (trava de linha `for update`, então
+ * dois operadores clicando ao mesmo tempo nunca duplicam a transição nem
+ * pulam etapa). Usada por todos os quick actions do Kanban — nunca um
+ * `UPDATE orders SET status = ...` direto do cliente.
+ */
+export async function advanceOrderStatusAction(orderId: string): Promise<AdvanceOrderStatusResult> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.rpc("advance_order_status", { p_order_id: orderId });
+  if (error) return { status: "error", message: friendlyAdvanceStatusError(error.message) };
+  if (!data) return { status: "error", message: "Pedido não encontrado." };
+
+  revalidatePath("/painel/pedidos");
+  return {
+    status: "success",
+    order: {
+      ...data,
+      subtotal: Number(data.subtotal),
+      delivery_fee: Number(data.delivery_fee),
+      total: Number(data.total),
+      change_for: data.change_for === null ? null : Number(data.change_for),
+    } as Order,
+  };
 }

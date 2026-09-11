@@ -1,8 +1,10 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getPublicOrder, getPublicRestaurantBySlug, formatCurrencyBRL } from "@/lib/store";
-import { ORDER_STATUS_LABELS, PAYMENT_METHOD_LABELS } from "@/lib/checkout";
+import { PAYMENT_METHOD_LABELS } from "@/lib/checkout";
+import type { OrderStatus } from "@/lib/orders";
 import { CopyButton } from "@/components/loja/CopyButton";
+import { OrderStatusBadgeLive } from "@/components/loja/OrderStatusBadge";
 import { StoreNotFound } from "@/components/loja/StoreNotFound";
 
 const FULFILLMENT_LABEL: Record<string, string> = { delivery: "Entrega", pickup: "Retirada" };
@@ -39,9 +41,7 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/pedido/[o
         <span className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald text-2xl text-white">✓</span>
         <h1 className="text-lg font-extrabold text-graphite">Pedido recebido!</h1>
         <p className="text-sm text-text-muted">Pedido #{order.order_number} em {order.restaurant_name}</p>
-        <span className="mt-1 rounded-full border border-emerald/20 bg-surface-card px-3 py-1 text-xs font-bold text-emerald">
-          {ORDER_STATUS_LABELS[order.status] ?? order.status}
-        </span>
+        <OrderStatusBadgeLive publicId={order.public_id} initialStatus={order.status as OrderStatus} />
       </div>
 
       <div className="space-y-4 px-3.5 py-4">

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getAuthedUser, getMyRestaurant, getMyMembership } from "@/lib/tenant";
+import { formatCurrencyBRL, getDashboardOrderMetrics } from "@/lib/orders";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 
@@ -18,13 +19,31 @@ export default async function PainelDashboardPage() {
   if (!restaurant) redirect("/onboarding/passo-1");
 
   const membership = await getMyMembership(supabase, restaurant.id);
+  const metrics = await getDashboardOrderMetrics(supabase, restaurant.id);
 
   return (
     <div className="mx-auto max-w-4xl px-6 py-10">
       <h1 className="text-2xl font-extrabold text-graphite">Olá, bem-vindo ao {restaurant.name}</h1>
-      <p className="mt-1 text-sm text-text-muted">
-        Aqui está a fundação real da sua conta — as métricas e operações do dia a dia chegam nas próximas Sprints.
-      </p>
+      <p className="mt-1 text-sm text-text-muted">Aqui está o resumo real da operação de hoje.</p>
+
+      <div className="mt-6 grid gap-4 sm:grid-cols-4">
+        <Card className="p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Pedidos hoje</p>
+          <p className="mt-1 text-2xl font-extrabold text-graphite">{metrics.ordersToday}</p>
+        </Card>
+        <Card className="p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Faturamento hoje</p>
+          <p className="mt-1 text-2xl font-extrabold text-graphite">{formatCurrencyBRL(metrics.revenueToday)}</p>
+        </Card>
+        <Card className="p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Ticket médio</p>
+          <p className="mt-1 text-2xl font-extrabold text-graphite">{formatCurrencyBRL(metrics.averageTicketToday)}</p>
+        </Card>
+        <Card className="p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Pedidos ativos</p>
+          <p className="mt-1 text-2xl font-extrabold text-graphite">{metrics.activeOrders}</p>
+        </Card>
+      </div>
 
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <Card className="p-5">
