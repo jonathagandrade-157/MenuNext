@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { CreateOrderItemPayload } from "@/lib/checkout";
 import type { Order } from "@/lib/orders";
+import { resolveDeliveryDistanceForOrder } from "@/lib/actions/delivery-quote";
 
 export type SubmitOrderDeliveryInput = {
   zip: string;
@@ -53,6 +54,8 @@ function friendlyOrderError(message: string): string {
   if (normalized.includes("invalid_payment_method")) return "Selecione uma forma de pagamento válida.";
   if (normalized.includes("invalid_change")) return "O valor para troco deve ser maior ou igual ao total do pedido.";
   if (normalized.includes("below_minimum_order")) return "O valor do seu pedido está abaixo do pedido mínimo desta loja.";
+  if (normalized.includes("address_out_of_range")) return "Não entregamos neste endereço — está fora da área de entrega.";
+  if (normalized.includes("invalid_distance")) return "Não foi possível calcular a distância de entrega para este endereço.";
   if (normalized.includes("empty_cart")) return "Sua sacola está vazia.";
   if (normalized.includes("invalid_quantity")) return "Quantidade inválida em algum item da sacola.";
   if (normalized.includes("observation_too_long")) return "A observação é muito longa.";
@@ -87,6 +90,20 @@ function friendlyOrderError(message: string): string {
 export async function submitOrderAction(input: SubmitOrderInput): Promise<SubmitOrderResult> {
   const supabase = await createClient();
 
+  // Frete por distância (Fase 4.1.1): a distância é calculada aqui, no
+  // servidor Next.js (geocoding server-side, nunca no navegador) — só
+  // quando a loja realmente precisa dela (raio configurado ou método "por
+  // km"; ver resolveDeliveryDistanceForOrder). create_order continua sendo
+  // a autoridade final: ela recalcula o frete e valida o raio de novo a
+  // partir da distância recebida, nunca de um valor de frete vindo do
+  // cliente (que nunca existiu como parâmetro nesta RPC).
+  let distanceKm: number | null = null;
+  if (input.fulfillmentType === "delivery" && input.delivery) {
+    const distanceResult = await resolveDeliveryDistanceForOrder(input.slug, input.delivery);
+    if (!distanceResult.ok) return { status: "error", message: distanceResult.message };
+    distanceKm = distanceResult.distanceKm;
+  }
+
   const { data, error } = await supabase.rpc("create_order", {
     p_slug: input.slug,
     p_customer_name: input.customerName,
@@ -105,6 +122,7 @@ export async function submitOrderAction(input: SubmitOrderInput): Promise<Submit
     p_delivery_reference: input.delivery?.reference || null,
     p_change_for: input.changeFor,
     p_observation: input.observation || null,
+    p_delivery_distance_km: distanceKm,
   });
 
   if (error) return { status: "error", message: friendlyOrderError(error.message) };

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getAuthedUser, getBusinessHours, getMyRestaurant } from "@/lib/tenant";
+import { isGeocodingConfigured } from "@/lib/geocoding";
 import { DeliveryConfigForm } from "@/components/painel/delivery/DeliveryConfigForm";
 
 // Consolidação do MVP de delivery (Fase 4.1): esta era uma tela de
@@ -26,7 +27,7 @@ export default async function Page() {
         </p>
       </div>
 
-      <DeliveryConfigForm restaurant={restaurant} businessHours={businessHours} />
+      <DeliveryConfigForm restaurant={restaurant} businessHours={businessHours} geocodingConfigured={isGeocodingConfigured()} />
     </div>
   );
 }

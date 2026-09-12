@@ -50,6 +50,8 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/checkout"
     <CheckoutClient
       slug={slug}
       deliveryFee={restaurant.delivery_fee}
+      deliveryFeeMethod={restaurant.delivery_fee_method}
+      deliveryRadiusKm={restaurant.delivery_radius_km}
       minimumOrderValue={restaurant.minimum_order_value}
       paymentPix={restaurant.payment_pix}
       paymentCash={restaurant.payment_cash}

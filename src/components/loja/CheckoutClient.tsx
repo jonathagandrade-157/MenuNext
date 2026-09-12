@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useBag } from "@/contexts/BagContext";
 import { submitOrderAction } from "@/lib/actions/orders";
+import { getDeliveryQuoteAction } from "@/lib/actions/delivery-quote";
 import {
   PAYMENT_METHOD_LABELS,
   buildOrderItemsPayload,
@@ -42,6 +43,8 @@ function readOrCreateIdempotencyKey(slug: string): string {
 export function CheckoutClient({
   slug,
   deliveryFee,
+  deliveryFeeMethod,
+  deliveryRadiusKm,
   minimumOrderValue,
   paymentPix,
   paymentCash,
@@ -49,6 +52,8 @@ export function CheckoutClient({
 }: {
   slug: string;
   deliveryFee: number | null;
+  deliveryFeeMethod: "fixed" | "per_km";
+  deliveryRadiusKm: number | null;
   minimumOrderValue: number | null;
   paymentPix: boolean;
   paymentCash: boolean;
@@ -83,6 +88,53 @@ export function CheckoutClient({
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [idempotencyKey, setIdempotencyKey] = useState<string | null>(null);
 
+  // Frete por distância (Fase 4.1.1): só entra em jogo quando a loja
+  // configurou raio máximo e/ou método "por km" — no caso comum (taxa fixa
+  // sem raio) nada aqui é chamado, o comportamento continua idêntico ao de
+  // antes desta fase. O cálculo em si (geocoding) sempre acontece no
+  // servidor (getDeliveryQuoteAction); o valor mostrado aqui é só preview —
+  // create_order recalcula tudo de novo ao criar o pedido.
+  const needsDeliveryQuote = deliveryRadiusKm !== null || deliveryFeeMethod === "per_km";
+  const [quote, setQuote] = useState<{ distanceKm: number | null; fee: number } | null>(null);
+  const [quoteLoading, setQuoteLoading] = useState(false);
+  const [quoteError, setQuoteError] = useState<string | null>(null);
+  const quoteRequestId = useRef(0);
+
+  const addressComplete = Boolean(street.trim() && number.trim() && neighborhood.trim() && city.trim());
+
+  useEffect(() => {
+    if (!needsDeliveryQuote) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setQuote(null);
+      setQuoteError(null);
+      return;
+    }
+    if (!addressComplete) {
+      setQuote(null);
+      setQuoteError(null);
+      setQuoteLoading(false);
+      return;
+    }
+
+    const requestId = ++quoteRequestId.current;
+    setQuoteLoading(true);
+    setQuoteError(null);
+
+    const timeoutId = setTimeout(async () => {
+      const result = await getDeliveryQuoteAction(slug, { zip, street, number, neighborhood, city, state });
+      if (quoteRequestId.current !== requestId) return; // resposta de uma digitação anterior — ignorar
+      setQuoteLoading(false);
+      if (result.status === "error") {
+        setQuote(null);
+        setQuoteError(result.message);
+        return;
+      }
+      setQuote({ distanceKm: result.distanceKm, fee: result.fee });
+    }, 700);
+
+    return () => clearTimeout(timeoutId);
+  }, [needsDeliveryQuote, addressComplete, slug, zip, street, number, neighborhood, city, state]);
+
   useEffect(() => {
     // sessionStorage só existe no client — não dá pra usar isso num
     // useState(() => ...) porque o SSR não tem acesso a window (mesmo
@@ -101,11 +153,16 @@ export function CheckoutClient({
     }
   }, [items.length, redirecting, router, slug]);
 
-  const deliveryFeeValue = deliveryFee ?? 0;
-  const total = totalPrice + deliveryFeeValue;
+  const effectiveDeliveryFee = needsDeliveryQuote ? quote?.fee ?? null : (deliveryFee ?? 0);
+  const total = totalPrice + (effectiveDeliveryFee ?? 0);
   const changeForValue = changeForInput.trim() ? parseMoneyInput(changeForInput) : null;
 
-  const canSubmit = availablePaymentMethods.length > 0 && paymentMethod !== null && items.length > 0 && !loading;
+  const canSubmit =
+    availablePaymentMethods.length > 0 &&
+    paymentMethod !== null &&
+    items.length > 0 &&
+    !loading &&
+    (!needsDeliveryQuote || (quote !== null && !quoteError && !quoteLoading));
 
   async function handleSubmit() {
     setErrorMessage(null);
@@ -120,6 +177,10 @@ export function CheckoutClient({
 
     const addressValidation = validateDeliveryAddress({ street, number, neighborhood, city });
     if (!addressValidation.ok) return setErrorMessage(addressValidation.error);
+
+    if (needsDeliveryQuote && (quoteError || !quote)) {
+      return setErrorMessage(quoteError ?? "Aguarde o cálculo do frete para este endereço.");
+    }
 
     const minimumOrderValidation = validateMinimumOrder(totalPrice, minimumOrderValue);
     if (!minimumOrderValidation.ok) return setErrorMessage(minimumOrderValidation.error);
@@ -274,6 +335,25 @@ export function CheckoutClient({
               className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
           </div>
+
+          {needsDeliveryQuote && addressComplete && (
+            <div className="rounded-xl border border-border bg-surface-subdued/60 px-3.5 py-2.5 text-sm">
+              {quoteLoading && <p className="text-text-muted">Calculando distância e frete...</p>}
+              {!quoteLoading && quoteError && <p className="font-semibold text-red">{quoteError}</p>}
+              {!quoteLoading && !quoteError && quote && (
+                <div className="space-y-0.5">
+                  {quote.distanceKm !== null && (
+                    <p className="text-text-muted">
+                      📍 Distância estimada: <span className="font-semibold text-graphite">{quote.distanceKm.toFixed(1)} km</span>
+                    </p>
+                  )}
+                  <p className="text-text-muted">
+                    🚚 Taxa de entrega: <span className="font-semibold text-graphite">{formatCurrencyBRL(quote.fee)}</span>
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
         </section>
 
         {availablePaymentMethods.length > 0 && (
@@ -346,7 +426,9 @@ export function CheckoutClient({
             </div>
             <div className="flex justify-between text-text-muted">
               <span>Taxa de entrega</span>
-              <span className="font-semibold text-graphite">{formatCurrencyBRL(deliveryFeeValue)}</span>
+              <span className="font-semibold text-graphite">
+                {effectiveDeliveryFee !== null ? formatCurrencyBRL(effectiveDeliveryFee) : "—"}
+              </span>
             </div>
             <div className="flex justify-between text-base font-extrabold text-graphite">
               <span>Total</span>

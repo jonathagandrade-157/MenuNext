@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import { useFormStatus } from "react-dom";
 import { saveDeliveryConfigAction, initialDeliveryConfigState } from "@/lib/actions/delivery";
@@ -31,8 +31,17 @@ function openDaysSummary(businessHours: BusinessHour[]): string {
   return openDays.map((d) => d.label).join(", ");
 }
 
-export function DeliveryConfigForm({ restaurant, businessHours }: { restaurant: Restaurant; businessHours: BusinessHour[] }) {
+export function DeliveryConfigForm({
+  restaurant,
+  businessHours,
+  geocodingConfigured,
+}: {
+  restaurant: Restaurant;
+  businessHours: BusinessHour[];
+  geocodingConfigured: boolean;
+}) {
   const [state, formAction] = useActionState(saveDeliveryConfigAction, initialDeliveryConfigState);
+  const [feeMethod, setFeeMethod] = useState<"fixed" | "per_km">(restaurant.delivery_fee_method);
 
   return (
     <form action={formAction} className="space-y-6">
@@ -56,15 +65,66 @@ export function DeliveryConfigForm({ restaurant, businessHours }: { restaurant: 
       <Card className="space-y-5 p-6">
         <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Taxa e área de entrega</h2>
 
+        <div>
+          <span className={fieldLabelClass}>Como calcular a taxa de entrega</span>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <label
+              className={`flex cursor-pointer items-start gap-2.5 rounded-xl border p-3.5 ${
+                feeMethod === "fixed" ? "border-primary bg-primary/5" : "border-border"
+              }`}
+            >
+              <input
+                type="radio"
+                name="delivery_fee_method"
+                value="fixed"
+                checked={feeMethod === "fixed"}
+                onChange={() => setFeeMethod("fixed")}
+                className="mt-0.5 h-4 w-4 accent-primary"
+              />
+              <span>
+                <span className="block text-sm font-semibold text-graphite">Taxa fixa</span>
+                <span className="block text-xs text-text-muted">Mesmo valor para qualquer endereço dentro do raio.</span>
+              </span>
+            </label>
+            <label
+              className={`flex items-start gap-2.5 rounded-xl border p-3.5 ${
+                !geocodingConfigured
+                  ? "cursor-not-allowed border-border opacity-50"
+                  : feeMethod === "per_km"
+                    ? "cursor-pointer border-primary bg-primary/5"
+                    : "cursor-pointer border-border"
+              }`}
+            >
+              <input
+                type="radio"
+                name="delivery_fee_method"
+                value="per_km"
+                checked={feeMethod === "per_km"}
+                onChange={() => setFeeMethod("per_km")}
+                disabled={!geocodingConfigured}
+                className="mt-0.5 h-4 w-4 accent-primary"
+              />
+              <span>
+                <span className="block text-sm font-semibold text-graphite">Por km</span>
+                <span className="block text-xs text-text-muted">
+                  {geocodingConfigured
+                    ? "Valor multiplicado pela distância até o cliente."
+                    : "Indisponível: requer configurar GOOGLE_MAPS_GEOCODING_API_KEY no servidor."}
+                </span>
+              </span>
+            </label>
+          </div>
+        </div>
+
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
-            <span className={fieldLabelClass}>Taxa de entrega (R$)</span>
+            <span className={fieldLabelClass}>{feeMethod === "per_km" ? "Valor por km (R$/km)" : "Taxa de entrega (R$)"}</span>
             <input
               name="delivery_fee"
               type="text"
               inputMode="decimal"
               defaultValue={restaurant.delivery_fee ?? ""}
-              placeholder="8,00"
+              placeholder={feeMethod === "per_km" ? "2,50" : "8,00"}
               className={inputClass}
             />
           </div>

@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import { buildGeocodableAddress, type DeliveryFeeMethod } from "@/lib/delivery";
+import { geocodeAddress, isGeocodingConfigured } from "@/lib/geocoding";
 
 const DELIVERY_PATH = "/painel/delivery";
 
@@ -50,6 +52,8 @@ export async function saveDeliveryConfigAction(
   const { supabase, restaurant } = await requireRestaurant();
 
   const serviceDelivery = formData.get("service_delivery") === "on";
+  const feeMethodRaw = String(formData.get("delivery_fee_method") ?? "fixed");
+  const feeMethod: DeliveryFeeMethod = feeMethodRaw === "per_km" ? "per_km" : "fixed";
   const feeRaw = String(formData.get("delivery_fee") ?? "");
   const radiusRaw = String(formData.get("delivery_radius_km") ?? "");
   const minOrderRaw = String(formData.get("minimum_order_value") ?? "");
@@ -64,7 +68,10 @@ export async function saveDeliveryConfigAction(
 
   if (serviceDelivery) {
     if (fee === null || Number.isNaN(fee) || fee < 0) {
-      return { status: "error", message: "Informe uma taxa de entrega válida." };
+      return {
+        status: "error",
+        message: feeMethod === "per_km" ? "Informe um valor por km válido." : "Informe uma taxa de entrega válida.",
+      };
     }
     if (radius === null || Number.isNaN(radius) || radius <= 0) {
       return { status: "error", message: "Informe um raio de entrega válido." };
@@ -91,17 +98,60 @@ export async function saveDeliveryConfigAction(
     }
   }
 
-  const { error } = await supabase
-    .from("restaurants")
-    .update({
-      service_delivery: serviceDelivery,
-      delivery_fee: fee,
-      delivery_radius_km: radius,
-      minimum_order_value: minOrder,
-      estimated_delivery_min_minutes: estMin,
-      estimated_delivery_max_minutes: estMax,
-    })
-    .eq("id", restaurant.id);
+  // "Por km" precisa da localização do PRÓPRIO restaurante para calcular
+  // distância até o cliente — geocodificada aqui (servidor), uma vez, nunca
+  // no navegador. Fora do escopo: geocodificar a cada pedido o endereço do
+  // restaurante, que já é conhecido e estável.
+  let latitude: number | null = null;
+  let longitude: number | null = null;
+  if (serviceDelivery && feeMethod === "per_km") {
+    if (!isGeocodingConfigured()) {
+      return {
+        status: "error",
+        message:
+          "O método \"Por km\" ainda não está disponível: falta configurar a variável de ambiente GOOGLE_MAPS_GEOCODING_API_KEY no servidor. Use taxa fixa por enquanto.",
+      };
+    }
+    if (!restaurant.address_street || !restaurant.address_number || !restaurant.address_city) {
+      return {
+        status: "error",
+        message: "Cadastre o endereço completo do restaurante (Passo 2) antes de usar o método \"Por km\".",
+      };
+    }
+    const restaurantAddress = buildGeocodableAddress({
+      street: restaurant.address_street,
+      number: restaurant.address_number,
+      neighborhood: restaurant.address_neighborhood,
+      city: restaurant.address_city,
+      state: restaurant.address_state,
+      zip: restaurant.address_zip,
+    });
+    const geocoded = await geocodeAddress(restaurantAddress);
+    if (!geocoded.ok) {
+      return {
+        status: "error",
+        message: "Não foi possível localizar o endereço do restaurante. Verifique o endereço cadastrado e tente novamente.",
+      };
+    }
+    latitude = geocoded.point.lat;
+    longitude = geocoded.point.lng;
+  }
+
+  const update: Record<string, unknown> = {
+    service_delivery: serviceDelivery,
+    delivery_fee: fee,
+    delivery_radius_km: radius,
+    delivery_fee_method: feeMethod,
+    minimum_order_value: minOrder,
+    estimated_delivery_min_minutes: estMin,
+    estimated_delivery_max_minutes: estMax,
+  };
+  if (feeMethod === "per_km") {
+    update.latitude = latitude;
+    update.longitude = longitude;
+  }
+
+  const { error } = await supabase.from("restaurants").update(update).eq("id", restaurant.id);
   if (error) return { status: "error", message: "Não foi possível salvar. Tente novamente." };
 
   revalidatePath(DELIVERY_PATH);
