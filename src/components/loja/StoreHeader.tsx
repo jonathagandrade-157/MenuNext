@@ -15,20 +15,22 @@ export function StoreHeader({
   logoUrl,
   openState,
   serviceDelivery,
-  servicePickup,
   deliveryFee,
   deliveryRadiusKm,
+  estimatedDeliveryMinMinutes,
+  estimatedDeliveryMaxMinutes,
 }: {
   name: string;
   coverUrl: string | null;
   logoUrl: string | null;
   openState: StoreOpenState;
   serviceDelivery: boolean;
-  servicePickup: boolean;
   deliveryFee: number | null;
   deliveryRadiusKm: number | null;
+  estimatedDeliveryMinMinutes: number | null;
+  estimatedDeliveryMaxMinutes: number | null;
 }) {
-  const hasDeliveryInfo = serviceDelivery || servicePickup;
+  const hasEstimate = estimatedDeliveryMinMinutes !== null && estimatedDeliveryMaxMinutes !== null;
 
   return (
     <header className="relative">
@@ -63,22 +65,20 @@ export function StoreHeader({
           </div>
         </div>
 
-        {hasDeliveryInfo && (
+        {serviceDelivery && (
           <div className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-3">
-            {serviceDelivery && (
+            <div className="rounded-xl bg-surface-subdued p-2.5">
+              <p className="text-[11px] font-medium text-text-muted">Taxa de entrega</p>
+              <p className="text-xs font-bold text-graphite">
+                {deliveryFee !== null ? formatCurrencyBRL(deliveryFee) : "A combinar"}
+                {deliveryRadiusKm !== null && ` · até ${deliveryRadiusKm} km`}
+              </p>
+            </div>
+            {hasEstimate && (
               <div className="rounded-xl bg-surface-subdued p-2.5">
-                <p className="text-[11px] font-medium text-text-muted">Taxa de entrega</p>
+                <p className="text-[11px] font-medium text-text-muted">Tempo estimado</p>
                 <p className="text-xs font-bold text-graphite">
-                  {deliveryFee !== null ? formatCurrencyBRL(deliveryFee) : "A combinar"}
-                  {deliveryRadiusKm !== null && ` · até ${deliveryRadiusKm} km`}
-                </p>
-              </div>
-            )}
-            {servicePickup && (
-              <div className="rounded-xl bg-surface-subdued p-2.5">
-                <p className="text-[11px] font-medium text-text-muted">Modalidade</p>
-                <p className="text-xs font-bold text-graphite">
-                  {serviceDelivery ? "Entrega e retirada" : "Retirada no local"}
+                  {estimatedDeliveryMinMinutes}–{estimatedDeliveryMaxMinutes} min
                 </p>
               </div>
             )}

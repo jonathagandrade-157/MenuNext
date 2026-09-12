@@ -52,6 +52,7 @@ function friendlyOrderError(message: string): string {
   if (normalized.includes("invalid_address")) return "Preencha o endereço de entrega completo.";
   if (normalized.includes("invalid_payment_method")) return "Selecione uma forma de pagamento válida.";
   if (normalized.includes("invalid_change")) return "O valor para troco deve ser maior ou igual ao total do pedido.";
+  if (normalized.includes("below_minimum_order")) return "O valor do seu pedido está abaixo do pedido mínimo desta loja.";
   if (normalized.includes("empty_cart")) return "Sua sacola está vazia.";
   if (normalized.includes("invalid_quantity")) return "Quantidade inválida em algum item da sacola.";
   if (normalized.includes("observation_too_long")) return "A observação é muito longa.";
@@ -143,6 +144,51 @@ export async function advanceOrderStatusAction(orderId: string): Promise<Advance
 
   const { data, error } = await supabase.rpc("advance_order_status", { p_order_id: orderId });
   if (error) return { status: "error", message: friendlyAdvanceStatusError(error.message) };
+  if (!data) return { status: "error", message: "Pedido não encontrado." };
+
+  revalidatePath("/painel/pedidos");
+  return {
+    status: "success",
+    order: {
+      ...data,
+      subtotal: Number(data.subtotal),
+      delivery_fee: Number(data.delivery_fee),
+      total: Number(data.total),
+      change_for: data.change_for === null ? null : Number(data.change_for),
+    } as Order,
+  };
+}
+
+export type CancelOrderResult = { status: "success"; order: Order } | { status: "error"; message: string };
+
+function friendlyCancelOrderError(message: string): string {
+  const normalized = message.toLowerCase();
+  if (normalized.includes("not_authenticated") || normalized.includes("not_authorized")) {
+    return "Você não tem permissão para cancelar este pedido.";
+  }
+  if (normalized.includes("order_not_found")) return "Pedido não encontrado.";
+  if (normalized.includes("invalid_transition")) {
+    return "Este pedido já está entregue, retirado ou cancelado e não pode mais ser cancelado.";
+  }
+  if (normalized.includes("invalid_reason") || normalized.includes("reason_too_long")) {
+    return "Informe um motivo de cancelamento válido.";
+  }
+  return "Não foi possível cancelar o pedido. Tente novamente.";
+}
+
+/**
+ * Cancela o pedido (Fase 4.1) — mesmo padrão de segurança de
+ * advanceOrderStatusAction: a RPC cancel_order (SECURITY DEFINER) é quem
+ * decide se a transição é permitida (nunca aceita um pedido já
+ * entregue/retirado/cancelado) e quem grava quem/quando/por quê em
+ * order_status_history. Nenhum estorno automático acontece aqui — fora de
+ * escopo desta fase.
+ */
+export async function cancelOrderAction(orderId: string, reason: string): Promise<CancelOrderResult> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.rpc("cancel_order", { p_order_id: orderId, p_reason: reason });
+  if (error) return { status: "error", message: friendlyCancelOrderError(error.message) };
   if (!data) return { status: "error", message: "Pedido não encontrado." };
 
   revalidatePath("/painel/pedidos");

@@ -34,6 +34,9 @@ export type PublicRestaurant = {
   service_pickup: boolean;
   delivery_fee: number | null;
   delivery_radius_km: number | null;
+  minimum_order_value: number | null;
+  estimated_delivery_min_minutes: number | null;
+  estimated_delivery_max_minutes: number | null;
   payment_pix: boolean;
   payment_cash: boolean;
   payment_card: boolean;
@@ -52,6 +55,7 @@ export async function getPublicRestaurantBySlug(
     ...row,
     delivery_fee: row.delivery_fee === null ? null : Number(row.delivery_fee),
     delivery_radius_km: row.delivery_radius_km === null ? null : Number(row.delivery_radius_km),
+    minimum_order_value: row.minimum_order_value === null ? null : Number(row.minimum_order_value),
   } as PublicRestaurant;
 }
 

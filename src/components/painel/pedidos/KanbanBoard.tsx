@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { advanceOrderStatusAction } from "@/lib/actions/orders";
+import { advanceOrderStatusAction, cancelOrderAction } from "@/lib/actions/orders";
 import {
   KANBAN_COLUMNS,
   getKanbanColumnForStatus,
@@ -32,6 +32,7 @@ export function KanbanBoard({ restaurantId, initialOrders }: { restaurantId: str
   const [orders, setOrders] = useState<OrderWithItems[]>(initialOrders);
   const [newOrderIds, setNewOrderIds] = useState<Set<string>>(new Set());
   const [advancingId, setAdvancingId] = useState<string | null>(null);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const supabaseRef = useRef(createClient());
@@ -112,6 +113,29 @@ export function KanbanBoard({ restaurantId, initialOrders }: { restaurantId: str
     }
   }, []);
 
+  const handleCancel = useCallback(async (order: OrderWithItems, reason: string) => {
+    setErrorMessage(null);
+    setCancellingId(order.id);
+    const result = await cancelOrderAction(order.id, reason);
+    setCancellingId(null);
+
+    if (result.status === "error") {
+      setErrorMessage(result.message);
+      return;
+    }
+
+    setOrders((prev) => prev.filter((o) => o.id !== order.id));
+    setSelectedOrderId(null);
+
+    try {
+      const trackingChannel = supabaseRef.current.channel(orderTrackingChannelName(result.order.public_id));
+      await trackingChannel.send({ type: "broadcast", event: "status_changed", payload: { status: result.order.status } });
+      supabaseRef.current.removeChannel(trackingChannel);
+    } catch {
+      // best-effort — ver comentário equivalente em handleAdvance.
+    }
+  }, []);
+
   const selectedOrder = orders.find((o) => o.id === selectedOrderId) ?? null;
 
   return (
@@ -156,8 +180,10 @@ export function KanbanBoard({ restaurantId, initialOrders }: { restaurantId: str
       <OrderDetailModal
         order={selectedOrder}
         isAdvancing={advancingId === selectedOrder?.id}
+        isCancelling={cancellingId === selectedOrder?.id}
         onClose={() => setSelectedOrderId(null)}
         onAdvance={() => selectedOrder && handleAdvance(selectedOrder)}
+        onCancel={(reason) => selectedOrder && handleCancel(selectedOrder, reason)}
       />
     </div>
   );

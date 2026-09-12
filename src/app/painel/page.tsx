@@ -54,6 +54,29 @@ export default async function PainelDashboardPage() {
         </Card>
       </div>
 
+      <div className="mt-4 grid gap-4 sm:grid-cols-4">
+        <Card className="p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Entregues hoje</p>
+          <p className="mt-1 text-2xl font-extrabold text-emerald">{metrics.deliveredToday}</p>
+        </Card>
+        <Card className="p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Cancelados hoje</p>
+          <p className="mt-1 text-2xl font-extrabold text-red">{metrics.cancelledToday}</p>
+        </Card>
+        <Card className="p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Tempo médio de preparo</p>
+          <p className="mt-1 text-2xl font-extrabold text-graphite">
+            {metrics.averagePrepMinutes !== null ? `${Math.round(metrics.averagePrepMinutes)} min` : "—"}
+          </p>
+        </Card>
+        <Card className="p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Tempo médio até entrega</p>
+          <p className="mt-1 text-2xl font-extrabold text-graphite">
+            {metrics.averageDeliveryMinutes !== null ? `${Math.round(metrics.averageDeliveryMinutes)} min` : "—"}
+          </p>
+        </Card>
+      </div>
+
       <div className="mt-6 grid gap-4 sm:grid-cols-3">
         <Card className="p-5">
           <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Usuário</p>

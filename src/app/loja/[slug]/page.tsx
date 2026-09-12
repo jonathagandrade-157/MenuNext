@@ -42,9 +42,10 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
         logoUrl={restaurant.logo_path ? getImageUrl(restaurant.logo_path) : null}
         openState={openState}
         serviceDelivery={restaurant.service_delivery}
-        servicePickup={restaurant.service_pickup}
         deliveryFee={restaurant.delivery_fee}
         deliveryRadiusKm={restaurant.delivery_radius_km}
+        estimatedDeliveryMinMinutes={restaurant.estimated_delivery_min_minutes}
+        estimatedDeliveryMaxMinutes={restaurant.estimated_delivery_max_minutes}
       />
 
       {openState.status === "closed_hours" && (

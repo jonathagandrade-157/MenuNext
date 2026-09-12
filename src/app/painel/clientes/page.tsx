@@ -1,13 +1,28 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { redirect } from "next/navigation";
+import { getAuthedUser, getMyRestaurant } from "@/lib/tenant";
+import { aggregateCustomers, getCustomerOrders } from "@/lib/customers";
+import { ClientesView } from "@/components/painel/clientes/ClientesView";
 
-export default function Page() {
+export default async function Page() {
+  const { supabase, user } = await getAuthedUser();
+  if (!user) redirect("/cadastro");
+
+  const restaurant = await getMyRestaurant(supabase);
+  if (!restaurant) redirect("/onboarding/passo-1");
+
+  const orders = await getCustomerOrders(supabase, restaurant.id);
+  const customers = aggregateCustomers(orders);
+
   return (
-    <ScreenPlaceholder
-      screenId="SCREEN_19"
-      title="Clientes"
-      description="Base de clientes do restaurante, com histórico de pedidos."
-      backHref="/painel"
-      backLabel="Voltar ao dashboard"
-    />
+    <div className="mx-auto max-w-5xl space-y-6 px-6 py-8">
+      <div>
+        <h1 className="text-2xl font-black tracking-tight text-graphite">Clientes</h1>
+        <p className="mt-0.5 text-sm font-medium text-text-muted">
+          Todos os clientes que já fizeram pedidos, com histórico e totais.
+        </p>
+      </div>
+
+      <ClientesView customers={customers} />
+    </div>
   );
 }

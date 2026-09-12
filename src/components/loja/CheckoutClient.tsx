@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useBag } from "@/contexts/BagContext";
 import { submitOrderAction } from "@/lib/actions/orders";
 import {
-  FULFILLMENT_TYPE_LABELS,
   PAYMENT_METHOD_LABELS,
   buildOrderItemsPayload,
   generateIdempotencyKey,
@@ -14,7 +13,7 @@ import {
   validateCustomerName,
   validateCustomerPhone,
   validateDeliveryAddress,
-  type FulfillmentType,
+  validateMinimumOrder,
   type PaymentMethod,
 } from "@/lib/checkout";
 import { parseMoneyInput } from "@/lib/products";
@@ -42,30 +41,21 @@ function readOrCreateIdempotencyKey(slug: string): string {
 
 export function CheckoutClient({
   slug,
-  serviceDelivery,
-  servicePickup,
   deliveryFee,
+  minimumOrderValue,
   paymentPix,
   paymentCash,
   paymentCard,
 }: {
   slug: string;
-  serviceDelivery: boolean;
-  servicePickup: boolean;
   deliveryFee: number | null;
+  minimumOrderValue: number | null;
   paymentPix: boolean;
   paymentCash: boolean;
   paymentCard: boolean;
 }) {
   const router = useRouter();
   const { items, totalPrice, clearBag } = useBag();
-
-  const availableFulfillmentTypes = useMemo<FulfillmentType[]>(() => {
-    const list: FulfillmentType[] = [];
-    if (serviceDelivery) list.push("delivery");
-    if (servicePickup) list.push("pickup");
-    return list;
-  }, [serviceDelivery, servicePickup]);
 
   const availablePaymentMethods = useMemo<PaymentMethod[]>(() => {
     const list: PaymentMethod[] = [];
@@ -77,7 +67,6 @@ export function CheckoutClient({
 
   const [customerName, setCustomerName] = useState("");
   const [customerPhone, setCustomerPhone] = useState("");
-  const [fulfillmentType, setFulfillmentType] = useState<FulfillmentType | null>(availableFulfillmentTypes[0] ?? null);
   const [zip, setZip] = useState("");
   const [street, setStreet] = useState("");
   const [number, setNumber] = useState("");
@@ -113,21 +102,15 @@ export function CheckoutClient({
   }, [items.length, redirecting, router, slug]);
 
   const deliveryFeeValue = deliveryFee ?? 0;
-  const total = totalPrice + (fulfillmentType === "delivery" ? deliveryFeeValue : 0);
+  const total = totalPrice + deliveryFeeValue;
   const changeForValue = changeForInput.trim() ? parseMoneyInput(changeForInput) : null;
 
-  const canSubmit =
-    availableFulfillmentTypes.length > 0 &&
-    availablePaymentMethods.length > 0 &&
-    fulfillmentType !== null &&
-    paymentMethod !== null &&
-    items.length > 0 &&
-    !loading;
+  const canSubmit = availablePaymentMethods.length > 0 && paymentMethod !== null && items.length > 0 && !loading;
 
   async function handleSubmit() {
     setErrorMessage(null);
 
-    if (!fulfillmentType || !paymentMethod || !idempotencyKey) return;
+    if (!paymentMethod || !idempotencyKey) return;
 
     const nameValidation = validateCustomerName(customerName);
     if (!nameValidation.ok) return setErrorMessage(nameValidation.error);
@@ -135,10 +118,11 @@ export function CheckoutClient({
     const phoneValidation = validateCustomerPhone(customerPhone);
     if (!phoneValidation.ok) return setErrorMessage(phoneValidation.error);
 
-    if (fulfillmentType === "delivery") {
-      const addressValidation = validateDeliveryAddress({ street, number, neighborhood, city });
-      if (!addressValidation.ok) return setErrorMessage(addressValidation.error);
-    }
+    const addressValidation = validateDeliveryAddress({ street, number, neighborhood, city });
+    if (!addressValidation.ok) return setErrorMessage(addressValidation.error);
+
+    const minimumOrderValidation = validateMinimumOrder(totalPrice, minimumOrderValue);
+    if (!minimumOrderValidation.ok) return setErrorMessage(minimumOrderValidation.error);
 
     if (paymentMethod === "cash" && changeForInput.trim()) {
       if (changeForValue === null) return setErrorMessage("Informe um valor de troco válido.");
@@ -154,8 +138,8 @@ export function CheckoutClient({
       slug,
       customerName,
       customerPhone,
-      fulfillmentType,
-      delivery: fulfillmentType === "delivery" ? { zip, street, number, complement, neighborhood, city, state, reference } : null,
+      fulfillmentType: "delivery",
+      delivery: { zip, street, number, complement, neighborhood, city, state, reference },
       paymentMethod,
       changeFor: paymentMethod === "cash" ? changeForValue : null,
       observation,
@@ -197,9 +181,14 @@ export function CheckoutClient({
       </div>
 
       <div className="space-y-5 px-3.5 py-4">
-        {(availableFulfillmentTypes.length === 0 || availablePaymentMethods.length === 0) && (
+        {availablePaymentMethods.length === 0 && (
           <div className="rounded-xl border border-amber/20 bg-amber/10 px-3.5 py-2.5 text-xs font-medium text-amber">
-            Esta loja ainda não concluiu a configuração de atendimento/pagamento. Tente novamente mais tarde.
+            Esta loja ainda não concluiu a configuração de pagamento. Tente novamente mais tarde.
+          </div>
+        )}
+        {minimumOrderValue !== null && totalPrice < minimumOrderValue && (
+          <div className="rounded-xl border border-amber/20 bg-amber/10 px-3.5 py-2.5 text-xs font-medium text-amber">
+            Pedido mínimo de {formatCurrencyBRL(minimumOrderValue)}. Adicione mais itens à sacola para continuar.
           </div>
         )}
 
@@ -232,84 +221,60 @@ export function CheckoutClient({
           </div>
         </section>
 
-        {availableFulfillmentTypes.length > 1 && (
-          <section className="space-y-2">
-            <h2 className="text-sm font-extrabold text-graphite">Entrega ou retirada</h2>
-            <div className="grid grid-cols-2 gap-2">
-              {availableFulfillmentTypes.map((type) => (
-                <button
-                  key={type}
-                  type="button"
-                  onClick={() => setFulfillmentType(type)}
-                  className={`rounded-xl border px-3 py-2.5 text-sm font-bold transition-colors ${
-                    fulfillmentType === type
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border text-graphite hover:bg-surface-subdued"
-                  }`}
-                >
-                  {FULFILLMENT_TYPE_LABELS[type]}
-                </button>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {fulfillmentType === "delivery" && (
-          <section className="space-y-3">
-            <h2 className="text-sm font-extrabold text-graphite">Endereço de entrega</h2>
-            <div className="grid grid-cols-2 gap-2">
-              <input
-                value={zip}
-                onChange={(e) => setZip(e.target.value)}
-                placeholder="CEP (opcional)"
-                className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-              />
-              <input
-                value={street}
-                onChange={(e) => setStreet(e.target.value)}
-                placeholder="Rua"
-                className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-              />
-              <input
-                value={number}
-                onChange={(e) => setNumber(e.target.value)}
-                placeholder="Número"
-                className="rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-              />
-              <input
-                value={complement}
-                onChange={(e) => setComplement(e.target.value)}
-                placeholder="Complemento (opcional)"
-                className="rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-              />
-              <input
-                value={neighborhood}
-                onChange={(e) => setNeighborhood(e.target.value)}
-                placeholder="Bairro"
-                className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-              />
-              <input
-                value={city}
-                onChange={(e) => setCity(e.target.value)}
-                placeholder="Cidade"
-                className="rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-              />
-              <input
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                placeholder="UF"
-                maxLength={2}
-                className="rounded-xl border border-border bg-surface-card px-3 py-2 text-sm uppercase text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-              />
-              <input
-                value={reference}
-                onChange={(e) => setReference(e.target.value)}
-                placeholder="Referência (opcional)"
-                className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-              />
-            </div>
-          </section>
-        )}
+        <section className="space-y-3">
+          <h2 className="text-sm font-extrabold text-graphite">Endereço de entrega</h2>
+          <div className="grid grid-cols-2 gap-2">
+            <input
+              value={zip}
+              onChange={(e) => setZip(e.target.value)}
+              placeholder="CEP (opcional)"
+              className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            />
+            <input
+              value={street}
+              onChange={(e) => setStreet(e.target.value)}
+              placeholder="Rua"
+              className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            />
+            <input
+              value={number}
+              onChange={(e) => setNumber(e.target.value)}
+              placeholder="Número"
+              className="rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            />
+            <input
+              value={complement}
+              onChange={(e) => setComplement(e.target.value)}
+              placeholder="Complemento (opcional)"
+              className="rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            />
+            <input
+              value={neighborhood}
+              onChange={(e) => setNeighborhood(e.target.value)}
+              placeholder="Bairro"
+              className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            />
+            <input
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+              placeholder="Cidade"
+              className="rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            />
+            <input
+              value={state}
+              onChange={(e) => setState(e.target.value)}
+              placeholder="UF"
+              maxLength={2}
+              className="rounded-xl border border-border bg-surface-card px-3 py-2 text-sm uppercase text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            />
+            <input
+              value={reference}
+              onChange={(e) => setReference(e.target.value)}
+              placeholder="Referência (opcional)"
+              className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            />
+          </div>
+        </section>
 
         {availablePaymentMethods.length > 0 && (
           <section className="space-y-2">
@@ -379,12 +344,10 @@ export function CheckoutClient({
               <span>Subtotal</span>
               <span className="font-semibold text-graphite">{formatCurrencyBRL(totalPrice)}</span>
             </div>
-            {fulfillmentType === "delivery" && (
-              <div className="flex justify-between text-text-muted">
-                <span>Taxa de entrega</span>
-                <span className="font-semibold text-graphite">{formatCurrencyBRL(deliveryFeeValue)}</span>
-              </div>
-            )}
+            <div className="flex justify-between text-text-muted">
+              <span>Taxa de entrega</span>
+              <span className="font-semibold text-graphite">{formatCurrencyBRL(deliveryFeeValue)}</span>
+            </div>
             <div className="flex justify-between text-base font-extrabold text-graphite">
               <span>Total</span>
               <span>{formatCurrencyBRL(total)}</span>

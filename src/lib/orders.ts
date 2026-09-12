@@ -90,6 +90,20 @@ export function getKanbanColumnForStatus(status: OrderStatus): KanbanColumnId | 
   return column?.id ?? null;
 }
 
+/** Motivos de cancelamento oferecidos ao lojista (Fase 4.1) — lista fechada
+ * exceto "other", que exige um texto livre complementar. O motivo final
+ * enviado à RPC cancel_order é sempre uma string (o rótulo, para "other" o
+ * texto digitado), gravada em order_status_history.reason. */
+export const CANCEL_REASONS = [
+  { value: "customer_cancelled", label: "Cliente cancelou" },
+  { value: "product_unavailable", label: "Produto indisponível" },
+  { value: "cannot_fulfill", label: "Restaurante não consegue atender" },
+  { value: "invalid_address", label: "Endereço inválido" },
+  { value: "other", label: "Outro" },
+] as const;
+
+export type CancelReasonValue = (typeof CANCEL_REASONS)[number]["value"];
+
 /** Nome do canal de broadcast do tracking público deste pedido — o
  * public_id (UUID não adivinhável) é a própria autorização, mesmo modelo
  * de confiança que get_public_order já usa (ver migration
@@ -201,6 +215,45 @@ export async function getActiveOrdersForKanban(supabase: SupabaseClient, restaur
   return ((data ?? []) as OrderWithItems[]).map(normalizeOrderWithItems);
 }
 
+/**
+ * Histórico de pedidos do restaurante (Fase 4.1) — TODOS os status, mais
+ * recentes primeiro, limitado a um teto razoável para uma tela de operação
+ * (filtros de período/status/cliente/valor são aplicados no client sobre
+ * este conjunto, sem nova query por filtro — mesmo padrão de simplicidade
+ * de getSetupChecklist: nenhuma tabela/índice novo só para isto). RLS
+ * (orders_select_members) é, de novo, a única proteção real de tenant.
+ */
+const ORDER_HISTORY_LIMIT = 300;
+
+export async function getOrderHistory(supabase: SupabaseClient, restaurantId: string): Promise<OrderWithItems[]> {
+  const { data, error } = await supabase
+    .from("orders")
+    .select(ORDER_WITH_ITEMS_SELECT)
+    .eq("restaurant_id", restaurantId)
+    .order("created_at", { ascending: false })
+    .limit(ORDER_HISTORY_LIMIT);
+  if (error) throw error;
+  return ((data ?? []) as OrderWithItems[]).map(normalizeOrderWithItems);
+}
+
+/** Grupos de status usados pelas abas do histórico de pedidos — únicos o
+ * suficiente para responder rápido "o que está em qual etapa", sem replicar
+ * 1-status-por-aba (que forçaria o lojista a abrir 8 abas para achar algo). */
+export type OrderHistoryTabId = "all" | "received" | "preparing" | "out_for_delivery" | "delivered" | "cancelled";
+
+export const ORDER_HISTORY_TABS: { id: OrderHistoryTabId; title: string; statuses: OrderStatus[] | null }[] = [
+  { id: "all", title: "Todos", statuses: null },
+  { id: "received", title: "Recebidos", statuses: ["received", "confirmed"] },
+  { id: "preparing", title: "Em preparação", statuses: ["preparing", "ready"] },
+  { id: "out_for_delivery", title: "Saiu para entrega", statuses: ["out_for_delivery"] },
+  { id: "delivered", title: "Entregues", statuses: ["delivered", "picked_up"] },
+  { id: "cancelled", title: "Cancelados", statuses: ["cancelled"] },
+];
+
+export function formatOrderDateTime(iso: string): string {
+  return new Date(iso).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+}
+
 /** Um pedido específico com itens — usado para buscar o pedido recém-criado
  * quando o Kanban recebe um evento realtime de INSERT (que só traz as
  * colunas de `orders`, sem os itens). */
@@ -215,22 +268,44 @@ export type DashboardOrderMetrics = {
   revenueToday: number;
   averageTicketToday: number;
   activeOrders: number;
+  deliveredToday: number;
+  cancelledToday: number;
+  averagePrepMinutes: number | null;
+  averageDeliveryMinutes: number | null;
 };
 
+function minutesBetween(startIso: string, endIso: string): number {
+  return (new Date(endIso).getTime() - new Date(startIso).getTime()) / 60000;
+}
+
+function average(values: number[]): number | null {
+  if (values.length === 0) return null;
+  return values.reduce((sum, v) => sum + v, 0) / values.length;
+}
+
 /**
- * Métricas básicas do Dashboard (item 22 da Fase 3.4) — derivadas
+ * Métricas básicas do Dashboard (item 22 da Fase 3.4, ampliadas na Fase
+ * 4.1 com entregues/cancelados hoje e tempos médios) — derivadas
  * diretamente de `orders`, nunca de uma tabela paralela. "Hoje" usa a data
  * local do servidor (mesma limitação já existente no projeto — nenhuma
  * tabela guarda timezone do restaurante, ver computeStoreOpenState em
  * src/lib/store.ts). "Pedidos ativos" conta qualquer pedido fora dos
- * status terminais, independente da data.
+ * status terminais, independente da data. Tempo médio de preparo usa
+ * preparing_at -> ready_at; tempo médio até entrega usa created_at ->
+ * delivered_at — ambos só sobre pedidos de hoje que já têm os dois
+ * timestamps preenchidos (null quando não há nenhum pedido nessa condição
+ * ainda hoje, nunca 0 — 0 minutos seria um dado errado, não "sem dado").
  */
 export async function getDashboardOrderMetrics(supabase: SupabaseClient, restaurantId: string): Promise<DashboardOrderMetrics> {
   const startOfToday = new Date();
   startOfToday.setHours(0, 0, 0, 0);
 
   const [todayResult, activeResult] = await Promise.all([
-    supabase.from("orders").select("total").eq("restaurant_id", restaurantId).gte("created_at", startOfToday.toISOString()),
+    supabase
+      .from("orders")
+      .select("total, status, created_at, preparing_at, ready_at, delivered_at")
+      .eq("restaurant_id", restaurantId)
+      .gte("created_at", startOfToday.toISOString()),
     supabase
       .from("orders")
       .select("id", { count: "exact", head: true })
@@ -244,11 +319,23 @@ export async function getDashboardOrderMetrics(supabase: SupabaseClient, restaur
   const todayOrders = todayResult.data ?? [];
   const revenueToday = todayOrders.reduce((sum, row) => sum + Number(row.total), 0);
 
+  const prepMinutes = todayOrders
+    .filter((row) => row.preparing_at && row.ready_at)
+    .map((row) => minutesBetween(row.preparing_at as string, row.ready_at as string));
+
+  const deliveryMinutes = todayOrders
+    .filter((row) => row.status === "delivered" && row.delivered_at)
+    .map((row) => minutesBetween(row.created_at, row.delivered_at as string));
+
   return {
     ordersToday: todayOrders.length,
     revenueToday,
     averageTicketToday: todayOrders.length > 0 ? revenueToday / todayOrders.length : 0,
     activeOrders: activeResult.count ?? 0,
+    deliveredToday: todayOrders.filter((row) => row.status === "delivered" || row.status === "picked_up").length,
+    cancelledToday: todayOrders.filter((row) => row.status === "cancelled").length,
+    averagePrepMinutes: average(prepMinutes),
+    averageDeliveryMinutes: average(deliveryMinutes),
   };
 }
 

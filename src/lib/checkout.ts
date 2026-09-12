@@ -88,6 +88,20 @@ export function validateChangeFor(changeFor: number | null, total: number): Fiel
   return { ok: true };
 }
 
+/** Pedido mínimo é opcional (null = sem exigência) — mesma checagem que o
+ * servidor repete em create_order (nunca confiamos só nisto aqui: é feedback
+ * imediato antes de chamar a RPC, que sempre recalcula o subtotal real). */
+export function validateMinimumOrder(subtotal: number, minimumOrderValue: number | null): FieldValidation {
+  if (minimumOrderValue === null) return { ok: true };
+  if (subtotal < minimumOrderValue) {
+    return {
+      ok: false,
+      error: `O pedido mínimo desta loja é ${minimumOrderValue.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })}.`,
+    };
+  }
+  return { ok: true };
+}
+
 export function validateCheckoutObservation(observation: string): FieldValidation {
   if (observation.length > CHECKOUT_OBSERVATION_MAX_LENGTH) {
     return { ok: false, error: `A observação deve ter até ${CHECKOUT_OBSERVATION_MAX_LENGTH} caracteres.` };

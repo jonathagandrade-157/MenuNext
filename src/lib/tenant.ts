@@ -22,6 +22,9 @@ export type Restaurant = {
   service_pickup: boolean;
   delivery_fee: number | null;
   delivery_radius_km: number | null;
+  minimum_order_value: number | null;
+  estimated_delivery_min_minutes: number | null;
+  estimated_delivery_max_minutes: number | null;
   payment_pix: boolean;
   payment_pix_key: string | null;
   payment_cash: boolean;

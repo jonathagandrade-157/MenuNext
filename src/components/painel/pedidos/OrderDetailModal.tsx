@@ -1,26 +1,59 @@
 "use client";
 
+import { useState } from "react";
 import { Modal } from "@/components/ui/Modal";
 import { StatusBadge } from "@/components/ui/Badge";
 import { FULFILLMENT_TYPE_LABELS, PAYMENT_METHOD_LABELS } from "@/lib/checkout";
-import { ORDER_STATUS_ACTION_LABEL, formatCurrencyBRL, formatOrderTime, getNextOrderStatus, type OrderWithItems } from "@/lib/orders";
+import {
+  CANCEL_REASONS,
+  ORDER_STATUS_ACTION_LABEL,
+  formatCurrencyBRL,
+  formatOrderTime,
+  getNextOrderStatus,
+  isTerminalOrderStatus,
+  type CancelReasonValue,
+  type OrderWithItems,
+} from "@/lib/orders";
 
 export function OrderDetailModal({
   order,
   isAdvancing,
+  isCancelling,
   onClose,
   onAdvance,
+  onCancel,
 }: {
   order: OrderWithItems | null;
   isAdvancing: boolean;
+  isCancelling: boolean;
   onClose: () => void;
   onAdvance: () => void;
+  onCancel: (reason: string) => void;
 }) {
+  const [cancelPanelOpen, setCancelPanelOpen] = useState(false);
+  const [cancelReason, setCancelReason] = useState<CancelReasonValue>(CANCEL_REASONS[0].value);
+  const [cancelOtherText, setCancelOtherText] = useState("");
+
   const nextStatus = order ? getNextOrderStatus(order.status, order.fulfillment_type) : null;
   const actionLabel = nextStatus ? ORDER_STATUS_ACTION_LABEL[nextStatus] : null;
+  const canCancel = order ? !isTerminalOrderStatus(order.status, order.fulfillment_type) : false;
+
+  function handleClose() {
+    setCancelPanelOpen(false);
+    setCancelReason(CANCEL_REASONS[0].value);
+    setCancelOtherText("");
+    onClose();
+  }
+
+  function handleConfirmCancel() {
+    const label = CANCEL_REASONS.find((r) => r.value === cancelReason)?.label ?? cancelReason;
+    const reason = cancelReason === "other" ? cancelOtherText.trim() : label;
+    if (!reason) return;
+    onCancel(reason);
+  }
 
   return (
-    <Modal open={order !== null} onClose={onClose} title={order ? `Pedido #${order.order_number}` : ""}>
+    <Modal open={order !== null} onClose={handleClose} title={order ? `Pedido #${order.order_number}` : ""}>
       {order && (
         <div className="max-h-[70vh] space-y-4 overflow-y-auto">
           <div className="flex items-center justify-between">
@@ -110,15 +143,74 @@ export function OrderDetailModal({
             </div>
           </div>
 
-          {actionLabel && (
-            <button
-              type="button"
-              onClick={onAdvance}
-              disabled={isAdvancing}
-              className="flex h-11 w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-white transition-all hover:bg-[#ff5436] disabled:cursor-not-allowed disabled:opacity-50"
-            >
-              {isAdvancing ? "Atualizando..." : actionLabel}
-            </button>
+          {cancelPanelOpen ? (
+            <div className="space-y-3 rounded-xl border border-red/20 bg-red/5 p-3.5">
+              <p className="text-sm font-bold text-graphite">Cancelar pedido</p>
+              <div className="space-y-1.5">
+                {CANCEL_REASONS.map((reason) => (
+                  <label key={reason.value} className="flex cursor-pointer items-center gap-2 text-sm text-graphite">
+                    <input
+                      type="radio"
+                      name="cancel_reason"
+                      value={reason.value}
+                      checked={cancelReason === reason.value}
+                      onChange={() => setCancelReason(reason.value)}
+                      className="h-4 w-4 accent-red"
+                    />
+                    {reason.label}
+                  </label>
+                ))}
+              </div>
+              {cancelReason === "other" && (
+                <input
+                  value={cancelOtherText}
+                  onChange={(e) => setCancelOtherText(e.target.value)}
+                  placeholder="Descreva o motivo"
+                  maxLength={200}
+                  className="h-10 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-red focus:outline-none focus:ring-[3px] focus:ring-red/15"
+                />
+              )}
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setCancelPanelOpen(false)}
+                  disabled={isCancelling}
+                  className="h-10 flex-1 rounded-lg border border-border text-sm font-semibold text-graphite hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Voltar
+                </button>
+                <button
+                  type="button"
+                  onClick={handleConfirmCancel}
+                  disabled={isCancelling || (cancelReason === "other" && !cancelOtherText.trim())}
+                  className="h-10 flex-1 rounded-lg bg-red text-sm font-bold text-white hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isCancelling ? "Cancelando..." : "Confirmar cancelamento"}
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              {actionLabel && (
+                <button
+                  type="button"
+                  onClick={onAdvance}
+                  disabled={isAdvancing}
+                  className="flex h-11 flex-1 items-center justify-center rounded-xl bg-primary text-sm font-bold text-white transition-all hover:bg-[#ff5436] disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isAdvancing ? "Atualizando..." : actionLabel}
+                </button>
+              )}
+              {canCancel && (
+                <button
+                  type="button"
+                  onClick={() => setCancelPanelOpen(true)}
+                  className="flex h-11 items-center justify-center rounded-xl border border-red/30 px-4 text-sm font-bold text-red transition-all hover:bg-red/5"
+                >
+                  Cancelar
+                </button>
+              )}
+            </div>
           )}
         </div>
       )}
