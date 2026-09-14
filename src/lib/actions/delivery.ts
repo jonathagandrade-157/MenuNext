@@ -37,13 +37,17 @@ function parseOptionalDecimal(raw: string): number | null {
 
 /**
  * Configuração consolidada de delivery (Fase 4.1) — reaproveita
- * service_delivery/delivery_fee/delivery_radius_km (já existiam desde o
- * onboarding, Passo 3/4) e adiciona pedido mínimo + tempo estimado de
- * entrega, os dois únicos campos realmente novos desta fase. Horários
- * continuam vivendo só em business_hours (/onboarding/passo-5) — não
- * duplicados aqui, apenas linkados. Ligar/desligar o delivery aqui nunca
- * apaga taxa/raio/pedido mínimo já configurados: o lojista pode desativar
- * temporariamente sem perder a configuração.
+ * service_delivery/service_pickup/delivery_fee/delivery_radius_km (já
+ * existiam desde o onboarding, Passo 3/4) e adiciona pedido mínimo + tempo
+ * estimado de entrega, os dois únicos campos realmente novos daquela fase.
+ * service_pickup foi incluído aqui (fase de separação onboarding/painel) só
+ * como o mesmo toggle de compatibilidade que já existia no Passo 3 — a
+ * retirada continua fora da experiência do cliente, isto só evita que o
+ * campo só seja editável dentro do onboarding. Horários continuam vivendo
+ * só em business_hours (/painel/horarios) — não duplicados aqui, apenas
+ * linkados. Ligar/desligar o delivery aqui nunca apaga taxa/raio/pedido
+ * mínimo já configurados: o lojista pode desativar temporariamente sem
+ * perder a configuração.
  */
 export async function saveDeliveryConfigAction(
   _prev: DeliveryConfigActionState,
@@ -52,6 +56,7 @@ export async function saveDeliveryConfigAction(
   const { supabase, restaurant } = await requireRestaurant();
 
   const serviceDelivery = formData.get("service_delivery") === "on";
+  const servicePickup = formData.get("service_pickup") === "on";
   const feeMethodRaw = String(formData.get("delivery_fee_method") ?? "fixed");
   const feeMethod: DeliveryFeeMethod = feeMethodRaw === "per_km" ? "per_km" : "fixed";
   const feeRaw = String(formData.get("delivery_fee") ?? "");
@@ -139,6 +144,7 @@ export async function saveDeliveryConfigAction(
 
   const update: Record<string, unknown> = {
     service_delivery: serviceDelivery,
+    service_pickup: servicePickup,
     delivery_fee: fee,
     delivery_radius_km: radius,
     delivery_fee_method: feeMethod,

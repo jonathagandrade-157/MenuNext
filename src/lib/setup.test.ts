@@ -148,6 +148,23 @@ describe("computeSetupItems — entrega", () => {
   });
 });
 
+describe("computeSetupItems — separação onboarding/painel: nenhum item aponta para /onboarding", () => {
+  it("todos os actionHref levam para dentro do painel, nunca para /onboarding", () => {
+    const items = computeSetupItems(makeRestaurant(), zeroCounts);
+    for (const item of items) {
+      expect(item.actionHref.startsWith("/onboarding")).toBe(false);
+    }
+  });
+
+  it("informacoes, horarios, pagamentos e entrega apontam para suas telas reais no painel", () => {
+    const items = computeSetupItems(makeRestaurant(), zeroCounts);
+    expect(items.find((i) => i.id === "informacoes")!.actionHref).toBe("/painel/informacoes");
+    expect(items.find((i) => i.id === "horarios")!.actionHref).toBe("/painel/horarios");
+    expect(items.find((i) => i.id === "pagamentos")!.actionHref).toBe("/painel/pagamentos");
+    expect(items.find((i) => i.id === "entrega")!.actionHref).toBe("/painel/delivery");
+  });
+});
+
 describe("buildSetupChecklist — percentual real, nunca fixo", () => {
   it("0% com nada concluído", () => {
     const checklist = buildSetupChecklist(computeSetupItems(makeRestaurant(), zeroCounts));

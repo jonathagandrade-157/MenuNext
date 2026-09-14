@@ -25,6 +25,7 @@ const NAV_GROUPS: NavGroup[] = [
   {
     title: "Loja",
     items: [
+      { href: "/painel/informacoes", label: "Informações" },
       { href: "/painel/delivery", label: "Delivery" },
       { href: "/painel/horarios", label: "Horários" },
       { href: "/painel/pagamentos", label: "Pagamentos" },

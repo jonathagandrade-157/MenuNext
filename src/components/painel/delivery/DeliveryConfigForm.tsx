@@ -45,7 +45,7 @@ export function DeliveryConfigForm({
 
   return (
     <form action={formAction} className="space-y-6">
-      <Card className="p-6">
+      <Card className="space-y-3 p-6">
         <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
           <input
             type="checkbox"
@@ -57,6 +57,21 @@ export function DeliveryConfigForm({
             <span className="block text-sm font-semibold text-graphite">Delivery ativo</span>
             <span className="block text-sm text-text-muted">
               Com o delivery desativado, sua loja pública não aceita novos pedidos — mas nada aqui é apagado.
+            </span>
+          </span>
+        </label>
+
+        <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+          <input
+            type="checkbox"
+            name="service_pickup"
+            defaultChecked={restaurant.service_pickup}
+            className="mt-0.5 h-5 w-5 accent-primary"
+          />
+          <span>
+            <span className="block text-sm font-semibold text-graphite">Retirada no local</span>
+            <span className="block text-sm text-text-muted">
+              Mantido por compatibilidade — a retirada não é oferecida ao cliente na loja pública nesta fase do MenuNext.
             </span>
           </span>
         </label>
@@ -191,7 +206,7 @@ export function DeliveryConfigForm({
       <Card className="space-y-2 p-6">
         <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Dias e horários que aceitam delivery</h2>
         <p className="text-sm text-graphite">{openDaysSummary(businessHours)}</p>
-        <Link href="/onboarding/passo-5" className="inline-block text-sm font-semibold text-primary hover:underline">
+        <Link href="/painel/horarios" className="inline-block text-sm font-semibold text-primary hover:underline">
           Editar horários de funcionamento →
         </Link>
       </Card>

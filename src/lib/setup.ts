@@ -72,7 +72,7 @@ export function computeSetupItems(restaurant: Restaurant, counts: SetupCounts): 
       pendingDescription: "Complete o endereço do seu restaurante.",
       completedDescription: "Configuração concluída.",
       actionLabel: "Completar endereço",
-      actionHref: "/onboarding/passo-2",
+      actionHref: "/painel/informacoes",
       completed: hasAddress,
     },
     {
@@ -108,7 +108,7 @@ export function computeSetupItems(restaurant: Restaurant, counts: SetupCounts): 
       pendingDescription: "Defina os dias e horários de funcionamento.",
       completedDescription: "Configuração concluída.",
       actionLabel: "Configurar horários",
-      actionHref: "/onboarding/passo-5",
+      actionHref: "/painel/horarios",
       completed: counts.openBusinessHours > 0,
     },
     {
@@ -117,7 +117,7 @@ export function computeSetupItems(restaurant: Restaurant, counts: SetupCounts): 
       pendingDescription: "Escolha como seus clientes pagarão.",
       completedDescription: "Configuração concluída.",
       actionLabel: "Configurar pagamentos",
-      actionHref: "/onboarding/passo-6",
+      actionHref: "/painel/pagamentos",
       completed: hasPayment,
     },
     {
@@ -126,7 +126,7 @@ export function computeSetupItems(restaurant: Restaurant, counts: SetupCounts): 
       pendingDescription: "Defina como os clientes receberão os pedidos.",
       completedDescription: "Configuração concluída.",
       actionLabel: "Configurar entrega",
-      actionHref: "/onboarding/passo-3",
+      actionHref: "/painel/delivery",
       completed: hasDelivery,
     },
     {
