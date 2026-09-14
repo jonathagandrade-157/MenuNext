@@ -14,6 +14,7 @@ import {
   uploadProductImage,
   validateImageFile,
 } from "@/lib/storage/assets";
+import { nextProductImageDisplayOrder, stepsToPromoteToPrimary } from "@/lib/productImages";
 
 export type { ProductActionState };
 
@@ -274,14 +275,11 @@ export async function addProductImageAction(
     .eq("product_id", productId);
   if (fetchError) return { ok: false, error: "Não foi possível verificar as imagens existentes." };
 
-  const used = new Set((existing ?? []).map((row) => row.display_order));
-  let slot: number | null = null;
-  for (let i = 1; i <= MAX_PRODUCT_IMAGES; i++) {
-    if (!used.has(i)) {
-      slot = i;
-      break;
-    }
-  }
+  // Sempre depois da última existente — nunca reocupa um buraco deixado por
+  // uma exclusão anterior (ver src/lib/productImages.ts). Reocupar o slot 1
+  // faria uma foto nova "roubar" a posição de principal sem o lojista ter
+  // pedido isso.
+  const slot = nextProductImageDisplayOrder((existing ?? []).map((row) => row.display_order));
   if (slot === null) {
     return { ok: false, error: `Este produto já tem o máximo de ${MAX_PRODUCT_IMAGES} imagens.` };
   }
@@ -314,6 +312,42 @@ export async function moveProductImageAction(
 
   const { error } = await supabase.rpc("move_product_image", { p_image_id: imageId, p_direction: direction });
   if (error) return { ok: false, error: "Não foi possível reordenar a imagem. Tente novamente." };
+
+  revalidatePath(PRODUCTS_PATH);
+  return { ok: true };
+}
+
+/**
+ * "Definir como principal" — a principal é sempre a imagem de menor
+ * display_order (nunca um campo separado, ver src/lib/productImages.ts).
+ * Promover uma imagem é só andar até essa posição usando a MESMA RPC de
+ * reordenar (move_product_image, que só troca vizinhos adjacentes) uma vez
+ * por passo — nenhuma RPC nova. Cada passo é sua própria transação; se um
+ * passo no meio do caminho falhar, a imagem fica mais perto da posição 1 do
+ * que estava (nunca num estado inválido), e o lojista pode tentar de novo.
+ */
+export async function setPrimaryProductImageAction(imageId: string): Promise<{ ok: boolean; error?: string }> {
+  const { supabase } = await requireRestaurant();
+
+  const { data: image, error: imageError } = await supabase
+    .from("product_images")
+    .select("id, product_id")
+    .eq("id", imageId)
+    .maybeSingle();
+  if (imageError) return { ok: false, error: "Não foi possível localizar a imagem." };
+  if (!image) return { ok: false, error: "Imagem não encontrada." };
+
+  const { data: siblings, error: siblingsError } = await supabase
+    .from("product_images")
+    .select("id, display_order")
+    .eq("product_id", image.product_id);
+  if (siblingsError) return { ok: false, error: "Não foi possível verificar as imagens do produto." };
+
+  const steps = stepsToPromoteToPrimary(siblings ?? [], imageId);
+  for (let i = 0; i < steps; i++) {
+    const { error } = await supabase.rpc("move_product_image", { p_image_id: imageId, p_direction: "up" });
+    if (error) return { ok: false, error: "Não foi possível definir como principal. Tente novamente." };
+  }
 
   revalidatePath(PRODUCTS_PATH);
   return { ok: true };

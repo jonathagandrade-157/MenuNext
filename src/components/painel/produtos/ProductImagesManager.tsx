@@ -2,13 +2,25 @@
 
 import { useRef, useState, useTransition } from "react";
 import { ErrorState } from "@/components/ui/States";
-import { addProductImageAction, moveProductImageAction, removeProductImageAction } from "@/lib/actions/products";
+import {
+  addProductImageAction,
+  moveProductImageAction,
+  removeProductImageAction,
+  setPrimaryProductImageAction,
+} from "@/lib/actions/products";
 import { MAX_PRODUCT_IMAGES } from "@/lib/storage/assets";
 import type { ProductImage } from "@/lib/tenant";
 
 type ImageWithUrl = ProductImage & { url: string };
 
-/** Grade de fotos do produto (editar): adicionar, remover, mover para os lados. */
+/**
+ * Galeria de fotos do produto (editar) — adicionar, remover, mover e
+ * definir principal. A principal é sempre a primeira depois de ordenar por
+ * display_order (nunca um campo separado); adicionar nunca reocupa o slot
+ * dela por acidente (ver nextProductImageDisplayOrder em
+ * src/lib/productImages.ts) e excluí-la promove a próxima automaticamente,
+ * só por ordenação — nenhum estado local a mais aqui.
+ */
 export function ProductImagesManager({ productId, images }: { productId: string; images: ImageWithUrl[] }) {
   const [error, setError] = useState<string | null>(null);
   const [pendingId, setPendingId] = useState<string | null>(null);
@@ -50,26 +62,53 @@ export function ProductImagesManager({ productId, images }: { productId: string;
     });
   }
 
+  function handleSetPrimary(imageId: string) {
+    setError(null);
+    setPendingId(imageId);
+    startTransition(async () => {
+      const result = await setPrimaryProductImageAction(imageId);
+      setPendingId(null);
+      if (!result.ok) setError(result.error ?? "Não foi possível definir como principal.");
+    });
+  }
+
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-graphite">Fotos do produto</span>
+        <span className="text-sm font-semibold text-graphite">Imagens do produto</span>
         <span className="text-xs text-text-muted">
           {sorted.length}/{MAX_PRODUCT_IMAGES}
         </span>
       </div>
 
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap items-start gap-3">
         {sorted.map((image, index) => {
           const busy = isPending && pendingId === image.id;
+          const isPrimary = index === 0;
           return (
-            <div key={image.id} className="flex flex-col items-center gap-1">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={image.url}
-                alt={`Foto ${index + 1} do produto`}
-                className={`h-20 w-20 rounded-lg object-cover ${index === 0 ? "ring-2 ring-primary" : "border border-border"}`}
-              />
+            <div key={image.id} className="flex flex-col items-center gap-1.5">
+              <div className="relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={image.url}
+                  alt={isPrimary ? "Foto principal do produto" : `Foto ${index + 1} do produto`}
+                  className={`object-cover ${
+                    isPrimary
+                      ? "h-24 w-24 rounded-xl ring-2 ring-primary"
+                      : "h-20 w-20 rounded-lg border border-border"
+                  }`}
+                />
+                {isPrimary && (
+                  <span className="absolute -top-1.5 -left-1.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary text-[10px] text-white shadow-sm">
+                    ★
+                  </span>
+                )}
+              </div>
+
+              <span className={`text-[10px] font-bold ${isPrimary ? "text-primary" : "text-text-muted"}`}>
+                {isPrimary ? "Principal" : `Foto ${index + 1}`}
+              </span>
+
               <div className="flex items-center justify-center gap-1">
                 <button
                   type="button"
@@ -99,6 +138,17 @@ export function ProductImagesManager({ productId, images }: { productId: string;
                   →
                 </button>
               </div>
+
+              {!isPrimary && (
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => handleSetPrimary(image.id)}
+                  className="text-[10px] font-bold text-primary hover:underline disabled:cursor-not-allowed disabled:opacity-30"
+                >
+                  Definir como principal
+                </button>
+              )}
             </div>
           );
         })}

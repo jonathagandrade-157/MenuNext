@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useBag } from "@/contexts/BagContext";
 import {
@@ -42,6 +42,29 @@ export function ProductDetailClient({
   const [observation, setObservation] = useState("");
   const [activeImage, setActiveImage] = useState(0);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const touchStartX = useRef<number | null>(null);
+
+  const hasGallery = product.images.length > 1;
+
+  function handleTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.touches[0]?.clientX ?? null;
+  }
+
+  // Troca de imagem por swipe (mobile) — a galeria de miniaturas cobre o
+  // clique no desktop; aqui é só o gesto de arrastar o dedo na foto
+  // principal. Limite de 40px evita trocar com um toque acidental.
+  function handleTouchEnd(e: React.TouchEvent) {
+    const startX = touchStartX.current;
+    touchStartX.current = null;
+    if (startX === null) return;
+    const deltaX = (e.changedTouches[0]?.clientX ?? startX) - startX;
+    const SWIPE_THRESHOLD_PX = 40;
+    if (deltaX > SWIPE_THRESHOLD_PX) {
+      setActiveImage((i) => Math.max(0, i - 1));
+    } else if (deltaX < -SWIPE_THRESHOLD_PX) {
+      setActiveImage((i) => Math.min(product.images.length - 1, i + 1));
+    }
+  }
 
   const selectedAddons = useMemo<BagSelectedAddon[]>(() => {
     const result: BagSelectedAddon[] = [];
@@ -107,7 +130,11 @@ export function ProductDetailClient({
         <span className="truncate text-sm font-bold text-graphite">{product.name}</span>
       </div>
 
-      <div className="aspect-square w-full overflow-hidden bg-surface-subdued">
+      <div
+        className="aspect-square w-full overflow-hidden bg-surface-subdued"
+        onTouchStart={hasGallery ? handleTouchStart : undefined}
+        onTouchEnd={hasGallery ? handleTouchEnd : undefined}
+      >
         {cover ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={cover.url} alt={product.name} className="h-full w-full object-cover" />
@@ -118,22 +145,37 @@ export function ProductDetailClient({
         )}
       </div>
 
-      {product.images.length > 1 && (
-        <div className="flex gap-2 overflow-x-auto px-3.5 py-2.5">
-          {product.images.map((image, index) => (
-            <button
-              key={image.url}
-              type="button"
-              onClick={() => setActiveImage(index)}
-              className={`h-14 w-14 shrink-0 overflow-hidden rounded-lg border-2 ${
-                index === activeImage ? "border-primary" : "border-transparent"
-              }`}
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={image.url} alt={`${product.name} ${index + 1}`} className="h-full w-full object-cover" />
-            </button>
-          ))}
-        </div>
+      {hasGallery && (
+        <>
+          {/* Mobile: indicadores de posição (troca é por swipe na foto principal). */}
+          <div className="flex justify-center gap-1.5 py-2.5 sm:hidden">
+            {product.images.map((image, index) => (
+              <span
+                key={image.url}
+                className={`h-1.5 w-1.5 rounded-full transition-colors ${
+                  index === activeImage ? "bg-primary" : "bg-border"
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Desktop: miniaturas clicáveis. */}
+          <div className="hidden gap-2 overflow-x-auto px-3.5 py-2.5 sm:flex">
+            {product.images.map((image, index) => (
+              <button
+                key={image.url}
+                type="button"
+                onClick={() => setActiveImage(index)}
+                className={`h-14 w-14 shrink-0 overflow-hidden rounded-lg border-2 ${
+                  index === activeImage ? "border-primary" : "border-transparent"
+                }`}
+              >
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={image.url} alt={`${product.name} ${index + 1}`} className="h-full w-full object-cover" />
+              </button>
+            ))}
+          </div>
+        </>
       )}
 
       <div className="space-y-4 px-3.5 py-4">
