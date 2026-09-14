@@ -1,11 +1,60 @@
 import { describe, expect, it } from "vitest";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import {
+  computeDashboardMetrics,
   getKanbanColumnForStatus,
   getNextOrderStatus,
+  getRecentOrders,
   isTerminalOrderStatus,
   orderTrackingChannelName,
+  type DashboardOrderRow,
   type OrderStatus,
 } from "./orders";
+
+/** Fake mínimo do query builder do supabase-js — registra cada chamada
+ * (.from/.select/.eq/...) para provar que o fetcher sempre filtra por
+ * restaurant_id, sem precisar de um banco real. `then` torna o objeto
+ * "awaitable" em qualquer ponto da cadeia, já que fetchers diferentes
+ * terminam a cadeia em métodos diferentes (.limit, .eq, ...). */
+function createFakeSupabase(rows: unknown[]) {
+  const calls: { method: string; args: unknown[] }[] = [];
+  const query = {
+    select: (...args: unknown[]) => {
+      calls.push({ method: "select", args });
+      return query;
+    },
+    eq: (...args: unknown[]) => {
+      calls.push({ method: "eq", args });
+      return query;
+    },
+    order: (...args: unknown[]) => {
+      calls.push({ method: "order", args });
+      return query;
+    },
+    limit: (...args: unknown[]) => {
+      calls.push({ method: "limit", args });
+      return query;
+    },
+    then: (resolve: (value: { data: unknown; error: null }) => void) => resolve({ data: rows, error: null }),
+  };
+  const client = {
+    from: (table: string) => {
+      calls.push({ method: "from", args: [table] });
+      return query;
+    },
+  } as unknown as SupabaseClient;
+  return { client, calls };
+}
+
+function dashboardRow(overrides: Partial<DashboardOrderRow> & { status: OrderStatus; total: number }): DashboardOrderRow {
+  return {
+    created_at: "2026-09-09T12:00:00.000Z",
+    preparing_at: null,
+    ready_at: null,
+    delivered_at: null,
+    ...overrides,
+  };
+}
 
 describe("getNextOrderStatus — entrega", () => {
   it("received -> confirmed", () => {
@@ -97,6 +146,101 @@ describe("orderTrackingChannelName", () => {
   });
   it("dois public_id diferentes geram canais diferentes (isolamento por pedido)", () => {
     expect(orderTrackingChannelName("a")).not.toBe(orderTrackingChannelName("b"));
+  });
+});
+
+describe("computeDashboardMetrics — faturamento hoje", () => {
+  it("soma somente pedidos válidos (não cancelados)", () => {
+    const orders = [
+      dashboardRow({ status: "delivered", total: 50 }),
+      dashboardRow({ status: "preparing", total: 30 }),
+    ];
+    expect(computeDashboardMetrics(orders, 0).revenueToday).toBe(80);
+  });
+
+  it("BUG CORRIGIDO: pedido cancelado nunca entra no faturamento, mesmo tendo total > 0", () => {
+    const orders = [dashboardRow({ status: "delivered", total: 50 }), dashboardRow({ status: "cancelled", total: 999 })];
+    expect(computeDashboardMetrics(orders, 0).revenueToday).toBe(50);
+  });
+
+  it("sem pedidos válidos hoje: faturamento é 0, nunca NaN", () => {
+    expect(computeDashboardMetrics([], 0).revenueToday).toBe(0);
+    expect(computeDashboardMetrics([dashboardRow({ status: "cancelled", total: 100 })], 0).revenueToday).toBe(0);
+  });
+});
+
+describe("computeDashboardMetrics — pedidos hoje", () => {
+  it("conta TODOS os pedidos recebidos hoje, cancelados inclusive (é volume, não receita)", () => {
+    const orders = [
+      dashboardRow({ status: "delivered", total: 50 }),
+      dashboardRow({ status: "cancelled", total: 30 }),
+      dashboardRow({ status: "received", total: 20 }),
+    ];
+    expect(computeDashboardMetrics(orders, 0).ordersToday).toBe(3);
+  });
+
+  it("nenhum pedido hoje: 0, nunca undefined", () => {
+    expect(computeDashboardMetrics([], 0).ordersToday).toBe(0);
+  });
+});
+
+describe("computeDashboardMetrics — ticket médio", () => {
+  it("faturamento dividido pela quantidade de pedidos VÁLIDOS (não pelo total de pedidos hoje)", () => {
+    const orders = [
+      dashboardRow({ status: "delivered", total: 100 }),
+      dashboardRow({ status: "cancelled", total: 500 }), // não entra no numerador nem no denominador
+    ];
+    const metrics = computeDashboardMetrics(orders, 0);
+    expect(metrics.averageTicketToday).toBe(100); // 100 / 1, não 600 / 2 nem 100 / 2
+  });
+
+  it("evita divisão por zero quando não há pedido válido hoje", () => {
+    expect(computeDashboardMetrics([], 0).averageTicketToday).toBe(0);
+    expect(computeDashboardMetrics([dashboardRow({ status: "cancelled", total: 40 })], 0).averageTicketToday).toBe(0);
+  });
+});
+
+describe("computeDashboardMetrics — pedidos em andamento", () => {
+  it("usa a contagem recebida do banco (independente da data), nunca recalcula a partir das linhas de hoje", () => {
+    expect(computeDashboardMetrics([], 7).activeOrders).toBe(7);
+  });
+});
+
+describe("computeDashboardMetrics — tempos médios", () => {
+  it("null quando nenhum pedido hoje tem os dois timestamps (nunca 0 — 0 seria um dado errado)", () => {
+    const metrics = computeDashboardMetrics([dashboardRow({ status: "preparing", total: 10 })], 0);
+    expect(metrics.averagePrepMinutes).toBeNull();
+    expect(metrics.averageDeliveryMinutes).toBeNull();
+  });
+
+  it("calcula o tempo médio de preparo a partir de preparing_at -> ready_at", () => {
+    const orders = [
+      dashboardRow({
+        status: "ready",
+        total: 10,
+        preparing_at: "2026-09-09T12:00:00.000Z",
+        ready_at: "2026-09-09T12:20:00.000Z",
+      }),
+    ];
+    expect(computeDashboardMetrics(orders, 0).averagePrepMinutes).toBe(20);
+  });
+});
+
+describe("getRecentOrders — isolamento por restaurante", () => {
+  it("sempre filtra a query por restaurant_id, nunca confia em outro escopo", async () => {
+    const { client, calls } = createFakeSupabase([]);
+    await getRecentOrders(client, "restaurante-abc");
+    expect(calls).toContainEqual({ method: "eq", args: ["restaurant_id", "restaurante-abc"] });
+    expect(calls).toContainEqual({ method: "from", args: ["orders"] });
+  });
+
+  it("normaliza total (numeric do Postgres chega como string) para number", async () => {
+    const { client } = createFakeSupabase([
+      { id: "o1", order_number: 1, customer_name: "Maria", total: "45.90", status: "delivered", created_at: "2026-09-09T12:00:00.000Z" },
+    ]);
+    const orders = await getRecentOrders(client, "r1");
+    expect(orders[0].total).toBe(45.9);
+    expect(typeof orders[0].total).toBe("number");
   });
 });
 

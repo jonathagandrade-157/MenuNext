@@ -39,12 +39,18 @@ function periodStartDate(period: PeriodFilter): Date | null {
  * (getOrderHistory) e filtra tudo no client: nenhuma query nova por filtro,
  * suficiente para o volume de um único restaurante no MVP.
  */
-export function OrderHistoryView({ initialOrders }: { initialOrders: OrderWithItems[] }) {
+export function OrderHistoryView({
+  initialOrders,
+  initialSelectedOrderId = null,
+}: {
+  initialOrders: OrderWithItems[];
+  initialSelectedOrderId?: string | null;
+}) {
   const [orders, setOrders] = useState<OrderWithItems[]>(initialOrders);
   const [tab, setTab] = useState<OrderHistoryTabId>("all");
   const [period, setPeriod] = useState<PeriodFilter>("30d");
   const [search, setSearch] = useState("");
-  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
+  const [selectedOrderId, setSelectedOrderId] = useState<string | null>(initialSelectedOrderId);
   const [advancingId, setAdvancingId] = useState<string | null>(null);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);

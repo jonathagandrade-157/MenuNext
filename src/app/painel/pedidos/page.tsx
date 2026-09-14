@@ -3,7 +3,7 @@ import { getAuthedUser, getMyRestaurant } from "@/lib/tenant";
 import { getActiveOrdersForKanban, getOrderHistory } from "@/lib/orders";
 import { PedidosTabs } from "@/components/painel/pedidos/PedidosTabs";
 
-export default async function Page() {
+export default async function Page(props: PageProps<"/painel/pedidos">) {
   // Guarda redundante à do layout (barato e explícito) — restaurantId é
   // usado direto pela query e pelo filtro do canal realtime.
   const { supabase, user } = await getAuthedUser();
@@ -17,6 +17,13 @@ export default async function Page() {
     getOrderHistory(supabase, restaurant.id),
   ]);
 
+  // Deep link do card "Pedidos recentes" do Dashboard (/painel?order=<id>
+  // vira /painel/pedidos?order=<id>) — abre o pedido no OrderDetailModal já
+  // existente, sem duplicar a tela de detalhe do pedido.
+  const searchParams = await props.searchParams;
+  const orderParam = searchParams.order;
+  const initialSelectedOrderId = typeof orderParam === "string" ? orderParam : null;
+
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col">
       <div className="px-4 pt-4">
@@ -27,6 +34,7 @@ export default async function Page() {
         restaurantId={restaurant.id}
         initialActiveOrders={initialActiveOrders}
         initialHistoryOrders={initialHistoryOrders}
+        initialSelectedOrderId={initialSelectedOrderId}
       />
     </div>
   );

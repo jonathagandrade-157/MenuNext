@@ -8,6 +8,10 @@
  */
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+// Import relativo: o vitest deste projeto não resolve o alias "@/" em
+// runtime (só via tsc, que nunca executa o código — todo "@/..." existente
+// até aqui era só tipo, erasado em build).
+import { getStartOfDayInTimeZone, SAO_PAULO_TIME_ZONE } from "./timezone";
 
 export type OrderStatus =
   | "received"
@@ -274,6 +278,15 @@ export type DashboardOrderMetrics = {
   averageDeliveryMinutes: number | null;
 };
 
+export type DashboardOrderRow = {
+  status: OrderStatus;
+  total: number;
+  created_at: string;
+  preparing_at: string | null;
+  ready_at: string | null;
+  delivered_at: string | null;
+};
+
 function minutesBetween(startIso: string, endIso: string): number {
   return (new Date(endIso).getTime() - new Date(startIso).getTime()) / 60000;
 }
@@ -284,21 +297,55 @@ function average(values: number[]): number | null {
 }
 
 /**
- * Métricas básicas do Dashboard (item 22 da Fase 3.4, ampliadas na Fase
- * 4.1 com entregues/cancelados hoje e tempos médios) — derivadas
- * diretamente de `orders`, nunca de uma tabela paralela. "Hoje" usa a data
- * local do servidor (mesma limitação já existente no projeto — nenhuma
- * tabela guarda timezone do restaurante, ver computeStoreOpenState em
- * src/lib/store.ts). "Pedidos ativos" conta qualquer pedido fora dos
- * status terminais, independente da data. Tempo médio de preparo usa
- * preparing_at -> ready_at; tempo médio até entrega usa created_at ->
- * delivered_at — ambos só sobre pedidos de hoje que já têm os dois
- * timestamps preenchidos (null quando não há nenhum pedido nessa condição
- * ainda hoje, nunca 0 — 0 minutos seria um dado errado, não "sem dado").
+ * Métricas básicas do Dashboard (item 22 da Fase 3.4; corrigidas e
+ * ampliadas na Sprint 4) — pura e testável sem banco, mesmo padrão de
+ * computeSetupItems/aggregateCustomers: o fetcher (getDashboardOrderMetrics)
+ * só busca as linhas reais de "hoje", esta função decide o cálculo.
+ *
+ * Faturamento e ticket médio SÓ contam pedidos válidos (status !==
+ * "cancelled") — mesma regra já estabelecida em aggregateCustomers
+ * (src/lib/customers.ts): um pedido cancelado não é receita real. "Pedidos
+ * hoje" continua contando TODOS os pedidos recebidos hoje, cancelados
+ * inclusive — é uma contagem de volume, não de receita. "Pedidos ativos"
+ * conta qualquer pedido fora dos status terminais, independente da data
+ * (recebido via `activeOrdersCount`, contado direto no banco). Tempo médio
+ * de preparo usa preparing_at -> ready_at; tempo médio até entrega usa
+ * created_at -> delivered_at — ambos só sobre pedidos de hoje que já têm os
+ * dois timestamps preenchidos (null quando não há nenhum pedido nessa
+ * condição ainda hoje, nunca 0 — 0 minutos seria um dado errado, não "sem
+ * dado").
  */
+export function computeDashboardMetrics(todayOrders: DashboardOrderRow[], activeOrdersCount: number): DashboardOrderMetrics {
+  const validToday = todayOrders.filter((row) => row.status !== "cancelled");
+  const revenueToday = validToday.reduce((sum, row) => sum + row.total, 0);
+
+  const prepMinutes = todayOrders
+    .filter((row) => row.preparing_at && row.ready_at)
+    .map((row) => minutesBetween(row.preparing_at as string, row.ready_at as string));
+
+  const deliveryMinutes = todayOrders
+    .filter((row) => row.status === "delivered" && row.delivered_at)
+    .map((row) => minutesBetween(row.created_at, row.delivered_at as string));
+
+  return {
+    ordersToday: todayOrders.length,
+    revenueToday,
+    averageTicketToday: validToday.length > 0 ? revenueToday / validToday.length : 0,
+    activeOrders: activeOrdersCount,
+    deliveredToday: todayOrders.filter((row) => row.status === "delivered" || row.status === "picked_up").length,
+    cancelledToday: todayOrders.filter((row) => row.status === "cancelled").length,
+    averagePrepMinutes: average(prepMinutes),
+    averageDeliveryMinutes: average(deliveryMinutes),
+  };
+}
+
+/** "Hoje" no timezone de operação do restaurante (America/Sao_Paulo, ver
+ * src/lib/timezone.ts) — nunca a data local do processo Node, que em
+ * produção roda em UTC e faria "hoje" virar às 21h de SP em vez da meia-noite
+ * real. RLS (orders_select_members) é a proteção real de tenant; o
+ * `.eq("restaurant_id", ...)` aqui é defesa em profundidade. */
 export async function getDashboardOrderMetrics(supabase: SupabaseClient, restaurantId: string): Promise<DashboardOrderMetrics> {
-  const startOfToday = new Date();
-  startOfToday.setHours(0, 0, 0, 0);
+  const startOfToday = getStartOfDayInTimeZone(new Date(), SAO_PAULO_TIME_ZONE);
 
   const [todayResult, activeResult] = await Promise.all([
     supabase
@@ -316,27 +363,42 @@ export async function getDashboardOrderMetrics(supabase: SupabaseClient, restaur
   if (todayResult.error) throw todayResult.error;
   if (activeResult.error) throw activeResult.error;
 
-  const todayOrders = todayResult.data ?? [];
-  const revenueToday = todayOrders.reduce((sum, row) => sum + Number(row.total), 0);
+  const todayOrders = (todayResult.data ?? []).map((row) => ({ ...row, total: Number(row.total) }));
 
-  const prepMinutes = todayOrders
-    .filter((row) => row.preparing_at && row.ready_at)
-    .map((row) => minutesBetween(row.preparing_at as string, row.ready_at as string));
+  return computeDashboardMetrics(todayOrders, activeResult.count ?? 0);
+}
 
-  const deliveryMinutes = todayOrders
-    .filter((row) => row.status === "delivered" && row.delivered_at)
-    .map((row) => minutesBetween(row.created_at, row.delivered_at as string));
+export type RecentOrder = {
+  id: string;
+  order_number: number;
+  customer_name: string;
+  total: number;
+  status: OrderStatus;
+  created_at: string;
+};
 
-  return {
-    ordersToday: todayOrders.length,
-    revenueToday,
-    averageTicketToday: todayOrders.length > 0 ? revenueToday / todayOrders.length : 0,
-    activeOrders: activeResult.count ?? 0,
-    deliveredToday: todayOrders.filter((row) => row.status === "delivered" || row.status === "picked_up").length,
-    cancelledToday: todayOrders.filter((row) => row.status === "cancelled").length,
-    averagePrepMinutes: average(prepMinutes),
-    averageDeliveryMinutes: average(deliveryMinutes),
-  };
+const RECENT_ORDERS_LIMIT = 5;
+
+/**
+ * Pedidos recentes para o card do Dashboard (Sprint 4) — versão leve de
+ * getOrderHistory: só as colunas que a lista do dashboard mostra (sem
+ * itens/adicionais), para não puxar dados que a tela não usa. Também serve
+ * para "já houve pedido?" (Etapa 9): não vazio ⟺ existe pelo menos 1 pedido,
+ * sem query extra. RLS (orders_select_members) é a proteção real de tenant.
+ */
+export async function getRecentOrders(
+  supabase: SupabaseClient,
+  restaurantId: string,
+  limit = RECENT_ORDERS_LIMIT
+): Promise<RecentOrder[]> {
+  const { data, error } = await supabase
+    .from("orders")
+    .select("id, order_number, customer_name, total, status, created_at")
+    .eq("restaurant_id", restaurantId)
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return ((data ?? []) as RecentOrder[]).map((row) => ({ ...row, total: Number(row.total) }));
 }
 
 export function formatCurrencyBRL(value: number): string {

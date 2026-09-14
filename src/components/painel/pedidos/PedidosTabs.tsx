@@ -17,12 +17,17 @@ export function PedidosTabs({
   restaurantId,
   initialActiveOrders,
   initialHistoryOrders,
+  initialSelectedOrderId = null,
 }: {
   restaurantId: string;
   initialActiveOrders: OrderWithItems[];
   initialHistoryOrders: OrderWithItems[];
+  initialSelectedOrderId?: string | null;
 }) {
-  const [view, setView] = useState<View>("kanban");
+  // Deep link do Dashboard (?order=<id>) abre direto no Histórico — o
+  // Kanban só lista pedidos ativos, então um pedido já entregue/cancelado
+  // não apareceria nele.
+  const [view, setView] = useState<View>(initialSelectedOrderId ? "historico" : "kanban");
 
   return (
     <div className="flex h-full flex-col">
@@ -51,7 +56,7 @@ export function PedidosTabs({
         {view === "kanban" ? (
           <KanbanBoard restaurantId={restaurantId} initialOrders={initialActiveOrders} />
         ) : (
-          <OrderHistoryView initialOrders={initialHistoryOrders} />
+          <OrderHistoryView initialOrders={initialHistoryOrders} initialSelectedOrderId={initialSelectedOrderId} />
         )}
       </div>
     </div>

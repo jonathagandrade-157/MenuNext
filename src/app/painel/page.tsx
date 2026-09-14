@@ -1,17 +1,14 @@
 import { redirect } from "next/navigation";
-import { getAuthedUser, getMyRestaurant, getMyMembership } from "@/lib/tenant";
-import { formatCurrencyBRL, getDashboardOrderMetrics } from "@/lib/orders";
+import { getAuthedUser, getMyRestaurant } from "@/lib/tenant";
+import { formatCurrencyBRL, getDashboardOrderMetrics, getRecentOrders } from "@/lib/orders";
+import { getBestSellingProducts } from "@/lib/bestsellers";
 import { getSetupChecklist } from "@/lib/setup";
+import { getStoreUrl } from "@/lib/site-url";
 import { Card } from "@/components/ui/Card";
-import { Badge } from "@/components/ui/Badge";
 import { SetupChecklistCard } from "@/components/painel/SetupChecklistCard";
-
-const STATUS_LABEL: Record<string, string> = {
-  draft: "Rascunho",
-  active: "Ativo",
-  paused: "Pausado",
-  closed: "Encerrado",
-};
+import { StoreShareCard } from "@/components/painel/dashboard/StoreShareCard";
+import { RecentOrdersCard } from "@/components/painel/dashboard/RecentOrdersCard";
+import { BestSellersCard } from "@/components/painel/dashboard/BestSellersCard";
 
 export default async function PainelDashboardPage() {
   const { supabase, user } = await getAuthedUser();
@@ -20,41 +17,55 @@ export default async function PainelDashboardPage() {
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) redirect("/onboarding/passo-1");
 
-  const membership = await getMyMembership(supabase, restaurant.id);
-  const [metrics, checklist] = await Promise.all([
+  const [metrics, checklist, recentOrders, bestSellers, storeUrl] = await Promise.all([
     getDashboardOrderMetrics(supabase, restaurant.id),
     getSetupChecklist(supabase, restaurant),
+    getRecentOrders(supabase, restaurant.id),
+    getBestSellingProducts(supabase, restaurant.id),
+    getStoreUrl(restaurant.slug),
   ]);
 
-  return (
-    <div className="mx-auto max-w-4xl px-6 py-10">
-      <h1 className="text-2xl font-extrabold text-graphite">Olá, bem-vindo ao {restaurant.name}</h1>
-      <p className="mt-1 text-sm text-text-muted">Aqui está o resumo real da operação de hoje.</p>
+  // Não é uma query extra: getRecentOrders já busca (sem filtro de status)
+  // os pedidos mais recentes, então "não vazio" já prova "existe pelo menos
+  // 1 pedido" — ver comentário de getRecentOrders em src/lib/orders.ts.
+  const hasAnyOrder = recentOrders.length > 0;
 
-      <div className="mt-6">
-        <SetupChecklistCard checklist={checklist} storeSlug={restaurant.slug} />
+  return (
+    <div className="mx-auto max-w-5xl space-y-6 px-6 py-10">
+      <div>
+        <h1 className="text-2xl font-extrabold text-graphite">Olá, bem-vindo ao {restaurant.name}</h1>
+        <p className="mt-1 text-sm text-text-muted">Aqui está o resumo real da operação de hoje.</p>
       </div>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-4">
-        <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Pedidos hoje</p>
-          <p className="mt-1 text-2xl font-extrabold text-graphite">{metrics.ordersToday}</p>
-        </Card>
+      <StoreShareCard
+        storeUrl={storeUrl}
+        storeName={restaurant.name}
+        isActive={restaurant.status === "active"}
+        hasAnyOrder={hasAnyOrder}
+      />
+
+      <SetupChecklistCard checklist={checklist} storeSlug={restaurant.slug} />
+
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="p-5">
           <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Faturamento hoje</p>
           <p className="mt-1 text-2xl font-extrabold text-graphite">{formatCurrencyBRL(metrics.revenueToday)}</p>
+        </Card>
+        <Card className="p-5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Pedidos hoje</p>
+          <p className="mt-1 text-2xl font-extrabold text-graphite">{metrics.ordersToday}</p>
         </Card>
         <Card className="p-5">
           <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Ticket médio</p>
           <p className="mt-1 text-2xl font-extrabold text-graphite">{formatCurrencyBRL(metrics.averageTicketToday)}</p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Pedidos ativos</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Pedidos em andamento</p>
           <p className="mt-1 text-2xl font-extrabold text-graphite">{metrics.activeOrders}</p>
         </Card>
       </div>
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="p-5">
           <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Entregues hoje</p>
           <p className="mt-1 text-2xl font-extrabold text-emerald">{metrics.deliveredToday}</p>
@@ -77,27 +88,10 @@ export default async function PainelDashboardPage() {
         </Card>
       </div>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
-        <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Usuário</p>
-          <p className="mt-1 text-sm font-semibold text-graphite">{user.email}</p>
-        </Card>
-        <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Seu papel</p>
-          <p className="mt-1 text-sm font-semibold text-graphite">{membership?.role ?? "—"}</p>
-        </Card>
-        <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Status da loja</p>
-          <Badge tone={restaurant.status === "active" ? "success" : "neutral"} className="mt-1">
-            {STATUS_LABEL[restaurant.status] ?? restaurant.status}
-          </Badge>
-        </Card>
+      <div className="grid gap-4 lg:grid-cols-2">
+        <RecentOrdersCard orders={recentOrders} />
+        <BestSellersCard products={bestSellers} />
       </div>
-
-      <Card className="mt-6 p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Endereço da loja</p>
-        <p className="mt-1 text-sm text-graphite">menunext.com.br/{restaurant.slug}</p>
-      </Card>
     </div>
   );
 }
