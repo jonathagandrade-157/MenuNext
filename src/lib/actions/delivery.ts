@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
-import { buildGeocodableAddress, type DeliveryFeeMethod } from "@/lib/delivery";
+import { buildGeocodableAddress, needsRestaurantLocation, type DeliveryFeeMethod } from "@/lib/delivery";
 import { geocodeAddress, isGeocodingConfigured } from "@/lib/geocoding";
 
 const DELIVERY_PATH = "/painel/delivery";
@@ -103,24 +103,29 @@ export async function saveDeliveryConfigAction(
     }
   }
 
-  // "Por km" precisa da localização do PRÓPRIO restaurante para calcular
-  // distância até o cliente — geocodificada aqui (servidor), uma vez, nunca
-  // no navegador. Fora do escopo: geocodificar a cada pedido o endereço do
-  // restaurante, que já é conhecido e estável.
+  // O checkout precisa da localização do PRÓPRIO restaurante sempre que o
+  // raio máximo (delivery_radius_km, obrigatório com delivery ativo) ou o
+  // método "por km" exigirem calcular a distância até o cliente — em
+  // QUALQUER método de cobrança, não só "per_km" (mesma decisão usada em
+  // resolveDeliveryDistanceKm, ver needsRestaurantLocation em
+  // src/lib/delivery.ts, para as duas nunca divergirem). Geocodificada aqui
+  // (servidor), uma vez por salvamento, nunca no navegador. Fora do escopo:
+  // geocodificar a cada pedido o endereço do restaurante, que já é
+  // conhecido e estável.
   let latitude: number | null = null;
   let longitude: number | null = null;
-  if (serviceDelivery && feeMethod === "per_km") {
+  if (needsRestaurantLocation({ serviceDelivery, method: feeMethod, radiusKm: radius })) {
     if (!isGeocodingConfigured()) {
       return {
         status: "error",
         message:
-          "O método \"Por km\" ainda não está disponível: falta configurar a variável de ambiente GOOGLE_MAPS_GEOCODING_API_KEY no servidor. Use taxa fixa por enquanto.",
+          "Não foi possível ativar o delivery: falta configurar a variável de ambiente GOOGLE_MAPS_GEOCODING_API_KEY no servidor para calcular a área de entrega.",
       };
     }
     if (!restaurant.address_street || !restaurant.address_number || !restaurant.address_city) {
       return {
         status: "error",
-        message: "Cadastre o endereço completo do restaurante (Passo 2) antes de usar o método \"Por km\".",
+        message: "Cadastre o endereço completo do restaurante (Passo 2) antes de ativar o delivery.",
       };
     }
     const restaurantAddress = buildGeocodableAddress({
@@ -152,7 +157,7 @@ export async function saveDeliveryConfigAction(
     estimated_delivery_min_minutes: estMin,
     estimated_delivery_max_minutes: estMax,
   };
-  if (feeMethod === "per_km") {
+  if (needsRestaurantLocation({ serviceDelivery, method: feeMethod, radiusKm: radius })) {
     update.latitude = latitude;
     update.longitude = longitude;
   }
