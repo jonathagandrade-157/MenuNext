@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useBag } from "@/contexts/BagContext";
 import { submitOrderAction } from "@/lib/actions/orders";
 import { getDeliveryQuoteAction } from "@/lib/actions/delivery-quote";
+import { formatCepInput, isCompleteCep, lookupCep } from "@/lib/cep";
 import {
   PAYMENT_METHOD_LABELS,
   buildOrderItemsPayload,
@@ -102,6 +103,44 @@ export function CheckoutClient({
 
   const addressComplete = Boolean(street.trim() && number.trim() && neighborhood.trim() && city.trim());
 
+  // Busca automática de endereço por CEP (Sprint 3) — só preenche
+  // rua/bairro/cidade/estado; número/complemento/referência nunca são
+  // tocados por isto. Só dispara quando o CEP tem os 8 dígitos completos
+  // (nunca a cada tecla) e nunca bloqueia o formulário: se a busca falhar,
+  // os campos continuam editáveis manualmente.
+  const [cepStatus, setCepStatus] = useState<"idle" | "loading" | "found" | "not_found" | "error">("idle");
+  const cepRequestId = useRef(0);
+
+  function handleZipChange(value: string) {
+    const formatted = formatCepInput(value);
+    setZip(formatted);
+    if (!isCompleteCep(formatted)) setCepStatus("idle");
+  }
+
+  useEffect(() => {
+    if (!isCompleteCep(zip)) return;
+
+    const requestId = ++cepRequestId.current;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCepStatus("loading");
+
+    const timeoutId = setTimeout(async () => {
+      const result = await lookupCep(zip);
+      if (cepRequestId.current !== requestId) return; // resposta de um CEP já substituído — ignorar
+      if (!result.ok) {
+        setCepStatus(result.reason === "not_found" ? "not_found" : "error");
+        return;
+      }
+      setCepStatus("found");
+      setStreet(result.address.street);
+      setNeighborhood(result.address.neighborhood);
+      setCity(result.address.city);
+      setState(result.address.state);
+    }, 400);
+
+    return () => clearTimeout(timeoutId);
+  }, [zip]);
+
   useEffect(() => {
     if (!needsDeliveryQuote) {
       // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -175,7 +214,7 @@ export function CheckoutClient({
     const phoneValidation = validateCustomerPhone(customerPhone);
     if (!phoneValidation.ok) return setErrorMessage(phoneValidation.error);
 
-    const addressValidation = validateDeliveryAddress({ street, number, neighborhood, city });
+    const addressValidation = validateDeliveryAddress({ zip, street, number, neighborhood, city, state });
     if (!addressValidation.ok) return setErrorMessage(addressValidation.error);
 
     if (needsDeliveryQuote && (quoteError || !quote)) {
@@ -284,13 +323,29 @@ export function CheckoutClient({
 
         <section className="space-y-3">
           <h2 className="text-sm font-extrabold text-graphite">Endereço de entrega</h2>
-          <div className="grid grid-cols-2 gap-2">
+
+          <div>
             <input
               value={zip}
-              onChange={(e) => setZip(e.target.value)}
-              placeholder="CEP (opcional)"
-              className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              onChange={(e) => handleZipChange(e.target.value)}
+              placeholder="CEP"
+              inputMode="numeric"
+              maxLength={9}
+              className="w-full rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
+            {cepStatus === "loading" && <p className="mt-1 text-xs text-text-muted">Buscando endereço...</p>}
+            {cepStatus === "found" && <p className="mt-1 text-xs font-semibold text-emerald">✓ Endereço encontrado.</p>}
+            {cepStatus === "not_found" && (
+              <p className="mt-1 text-xs font-semibold text-red">CEP não encontrado. Confira o número informado.</p>
+            )}
+            {cepStatus === "error" && (
+              <p className="mt-1 text-xs text-text-muted">
+                Não foi possível buscar o CEP agora. Preencha o endereço manualmente.
+              </p>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 gap-2">
             <input
               value={street}
               onChange={(e) => setStreet(e.target.value)}

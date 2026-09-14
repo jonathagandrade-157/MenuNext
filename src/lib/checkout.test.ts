@@ -52,10 +52,22 @@ describe("validateCustomerPhone — TESTE C (telefone ausente/inválido)", () =>
 });
 
 describe("validateDeliveryAddress — TESTE D (entrega sem endereço)", () => {
-  const valid = { street: "Rua das Flores", number: "123", neighborhood: "Centro", city: "São Paulo" };
+  const valid = {
+    zip: "01310-100",
+    street: "Rua das Flores",
+    number: "123",
+    neighborhood: "Centro",
+    city: "São Paulo",
+    state: "SP",
+  };
 
   it("aceita endereço completo", () => {
     expect(validateDeliveryAddress(valid)).toEqual({ ok: true });
+  });
+
+  it("TESTE D: rejeita sem CEP (ou CEP incompleto)", () => {
+    expect(validateDeliveryAddress({ ...valid, zip: "" }).ok).toBe(false);
+    expect(validateDeliveryAddress({ ...valid, zip: "01310" }).ok).toBe(false);
   });
 
   it("TESTE D: rejeita sem rua", () => {
@@ -72,6 +84,10 @@ describe("validateDeliveryAddress — TESTE D (entrega sem endereço)", () => {
 
   it("TESTE D: rejeita sem cidade", () => {
     expect(validateDeliveryAddress({ ...valid, city: "" }).ok).toBe(false);
+  });
+
+  it("TESTE D: rejeita sem estado", () => {
+    expect(validateDeliveryAddress({ ...valid, state: "" }).ok).toBe(false);
   });
 });
 

@@ -62,17 +62,24 @@ export function validateCustomerPhone(rawPhone: string): FieldValidation {
 }
 
 export type DeliveryAddressInput = {
+  zip: string;
   street: string;
   number: string;
   neighborhood: string;
   city: string;
+  state: string;
 };
 
+/** CEP obrigatório (Sprint 3 — é ele que dispara o preenchimento automático
+ * do restante do endereço, ver src/lib/cep.ts). Continua sendo só validação
+ * de UX: o servidor (create_order) valida tudo de novo. */
 export function validateDeliveryAddress(address: DeliveryAddressInput): FieldValidation {
+  if (address.zip.replace(/\D/g, "").length !== 8) return { ok: false, error: "Informe um CEP válido." };
   if (!address.street.trim()) return { ok: false, error: "Informe a rua." };
   if (!address.number.trim()) return { ok: false, error: "Informe o número." };
   if (!address.neighborhood.trim()) return { ok: false, error: "Informe o bairro." };
   if (!address.city.trim()) return { ok: false, error: "Informe a cidade." };
+  if (!address.state.trim()) return { ok: false, error: "Informe o estado." };
   return { ok: true };
 }
 
