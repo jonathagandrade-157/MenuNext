@@ -1,5 +1,11 @@
 import { describe, expect, it } from "vitest";
-import { buildGeocodableAddress, computeDeliveryQuote, haversineDistanceKm, roundToCents } from "./delivery";
+import {
+  buildGeocodableAddress,
+  computeDeliveryQuote,
+  haversineDistanceKm,
+  needsRestaurantLocation,
+  roundToCents,
+} from "./delivery";
 
 describe("roundToCents", () => {
   it("arredonda para 2 casas decimais", () => {
@@ -79,6 +85,26 @@ describe("computeDeliveryQuote", () => {
 
   it("distância exatamente igual ao raio é permitida (limite inclusivo)", () => {
     expect(computeDeliveryQuote({ method: "fixed", rate: 8, distanceKm: 10, radiusKm: 10 }).ok).toBe(true);
+  });
+});
+
+describe("needsRestaurantLocation", () => {
+  it("delivery desativado: nunca precisa de localização, mesmo com raio configurado", () => {
+    expect(needsRestaurantLocation({ serviceDelivery: false, method: "fixed", radiusKm: 10 })).toBe(false);
+    expect(needsRestaurantLocation({ serviceDelivery: false, method: "per_km", radiusKm: null })).toBe(false);
+  });
+
+  it("BUG CORRIGIDO: taxa fixa + raio configurado precisa geocodificar o restaurante", () => {
+    expect(needsRestaurantLocation({ serviceDelivery: true, method: "fixed", radiusKm: 10 })).toBe(true);
+  });
+
+  it("taxa fixa sem raio configurado continua sem exigir localização", () => {
+    expect(needsRestaurantLocation({ serviceDelivery: true, method: "fixed", radiusKm: null })).toBe(false);
+  });
+
+  it("por km sempre precisa de localização, com ou sem raio", () => {
+    expect(needsRestaurantLocation({ serviceDelivery: true, method: "per_km", radiusKm: 10 })).toBe(true);
+    expect(needsRestaurantLocation({ serviceDelivery: true, method: "per_km", radiusKm: null })).toBe(true);
   });
 });
 

@@ -8,6 +8,8 @@ import type { StepActionState } from "@/lib/form-state";
 import { WEEK_DAYS } from "@/lib/form-state";
 import { validateProductDescription, validateProductName, validateProductPrice } from "@/lib/products";
 import { uploadProductImage } from "@/lib/storage/assets";
+import { buildGeocodableAddress, needsRestaurantLocation } from "@/lib/delivery";
+import { geocodeAddress, isGeocodingConfigured } from "@/lib/geocoding";
 
 export type { StepActionState };
 
@@ -217,13 +219,60 @@ export async function savePasso4Action(_prev: StepActionState, formData: FormDat
     }
   }
 
-  const { error } = await supabase
-    .from("restaurants")
-    .update({
-      delivery_fee: restaurant.service_delivery ? Number(feeRaw) : null,
-      delivery_radius_km: restaurant.service_delivery ? Number(radiusRaw) : null,
-    })
-    .eq("id", restaurant.id);
+  const radius = restaurant.service_delivery ? Number(radiusRaw) : null;
+
+  // Mesma exigência de localização do restaurante que /painel/delivery
+  // (saveDeliveryConfigAction) e o checkout (resolveDeliveryDistanceKm) —
+  // ver needsRestaurantLocation em src/lib/delivery.ts, para as três nunca
+  // divergirem.
+  let latitude: number | null = null;
+  let longitude: number | null = null;
+  const locationNeeded = needsRestaurantLocation({
+    serviceDelivery: restaurant.service_delivery,
+    method: restaurant.delivery_fee_method,
+    radiusKm: radius,
+  });
+  if (locationNeeded) {
+    if (!isGeocodingConfigured()) {
+      return {
+        status: "error",
+        message:
+          "Não foi possível ativar o delivery: falta configurar a variável de ambiente GOOGLE_MAPS_GEOCODING_API_KEY no servidor para calcular a área de entrega.",
+      };
+    }
+    if (!restaurant.address_street || !restaurant.address_number || !restaurant.address_city) {
+      return { status: "error", message: "Cadastre o endereço completo (Passo 2) antes de configurar o delivery." };
+    }
+    const geocoded = await geocodeAddress(
+      buildGeocodableAddress({
+        street: restaurant.address_street,
+        number: restaurant.address_number,
+        neighborhood: restaurant.address_neighborhood,
+        city: restaurant.address_city,
+        state: restaurant.address_state,
+        zip: restaurant.address_zip,
+      })
+    );
+    if (!geocoded.ok) {
+      return {
+        status: "error",
+        message: "Não foi possível localizar o endereço do restaurante. Verifique o endereço cadastrado e tente novamente.",
+      };
+    }
+    latitude = geocoded.point.lat;
+    longitude = geocoded.point.lng;
+  }
+
+  const update: Record<string, unknown> = {
+    delivery_fee: restaurant.service_delivery ? Number(feeRaw) : null,
+    delivery_radius_km: radius,
+  };
+  if (locationNeeded) {
+    update.latitude = latitude;
+    update.longitude = longitude;
+  }
+
+  const { error } = await supabase.from("restaurants").update(update).eq("id", restaurant.id);
   if (error) return { status: "error", message: "Não foi possível salvar. Tente novamente." };
 
   await advanceStep(supabase, restaurant, 4, true);

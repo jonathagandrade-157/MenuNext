@@ -2,7 +2,7 @@
 
 import { createClient } from "@/lib/supabase/server";
 import { getPublicRestaurantBySlug } from "@/lib/store";
-import { buildGeocodableAddress, computeDeliveryQuote, haversineDistanceKm } from "@/lib/delivery";
+import { buildGeocodableAddress, computeDeliveryQuote, haversineDistanceKm, needsRestaurantLocation } from "@/lib/delivery";
 import { geocodeAddress } from "@/lib/geocoding";
 
 export type DeliveryAddressInputForQuote = {
@@ -35,7 +35,11 @@ async function resolveDeliveryDistanceKm(
   // a mensagem de sempre, em vez de duplicar essa checagem aqui.
   if (!restaurant) return { ok: true, distanceKm: null };
 
-  const needsDistance = restaurant.delivery_radius_km !== null || restaurant.delivery_fee_method === "per_km";
+  const needsDistance = needsRestaurantLocation({
+    serviceDelivery: restaurant.service_delivery,
+    method: restaurant.delivery_fee_method,
+    radiusKm: restaurant.delivery_radius_km,
+  });
   if (!needsDistance) return { ok: true, distanceKm: null };
 
   if (restaurant.latitude === null || restaurant.longitude === null) {

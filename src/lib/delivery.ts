@@ -80,6 +80,28 @@ export function computeDeliveryQuote(input: DeliveryQuoteInput): DeliveryQuoteRe
   return { ok: true, fee: roundToCents(rate), distanceKm };
 }
 
+export type DeliveryLocationInput = {
+  serviceDelivery: boolean;
+  method: DeliveryFeeMethod;
+  radiusKm: number | null;
+};
+
+/**
+ * Única fonte de verdade para "esta configuração de delivery precisa da
+ * localização (lat/lng) do restaurante" — usada tanto para decidir quando
+ * geocodificar o endereço ao salvar (/painel/delivery, saveDeliveryConfigAction)
+ * quanto para decidir quando calcular distância no checkout
+ * (resolveDeliveryDistanceKm). As duas decisões nunca podem divergir: se o
+ * checkout vai precisar de distância, o salvamento já precisa ter
+ * geocodificado antes — raio máximo (delivery_radius_km) exige a distância
+ * até o cliente para validar o limite em QUALQUER método de cobrança, não
+ * só "per_km".
+ */
+export function needsRestaurantLocation({ serviceDelivery, method, radiusKm }: DeliveryLocationInput): boolean {
+  if (!serviceDelivery) return false;
+  return radiusKm !== null || method === "per_km";
+}
+
 export function buildGeocodableAddress(parts: {
   street: string;
   number: string;
