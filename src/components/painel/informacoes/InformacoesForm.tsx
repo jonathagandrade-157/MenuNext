@@ -2,7 +2,8 @@
 
 import { useActionState, useState, useTransition } from "react";
 import { useFormStatus } from "react-dom";
-import { saveInformacoesAction, initialInformacoesState } from "@/lib/actions/informacoes";
+import { saveInformacoesAction } from "@/lib/actions/informacoes";
+import { initialInformacoesState } from "@/lib/form-state";
 import { checkSlugAvailability } from "@/lib/actions/onboarding";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";

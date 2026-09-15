@@ -2,7 +2,8 @@
 
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { savePagamentosConfigAction, initialPagamentosState } from "@/lib/actions/pagamentos";
+import { savePagamentosConfigAction } from "@/lib/actions/pagamentos";
+import { initialPagamentosState } from "@/lib/form-state";
 import { Button } from "@/components/ui/Button";
 import type { Restaurant } from "@/lib/tenant";
 

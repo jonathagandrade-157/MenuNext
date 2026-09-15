@@ -2,7 +2,8 @@
 
 import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { saveHorariosConfigAction, initialHorariosState } from "@/lib/actions/horarios";
+import { saveHorariosConfigAction } from "@/lib/actions/horarios";
+import { initialHorariosState } from "@/lib/form-state";
 import { Button } from "@/components/ui/Button";
 import { WEEK_DAYS } from "@/lib/form-state";
 import type { BusinessHour } from "@/lib/tenant";

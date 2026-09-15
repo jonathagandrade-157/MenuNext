@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import type { InformacoesActionState } from "@/lib/form-state";
 
 const INFORMACOES_PATH = "/painel/informacoes";
 
@@ -20,9 +21,6 @@ async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaura
 
   return { supabase, restaurant };
 }
-
-export type InformacoesActionState = { status: "idle" | "success" | "error"; message?: string };
-export const initialInformacoesState: InformacoesActionState = { status: "idle" };
 
 const COMBINING_DIACRITICS_RANGE_START = 0x0300;
 const COMBINING_DIACRITICS_RANGE_END = 0x036f;

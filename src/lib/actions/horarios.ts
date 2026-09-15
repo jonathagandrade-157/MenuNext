@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
-import { WEEK_DAYS } from "@/lib/form-state";
+import { WEEK_DAYS, type HorariosActionState } from "@/lib/form-state";
 
 const HORARIOS_PATH = "/painel/horarios";
 
@@ -21,9 +21,6 @@ async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaura
 
   return { supabase, restaurant };
 }
-
-export type HorariosActionState = { status: "idle" | "success" | "error"; message?: string };
-export const initialHorariosState: HorariosActionState = { status: "idle" };
 
 /**
  * Edição de horários de funcionamento (separação onboarding/painel) — mesma

@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import type { PagamentosActionState } from "@/lib/form-state";
 
 const PAGAMENTOS_PATH = "/painel/pagamentos";
 
@@ -20,9 +21,6 @@ async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaura
 
   return { supabase, restaurant };
 }
-
-export type PagamentosActionState = { status: "idle" | "success" | "error"; message?: string };
-export const initialPagamentosState: PagamentosActionState = { status: "idle" };
 
 /**
  * Edição de formas de pagamento (separação onboarding/painel) — mesma

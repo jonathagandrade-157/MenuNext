@@ -3,7 +3,8 @@
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { useFormStatus } from "react-dom";
-import { saveDeliveryConfigAction, initialDeliveryConfigState } from "@/lib/actions/delivery";
+import { saveDeliveryConfigAction } from "@/lib/actions/delivery";
+import { initialDeliveryConfigState } from "@/lib/form-state";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import type { Restaurant } from "@/lib/tenant";

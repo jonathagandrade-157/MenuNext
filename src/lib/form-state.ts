@@ -33,6 +33,28 @@ export const initialAddonState: AddonActionState = { status: "idle" };
 export type ComboActionState = { status: "idle" | "success" | "error"; message?: string };
 export const initialComboState: ComboActionState = { status: "idle" };
 
+// Mesmo motivo dos tipos acima — movidos de src/lib/actions/{delivery,
+// horarios,pagamentos,informacoes,aparencia}.ts (JON-20): um arquivo
+// "use server" só pode exportar funções async, então essas constantes
+// nunca podiam viver ali. Cada tela tinha o objeto declarado localmente
+// (aparentemente antes de este arquivo existir/ser seguido) — o Next.js
+// passou a validar isso estritamente e as 3 rotas em produção quebravam
+// com "A 'use server' file can only export async functions, found object.".
+export type DeliveryConfigActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialDeliveryConfigState: DeliveryConfigActionState = { status: "idle" };
+
+export type HorariosActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialHorariosState: HorariosActionState = { status: "idle" };
+
+export type PagamentosActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialPagamentosState: PagamentosActionState = { status: "idle" };
+
+export type InformacoesActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialInformacoesState: InformacoesActionState = { status: "idle" };
+
+export type AparenciaActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialAparenciaState: AparenciaActionState = { status: "idle" };
+
 export const WEEK_DAYS = [
   { value: 0, label: "Domingo" },
   { value: 1, label: "Segunda" },

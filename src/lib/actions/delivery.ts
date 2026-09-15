@@ -7,6 +7,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
 import { buildGeocodableAddress, needsRestaurantLocation, type DeliveryFeeMethod } from "@/lib/delivery";
 import { geocodeAddress, isGeocodingConfigured } from "@/lib/geocoding";
+import type { DeliveryConfigActionState } from "@/lib/form-state";
 
 const DELIVERY_PATH = "/painel/delivery";
 
@@ -22,9 +23,6 @@ async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaura
 
   return { supabase, restaurant };
 }
-
-export type DeliveryConfigActionState = { status: "idle" | "success" | "error"; message?: string };
-export const initialDeliveryConfigState: DeliveryConfigActionState = { status: "idle" };
 
 /** Retorna null para vazio, NaN para "preenchido mas inválido" — para os dois
  * casos serem distinguíveis na validação abaixo. */

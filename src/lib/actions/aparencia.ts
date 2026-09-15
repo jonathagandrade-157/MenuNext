@@ -6,6 +6,7 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
 import { uploadRestaurantCover, uploadRestaurantLogo } from "@/lib/storage/assets";
+import type { AparenciaActionState } from "@/lib/form-state";
 
 const APARENCIA_PATH = "/painel/aparencia";
 
@@ -21,9 +22,6 @@ async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaura
 
   return { supabase, restaurant };
 }
-
-export type AparenciaActionState = { status: "idle" | "success" | "error"; message?: string };
-export const initialAparenciaState: AparenciaActionState = { status: "idle" };
 
 /**
  * Logo e capa do restaurante — reaproveita integralmente

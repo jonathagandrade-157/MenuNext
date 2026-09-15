@@ -2,7 +2,8 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { uploadCoverAction, uploadLogoAction, initialAparenciaState } from "@/lib/actions/aparencia";
+import { uploadCoverAction, uploadLogoAction } from "@/lib/actions/aparencia";
+import { initialAparenciaState } from "@/lib/form-state";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 
