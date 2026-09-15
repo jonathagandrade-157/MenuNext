@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs/config";
 
 const nextConfig: NextConfig = {
   experimental: {
@@ -13,4 +14,14 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// JON-21 — projeto Sentry "menunext" (org jonatha-study), separado do
+// projeto do Vexo. authToken vem de SENTRY_AUTH_TOKEN só se existir: sem
+// ela, o upload de source maps é pulado (sem quebrar o build), e a
+// captura de erros continua funcionando normalmente — authToken é só para
+// stack traces legíveis, não para o instrumentation em si.
+export default withSentryConfig(nextConfig, {
+  org: "jonatha-study",
+  project: "menunext",
+  authToken: process.env.SENTRY_AUTH_TOKEN,
+  silent: true,
+});
