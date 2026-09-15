@@ -1,0 +1,24 @@
+-- Reconciliação de drift (JON-5): esta migration (versão 20260912122212)
+-- já estava aplicada em produção, mas nunca tinha um arquivo commitado
+-- neste repositório. O SQL abaixo foi RECONSTRUÍDO a partir do estado real
+-- do banco, consultado via Management API do Supabase (execute_sql em
+-- pg_proc/information_schema.routine_privileges/has_function_privilege) —
+-- não é um dump do SQL original, que não existe: o Supabase só guarda
+-- version+name em supabase_migrations.schema_migrations, nunca o corpo da
+-- migration.
+--
+-- Estado confirmado em produção em 2026-09-15, antes desta migration ser
+-- criada aqui: public.cancel_order(uuid, text) tem EXECUTE só para
+-- authenticated/postgres/service_role — anon não aparece em
+-- information_schema.routine_privileges, e
+-- has_function_privilege('anon', 'cancel_order(uuid,text)', 'EXECUTE')
+-- retorna false. O corpo da função (checagem de auth.uid()/
+-- is_restaurant_member) já é idêntico ao de add_delivery_config_and_
+-- cancellation.sql, então esta migration reconstruída só precisa garantir
+-- a revogação — nenhuma outra mudança de schema/RLS é necessária.
+--
+-- revoke é idempotente: reexecutar isto (aqui ou em qualquer ambiente
+-- novo criado a partir do zero destas migrations) nunca falha e nunca
+-- muda o comportamento além de garantir que anon não pode chamar
+-- cancel_order.
+revoke execute on function public.cancel_order(uuid, text) from anon;
