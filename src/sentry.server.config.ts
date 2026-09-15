@@ -10,4 +10,9 @@ const SENTRY_DSN =
 Sentry.init({
   dsn: SENTRY_DSN,
   tracesSampleRate: process.env.NODE_ENV === "development" ? 1.0 : 0.1,
+  // JON-21 (temporário): eventos de erro não estavam chegando no Sentry em
+  // produção apesar do throw e do DSN corretos — debug expõe no log da
+  // função se o SDK está de fato tentando enviar o evento. Remover depois
+  // de confirmar a causa.
+  debug: true,
 });
