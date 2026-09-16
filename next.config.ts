@@ -18,10 +18,10 @@ const nextConfig: NextConfig = {
 // projeto do Vexo. authToken vem de SENTRY_AUTH_TOKEN só se existir: sem
 // ela, o upload de source maps é pulado (sem quebrar o build), e a
 // captura de erros continua funcionando normalmente — authToken é só para
-// stack traces legíveis, não para o instrumentation em si.
+// stack traces legíveis, não para o instrumentation em si. silent:false
+// (padrão) para o build log mostrar se o upload de source maps rodou.
 export default withSentryConfig(nextConfig, {
   org: "jonatha-study",
   project: "menunext",
   authToken: process.env.SENTRY_AUTH_TOKEN,
-  silent: true,
 });
