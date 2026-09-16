@@ -94,6 +94,14 @@ export function getKanbanColumnForStatus(status: OrderStatus): KanbanColumnId | 
   return column?.id ?? null;
 }
 
+/** Subconjunto das colunas do Kanban relevante para a cozinha (JON-23,
+ * /painel/kds) — "Saiu para Entrega" e "Entregues" são responsabilidade do
+ * entregador/balcão, não da cozinha, então ficam fora do KDS. Derivado de
+ * KANBAN_COLUMNS (não uma lista solta) para nunca divergir se as colunas do
+ * Kanban operacional mudarem. */
+export const KDS_COLUMN_IDS: KanbanColumnId[] = ["novos", "preparando", "prontos"];
+export const KDS_COLUMNS = KANBAN_COLUMNS.filter((column) => KDS_COLUMN_IDS.includes(column.id));
+
 /** Motivos de cancelamento oferecidos ao lojista (Fase 4.1) — lista fechada
  * exceto "other", que exige um texto livre complementar. O motivo final
  * enviado à RPC cancel_order é sempre uma string (o rótulo, para "other" o
@@ -289,6 +297,38 @@ export type DashboardOrderRow = {
 
 function minutesBetween(startIso: string, endIso: string): number {
   return (new Date(endIso).getTime() - new Date(startIso).getTime()) / 60000;
+}
+
+/** Timestamp de entrada em cada status — mesmas colunas gravadas pela RPC
+ * advance_order_status (add_order_status_transitions.sql), nenhuma nova.
+ * "cancelled" não tem timestamp próprio; usa created_at como todo status
+ * sem coluna dedicada (nunca deveria ser consultado no KDS, que já filtra
+ * pedidos ativos, mas evita undefined se algum dia for). */
+const STATUS_ELAPSED_SINCE_FIELD: Record<OrderStatus, keyof Order> = {
+  received: "created_at",
+  confirmed: "confirmed_at",
+  preparing: "preparing_at",
+  ready: "ready_at",
+  out_for_delivery: "out_for_delivery_at",
+  delivered: "delivered_at",
+  picked_up: "picked_up_at",
+  cancelled: "created_at",
+};
+
+/**
+ * Minutos decorridos desde que o pedido ENTROU no status atual (não desde a
+ * criação) — usa o timestamp específico do status (preparing_at para
+ * "preparing", ready_at para "ready" etc., já existentes desde
+ * add_order_status_transitions.sql — nenhuma coluna nova). Cai para
+ * created_at se o timestamp específico ainda não foi preenchido (defesa,
+ * não deveria acontecer para o status atual do próprio pedido). Usado pelo
+ * KDS (JON-23) para "tempo decorrido de preparo" — sempre inteiro e nunca
+ * negativo (arredonda para baixo, como um cronômetro).
+ */
+export function getElapsedMinutesSince(order: Order, now: Date = new Date()): number {
+  const field = STATUS_ELAPSED_SINCE_FIELD[order.status];
+  const timestamp = (order[field] as string | null) ?? order.created_at;
+  return Math.max(0, Math.floor(minutesBetween(timestamp, now.toISOString())));
 }
 
 function average(values: number[]): number | null {

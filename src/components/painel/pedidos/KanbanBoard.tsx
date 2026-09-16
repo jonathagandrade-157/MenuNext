@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { advanceOrderStatusAction, cancelOrderAction } from "@/lib/actions/orders";
 import {
   KANBAN_COLUMNS,
+  getElapsedMinutesSince,
   getKanbanColumnForStatus,
   getOrderWithItems,
   normalizeOrderFields,
@@ -28,20 +29,58 @@ const NEW_ORDER_HIGHLIGHT_MS = 6000;
  * entrega evento de outro restaurante — nenhum filtro de frontend é a
  * proteção real, só uma conveniência de UI.
  */
-export function KanbanBoard({ restaurantId, initialOrders }: { restaurantId: string; initialOrders: OrderWithItems[] }) {
+export function KanbanBoard({
+  restaurantId,
+  initialOrders,
+  columns = KANBAN_COLUMNS,
+  channelPrefix = "kanban",
+  showElapsedTime = false,
+  targetPrepMinutes = null,
+}: {
+  restaurantId: string;
+  initialOrders: OrderWithItems[];
+  /** Subconjunto de colunas a exibir — default são as 5 do Kanban
+   * operacional; o KDS (JON-23, /painel/kds) passa KDS_COLUMNS. */
+  columns?: typeof KANBAN_COLUMNS;
+  /** Prefixo do canal Realtime — só para diferenciar nos logs/dashboard do
+   * Supabase quando duas telas (Kanban e KDS) montam o board ao mesmo
+   * tempo; não afeta isolamento (que é sempre por restaurantId). */
+  channelPrefix?: string;
+  /** Mostra "tempo decorrido no status atual" em cada card (KDS, JON-23) —
+   * false no Kanban operacional, que não recebe esta prop. */
+  showElapsedTime?: boolean;
+  /** Meta de tempo de preparo (minutos) usada para marcar cards atrasados
+   * quando showElapsedTime está ativo — vem de
+   * computeDashboardMetrics.averagePrepMinutes, nunca um valor novo. */
+  targetPrepMinutes?: number | null;
+}) {
   const [orders, setOrders] = useState<OrderWithItems[]>(initialOrders);
   const [newOrderIds, setNewOrderIds] = useState<Set<string>>(new Set());
   const [advancingId, setAdvancingId] = useState<string | null>(null);
   const [cancellingId, setCancellingId] = useState<string | null>(null);
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [now, setNow] = useState<Date | null>(null);
   const supabaseRef = useRef(createClient());
+
+  // Cronômetro do KDS — só liga o interval quando alguém de fato usa
+  // showElapsedTime (Kanban operacional de /painel/pedidos nunca paga esse
+  // custo). `now` começa null e só é setado no cliente para não divergir
+  // do HTML de SSR (o servidor não tem por que saber a hora exata em que o
+  // componente vai hidratar).
+  useEffect(() => {
+    if (!showElapsedTime) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- mesmo padrão de ShareStoreModal: valor só existe no cliente, sem equivalente de SSR para evitar o efeito.
+    setNow(new Date());
+    const interval = setInterval(() => setNow(new Date()), 30_000);
+    return () => clearInterval(interval);
+  }, [showElapsedTime]);
 
   useEffect(() => {
     const supabase = supabaseRef.current;
 
     const channel = supabase
-      .channel(`kanban-orders-${restaurantId}`)
+      .channel(`${channelPrefix}-orders-${restaurantId}`)
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "orders", filter: `restaurant_id=eq.${restaurantId}` },
@@ -79,7 +118,7 @@ export function KanbanBoard({ restaurantId, initialOrders }: { restaurantId: str
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [restaurantId]);
+  }, [restaurantId, channelPrefix]);
 
   const handleAdvance = useCallback(async (order: OrderWithItems) => {
     setErrorMessage(null);
@@ -147,7 +186,7 @@ export function KanbanBoard({ restaurantId, initialOrders }: { restaurantId: str
       )}
 
       <div className="flex flex-1 gap-4 overflow-x-auto p-4">
-        {KANBAN_COLUMNS.map((column) => {
+        {columns.map((column) => {
           const columnOrders = orders.filter((o) => getKanbanColumnForStatus(o.status) === column.id);
           return (
             <div key={column.id} className="flex w-72 shrink-0 flex-col rounded-xl bg-surface-subdued">
@@ -161,16 +200,23 @@ export function KanbanBoard({ restaurantId, initialOrders }: { restaurantId: str
                 {columnOrders.length === 0 && (
                   <p className="px-1 py-6 text-center text-xs text-text-muted">Nenhum pedido</p>
                 )}
-                {columnOrders.map((order) => (
-                  <OrderCard
-                    key={order.id}
-                    order={order}
-                    isNew={newOrderIds.has(order.id)}
-                    isAdvancing={advancingId === order.id}
-                    onOpenDetails={() => setSelectedOrderId(order.id)}
-                    onAdvance={() => handleAdvance(order)}
-                  />
-                ))}
+                {columnOrders.map((order) => {
+                  const elapsedMinutes = showElapsedTime && now ? getElapsedMinutesSince(order, now) : undefined;
+                  const isOverdue =
+                    elapsedMinutes !== undefined && targetPrepMinutes !== null && elapsedMinutes > targetPrepMinutes;
+                  return (
+                    <OrderCard
+                      key={order.id}
+                      order={order}
+                      isNew={newOrderIds.has(order.id)}
+                      isAdvancing={advancingId === order.id}
+                      onOpenDetails={() => setSelectedOrderId(order.id)}
+                      onAdvance={() => handleAdvance(order)}
+                      elapsedMinutes={elapsedMinutes}
+                      isOverdue={isOverdue}
+                    />
+                  );
+                })}
               </div>
             </div>
           );

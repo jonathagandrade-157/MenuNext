@@ -9,12 +9,18 @@ export function OrderCard({
   isAdvancing,
   onOpenDetails,
   onAdvance,
+  elapsedMinutes,
+  isOverdue = false,
 }: {
   order: OrderWithItems;
   isNew: boolean;
   isAdvancing: boolean;
   onOpenDetails: () => void;
   onAdvance: () => void;
+  /** Minutos decorridos no status atual (KDS, JON-23) — omitido no Kanban
+   * operacional de /painel/pedidos, que não passa esta prop. */
+  elapsedMinutes?: number;
+  isOverdue?: boolean;
 }) {
   const nextStatus = getNextOrderStatus(order.status, order.fulfillment_type);
   const actionLabel = nextStatus ? ORDER_STATUS_ACTION_LABEL[nextStatus] : null;
@@ -34,6 +40,12 @@ export function OrderCard({
           <div className="text-right">
             <p className="text-[11px] font-medium text-text-muted">{formatOrderTime(order.created_at)}</p>
             <p className="text-[11px] font-bold text-primary">{FULFILLMENT_TYPE_LABELS[order.fulfillment_type]}</p>
+            {elapsedMinutes !== undefined && (
+              <p className={`text-[11px] font-bold ${isOverdue ? "text-red" : "text-text-muted"}`}>
+                {isOverdue ? "⚠ " : "⏱ "}
+                {elapsedMinutes} min
+              </p>
+            )}
           </div>
         </div>
 

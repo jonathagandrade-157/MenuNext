@@ -2,12 +2,15 @@ import { describe, expect, it } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
   computeDashboardMetrics,
+  getElapsedMinutesSince,
   getKanbanColumnForStatus,
   getNextOrderStatus,
   getRecentOrders,
   isTerminalOrderStatus,
+  KDS_COLUMNS,
   orderTrackingChannelName,
   type DashboardOrderRow,
+  type Order,
   type OrderStatus,
 } from "./orders";
 
@@ -241,6 +244,98 @@ describe("getRecentOrders — isolamento por restaurante", () => {
     const orders = await getRecentOrders(client, "r1");
     expect(orders[0].total).toBe(45.9);
     expect(typeof orders[0].total).toBe("number");
+  });
+});
+
+function orderFixture(overrides: Partial<Order> & { status: OrderStatus }): Order {
+  return {
+    id: "order-1",
+    restaurant_id: "r1",
+    public_id: "public-1",
+    order_number: 1,
+    customer_name: "Cliente Teste",
+    customer_phone: "11999999999",
+    fulfillment_type: "delivery",
+    delivery_zip: null,
+    delivery_street: null,
+    delivery_number: null,
+    delivery_complement: null,
+    delivery_neighborhood: null,
+    delivery_city: null,
+    delivery_state: null,
+    delivery_reference: null,
+    payment_method: "pix",
+    change_for: null,
+    observation: null,
+    subtotal: 10,
+    delivery_fee: 0,
+    total: 10,
+    confirmed_at: null,
+    preparing_at: null,
+    ready_at: null,
+    out_for_delivery_at: null,
+    delivered_at: null,
+    picked_up_at: null,
+    created_at: "2026-09-09T12:00:00.000Z",
+    updated_at: "2026-09-09T12:00:00.000Z",
+    ...overrides,
+  };
+}
+
+describe("KDS_COLUMNS (JON-23)", () => {
+  it("inclui só as colunas relevantes para a cozinha", () => {
+    expect(KDS_COLUMNS.map((c) => c.id)).toEqual(["novos", "preparando", "prontos"]);
+  });
+
+  it("nunca inclui 'saiu_para_entrega' ou 'entregues' (responsabilidade do entregador/balcão)", () => {
+    const ids = KDS_COLUMNS.map((c) => c.id);
+    expect(ids).not.toContain("saiu_para_entrega");
+    expect(ids).not.toContain("entregues");
+  });
+});
+
+describe("getElapsedMinutesSince (JON-23)", () => {
+  const now = new Date("2026-09-09T12:30:00.000Z");
+
+  it("usa preparing_at quando o pedido está em preparo (não created_at)", () => {
+    const order = orderFixture({
+      status: "preparing",
+      created_at: "2026-09-09T12:00:00.000Z",
+      preparing_at: "2026-09-09T12:20:00.000Z",
+    });
+    expect(getElapsedMinutesSince(order, now)).toBe(10);
+  });
+
+  it("usa ready_at quando o pedido está pronto", () => {
+    const order = orderFixture({
+      status: "ready",
+      created_at: "2026-09-09T12:00:00.000Z",
+      ready_at: "2026-09-09T12:25:00.000Z",
+    });
+    expect(getElapsedMinutesSince(order, now)).toBe(5);
+  });
+
+  it("cai para created_at quando o pedido ainda não foi confirmado ('novos')", () => {
+    const order = orderFixture({ status: "received", created_at: "2026-09-09T12:12:00.000Z" });
+    expect(getElapsedMinutesSince(order, now)).toBe(18);
+  });
+
+  it("arredonda para baixo (cronômetro, nunca antecipa o próximo minuto)", () => {
+    const order = orderFixture({
+      status: "preparing",
+      created_at: "2026-09-09T12:00:00.000Z",
+      preparing_at: "2026-09-09T12:00:00.000Z",
+    });
+    expect(getElapsedMinutesSince(order, new Date("2026-09-09T12:04:59.000Z"))).toBe(4);
+  });
+
+  it("nunca retorna negativo mesmo se o timestamp estiver no futuro por deriva de relógio", () => {
+    const order = orderFixture({
+      status: "preparing",
+      created_at: "2026-09-09T12:00:00.000Z",
+      preparing_at: "2026-09-09T12:00:00.000Z",
+    });
+    expect(getElapsedMinutesSince(order, new Date("2026-09-09T11:59:00.000Z"))).toBe(0);
   });
 });
 
