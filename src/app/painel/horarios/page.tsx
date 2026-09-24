@@ -1,16 +1,12 @@
-import { redirect } from "next/navigation";
-import { getAuthedUser, getBusinessHours, getMyRestaurant } from "@/lib/tenant";
+import { getBusinessHours, requireOwnerPage } from "@/lib/tenant";
 import { HorariosForm } from "@/components/painel/horarios/HorariosForm";
 
 // Separação onboarding/painel: esta era uma tela de redirecionamento para o
 // Passo 5 do onboarding (ver histórico do arquivo); agora é a tela real de
 // edição — nunca redireciona para /onboarding.
+// Restrita ao OWNER (JON-10): fora do escopo operacional/cardápio.
 export default async function HorariosPage() {
-  const { supabase, user } = await getAuthedUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
+  const { supabase, restaurant } = await requireOwnerPage();
 
   const businessHours = await getBusinessHours(supabase, restaurant.id);
 

@@ -64,6 +64,15 @@ export async function getAuthedUser() {
   return { supabase, user };
 }
 
+/** MASTER é papel de plataforma (JON-9), não de restaurante — via RPC
+ * SECURITY DEFINER (is_platform_admin), já que profiles.is_master não pode
+ * ser lido/gravado pelo cliente (revoke explícito na migration). */
+export async function isPlatformAdmin(supabase: SupabaseClient): Promise<boolean> {
+  const { data, error } = await supabase.rpc("is_platform_admin");
+  if (error) throw error;
+  return data === true;
+}
+
 /** Restaurante do usuário autenticado atual, ou null se ainda não criou nenhum. */
 export async function getMyRestaurant(supabase: SupabaseClient): Promise<Restaurant | null> {
   const { data, error } = await supabase.from("restaurants").select("*").maybeSingle();
@@ -98,6 +107,27 @@ export async function getMyMembership(supabase: SupabaseClient, restaurantId: st
     .maybeSingle();
   if (error) throw error;
   return data as { role: "OWNER" | "STAFF" } | null;
+}
+
+/**
+ * Guarda de acesso para páginas do painel restritas ao OWNER (JON-10) —
+ * telas administrativas (config. da loja, pagamentos, aparência, clientes,
+ * equipe) que um STAFF convidado (JON-27) não deve ver nem editar. STAFF
+ * autenticado com restaurante válido é redirecionado para /painel em vez de
+ * ver um erro — mesmo padrão de redirect silencioso já usado no resto do
+ * app (ex.: onboarding incompleto).
+ */
+export async function requireOwnerPage(): Promise<{ supabase: SupabaseClient; restaurant: Restaurant }> {
+  const { supabase, user } = await getAuthedUser();
+  if (!user) redirect("/cadastro");
+
+  const restaurant = await getMyRestaurant(supabase);
+  if (!restaurant) redirect("/onboarding/passo-1");
+
+  const membership = await getMyMembership(supabase, restaurant.id);
+  if (membership?.role !== "OWNER") redirect("/painel");
+
+  return { supabase, restaurant };
 }
 
 export type BusinessHour = {

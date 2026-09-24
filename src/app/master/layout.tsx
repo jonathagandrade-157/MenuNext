@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { PanelSidebar, type NavGroup } from "@/components/layout/PanelSidebar";
-import { getAuthedUser } from "@/lib/tenant";
+import { getAuthedUser, isPlatformAdmin, resolvePostAuthPath } from "@/lib/tenant";
 
 const NAV_GROUPS: NavGroup[] = [
   {
@@ -28,11 +28,15 @@ const NAV_GROUPS: NavGroup[] = [
 ];
 
 export default async function MasterLayout({ children }: { children: React.ReactNode }) {
-  // Checagem autoritativa de autenticação apenas. Este Sprint não implementa
-  // o papel MASTER de verdade (não existe esse conceito no schema ainda) —
-  // ver relatório da Sprint 1 para o que falta antes de considerar isto seguro.
-  const { user } = await getAuthedUser();
+  // Controle de acesso real (JON-9): antes só checava autenticação — agora
+  // exige profiles.is_master = true (via RPC is_platform_admin, SECURITY
+  // DEFINER). Quem não é admin da plataforma é mandado de volta para o
+  // destino normal pós-login, sem ver nem o esqueleto do /master.
+  const { supabase, user } = await getAuthedUser();
   if (!user) redirect("/cadastro");
+
+  const isAdmin = await isPlatformAdmin(supabase);
+  if (!isAdmin) redirect(await resolvePostAuthPath(supabase));
 
   return (
     <div className="flex min-h-screen flex-col bg-surface lg:flex-row">

@@ -1,5 +1,4 @@
-import { redirect } from "next/navigation";
-import { getAuthedUser, getMyRestaurant } from "@/lib/tenant";
+import { requireOwnerPage } from "@/lib/tenant";
 import { getRecentOrders } from "@/lib/orders";
 import { getStoreUrl } from "@/lib/site-url";
 import { Card } from "@/components/ui/Card";
@@ -17,11 +16,7 @@ import { StoreShareCard } from "@/components/painel/dashboard/StoreShareCard";
  * `restaurants`, fora do escopo autorizado para esta tarefa.
  */
 export default async function ConfiguracoesPage() {
-  const { supabase, user } = await getAuthedUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
+  const { supabase, restaurant } = await requireOwnerPage();
 
   const [recentOrders, storeUrl] = await Promise.all([
     getRecentOrders(supabase, restaurant.id, 1),

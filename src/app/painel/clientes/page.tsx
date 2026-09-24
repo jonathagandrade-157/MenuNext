@@ -1,14 +1,10 @@
-import { redirect } from "next/navigation";
-import { getAuthedUser, getMyRestaurant } from "@/lib/tenant";
+import { requireOwnerPage } from "@/lib/tenant";
 import { aggregateCustomers, getCustomerOrders } from "@/lib/customers";
 import { ClientesView } from "@/components/painel/clientes/ClientesView";
 
+// Restrita ao OWNER (JON-10): fora do escopo operacional/cardápio.
 export default async function Page() {
-  const { supabase, user } = await getAuthedUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
+  const { supabase, restaurant } = await requireOwnerPage();
 
   const orders = await getCustomerOrders(supabase, restaurant.id);
   const customers = aggregateCustomers(orders);

@@ -1,16 +1,12 @@
-import { redirect } from "next/navigation";
-import { getAuthedUser, getMyRestaurant } from "@/lib/tenant";
+import { requireOwnerPage } from "@/lib/tenant";
 import { PagamentosForm } from "@/components/painel/pagamentos/PagamentosForm";
 
 // Separação onboarding/painel: esta era uma tela de redirecionamento para o
 // Passo 6 do onboarding (ver histórico do arquivo); agora é a tela real de
 // edição — nunca redireciona para /onboarding.
+// Restrita ao OWNER (JON-10): fora do escopo operacional/cardápio.
 export default async function PagamentosPage() {
-  const { supabase, user } = await getAuthedUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
+  const { restaurant } = await requireOwnerPage();
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 px-6 py-8">

@@ -1,5 +1,4 @@
-import { redirect } from "next/navigation";
-import { getAuthedUser, getBusinessHours, getMyRestaurant } from "@/lib/tenant";
+import { getBusinessHours, requireOwnerPage } from "@/lib/tenant";
 import { isGeocodingConfigured } from "@/lib/geocoding";
 import { DeliveryConfigForm } from "@/components/painel/delivery/DeliveryConfigForm";
 
@@ -9,12 +8,9 @@ import { DeliveryConfigForm } from "@/components/painel/delivery/DeliveryConfigF
 // service_delivery/delivery_fee/delivery_radius_km (existentes desde o
 // onboarding) e adiciona pedido mínimo + tempo estimado de entrega. Pode ser
 // revisitada a qualquer momento, sem depender do fluxo guiado.
+// Restrita ao OWNER (JON-10): fora do escopo operacional/cardápio.
 export default async function Page() {
-  const { supabase, user } = await getAuthedUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
+  const { supabase, restaurant } = await requireOwnerPage();
 
   const businessHours = await getBusinessHours(supabase, restaurant.id);
 

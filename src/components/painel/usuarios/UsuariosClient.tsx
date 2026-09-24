@@ -26,12 +26,10 @@ export function UsuariosClient({
   members,
   invites,
   currentUserId,
-  isOwner,
 }: {
   members: RestaurantMember[];
   invites: RestaurantInvite[];
   currentUserId: string;
-  isOwner: boolean;
 }) {
   const [inviteOpen, setInviteOpen] = useState(false);
   const [revoking, setRevoking] = useState<RestaurantInvite | null>(null);
@@ -86,12 +84,10 @@ export function UsuariosClient({
             Gerencie quem tem acesso ao painel do seu restaurante.
           </p>
         </div>
-        {isOwner && (
-          <Button onClick={() => setInviteOpen(true)} className="self-start sm:self-auto">
-            <span className="text-lg leading-none">+</span>
-            Convidar membro
-          </Button>
-        )}
+        <Button onClick={() => setInviteOpen(true)} className="self-start sm:self-auto">
+          <span className="text-lg leading-none">+</span>
+          Convidar membro
+        </Button>
       </div>
 
       <Card className="overflow-hidden p-0">
@@ -118,11 +114,10 @@ export function UsuariosClient({
         </div>
       </Card>
 
-      {isOwner && (
-        <Card className="overflow-hidden p-0">
-          <div className="border-b border-border bg-surface-subdued/70 px-5 py-3">
-            <h2 className="text-sm font-bold text-graphite">Convites pendentes ({pendingInvites.length})</h2>
-          </div>
+      <Card className="overflow-hidden p-0">
+        <div className="border-b border-border bg-surface-subdued/70 px-5 py-3">
+          <h2 className="text-sm font-bold text-graphite">Convites pendentes ({pendingInvites.length})</h2>
+        </div>
 
           {(revokeError || resendError) && (
             <div className="px-5 pt-3">
@@ -189,8 +184,7 @@ export function UsuariosClient({
               </div>
             </>
           )}
-        </Card>
-      )}
+      </Card>
 
       <Modal open={inviteOpen} onClose={() => setInviteOpen(false)} title="Convidar membro">
         <InviteFormFields onDone={() => setInviteOpen(false)} />
