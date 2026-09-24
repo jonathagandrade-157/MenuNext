@@ -63,7 +63,7 @@ export default async function PainelLayout({ children }: { children: React.React
   if (!restaurant) redirect("/onboarding/passo-1");
 
   return (
-    <div className="flex min-h-screen bg-surface">
+    <div className="flex min-h-screen flex-col bg-surface lg:flex-row">
       <PanelSidebar brandLabel="Painel do Lojista" groups={NAV_GROUPS} />
       <div className="flex flex-1 flex-col">
         <PanelTopbar storeName={restaurant.name} storeSlug={restaurant.slug} isOpen={restaurant.status === "active"} />

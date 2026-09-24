@@ -35,7 +35,7 @@ export default async function MasterLayout({ children }: { children: React.React
   if (!user) redirect("/cadastro");
 
   return (
-    <div className="flex min-h-screen bg-surface">
+    <div className="flex min-h-screen flex-col bg-surface lg:flex-row">
       <PanelSidebar brandLabel="Painel Master" groups={NAV_GROUPS} />
       <div className="flex-1">{children}</div>
     </div>
