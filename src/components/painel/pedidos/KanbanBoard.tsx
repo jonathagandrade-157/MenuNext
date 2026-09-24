@@ -61,6 +61,12 @@ export function KanbanBoard({
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [now, setNow] = useState<Date | null>(null);
+  const [search, setSearch] = useState("");
+  const [soundEnabled, setSoundEnabled] = useState(true);
+  const soundEnabledRef = useRef(soundEnabled);
+  useEffect(() => {
+    soundEnabledRef.current = soundEnabled;
+  }, [soundEnabled]);
   const supabaseRef = useRef(createClient());
 
   // Cronômetro do KDS — só liga o interval quando alguém de fato usa
@@ -90,7 +96,7 @@ export function KanbanBoard({
           if (!full) return;
           setOrders((prev) => (prev.some((o) => o.id === full.id) ? prev : [...prev, full]));
           setNewOrderIds((prev) => new Set(prev).add(full.id));
-          playNewOrderChime();
+          if (soundEnabledRef.current) playNewOrderChime();
           setTimeout(() => {
             setNewOrderIds((prev) => {
               const next = new Set(prev);
@@ -177,8 +183,33 @@ export function KanbanBoard({
 
   const selectedOrder = orders.find((o) => o.id === selectedOrderId) ?? null;
 
+  const query = search.trim().toLowerCase();
+  const visibleOrders = query
+    ? orders.filter((o) => `${o.order_number}`.includes(query) || o.customer_name.toLowerCase().includes(query))
+    : orders;
+
   return (
     <div className="flex h-full flex-col">
+      <div className="flex items-center gap-3 px-4 pt-3">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Buscar por pedido (#1048) ou cliente..."
+          className="h-9 w-full max-w-sm rounded-lg border border-border bg-surface-card px-3 text-xs text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+        />
+        <button
+          type="button"
+          onClick={() => setSoundEnabled((v) => !v)}
+          title={soundEnabled ? "Som de novo pedido ativado" : "Som de novo pedido desativado"}
+          className={`flex h-9 shrink-0 items-center gap-1.5 rounded-lg border px-3 text-xs font-semibold transition-colors ${
+            soundEnabled ? "border-border text-graphite hover:bg-surface-subdued" : "border-border bg-surface-subdued text-text-muted"
+          }`}
+        >
+          {soundEnabled ? "🔊 Som ativado" : "🔇 Som desativado"}
+        </button>
+      </div>
+
       {errorMessage && (
         <div className="mx-4 mt-3 rounded-lg border border-red/20 bg-red/10 px-3.5 py-2 text-xs font-semibold text-red">
           {errorMessage}
@@ -187,7 +218,7 @@ export function KanbanBoard({
 
       <div className="flex flex-1 gap-4 overflow-x-auto p-4">
         {columns.map((column) => {
-          const columnOrders = orders.filter((o) => getKanbanColumnForStatus(o.status) === column.id);
+          const columnOrders = visibleOrders.filter((o) => getKanbanColumnForStatus(o.status) === column.id);
           return (
             <div key={column.id} className="flex w-72 shrink-0 flex-col rounded-xl bg-surface-subdued">
               <div className="flex items-center justify-between px-3.5 py-3">

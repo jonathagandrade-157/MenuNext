@@ -61,10 +61,20 @@ export function OrderDetailModal({
             <span className="text-xs font-medium text-text-muted">{formatOrderTime(order.created_at)}</span>
           </div>
 
-          <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Cliente</p>
-            <p className="text-sm font-bold text-graphite">{order.customer_name}</p>
-            <p className="text-sm text-text-muted">{order.customer_phone}</p>
+          <div className="flex items-start justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Cliente</p>
+              <p className="text-sm font-bold text-graphite">{order.customer_name}</p>
+              <p className="text-sm text-text-muted">{order.customer_phone}</p>
+            </div>
+            <a
+              href={`https://wa.me/55${order.customer_phone.replace(/\D/g, "")}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex h-9 shrink-0 items-center rounded-lg bg-emerald px-3 text-xs font-semibold text-white transition-all hover:opacity-90"
+            >
+              WhatsApp
+            </a>
           </div>
 
           <div>
