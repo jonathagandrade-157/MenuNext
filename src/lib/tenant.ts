@@ -73,6 +73,33 @@ export async function isPlatformAdmin(supabase: SupabaseClient): Promise<boolean
   return data === true;
 }
 
+/** Guarda de acesso para páginas de /master (defesa em profundidade — o
+ * layout já bloqueia, mas cada página segue o mesmo padrão de re-checar
+ * usado nas páginas OWNER-only de /painel, ver requireOwnerPage). */
+export async function requireMasterPage(): Promise<{ supabase: SupabaseClient }> {
+  const { supabase, user } = await getAuthedUser();
+  if (!user) redirect("/cadastro");
+
+  const isAdmin = await isPlatformAdmin(supabase);
+  if (!isAdmin) redirect(await resolvePostAuthPath(supabase));
+
+  return { supabase };
+}
+
+export type PlatformSettings = {
+  support_email: string | null;
+  support_whatsapp: string | null;
+};
+
+/** Contato de suporte configurado pelo MASTER (/master/configuracoes) —
+ * singleton (uma única linha). Leitura liberada a qualquer autenticado via
+ * RLS; nunca inventar um contato quando os campos vêm null. */
+export async function getPlatformSettings(supabase: SupabaseClient): Promise<PlatformSettings> {
+  const { data, error } = await supabase.from("platform_settings").select("support_email, support_whatsapp").eq("id", true).maybeSingle();
+  if (error) throw error;
+  return data ?? { support_email: null, support_whatsapp: null };
+}
+
 /** Restaurante do usuário autenticado atual, ou null se ainda não criou nenhum. */
 export async function getMyRestaurant(supabase: SupabaseClient): Promise<Restaurant | null> {
   const { data, error } = await supabase.from("restaurants").select("*").maybeSingle();

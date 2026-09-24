@@ -1,13 +1,26 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { redirect } from "next/navigation";
+import { getAuthedUser, getMyRestaurant, getPlatformSettings } from "@/lib/tenant";
+import { getSetupChecklist } from "@/lib/setup";
+import { SetupChecklistCard } from "@/components/painel/SetupChecklistCard";
+import { AjudaClient } from "@/components/painel/ajuda/AjudaClient";
 
-export default function Page() {
+export default async function AjudaPage() {
+  const { supabase, user } = await getAuthedUser();
+  if (!user) redirect("/cadastro");
+
+  const restaurant = await getMyRestaurant(supabase);
+  if (!restaurant) redirect("/onboarding/passo-1");
+
+  const [checklist, settings] = await Promise.all([
+    getSetupChecklist(supabase, restaurant),
+    getPlatformSettings(supabase),
+  ]);
+
   return (
-    <ScreenPlaceholder
-      screenId="SCREEN_11"
-      title="Ajuda"
-      description="Central de ajuda e manual de uso do painel."
-      backHref="/painel"
-      backLabel="Voltar ao dashboard"
+    <AjudaClient
+      hasChecklistSlot={<SetupChecklistCard checklist={checklist} storeSlug={restaurant.slug} />}
+      supportEmail={settings.support_email}
+      supportWhatsapp={settings.support_whatsapp}
     />
   );
 }

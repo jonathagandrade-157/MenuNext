@@ -63,6 +63,11 @@ export const initialAparenciaState: AparenciaActionState = { status: "idle" };
 export type InviteActionState = { status: "idle" | "success" | "error"; message?: string; inviteUrl?: string };
 export const initialInviteState: InviteActionState = { status: "idle" };
 
+// Configurações da plataforma (/master/configuracoes) — mesmo formato de
+// CategoryActionState/ProductActionState.
+export type PlatformSettingsActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialPlatformSettingsState: PlatformSettingsActionState = { status: "idle" };
+
 export const WEEK_DAYS = [
   { value: 0, label: "Domingo" },
   { value: 1, label: "Segunda" },
