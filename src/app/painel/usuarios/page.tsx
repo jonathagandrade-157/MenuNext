@@ -1,13 +1,22 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { redirect } from "next/navigation";
+import { getAuthedUser, getMyRestaurant, getMyMembership, getRestaurantMembers, getRestaurantInvites } from "@/lib/tenant";
+import { UsuariosClient } from "@/components/painel/usuarios/UsuariosClient";
 
-export default function Page() {
+export default async function UsuariosPage() {
+  const { supabase, user } = await getAuthedUser();
+  if (!user) redirect("/cadastro");
+
+  const restaurant = await getMyRestaurant(supabase);
+  if (!restaurant) redirect("/onboarding/passo-1");
+
+  const membership = await getMyMembership(supabase, restaurant.id);
+
+  const [members, invites] = await Promise.all([
+    getRestaurantMembers(supabase),
+    membership?.role === "OWNER" ? getRestaurantInvites(supabase, restaurant.id) : Promise.resolve([]),
+  ]);
+
   return (
-    <ScreenPlaceholder
-      screenId="SCREEN_14"
-      title="Usuários e permissões"
-      description="Gestão da equipe com acesso ao painel do restaurante."
-      backHref="/painel"
-      backLabel="Voltar ao dashboard"
-    />
+    <UsuariosClient members={members} invites={invites} currentUserId={user.id} isOwner={membership?.role === "OWNER"} />
   );
 }

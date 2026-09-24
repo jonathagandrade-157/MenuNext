@@ -40,6 +40,14 @@ function friendlyAuthError(message: string): string {
   return "Não foi possível concluir a operação. Tente novamente em instantes.";
 }
 
+/** Só redireciona para um "next" vindo de formData se apontar para uma
+ * rota de aceite de convite conhecida (JON-27) — nunca para uma URL
+ * arbitrária vinda de input do usuário (evita open redirect). */
+function safeInviteRedirect(formData: FormData): string | null {
+  const next = String(formData.get("next") ?? "");
+  return /^\/convite\/[^/]+$/.test(next) ? next : null;
+}
+
 export async function signUpAction(
   _prevState: AuthActionState,
   formData: FormData
@@ -106,7 +114,7 @@ export async function signUpAction(
     };
   }
 
-  redirect("/onboarding/passo-1?welcome=1");
+  redirect(safeInviteRedirect(formData) ?? "/onboarding/passo-1?welcome=1");
 }
 
 export async function signInAction(
@@ -127,7 +135,7 @@ export async function signInAction(
     return { status: "error", message: friendlyAuthError(error.message) };
   }
 
-  redirect("/painel");
+  redirect(safeInviteRedirect(formData) ?? "/painel");
 }
 
 export async function signOutAction() {

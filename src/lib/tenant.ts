@@ -357,6 +357,56 @@ export async function getCombosWithItems(supabase: SupabaseClient, restaurantId:
   })) as ComboWithItems[];
 }
 
+export type RestaurantMember = {
+  id: string;
+  user_id: string;
+  role: "OWNER" | "STAFF";
+  name: string | null;
+  phone: string | null;
+  email: string;
+  created_at: string;
+};
+
+/** Equipe do restaurante do usuário logado (nome + e-mail) — via RPC, já
+ * que auth.users não é exposto pelo PostgREST para um join direto; deriva o
+ * restaurante do próprio chamador (via restaurant_members), nunca recebe
+ * um restaurant_id do cliente. */
+export async function getRestaurantMembers(supabase: SupabaseClient): Promise<RestaurantMember[]> {
+  const { data, error } = await supabase.rpc("get_restaurant_members");
+  if (error) throw error;
+  return (data ?? []) as RestaurantMember[];
+}
+
+export type RestaurantInvite = {
+  id: string;
+  restaurant_id: string;
+  email: string;
+  role: "OWNER" | "STAFF";
+  token: string;
+  status: "pending" | "accepted" | "revoked";
+  invited_by: string;
+  accepted_by: string | null;
+  created_at: string;
+  updated_at: string;
+  expires_at: string;
+  accepted_at: string | null;
+};
+
+/** Convites do restaurante (pendentes, aceitos e revogados), mais recentes
+ * primeiro. Lido direto da tabela — RLS já garante que só membros vêem. */
+export async function getRestaurantInvites(
+  supabase: SupabaseClient,
+  restaurantId: string
+): Promise<RestaurantInvite[]> {
+  const { data, error } = await supabase
+    .from("restaurant_invites")
+    .select("*")
+    .eq("restaurant_id", restaurantId)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as RestaurantInvite[];
+}
+
 /**
  * Guarda de acesso para uma página `/onboarding/passo-N`. Redireciona para
  * /cadastro se não autenticado, e para /onboarding/passo-1 se o restaurante

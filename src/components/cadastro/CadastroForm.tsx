@@ -17,10 +17,30 @@ function SubmitButton({ label }: { label: string }) {
   );
 }
 
-export function CadastroForm({ mode }: { mode: "signup" | "login" }) {
+export function CadastroForm({
+  mode,
+  next,
+  defaultEmail,
+}: {
+  mode: "signup" | "login";
+  next?: string;
+  defaultEmail?: string;
+}) {
   const [signUpState, signUpFormAction] = useActionState(signUpAction, initialAuthState);
   const [signInState, signInFormAction] = useActionState(signInAction, initialAuthState);
   const [docInput, setDocInput] = useState("");
+
+  // Preserva next/email ao alternar entre "Criar conta" e "Entrar" — sem
+  // isso, quem veio de um link de convite (JON-27) perderia o destino de
+  // pós-login e teria que digitar o e-mail de novo ao trocar de aba.
+  const carryParams = new URLSearchParams();
+  if (next) carryParams.set("next", next);
+  if (defaultEmail) carryParams.set("email", defaultEmail);
+  function authLink(base: "/cadastro" | "/cadastro?mode=login"): string {
+    const query = carryParams.toString();
+    if (!query) return base;
+    return `${base}${base.includes("?") ? "&" : "?"}${query}`;
+  }
 
   if (mode === "login") {
     return (
@@ -31,7 +51,15 @@ export function CadastroForm({ mode }: { mode: "signup" | "login" }) {
         </div>
 
         <form action={signInFormAction} className="space-y-4">
-          <Field label="E-mail" name="email" type="email" autoComplete="email" required />
+          {next && <input type="hidden" name="next" value={next} />}
+          <Field
+            label="E-mail"
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            defaultValue={defaultEmail}
+          />
           <Field label="Senha" name="password" type="password" autoComplete="current-password" required />
 
           {signInState.status === "error" && <ErrorMessage message={signInState.message} />}
@@ -41,7 +69,7 @@ export function CadastroForm({ mode }: { mode: "signup" | "login" }) {
 
         <p className="text-center text-sm text-text-muted">
           Ainda não tem uma loja?{" "}
-          <Link href="/cadastro" className="font-semibold text-primary hover:underline">
+          <Link href={authLink("/cadastro")} className="font-semibold text-primary hover:underline">
             Criar minha loja grátis
           </Link>
         </p>
@@ -59,9 +87,17 @@ export function CadastroForm({ mode }: { mode: "signup" | "login" }) {
       </div>
 
       <form action={signUpFormAction} className="space-y-4">
+        {next && <input type="hidden" name="next" value={next} />}
         <Field label="Nome da loja" name="storeName" type="text" autoComplete="organization" required />
         <Field label="Nome completo" name="name" type="text" autoComplete="name" required />
-        <Field label="E-mail" name="email" type="email" autoComplete="email" required />
+        <Field
+          label="E-mail"
+          name="email"
+          type="email"
+          autoComplete="email"
+          required
+          defaultValue={defaultEmail}
+        />
         <Field label="Telefone" name="phone" type="tel" autoComplete="tel" required />
 
         <label className="block">
@@ -107,7 +143,7 @@ export function CadastroForm({ mode }: { mode: "signup" | "login" }) {
 
       <p className="text-center text-sm text-text-muted">
         Já tem uma conta?{" "}
-        <Link href="/cadastro?mode=login" className="font-semibold text-primary hover:underline">
+        <Link href={authLink("/cadastro?mode=login")} className="font-semibold text-primary hover:underline">
           Entrar
         </Link>
       </p>
@@ -122,6 +158,7 @@ function Field({
   autoComplete,
   required,
   minLength,
+  defaultValue,
 }: {
   label: string;
   name: string;
@@ -129,6 +166,7 @@ function Field({
   autoComplete?: string;
   required?: boolean;
   minLength?: number;
+  defaultValue?: string;
 }) {
   return (
     <label className="block">
@@ -139,6 +177,7 @@ function Field({
         autoComplete={autoComplete}
         required={required}
         minLength={minLength}
+        defaultValue={defaultValue}
         className="h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
       />
     </label>

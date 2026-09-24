@@ -55,6 +55,14 @@ export const initialInformacoesState: InformacoesActionState = { status: "idle" 
 export type AparenciaActionState = { status: "idle" | "success" | "error"; message?: string };
 export const initialAparenciaState: AparenciaActionState = { status: "idle" };
 
+// Convites de equipe (JON-27) — diferente dos tipos acima porque, no
+// sucesso, a tela precisa do link do convite recém-criado (inviteUrl) para
+// mostrar o botão "Copiar link" — não dá pra enviar e-mail de verdade ainda
+// (Resend sem domínio verificado), então o link é a única forma de
+// compartilhar o convite.
+export type InviteActionState = { status: "idle" | "success" | "error"; message?: string; inviteUrl?: string };
+export const initialInviteState: InviteActionState = { status: "idle" };
+
 export const WEEK_DAYS = [
   { value: 0, label: "Domingo" },
   { value: 1, label: "Segunda" },

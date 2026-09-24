@@ -11,13 +11,20 @@ const BENEFITS = [
 ];
 
 export default async function CadastroPage(props: PageProps<"/cadastro">) {
-  const { supabase, user } = await getAuthedUser();
-  if (user) {
-    redirect(await resolvePostAuthPath(supabase));
-  }
-
   const searchParams = await props.searchParams;
   const mode = searchParams.mode === "login" ? "login" : "signup";
+  const next = typeof searchParams.next === "string" ? searchParams.next : undefined;
+  const defaultEmail = typeof searchParams.email === "string" ? searchParams.email : undefined;
+  // Convite (JON-27): link "Criar conta"/"Entrar" a partir de /convite/[token]
+  // carrega ?next=/convite/token — se a pessoa já tem sessão (ex.: abriu o
+  // link de convite logada em outra aba), pula direto para lá em vez do
+  // destino padrão pós-login.
+  const isInviteNext = next !== undefined && /^\/convite\/[^/]+$/.test(next);
+
+  const { supabase, user } = await getAuthedUser();
+  if (user) {
+    redirect(isInviteNext ? next : await resolvePostAuthPath(supabase));
+  }
 
   return (
     <div className="min-h-screen bg-surface md:grid md:grid-cols-2">
@@ -48,7 +55,7 @@ export default async function CadastroPage(props: PageProps<"/cadastro">) {
 
       <div className="flex items-center justify-center p-6 md:p-12">
         <div className="w-full max-w-md rounded-2xl border border-border bg-surface-card p-8 shadow-[var(--shadow-modal)]">
-          <CadastroForm mode={mode} />
+          <CadastroForm mode={mode} next={next} defaultEmail={defaultEmail} />
         </div>
       </div>
     </div>
