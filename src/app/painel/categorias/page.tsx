@@ -14,5 +14,5 @@ export default async function CategoriasPage() {
     getCategoryProductCounts(supabase, restaurant.id),
   ]);
 
-  return <CategoriasClient initialCategories={categories} productCounts={productCounts} />;
+  return <CategoriasClient initialCategories={categories} productCounts={productCounts} storeSlug={restaurant.slug} />;
 }

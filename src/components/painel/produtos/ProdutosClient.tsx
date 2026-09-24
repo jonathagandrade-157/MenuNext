@@ -121,6 +121,7 @@ export function ProdutosClient({
 
   const availableCount = products.filter((p) => p.is_available).length;
   const unavailableCount = products.length - availableCount;
+  const activeCategoriesCount = categories.filter((c) => c.is_active).length;
   const editingProduct = editingId ? (products.find((p) => p.id === editingId) ?? null) : null;
   const deletingProduct = deletingId ? (products.find((p) => p.id === deletingId) ?? null) : null;
 
@@ -197,6 +198,25 @@ export function ProdutosClient({
         />
       ) : (
         <>
+          <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+            <Card className="p-4">
+              <p className="text-xs font-medium text-text-muted">Total cadastrado</p>
+              <p className="mt-1 text-2xl font-black text-graphite">{products.length}</p>
+            </Card>
+            <Card className="p-4">
+              <p className="text-xs font-medium text-text-muted">Disponíveis hoje</p>
+              <p className="mt-1 text-2xl font-black text-emerald">{availableCount}</p>
+            </Card>
+            <Card className="p-4">
+              <p className="text-xs font-medium text-text-muted">Pausados/Esgotados</p>
+              <p className="mt-1 text-2xl font-black text-graphite">{unavailableCount}</p>
+            </Card>
+            <Card className="p-4">
+              <p className="text-xs font-medium text-text-muted">Categorias ativas</p>
+              <p className="mt-1 text-2xl font-black text-graphite">{activeCategoriesCount}</p>
+            </Card>
+          </div>
+
           <Card className="flex flex-col gap-3 p-3.5 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
               <input

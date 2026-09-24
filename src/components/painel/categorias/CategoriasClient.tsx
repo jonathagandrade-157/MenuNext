@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -37,9 +38,11 @@ function ChevronDownIcon() {
 export function CategoriasClient({
   initialCategories,
   productCounts,
+  storeSlug,
 }: {
   initialCategories: Category[];
   productCounts: Record<string, number>;
+  storeSlug: string;
 }) {
   // Sincroniza com initialCategories quando o Server Component busca dados
   // novos (após revalidatePath numa Server Action) — ajuste durante o
@@ -77,6 +80,9 @@ export function CategoriasClient({
 
   const activeCount = categories.filter((c) => c.is_active).length;
   const inactiveCount = categories.length - activeCount;
+  const activeLinkedProducts = categories
+    .filter((c) => c.is_active)
+    .reduce((sum, c) => sum + (productCounts[c.id] ?? 0), 0);
 
   function handleToggle(category: Category) {
     setRowError(null);
@@ -294,6 +300,18 @@ export function CategoriasClient({
               </div>
             )}
           </Card>
+
+          <div className="flex flex-col items-start justify-between gap-2 text-xs font-medium text-text-muted sm:flex-row sm:items-center">
+            <p>
+              Total de <span className="font-bold text-graphite">{categories.length}</span> categoria
+              {categories.length === 1 ? "" : "s"} • <span className="font-bold text-graphite">{activeLinkedProducts}</span>{" "}
+              produto{activeLinkedProducts === 1 ? "" : "s"} ativo{activeLinkedProducts === 1 ? "" : "s"} vinculado
+              {activeLinkedProducts === 1 ? "" : "s"} no cardápio
+            </p>
+            <Link href={`/loja/${storeSlug}`} target="_blank" rel="noopener noreferrer" className="font-semibold text-primary hover:underline">
+              Visualizar no cardápio da loja →
+            </Link>
+          </div>
         </>
       )}
 
