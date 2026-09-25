@@ -57,3 +57,10 @@ export function getStartOfDayInTimeZone(now: Date, timeZone: string): Date {
   const offsetMinutes = getTimeZoneOffsetMinutes(new Date(midnightGuess), timeZone);
   return new Date(midnightGuess - offsetMinutes * 60000);
 }
+
+/** Ano/mês civil de `date` em `timeZone` — usado para "1º pedido neste mês"
+ * (Clientes, área de redesign), mesma lógica de fuso de getStartOfDayInTimeZone. */
+export function getYearMonthInTimeZone(date: Date, timeZone: string): { year: number; month: number } {
+  const { year, month } = getPartsInTimeZone(date, timeZone);
+  return { year, month };
+}

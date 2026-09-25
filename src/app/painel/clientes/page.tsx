@@ -1,12 +1,15 @@
 import { requireOwnerPage } from "@/lib/tenant";
-import { aggregateCustomers, getCustomerOrders } from "@/lib/customers";
+import { aggregateCustomers, getCustomerNotesByPhone, getCustomerOrders } from "@/lib/customers";
 import { ClientesView } from "@/components/painel/clientes/ClientesView";
 
 // Restrita ao OWNER (JON-10): fora do escopo operacional/cardápio.
 export default async function Page() {
   const { supabase, restaurant } = await requireOwnerPage();
 
-  const orders = await getCustomerOrders(supabase, restaurant.id);
+  const [orders, notesByPhone] = await Promise.all([
+    getCustomerOrders(supabase, restaurant.id),
+    getCustomerNotesByPhone(supabase, restaurant.id),
+  ]);
   const customers = aggregateCustomers(orders);
 
   return (
@@ -18,7 +21,7 @@ export default async function Page() {
         </p>
       </div>
 
-      <ClientesView customers={customers} />
+      <ClientesView customers={customers} notesByPhone={notesByPhone} now={new Date().toISOString()} />
     </div>
   );
 }
