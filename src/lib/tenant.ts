@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import type { PixKeyType } from "@/lib/pix";
 
 export type RestaurantStatus = "draft" | "active" | "paused" | "closed";
 
@@ -30,6 +31,9 @@ export type Restaurant = {
   estimated_delivery_max_minutes: number | null;
   payment_pix: boolean;
   payment_pix_key: string | null;
+  payment_pix_key_type: PixKeyType | null;
+  payment_pix_holder_name: string | null;
+  payment_pix_city: string | null;
   payment_cash: boolean;
   payment_card: boolean;
   logo_path: string | null;

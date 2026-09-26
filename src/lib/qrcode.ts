@@ -16,3 +16,14 @@ export async function generateStoreQrCodeDataUrl(url: string): Promise<string> {
     color: { dark: "#121826", light: "#ffffff" },
   });
 }
+
+/** Mesmo gerador acima, só que para o payload Pix BR Code (área Pagamentos)
+ * em vez da URL da loja — o conteúdo do QR é só uma string, o gerador não
+ * sabe nem precisa saber que é Pix. */
+export async function generatePixQrCodeDataUrl(brCode: string): Promise<string> {
+  return QRCode.toDataURL(brCode, {
+    margin: 1,
+    width: 280,
+    color: { dark: "#121826", light: "#ffffff" },
+  });
+}
