@@ -11,6 +11,7 @@ function getInitials(name: string): string {
 
 export function StoreHeader({
   name,
+  bio,
   coverUrl,
   logoUrl,
   openState,
@@ -21,6 +22,7 @@ export function StoreHeader({
   estimatedDeliveryMaxMinutes,
 }: {
   name: string;
+  bio: string | null;
   coverUrl: string | null;
   logoUrl: string | null;
   openState: StoreOpenState;
@@ -61,7 +63,7 @@ export function StoreHeader({
           </div>
           <div className="pb-1">
             <h1 className="text-xl font-extrabold tracking-tight text-graphite">{name}</h1>
-            <p className="text-xs font-medium text-text-muted">Cardápio digital</p>
+            <p className="text-xs font-medium text-text-muted">{bio || "Cardápio digital"}</p>
           </div>
         </div>
 

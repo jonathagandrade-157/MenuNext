@@ -4,8 +4,10 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getMyRestaurant } from "@/lib/tenant";
+import type { ContactInfoActionState } from "@/lib/form-state";
 
 const CONFIGURACOES_PATH = "/painel/configuracoes";
+const BIO_MAX_LENGTH = 160;
 
 /**
  * Pausa/reabre a loja (Configurações Gerais, JON-24) — único campo tocado é
@@ -42,4 +44,49 @@ export async function toggleRestaurantStatusAction(nextStatus: "active" | "pause
   revalidatePath(CONFIGURACOES_PATH);
   revalidatePath("/painel");
   return { ok: true };
+}
+
+/**
+ * Contato (WhatsApp/e-mail) e bio curta — únicos campos genuinamente
+ * ausentes desta tela (nome e endereço já são editáveis em
+ * /painel/informacoes, não duplicados aqui). bio e contact_whatsapp são
+ * públicos (get_public_restaurant_by_slug, StoreHeader/botão flutuante de
+ * WhatsApp na loja); contact_email fica só para uso interno.
+ */
+export async function saveContactInfoAction(
+  _prev: ContactInfoActionState,
+  formData: FormData
+): Promise<ContactInfoActionState> {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/cadastro");
+
+  const restaurant = await getMyRestaurant(supabase);
+  if (!restaurant) redirect("/onboarding/passo-1");
+
+  const contactWhatsapp = String(formData.get("contact_whatsapp") ?? "").replace(/\D/g, "");
+  const contactEmail = String(formData.get("contact_email") ?? "").trim();
+  const bio = String(formData.get("bio") ?? "").trim();
+
+  if (bio.length > BIO_MAX_LENGTH) {
+    return { status: "error", message: `A bio deve ter até ${BIO_MAX_LENGTH} caracteres.` };
+  }
+  if (contactEmail && !contactEmail.includes("@")) {
+    return { status: "error", message: "Informe um e-mail válido." };
+  }
+
+  const { error } = await supabase
+    .from("restaurants")
+    .update({
+      contact_whatsapp: contactWhatsapp || null,
+      contact_email: contactEmail || null,
+      bio: bio || null,
+    })
+    .eq("id", restaurant.id);
+  if (error) return { status: "error", message: "Não foi possível salvar. Tente novamente." };
+
+  revalidatePath(CONFIGURACOES_PATH);
+  return { status: "success" };
 }

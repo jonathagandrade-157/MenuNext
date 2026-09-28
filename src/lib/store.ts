@@ -43,6 +43,8 @@ export type PublicRestaurant = {
   payment_pix: boolean;
   payment_cash: boolean;
   payment_card: boolean;
+  bio: string | null;
+  contact_whatsapp: string | null;
 };
 
 /** Busca o restaurante pelo slug via RPC pública — null se não existir ou não estiver publicado. */

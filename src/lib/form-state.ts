@@ -68,6 +68,11 @@ export const initialInviteState: InviteActionState = { status: "idle" };
 export type PlatformSettingsActionState = { status: "idle" | "success" | "error"; message?: string };
 export const initialPlatformSettingsState: PlatformSettingsActionState = { status: "idle" };
 
+// Contato e bio do restaurante (/painel/configuracoes) — mesmo formato de
+// CategoryActionState/ProductActionState.
+export type ContactInfoActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialContactInfoState: ContactInfoActionState = { status: "idle" };
+
 export const WEEK_DAYS = [
   { value: 0, label: "Domingo" },
   { value: 1, label: "Segunda" },

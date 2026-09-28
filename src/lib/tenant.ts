@@ -38,6 +38,9 @@ export type Restaurant = {
   payment_card: boolean;
   logo_path: string | null;
   cover_path: string | null;
+  contact_whatsapp: string | null;
+  contact_email: string | null;
+  bio: string | null;
   created_at: string;
   updated_at: string;
 };

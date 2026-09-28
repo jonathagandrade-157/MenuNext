@@ -14,6 +14,7 @@ import { StoreHeader } from "@/components/loja/StoreHeader";
 import { StoreNotFound } from "@/components/loja/StoreNotFound";
 import { StoreOpenBadge } from "@/components/loja/StoreOpenBadge";
 import { StoreProductCard } from "@/components/loja/StoreProductCard";
+import { StoreWhatsAppButton } from "@/components/loja/StoreWhatsAppButton";
 
 export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug]">) {
   const { slug } = await params;
@@ -38,6 +39,7 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
     <div className="pb-24">
       <StoreHeader
         name={restaurant.name}
+        bio={restaurant.bio}
         coverUrl={restaurant.cover_path ? getImageUrl(restaurant.cover_path) : null}
         logoUrl={restaurant.logo_path ? getImageUrl(restaurant.logo_path) : null}
         openState={openState}
@@ -108,6 +110,8 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
       <p className="px-3.5 py-6 text-center text-[11px] font-medium text-text-muted">
         Tecnologia de pedidos online por Menu<span className="text-primary">Next</span>
       </p>
+
+      {restaurant.contact_whatsapp && <StoreWhatsAppButton whatsapp={restaurant.contact_whatsapp} storeName={restaurant.name} />}
 
       <StoreBottomNav slug={slug} />
     </div>
