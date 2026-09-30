@@ -2,10 +2,50 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
-import { uploadCoverAction, uploadLogoAction } from "@/lib/actions/aparencia";
-import { initialAparenciaState } from "@/lib/form-state";
+import { saveThemeColorAction, uploadCoverAction, uploadLogoAction } from "@/lib/actions/aparencia";
+import { initialAparenciaState, initialThemeColorState } from "@/lib/form-state";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
+
+const DEFAULT_PRIMARY_COLOR = "#f95721";
+
+function ThemeColorCard({ themePrimaryColor }: { themePrimaryColor: string | null }) {
+  const [state, formAction] = useActionState(saveThemeColorAction, initialThemeColorState);
+  const [color, setColor] = useState(themePrimaryColor ?? DEFAULT_PRIMARY_COLOR);
+
+  return (
+    <Card className="p-5">
+      <h2 className="text-sm font-bold text-graphite">Cor de destaque</h2>
+      <p className="mt-0.5 text-xs text-text-muted">
+        Usada em botões e destaques na sua loja pública. Não afeta o painel.
+      </p>
+
+      <form action={formAction} className="mt-4 space-y-3">
+        <div className="flex items-center gap-3">
+          <input
+            type="color"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            className="h-11 w-14 shrink-0 cursor-pointer rounded-lg border border-border bg-surface-card p-1"
+          />
+          <input
+            name="theme_primary_color"
+            type="text"
+            value={color}
+            onChange={(e) => setColor(e.target.value)}
+            placeholder={DEFAULT_PRIMARY_COLOR}
+            className="h-11 flex-1 rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          />
+        </div>
+
+        {state.status === "error" && <p className="text-xs font-semibold text-red">{state.message}</p>}
+        {state.status === "success" && <p className="text-xs font-semibold text-emerald">Salvo com sucesso!</p>}
+
+        <SubmitButton label="Salvar cor" />
+      </form>
+    </Card>
+  );
+}
 
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
@@ -78,7 +118,15 @@ function ImageUploadCard({
   );
 }
 
-export function AparenciaClient({ logoUrl, coverUrl }: { logoUrl: string | null; coverUrl: string | null }) {
+export function AparenciaClient({
+  logoUrl,
+  coverUrl,
+  themePrimaryColor,
+}: {
+  logoUrl: string | null;
+  coverUrl: string | null;
+  themePrimaryColor: string | null;
+}) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <ImageUploadCard
@@ -97,6 +145,7 @@ export function AparenciaClient({ logoUrl, coverUrl }: { logoUrl: string | null;
         action={uploadCoverAction}
         aspectClass="aspect-[3/1]"
       />
+      <ThemeColorCard themePrimaryColor={themePrimaryColor} />
     </div>
   );
 }

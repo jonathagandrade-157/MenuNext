@@ -35,8 +35,17 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
   const hasAnyProduct = categories.some((category) => category.products.length > 0);
   const isBrowsable = openState.status !== "closed_permanently";
 
+  // Cor de destaque por restaurante (área "Aparência" do redesign) — override
+  // inline de --color-primary só nesta subárvore, nunca no globals.css
+  // (compartilhado pelo painel de TODOS os restaurantes). O "Next" da marca
+  // MenuNext no rodapé usa uma cor fixa (não text-primary) de propósito, para
+  // não ser recolorido junto com a marca do restaurante.
+  const themeStyle = restaurant.theme_primary_color
+    ? ({ "--color-primary": restaurant.theme_primary_color } as React.CSSProperties)
+    : undefined;
+
   return (
-    <div className="pb-24">
+    <div className="pb-24" style={themeStyle}>
       <StoreHeader
         name={restaurant.name}
         bio={restaurant.bio}
@@ -108,7 +117,7 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
       )}
 
       <p className="px-3.5 py-6 text-center text-[11px] font-medium text-text-muted">
-        Tecnologia de pedidos online por Menu<span className="text-primary">Next</span>
+        Tecnologia de pedidos online por Menu<span className="text-[#f95721]">Next</span>
       </p>
 
       {restaurant.contact_whatsapp && <StoreWhatsAppButton whatsapp={restaurant.contact_whatsapp} storeName={restaurant.name} />}

@@ -6,7 +6,9 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
 import { uploadRestaurantCover, uploadRestaurantLogo } from "@/lib/storage/assets";
-import type { AparenciaActionState } from "@/lib/form-state";
+import type { AparenciaActionState, ThemeColorActionState } from "@/lib/form-state";
+
+const HEX_COLOR_PATTERN = /^#[0-9a-fA-F]{6}$/;
 
 const APARENCIA_PATH = "/painel/aparencia";
 
@@ -54,5 +56,30 @@ export async function uploadCoverAction(_prev: AparenciaActionState, formData: F
 
   revalidatePath(APARENCIA_PATH);
   revalidatePath("/painel");
+  return { status: "success" };
+}
+
+/**
+ * Cor primária da loja pública (área "Aparência" do redesign) — única peça
+ * implementada do motor de tema do mockup (paleta por IA, WCAG automático,
+ * produtos em destaque, banner promocional e preview ao vivo ficaram fora
+ * desta entrega, ver commit). Aplicada só em /loja/[slug] via CSS var
+ * inline — nunca no painel nem no globals.css, que são compartilhados por
+ * todos os restaurantes.
+ */
+export async function saveThemeColorAction(_prev: ThemeColorActionState, formData: FormData): Promise<ThemeColorActionState> {
+  const { supabase, restaurant } = await requireRestaurant();
+
+  const raw = String(formData.get("theme_primary_color") ?? "").trim();
+  const color = raw === "" ? null : raw;
+
+  if (color !== null && !HEX_COLOR_PATTERN.test(color)) {
+    return { status: "error", message: "Informe uma cor válida (ex.: #F95721)." };
+  }
+
+  const { error } = await supabase.from("restaurants").update({ theme_primary_color: color }).eq("id", restaurant.id);
+  if (error) return { status: "error", message: "Não foi possível salvar. Tente novamente." };
+
+  revalidatePath(APARENCIA_PATH);
   return { status: "success" };
 }

@@ -40,6 +40,7 @@ function makeRestaurant(overrides: Partial<Restaurant> = {}): Restaurant {
     contact_email: null,
     bio: null,
     free_delivery_threshold: null,
+    theme_primary_color: null,
     created_at: "2026-01-01T00:00:00Z",
     updated_at: "2026-01-01T00:00:00Z",
     ...overrides,

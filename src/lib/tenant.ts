@@ -42,6 +42,7 @@ export type Restaurant = {
   contact_email: string | null;
   bio: string | null;
   free_delivery_threshold: number | null;
+  theme_primary_color: string | null;
   created_at: string;
   updated_at: string;
 };

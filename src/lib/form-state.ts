@@ -78,6 +78,11 @@ export const initialContactInfoState: ContactInfoActionState = { status: "idle" 
 export type DeliveryZoneActionState = { status: "idle" | "success" | "error"; message?: string };
 export const initialDeliveryZoneState: DeliveryZoneActionState = { status: "idle" };
 
+// Cor primária do tema da loja (/painel/aparencia) — mesmo formato de
+// CategoryActionState/ProductActionState.
+export type ThemeColorActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialThemeColorState: ThemeColorActionState = { status: "idle" };
+
 export const WEEK_DAYS = [
   { value: 0, label: "Domingo" },
   { value: 1, label: "Segunda" },
