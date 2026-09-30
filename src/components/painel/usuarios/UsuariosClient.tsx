@@ -1,18 +1,39 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { EmptyState, ErrorState } from "@/components/ui/States";
 import { Modal } from "@/components/ui/Modal";
 import { CopyLinkButton } from "@/components/onboarding/CopyLinkButton";
-import { resendInviteAction, revokeInviteAction } from "@/lib/actions/invites";
+import { removeMemberAction, resendInviteAction, revokeInviteAction } from "@/lib/actions/invites";
 import type { RestaurantInvite, RestaurantMember } from "@/lib/tenant";
 import { InviteFormFields } from "./InviteFormFields";
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
+}
+
+function initialsOf(label: string): string {
+  const parts = label.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "?";
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+}
+
+function Avatar({ label, tone }: { label: string; tone: "owner" | "staff" | "invite" }) {
+  const toneClasses =
+    tone === "owner"
+      ? "bg-primary/15 text-primary"
+      : tone === "staff"
+        ? "bg-blue/15 text-blue"
+        : "bg-surface-subdued text-text-muted";
+  return (
+    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-bold ${toneClasses}`}>
+      {initialsOf(label)}
+    </div>
+  );
 }
 
 function inviteStatusBadge(invite: RestaurantInvite) {
@@ -34,13 +55,29 @@ export function UsuariosClient({
   const [inviteOpen, setInviteOpen] = useState(false);
   const [revoking, setRevoking] = useState<RestaurantInvite | null>(null);
   const [revokeError, setRevokeError] = useState<string | null>(null);
+  const [removing, setRemoving] = useState<RestaurantMember | null>(null);
+  const [removeError, setRemoveError] = useState<string | null>(null);
   const [resendUrl, setResendUrl] = useState<string | null>(null);
   const [resendError, setResendError] = useState<string | null>(null);
   const [pendingId, setPendingId] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
   const [isPending, startTransition] = useTransition();
 
   const pendingInvites = invites.filter((invite) => invite.status === "pending");
   const historyInvites = invites.filter((invite) => invite.status !== "pending");
+  const staffCount = members.filter((m) => m.role === "STAFF").length;
+
+  const normalizedSearch = search.trim().toLowerCase();
+  const filteredMembers = useMemo(() => {
+    if (!normalizedSearch) return members;
+    return members.filter((m) =>
+      [m.name, m.email, m.phone].some((field) => field?.toLowerCase().includes(normalizedSearch))
+    );
+  }, [members, normalizedSearch]);
+  const filteredPendingInvites = useMemo(() => {
+    if (!normalizedSearch) return pendingInvites;
+    return pendingInvites.filter((i) => i.email.toLowerCase().includes(normalizedSearch));
+  }, [pendingInvites, normalizedSearch]);
 
   function handleConfirmRevoke() {
     if (!revoking) return;
@@ -52,6 +89,19 @@ export function UsuariosClient({
         return;
       }
       setRevoking(null);
+    });
+  }
+
+  function handleConfirmRemove() {
+    if (!removing) return;
+    setRemoveError(null);
+    startTransition(async () => {
+      const result = await removeMemberAction(removing.id);
+      if (!result.ok) {
+        setRemoveError(result.error ?? "Não foi possível remover este membro.");
+        return;
+      }
+      setRemoving(null);
     });
   }
 
@@ -90,33 +140,83 @@ export function UsuariosClient({
         </Button>
       </div>
 
+      <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
+        <Card className="p-4">
+          <p className="text-xs font-medium text-text-muted">Total de usuários</p>
+          <p className="mt-1 text-2xl font-black text-graphite">{members.length}</p>
+        </Card>
+        <Card className="p-4">
+          <p className="text-xs font-medium text-text-muted">Colaboradores</p>
+          <p className="mt-1 text-2xl font-black text-graphite">{staffCount}</p>
+        </Card>
+        <Card className="p-4">
+          <p className="text-xs font-medium text-text-muted">Convites pendentes</p>
+          <p className="mt-1 text-2xl font-black text-graphite">{pendingInvites.length}</p>
+        </Card>
+      </div>
+
+      <Card className="p-3.5">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Buscar por nome, e-mail ou telefone..."
+          className="h-9 w-full max-w-md rounded-lg border border-border bg-surface px-3 text-xs text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+        />
+      </Card>
+
+      {removeError && <ErrorState message={removeError} />}
+
       <Card className="overflow-hidden p-0">
         <div className="border-b border-border bg-surface-subdued/70 px-5 py-3">
-          <h2 className="text-sm font-bold text-graphite">Equipe ({members.length})</h2>
+          <h2 className="text-sm font-bold text-graphite">Equipe ({filteredMembers.length})</h2>
         </div>
         <div className="divide-y divide-border">
-          {members.map((member) => (
+          {filteredMembers.map((member) => (
             <div key={member.id} className="flex items-center justify-between gap-3 px-5 py-3.5">
-              <div className="min-w-0">
-                <p className="truncate text-sm font-bold text-graphite">
-                  {member.name || member.email}
-                  {member.user_id === currentUserId && (
-                    <span className="ml-2 text-xs font-medium text-text-muted">(Você)</span>
-                  )}
-                </p>
-                <p className="truncate text-xs text-text-muted">{member.email}</p>
+              <div className="flex min-w-0 items-center gap-3">
+                <Avatar label={member.name || member.email} tone={member.role === "OWNER" ? "owner" : "staff"} />
+                <div className="min-w-0">
+                  <p className="truncate text-sm font-bold text-graphite">
+                    {member.name || member.email}
+                    {member.user_id === currentUserId && (
+                      <span className="ml-2 text-xs font-medium text-text-muted">(Você)</span>
+                    )}
+                  </p>
+                  <p className="truncate text-xs text-text-muted">{member.email}</p>
+                  {member.phone && <p className="truncate text-xs text-text-muted">{member.phone}</p>}
+                </div>
               </div>
-              <Badge tone={member.role === "OWNER" ? "info" : "neutral"}>
-                {member.role === "OWNER" ? "Proprietário" : "Staff"}
-              </Badge>
+              <div className="flex shrink-0 items-center gap-2">
+                <Badge tone={member.role === "OWNER" ? "info" : "neutral"}>
+                  {member.role === "OWNER" ? "Proprietário" : "Colaborador"}
+                </Badge>
+                {member.role === "STAFF" && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRemoveError(null);
+                      setRemoving(member);
+                    }}
+                    className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
+                  >
+                    Remover
+                  </button>
+                )}
+              </div>
             </div>
           ))}
+          {filteredMembers.length === 0 && (
+            <div className="px-5 py-8">
+              <EmptyState title="Nenhum membro encontrado." description="Ajuste a busca ou convide alguém novo." />
+            </div>
+          )}
         </div>
       </Card>
 
       <Card className="overflow-hidden p-0">
         <div className="border-b border-border bg-surface-subdued/70 px-5 py-3">
-          <h2 className="text-sm font-bold text-graphite">Convites pendentes ({pendingInvites.length})</h2>
+          <h2 className="text-sm font-bold text-graphite">Convites pendentes ({filteredPendingInvites.length})</h2>
         </div>
 
           {(revokeError || resendError) && (
@@ -125,7 +225,7 @@ export function UsuariosClient({
             </div>
           )}
 
-          {pendingInvites.length === 0 ? (
+          {filteredPendingInvites.length === 0 ? (
             <div className="px-5 py-8">
               <EmptyState
                 title="Nenhum convite pendente."
@@ -134,13 +234,16 @@ export function UsuariosClient({
             </div>
           ) : (
             <div className="divide-y divide-border">
-              {pendingInvites.map((invite) => (
+              {filteredPendingInvites.map((invite) => (
                 <div key={invite.id} className="flex items-center justify-between gap-3 px-5 py-3.5">
-                  <div className="min-w-0">
-                    <p className="truncate text-sm font-bold text-graphite">{invite.email}</p>
-                    <p className="text-xs text-text-muted">Enviado em {formatDate(invite.created_at)}</p>
+                  <div className="flex min-w-0 items-center gap-3">
+                    <Avatar label={invite.email} tone="invite" />
+                    <div className="min-w-0">
+                      <p className="truncate text-sm font-bold text-graphite">{invite.email}</p>
+                      <p className="text-xs text-text-muted">Enviado em {formatDate(invite.created_at)}</p>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex shrink-0 items-center gap-2">
                     {inviteStatusBadge(invite)}
                     <button
                       type="button"
@@ -174,9 +277,12 @@ export function UsuariosClient({
               <div className="divide-y divide-border">
                 {historyInvites.map((invite) => (
                   <div key={invite.id} className="flex items-center justify-between gap-3 px-5 py-3.5 opacity-70">
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-bold text-graphite">{invite.email}</p>
-                      <p className="text-xs text-text-muted">Enviado em {formatDate(invite.created_at)}</p>
+                    <div className="flex min-w-0 items-center gap-3">
+                      <Avatar label={invite.email} tone="invite" />
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-bold text-graphite">{invite.email}</p>
+                        <p className="text-xs text-text-muted">Enviado em {formatDate(invite.created_at)}</p>
+                      </div>
                     </div>
                     {inviteStatusBadge(invite)}
                   </div>
@@ -208,6 +314,29 @@ export function UsuariosClient({
             >
               {isPending && <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}
               Revogar
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      <Modal open={removing !== null} onClose={() => setRemoving(null)} title="Remover da equipe?">
+        <div className="space-y-4">
+          <p className="text-sm text-text-muted">
+            <span className="font-semibold text-graphite">{removing?.name || removing?.email}</span> perderá o
+            acesso ao painel imediatamente. Você pode convidar essa pessoa novamente depois, se precisar.
+          </p>
+          <div className="flex justify-end gap-2">
+            <Button variant="secondary" onClick={() => setRemoving(null)} disabled={isPending}>
+              Cancelar
+            </Button>
+            <button
+              type="button"
+              onClick={handleConfirmRemove}
+              disabled={isPending}
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {isPending && <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}
+              Remover
             </button>
           </div>
         </div>

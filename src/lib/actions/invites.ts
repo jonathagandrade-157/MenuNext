@@ -136,3 +136,26 @@ export async function acceptInviteAction(token: string): Promise<{ ok: boolean; 
 
   return { ok: true };
 }
+
+function friendlyRemoveMemberError(message: string): string {
+  const normalized = message.toLowerCase();
+  if (normalized.includes("cannot_remove_owner")) return "Não é possível remover o proprietário da equipe.";
+  if (normalized.includes("member_not_found")) return "Membro não encontrado.";
+  if (normalized.includes("not_authorized")) return "Você não tem permissão para gerenciar a equipe.";
+  return "Não foi possível remover este membro. Tente novamente.";
+}
+
+// ---------------------------------------------------------------------------
+// Remover membro (STAFF) da equipe — revoga o acesso ao painel imediatamente
+// (toda leitura do painel já é condicionada à existência da linha em
+// restaurant_members via RLS). Clique isolado, não formulário.
+// ---------------------------------------------------------------------------
+export async function removeMemberAction(memberId: string): Promise<{ ok: boolean; error?: string }> {
+  const { supabase } = await requireOwner();
+
+  const { error } = await supabase.rpc("remove_restaurant_member", { p_member_id: memberId });
+  if (error) return { ok: false, error: friendlyRemoveMemberError(error.message) };
+
+  revalidatePath(USUARIOS_PATH);
+  return { ok: true };
+}
