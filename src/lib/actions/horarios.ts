@@ -22,11 +22,22 @@ async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaura
   return { supabase, restaurant };
 }
 
+const MAX_PERIODS_PER_DAY = 3;
+
 /**
- * Edição de horários de funcionamento (separação onboarding/painel) — mesma
- * validação e mesmo upsert em business_hours do Passo 5 do onboarding
- * (savePasso5Action, src/lib/actions/onboarding.ts), mas sem chamar
- * advanceStep(): ao salvar, permanece em /painel/horarios.
+ * Edição de horários de funcionamento — cada dia pode ter até
+ * MAX_PERIODS_PER_DAY períodos (ex.: almoço/jantar com intervalo fechado,
+ * área "Horários" do redesign). Um dia fechado é representado pela
+ * ausência de linhas, nunca um boolean is_open (removido na migration
+ * add_business_hours_periods) — por isso salvar substitui TODAS as linhas
+ * do restaurante (delete + insert) em vez de upsert por chave, que exigiria
+ * calcular quais period_order remover quando o lojista reduz o número de
+ * turnos de um dia.
+ *
+ * Diferente do onboarding (Passo 5, savePasso5Action em
+ * src/lib/actions/onboarding.ts) — este é só o único ponto que já
+ * escreve/lê múltiplos períodos; o onboarding continua salvando 1 período
+ * por dia, decisão de escopo para não reescrever aquela UI.
  */
 export async function saveHorariosConfigAction(
   _prev: HorariosActionState,
@@ -34,26 +45,30 @@ export async function saveHorariosConfigAction(
 ): Promise<HorariosActionState> {
   const { supabase, restaurant } = await requireRestaurant();
 
-  const rows = WEEK_DAYS.map(({ value }) => {
-    const isOpen = formData.get(`is_open_${value}`) === "on";
-    const opensAt = String(formData.get(`opens_at_${value}`) ?? "");
-    const closesAt = String(formData.get(`closes_at_${value}`) ?? "");
-    return {
-      restaurant_id: restaurant.id,
-      day_of_week: value,
-      is_open: isOpen,
-      opens_at: isOpen && opensAt ? opensAt : null,
-      closes_at: isOpen && closesAt ? closesAt : null,
-    };
-  });
+  const rows: { restaurant_id: string; day_of_week: number; period_order: number; opens_at: string; closes_at: string }[] = [];
 
-  const anyOpenMissingHours = rows.some((row) => row.is_open && (!row.opens_at || !row.closes_at));
-  if (anyOpenMissingHours) {
-    return { status: "error", message: "Informe horário de abertura e fechamento para os dias abertos." };
+  for (const { value, label } of WEEK_DAYS) {
+    const isOpen = formData.get(`is_open_${value}`) === "on";
+    if (!isOpen) continue;
+
+    const periodCount = Math.min(Number(formData.get(`period_count_${value}`) ?? 1) || 1, MAX_PERIODS_PER_DAY);
+    for (let period = 1; period <= periodCount; period++) {
+      const opensAt = String(formData.get(`opens_at_${value}_${period}`) ?? "");
+      const closesAt = String(formData.get(`closes_at_${value}_${period}`) ?? "");
+      if (!opensAt || !closesAt) {
+        return { status: "error", message: `Informe abertura e fechamento de todos os períodos de ${label}.` };
+      }
+      rows.push({ restaurant_id: restaurant.id, day_of_week: value, period_order: period, opens_at: opensAt, closes_at: closesAt });
+    }
   }
 
-  const { error } = await supabase.from("business_hours").upsert(rows, { onConflict: "restaurant_id,day_of_week" });
-  if (error) return { status: "error", message: "Não foi possível salvar os horários. Tente novamente." };
+  const { error: deleteError } = await supabase.from("business_hours").delete().eq("restaurant_id", restaurant.id);
+  if (deleteError) return { status: "error", message: "Não foi possível salvar os horários. Tente novamente." };
+
+  if (rows.length > 0) {
+    const { error: insertError } = await supabase.from("business_hours").insert(rows);
+    if (insertError) return { status: "error", message: "Não foi possível salvar os horários. Tente novamente." };
+  }
 
   revalidatePath(HORARIOS_PATH);
   revalidatePath("/painel");

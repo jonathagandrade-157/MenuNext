@@ -26,7 +26,7 @@ function SaveButton() {
 }
 
 function openDaysSummary(businessHours: BusinessHour[]): string {
-  const openDays = WEEK_DAYS.filter((day) => businessHours.find((h) => h.day_of_week === day.value)?.is_open);
+  const openDays = WEEK_DAYS.filter((day) => businessHours.some((h) => h.day_of_week === day.value));
   if (openDays.length === 0) return "Nenhum dia configurado ainda.";
   if (openDays.length === 7) return "Todos os dias da semana.";
   return openDays.map((d) => d.label).join(", ");

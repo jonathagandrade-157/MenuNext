@@ -164,12 +164,16 @@ export async function requireOwnerPage(): Promise<{ supabase: SupabaseClient; re
   return { supabase, restaurant };
 }
 
+/** Um período de funcionamento (área "Horários" do redesign — antes, 1
+ * linha por dia; agora cada linha é um turno, period_order 1..3). Um dia
+ * sem nenhuma linha está fechado — não existe mais um boolean is_open
+ * redundante com a própria presença das linhas. */
 export type BusinessHour = {
   restaurant_id: string;
   day_of_week: number;
-  is_open: boolean;
-  opens_at: string | null;
-  closes_at: string | null;
+  period_order: number;
+  opens_at: string;
+  closes_at: string;
 };
 
 export async function getBusinessHours(supabase: SupabaseClient, restaurantId: string): Promise<BusinessHour[]> {
@@ -177,7 +181,8 @@ export async function getBusinessHours(supabase: SupabaseClient, restaurantId: s
     .from("business_hours")
     .select("*")
     .eq("restaurant_id", restaurantId)
-    .order("day_of_week");
+    .order("day_of_week")
+    .order("period_order");
   if (error) throw error;
   return (data ?? []) as BusinessHour[];
 }

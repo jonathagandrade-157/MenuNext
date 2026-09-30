@@ -5,7 +5,7 @@ import type { BusinessHour } from "./tenant";
 function hour(overrides: Partial<BusinessHour> & { day_of_week: number }): BusinessHour {
   return {
     restaurant_id: "r1",
-    is_open: true,
+    period_order: 1,
     opens_at: "11:00",
     closes_at: "23:00",
     ...overrides,
@@ -54,13 +54,6 @@ describe("computeStoreOpenState — TESTE 12 (loja fechada) e estados básicos",
     });
   });
 
-  it("ativo mas o dia está marcado como fechado (is_open = false) -> fechado por horário", () => {
-    const hours = [hour({ day_of_week: 3, is_open: false })];
-    expect(computeStoreOpenState("active", hours, wednesdayAt(15))).toEqual<StoreOpenState>({
-      status: "closed_hours",
-    });
-  });
-
   it("ativo sem nenhum horário cadastrado para o dia -> fechado por horário", () => {
     const hours = [hour({ day_of_week: 4 })]; // só quinta, não quarta
     expect(computeStoreOpenState("active", hours, wednesdayAt(15))).toEqual<StoreOpenState>({
@@ -87,6 +80,32 @@ describe("computeStoreOpenState — TESTE 12 (loja fechada) e estados básicos",
     expect(computeStoreOpenState("active", hours, wednesdayAt(10))).toEqual<StoreOpenState>({
       status: "closed_hours",
     });
+  });
+
+  it("múltiplos turnos no mesmo dia (almoço/jantar): aberto dentro do almoço", () => {
+    const hours = [
+      hour({ day_of_week: 3, period_order: 1, opens_at: "11:00", closes_at: "15:00" }),
+      hour({ day_of_week: 3, period_order: 2, opens_at: "18:00", closes_at: "23:00" }),
+    ];
+    expect(computeStoreOpenState("active", hours, wednesdayAt(12))).toEqual<StoreOpenState>({ status: "open" });
+  });
+
+  it("múltiplos turnos no mesmo dia: fechado no intervalo entre os turnos", () => {
+    const hours = [
+      hour({ day_of_week: 3, period_order: 1, opens_at: "11:00", closes_at: "15:00" }),
+      hour({ day_of_week: 3, period_order: 2, opens_at: "18:00", closes_at: "23:00" }),
+    ];
+    expect(computeStoreOpenState("active", hours, wednesdayAt(16))).toEqual<StoreOpenState>({
+      status: "closed_hours",
+    });
+  });
+
+  it("múltiplos turnos no mesmo dia: aberto dentro do jantar", () => {
+    const hours = [
+      hour({ day_of_week: 3, period_order: 1, opens_at: "11:00", closes_at: "15:00" }),
+      hour({ day_of_week: 3, period_order: 2, opens_at: "18:00", closes_at: "23:00" }),
+    ];
+    expect(computeStoreOpenState("active", hours, wednesdayAt(19))).toEqual<StoreOpenState>({ status: "open" });
   });
 });
 

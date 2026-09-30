@@ -10,15 +10,20 @@ const skipStep5 = skipOnboardingStepAction.bind(null, 5);
 
 export function Passo5Form({ businessHours }: { businessHours: BusinessHour[] }) {
   const [state, formAction] = useActionState(savePasso5Action, initialStepState);
-  const byDay = new Map(businessHours.map((row) => [row.day_of_week, row]));
+  // Passo 5 só lê/escreve period_order=1 por dia (formulário de múltiplos
+  // turnos é só no painel, /painel/horarios) — presença de QUALQUER período
+  // no dia conta como aberto, mesmo que period_order 1 especificamente não
+  // exista (caso raro: lojista configurou turnos só pelo painel).
+  const firstPeriodByDay = new Map(businessHours.filter((row) => row.period_order === 1).map((row) => [row.day_of_week, row]));
+  const openDaysSet = new Set(businessHours.map((row) => row.day_of_week));
   const [openDays, setOpenDays] = useState<Record<number, boolean>>(
-    Object.fromEntries(WEEK_DAYS.map(({ value }) => [value, byDay.get(value)?.is_open ?? false]))
+    Object.fromEntries(WEEK_DAYS.map(({ value }) => [value, openDaysSet.has(value)]))
   );
 
   return (
     <form action={formAction} className="space-y-3">
       {WEEK_DAYS.map(({ value, label }) => {
-        const row = byDay.get(value);
+        const row = firstPeriodByDay.get(value);
         const isOpen = openDays[value];
         return (
           <div key={value} className="flex flex-col gap-3 rounded-xl border border-border p-4 sm:flex-row sm:items-center">

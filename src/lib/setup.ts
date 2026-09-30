@@ -51,7 +51,8 @@ export type SetupCounts = {
  * - Identidade: logo enviado (restaurants.logo_path).
  * - Produtos: pelo menos 1 produto disponível (is_available = true).
  * - Categorias: pelo menos 1 categoria ativa (is_active = true).
- * - Horários: pelo menos 1 dia com is_open = true em business_hours.
+ * - Horários: pelo menos 1 período cadastrado em business_hours (um dia
+ *   sem nenhuma linha está fechado, não existe mais is_open).
  * - Pagamentos: pelo menos uma forma aceita (payment_pix/cash/card).
  * - Entrega: retirada habilitada, OU delivery habilitado com taxa e raio definidos.
  * - Aparência: capa enviada (restaurants.cover_path).
@@ -162,7 +163,7 @@ export async function getSetupChecklist(supabase: SupabaseClient, restaurant: Re
   const [productsResult, categoriesResult, hoursResult] = await Promise.all([
     supabase.from("products").select("id", { count: "exact", head: true }).eq("restaurant_id", restaurant.id).eq("is_available", true),
     supabase.from("categories").select("id", { count: "exact", head: true }).eq("restaurant_id", restaurant.id).eq("is_active", true),
-    supabase.from("business_hours").select("id", { count: "exact", head: true }).eq("restaurant_id", restaurant.id).eq("is_open", true),
+    supabase.from("business_hours").select("id", { count: "exact", head: true }).eq("restaurant_id", restaurant.id),
   ]);
 
   if (productsResult.error) throw productsResult.error;

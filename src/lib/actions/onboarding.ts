@@ -283,31 +283,36 @@ export async function savePasso4Action(_prev: StepActionState, formData: FormDat
 // Passo 5 — horários de funcionamento
 // ---------------------------------------------------------------------------
 
+/**
+ * Passo 5 continua salvando 1 período por dia (period_order=1) — o
+ * formulário de múltiplos turnos é só no painel (/painel/horarios,
+ * saveHorariosConfigAction), decisão de escopo do redesign de Horários.
+ * Um dia fechado é a ausência de linha (is_open não existe mais desde
+ * add_business_hours_periods) — por isso delete+insert em vez de upsert.
+ */
 export async function savePasso5Action(_prev: StepActionState, formData: FormData): Promise<StepActionState> {
   const { supabase, restaurant } = await requireRestaurant();
 
-  const rows = WEEK_DAYS.map(({ value }) => {
+  const rows: { restaurant_id: string; day_of_week: number; period_order: number; opens_at: string; closes_at: string }[] = [];
+
+  for (const { value } of WEEK_DAYS) {
     const isOpen = formData.get(`is_open_${value}`) === "on";
+    if (!isOpen) continue;
     const opensAt = String(formData.get(`opens_at_${value}`) ?? "");
     const closesAt = String(formData.get(`closes_at_${value}`) ?? "");
-    return {
-      restaurant_id: restaurant.id,
-      day_of_week: value,
-      is_open: isOpen,
-      opens_at: isOpen && opensAt ? opensAt : null,
-      closes_at: isOpen && closesAt ? closesAt : null,
-    };
-  });
-
-  const anyOpenMissingHours = rows.some((row) => row.is_open && (!row.opens_at || !row.closes_at));
-  if (anyOpenMissingHours) {
-    return { status: "error", message: "Informe horário de abertura e fechamento para os dias abertos." };
+    if (!opensAt || !closesAt) {
+      return { status: "error", message: "Informe horário de abertura e fechamento para os dias abertos." };
+    }
+    rows.push({ restaurant_id: restaurant.id, day_of_week: value, period_order: 1, opens_at: opensAt, closes_at: closesAt });
   }
 
-  const { error } = await supabase
-    .from("business_hours")
-    .upsert(rows, { onConflict: "restaurant_id,day_of_week" });
-  if (error) return { status: "error", message: "Não foi possível salvar os horários. Tente novamente." };
+  const { error: deleteError } = await supabase.from("business_hours").delete().eq("restaurant_id", restaurant.id);
+  if (deleteError) return { status: "error", message: "Não foi possível salvar os horários. Tente novamente." };
+
+  if (rows.length > 0) {
+    const { error: insertError } = await supabase.from("business_hours").insert(rows);
+    if (insertError) return { status: "error", message: "Não foi possível salvar os horários. Tente novamente." };
+  }
 
   await advanceStep(supabase, restaurant, 5, true);
   return { status: "idle" };

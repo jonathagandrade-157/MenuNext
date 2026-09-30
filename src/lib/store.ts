@@ -220,7 +220,8 @@ export async function getPublicBusinessHours(supabase: SupabaseClient, restauran
     .from("business_hours")
     .select("*")
     .eq("restaurant_id", restaurantId)
-    .order("day_of_week");
+    .order("day_of_week")
+    .order("period_order");
   if (error) throw error;
   return (data ?? []) as BusinessHour[];
 }
@@ -304,7 +305,9 @@ function timeToMinutes(time: string): number {
  * business_hours do dia atual — nunca um "Aberto" fixo no código. `status`
  * "paused"/"closed" sempre vencem (a loja não deve parecer aberta só porque
  * bateu o horário); só quando "active" é que o horário do dia decide.
- * Suporta horário que passa da meia-noite (ex.: 18:00–02:00).
+ * Um dia pode ter múltiplos períodos (área "Horários" do redesign, ex.:
+ * almoço/jantar) — aberto se o horário atual cair em QUALQUER um deles.
+ * Suporta período que passa da meia-noite (ex.: 18:00–02:00).
  */
 export function computeStoreOpenState(
   status: RestaurantStatus,
@@ -314,18 +317,16 @@ export function computeStoreOpenState(
   if (status === "paused") return { status: "paused" };
   if (status === "closed" || status === "draft") return { status: "closed_permanently" };
 
-  const today = businessHours.find((h) => h.day_of_week === now.getDay());
-  if (!today || !today.is_open || !today.opens_at || !today.closes_at) {
-    return { status: "closed_hours" };
-  }
-
+  const todayPeriods = businessHours.filter((h) => h.day_of_week === now.getDay());
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
-  const opens = timeToMinutes(today.opens_at);
-  const closes = timeToMinutes(today.closes_at);
 
-  const isWithinRange = closes > opens ? nowMinutes >= opens && nowMinutes < closes : nowMinutes >= opens || nowMinutes < closes;
+  const isWithinAnyPeriod = todayPeriods.some((period) => {
+    const opens = timeToMinutes(period.opens_at);
+    const closes = timeToMinutes(period.closes_at);
+    return closes > opens ? nowMinutes >= opens && nowMinutes < closes : nowMinutes >= opens || nowMinutes < closes;
+  });
 
-  return isWithinRange ? { status: "open" } : { status: "closed_hours" };
+  return isWithinAnyPeriod ? { status: "open" } : { status: "closed_hours" };
 }
 
 export function formatCurrencyBRL(value: number): string {

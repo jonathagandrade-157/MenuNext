@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/Button";
 import { WEEK_DAYS } from "@/lib/form-state";
 import type { BusinessHour } from "@/lib/tenant";
 
+const MAX_PERIODS_PER_DAY = 3;
+const DEFAULT_PERIOD = { opensAt: "08:00", closesAt: "18:00" };
+
 function SaveButton() {
   const { pending } = useFormStatus();
   return (
@@ -17,57 +20,123 @@ function SaveButton() {
   );
 }
 
+type Period = { opensAt: string; closesAt: string };
+
+function groupPeriodsByDay(businessHours: BusinessHour[]): Record<number, Period[]> {
+  const byDay: Record<number, Period[]> = {};
+  for (const row of businessHours) {
+    const list = byDay[row.day_of_week] ?? [];
+    list[row.period_order - 1] = { opensAt: row.opens_at.slice(0, 5), closesAt: row.closes_at.slice(0, 5) };
+    byDay[row.day_of_week] = list;
+  }
+  return byDay;
+}
+
 /**
- * Mesma UI de dias/horários do Passo 5 do onboarding (Passo5Form), sem o
- * rodapé de navegação de etapa (Voltar/Pular) — aqui é só "Salvar", e
- * salvar mantém o lojista em /painel/horarios.
+ * Um dia pode ter até MAX_PERIODS_PER_DAY períodos (ex.: almoço/jantar com
+ * intervalo fechado, área "Horários" do redesign — antes só 1 janela por
+ * dia). Cada período vira 2 inputs nomeados opens_at_{dia}_{período} /
+ * closes_at_{dia}_{período}, lidos por saveHorariosConfigAction; um hidden
+ * period_count_{dia} informa quantos períodos aquele dia tem no submit.
  */
 export function HorariosForm({ businessHours }: { businessHours: BusinessHour[] }) {
   const [state, formAction] = useActionState(saveHorariosConfigAction, initialHorariosState);
-  const byDay = new Map(businessHours.map((row) => [row.day_of_week, row]));
+
+  const initialPeriods = groupPeriodsByDay(businessHours);
   const [openDays, setOpenDays] = useState<Record<number, boolean>>(
-    Object.fromEntries(WEEK_DAYS.map(({ value }) => [value, byDay.get(value)?.is_open ?? false]))
+    Object.fromEntries(WEEK_DAYS.map(({ value }) => [value, (initialPeriods[value]?.length ?? 0) > 0]))
   );
+  const [periodsByDay, setPeriodsByDay] = useState<Record<number, Period[]>>(
+    Object.fromEntries(WEEK_DAYS.map(({ value }) => [value, initialPeriods[value]?.length ? initialPeriods[value] : [DEFAULT_PERIOD]]))
+  );
+
+  function addPeriod(day: number) {
+    setPeriodsByDay((prev) => {
+      const current = prev[day] ?? [];
+      if (current.length >= MAX_PERIODS_PER_DAY) return prev;
+      return { ...prev, [day]: [...current, DEFAULT_PERIOD] };
+    });
+  }
+
+  function removePeriod(day: number, index: number) {
+    setPeriodsByDay((prev) => {
+      const current = prev[day] ?? [];
+      if (current.length <= 1) return prev;
+      return { ...prev, [day]: current.filter((_, i) => i !== index) };
+    });
+  }
+
+  function updatePeriod(day: number, index: number, field: keyof Period, value: string) {
+    setPeriodsByDay((prev) => {
+      const current = [...(prev[day] ?? [])];
+      current[index] = { ...current[index], [field]: value };
+      return { ...prev, [day]: current };
+    });
+  }
 
   return (
     <form action={formAction} className="space-y-6">
       <div className="space-y-3">
         {WEEK_DAYS.map(({ value, label }) => {
-          const row = byDay.get(value);
           const isOpen = openDays[value];
+          const periods = periodsByDay[value] ?? [];
           return (
-            <div
-              key={value}
-              className="flex flex-col gap-3 rounded-xl border border-border bg-surface-card p-4 sm:flex-row sm:items-center"
-            >
-              <label className="flex w-36 shrink-0 cursor-pointer items-center gap-2">
-                <input
-                  type="checkbox"
-                  name={`is_open_${value}`}
-                  checked={isOpen}
-                  onChange={(e) => setOpenDays((prev) => ({ ...prev, [value]: e.target.checked }))}
-                  className="h-5 w-5 accent-primary"
-                />
-                <span className="text-sm font-semibold text-graphite">{label}</span>
-              </label>
-              {isOpen ? (
-                <div className="flex flex-1 items-center gap-2">
+            <div key={value} className="rounded-xl border border-border bg-surface-card p-4">
+              <div className="flex items-center justify-between gap-3">
+                <label className="flex cursor-pointer items-center gap-2">
                   <input
-                    type="time"
-                    name={`opens_at_${value}`}
-                    defaultValue={row?.opens_at?.slice(0, 5) ?? "08:00"}
-                    className="h-10 rounded-lg border border-border px-2 text-sm"
+                    type="checkbox"
+                    name={`is_open_${value}`}
+                    checked={isOpen}
+                    onChange={(e) => setOpenDays((prev) => ({ ...prev, [value]: e.target.checked }))}
+                    className="h-5 w-5 accent-primary"
                   />
-                  <span className="text-sm text-text-muted">às</span>
-                  <input
-                    type="time"
-                    name={`closes_at_${value}`}
-                    defaultValue={row?.closes_at?.slice(0, 5) ?? "18:00"}
-                    className="h-10 rounded-lg border border-border px-2 text-sm"
-                  />
+                  <span className="text-sm font-semibold text-graphite">{label}</span>
+                </label>
+                {!isOpen && <span className="text-sm text-text-muted">Fechado</span>}
+              </div>
+
+              {isOpen && (
+                <div className="mt-3 space-y-2 sm:pl-7">
+                  <input type="hidden" name={`period_count_${value}`} value={periods.length} />
+                  {periods.map((period, index) => (
+                    <div key={index} className="flex flex-wrap items-center gap-2">
+                      <input
+                        type="time"
+                        name={`opens_at_${value}_${index + 1}`}
+                        value={period.opensAt}
+                        onChange={(e) => updatePeriod(value, index, "opensAt", e.target.value)}
+                        className="h-10 rounded-lg border border-border px-2 text-sm"
+                      />
+                      <span className="text-sm text-text-muted">às</span>
+                      <input
+                        type="time"
+                        name={`closes_at_${value}_${index + 1}`}
+                        value={period.closesAt}
+                        onChange={(e) => updatePeriod(value, index, "closesAt", e.target.value)}
+                        className="h-10 rounded-lg border border-border px-2 text-sm"
+                      />
+                      {periods.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removePeriod(value, index)}
+                          className="text-xs font-semibold text-red hover:underline"
+                        >
+                          Remover período
+                        </button>
+                      )}
+                    </div>
+                  ))}
+                  {periods.length < MAX_PERIODS_PER_DAY && (
+                    <button
+                      type="button"
+                      onClick={() => addPeriod(value)}
+                      className="text-xs font-semibold text-primary hover:underline"
+                    >
+                      + Adicionar período
+                    </button>
+                  )}
                 </div>
-              ) : (
-                <span className="text-sm text-text-muted">Fechado</span>
               )}
             </div>
           );
