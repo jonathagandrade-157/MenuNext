@@ -41,9 +41,43 @@ export type Restaurant = {
   contact_whatsapp: string | null;
   contact_email: string | null;
   bio: string | null;
+  free_delivery_threshold: number | null;
   created_at: string;
   updated_at: string;
 };
+
+/** Uma zona de entrega por bairro (área "Delivery" do redesign) — refinamento
+ * opcional sobre a taxa global: se o bairro do pedido bater com uma zona
+ * ativa (nome exato, sem acento/caixa), a taxa/pedido mínimo daqui prevalecem;
+ * sem match, cai na configuração global de sempre (delivery_fee/radius). */
+export type DeliveryZone = {
+  id: string;
+  restaurant_id: string;
+  neighborhood: string;
+  delivery_fee: number;
+  estimated_time_min_minutes: number | null;
+  estimated_time_max_minutes: number | null;
+  minimum_order_value: number | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function getDeliveryZones(supabase: SupabaseClient, restaurantId: string): Promise<DeliveryZone[]> {
+  const { data, error } = await supabase
+    .from("delivery_zones")
+    .select("*")
+    .eq("restaurant_id", restaurantId)
+    .order("neighborhood");
+  if (error) throw error;
+  return ((data ?? []) as (DeliveryZone & { delivery_fee: string | number; minimum_order_value: string | number | null })[]).map(
+    (row) => ({
+      ...row,
+      delivery_fee: Number(row.delivery_fee),
+      minimum_order_value: row.minimum_order_value === null ? null : Number(row.minimum_order_value),
+    })
+  );
+}
 
 export type OnboardingProgress = {
   restaurant_id: string;

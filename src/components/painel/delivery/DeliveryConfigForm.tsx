@@ -171,6 +171,21 @@ export function DeliveryConfigForm({
             Se preenchido, pedidos abaixo desse valor são recusados automaticamente no checkout.
           </p>
         </div>
+
+        <div>
+          <span className={fieldLabelClass}>Frete grátis a partir de (R$)</span>
+          <input
+            name="free_delivery_threshold"
+            type="text"
+            inputMode="decimal"
+            defaultValue={restaurant.free_delivery_threshold ?? ""}
+            placeholder="Deixe em branco para não oferecer frete grátis"
+            className={inputClass}
+          />
+          <p className="mt-1 text-xs text-text-muted">
+            Pedidos com subtotal igual ou acima desse valor têm a taxa de entrega zerada automaticamente.
+          </p>
+        </div>
       </Card>
 
       <Card className="space-y-5 p-6">

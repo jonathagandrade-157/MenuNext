@@ -1,6 +1,7 @@
-import { getBusinessHours, requireOwnerPage } from "@/lib/tenant";
+import { getBusinessHours, getDeliveryZones, requireOwnerPage } from "@/lib/tenant";
 import { isGeocodingConfigured } from "@/lib/geocoding";
 import { DeliveryConfigForm } from "@/components/painel/delivery/DeliveryConfigForm";
+import { DeliveryZonesManager } from "@/components/painel/delivery/DeliveryZonesManager";
 
 // Consolidação do MVP de delivery (Fase 4.1): esta era uma tela de
 // redirecionamento para o Passo 3 do onboarding (ver histórico do arquivo);
@@ -12,7 +13,10 @@ import { DeliveryConfigForm } from "@/components/painel/delivery/DeliveryConfigF
 export default async function Page() {
   const { supabase, restaurant } = await requireOwnerPage();
 
-  const businessHours = await getBusinessHours(supabase, restaurant.id);
+  const [businessHours, deliveryZones] = await Promise.all([
+    getBusinessHours(supabase, restaurant.id),
+    getDeliveryZones(supabase, restaurant.id),
+  ]);
 
   return (
     <div className="mx-auto max-w-3xl space-y-6 px-6 py-8">
@@ -24,6 +28,8 @@ export default async function Page() {
       </div>
 
       <DeliveryConfigForm restaurant={restaurant} businessHours={businessHours} geocodingConfigured={isGeocodingConfigured()} />
+
+      <DeliveryZonesManager initialZones={deliveryZones} />
     </div>
   );
 }

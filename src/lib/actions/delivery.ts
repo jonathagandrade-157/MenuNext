@@ -60,12 +60,14 @@ export async function saveDeliveryConfigAction(
   const feeRaw = String(formData.get("delivery_fee") ?? "");
   const radiusRaw = String(formData.get("delivery_radius_km") ?? "");
   const minOrderRaw = String(formData.get("minimum_order_value") ?? "");
+  const freeDeliveryThresholdRaw = String(formData.get("free_delivery_threshold") ?? "");
   const estMinRaw = String(formData.get("estimated_delivery_min_minutes") ?? "").trim();
   const estMaxRaw = String(formData.get("estimated_delivery_max_minutes") ?? "").trim();
 
   const fee = parseOptionalDecimal(feeRaw);
   const radius = parseOptionalDecimal(radiusRaw);
   const minOrder = parseOptionalDecimal(minOrderRaw);
+  const freeDeliveryThreshold = parseOptionalDecimal(freeDeliveryThresholdRaw);
   const estMin = estMinRaw === "" ? null : Number(estMinRaw);
   const estMax = estMaxRaw === "" ? null : Number(estMaxRaw);
 
@@ -87,6 +89,10 @@ export async function saveDeliveryConfigAction(
 
   if (Number.isNaN(minOrder) || (minOrder !== null && minOrder < 0)) {
     return { status: "error", message: "Informe um pedido mínimo válido." };
+  }
+
+  if (Number.isNaN(freeDeliveryThreshold) || (freeDeliveryThreshold !== null && freeDeliveryThreshold < 0)) {
+    return { status: "error", message: "Informe um valor válido para o frete grátis." };
   }
 
   if ((estMin === null) !== (estMax === null)) {
@@ -152,6 +158,7 @@ export async function saveDeliveryConfigAction(
     delivery_radius_km: radius,
     delivery_fee_method: feeMethod,
     minimum_order_value: minOrder,
+    free_delivery_threshold: freeDeliveryThreshold,
     estimated_delivery_min_minutes: estMin,
     estimated_delivery_max_minutes: estMax,
   };

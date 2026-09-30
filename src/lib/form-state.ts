@@ -73,6 +73,11 @@ export const initialPlatformSettingsState: PlatformSettingsActionState = { statu
 export type ContactInfoActionState = { status: "idle" | "success" | "error"; message?: string };
 export const initialContactInfoState: ContactInfoActionState = { status: "idle" };
 
+// Zonas de entrega por bairro (/painel/delivery) — mesmo formato de
+// CategoryActionState/ProductActionState.
+export type DeliveryZoneActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialDeliveryZoneState: DeliveryZoneActionState = { status: "idle" };
+
 export const WEEK_DAYS = [
   { value: 0, label: "Domingo" },
   { value: 1, label: "Segunda" },
