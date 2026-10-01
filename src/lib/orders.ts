@@ -23,7 +23,7 @@ export type OrderStatus =
   | "picked_up"
   | "cancelled";
 
-export type FulfillmentType = "delivery" | "pickup";
+export type FulfillmentType = "delivery" | "pickup" | "counter";
 export type PaymentMethod = "pix" | "cash" | "card";
 
 /** Mesma sequência da RPC advance_order_status — única fonte de verdade

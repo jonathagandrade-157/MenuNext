@@ -121,10 +121,18 @@ export function computeEstimatedMargin(
 // ---------------------------------------------------------------------------
 // Como compraram (canal) / Formas de pagamento / Delivery hoje
 // ---------------------------------------------------------------------------
-export type ChannelSplit = { delivery: { count: number; revenue: number }; pickup: { count: number; revenue: number } };
+export type ChannelSplit = {
+  delivery: { count: number; revenue: number };
+  pickup: { count: number; revenue: number };
+  counter: { count: number; revenue: number };
+};
 
 export function computeChannelSplit(todayOrders: DashboardTodayOrderRow[]): ChannelSplit {
-  const split: ChannelSplit = { delivery: { count: 0, revenue: 0 }, pickup: { count: 0, revenue: 0 } };
+  const split: ChannelSplit = {
+    delivery: { count: 0, revenue: 0 },
+    pickup: { count: 0, revenue: 0 },
+    counter: { count: 0, revenue: 0 },
+  };
   for (const order of validOnly(todayOrders)) {
     split[order.fulfillment_type].count += 1;
     split[order.fulfillment_type].revenue += order.total;
@@ -229,11 +237,15 @@ export function computeDashboardInsights(
     insights.push({ label: "Horário de maior movimento hoje", value: `${String(peakHour.hour).padStart(2, "0")}h` });
   }
 
-  const { delivery, pickup } = channelSplit;
-  const totalChannelOrders = delivery.count + pickup.count;
+  const { delivery, pickup, counter } = channelSplit;
+  const totalChannelOrders = delivery.count + pickup.count + counter.count;
   if (totalChannelOrders > 0) {
-    const strongerChannel = delivery.count >= pickup.count ? "Delivery" : "Retirada";
-    const strongerCount = Math.max(delivery.count, pickup.count);
+    const channels: [string, number][] = [
+      ["Delivery", delivery.count],
+      ["Retirada", pickup.count],
+      ["Balcão", counter.count],
+    ];
+    const [strongerChannel, strongerCount] = channels.reduce((a, b) => (b[1] > a[1] ? b : a));
     insights.push({ label: "Canal forte hoje", value: `${strongerChannel} (${Math.round((strongerCount / totalChannelOrders) * 100)}%)` });
   }
 

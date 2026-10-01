@@ -12,12 +12,13 @@ import type { BagItem } from "@/lib/bag";
 
 export type FieldValidation = { ok: true } | { ok: false; error: string };
 
-export type FulfillmentType = "delivery" | "pickup";
+export type FulfillmentType = "delivery" | "pickup" | "counter";
 export type PaymentMethod = "pix" | "cash" | "card";
 
 export const FULFILLMENT_TYPE_LABELS: Record<FulfillmentType, string> = {
   delivery: "Entrega",
   pickup: "Retirada",
+  counter: "Balcão",
 };
 
 export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {

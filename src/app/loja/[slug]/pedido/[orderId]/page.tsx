@@ -7,7 +7,7 @@ import { CopyButton } from "@/components/loja/CopyButton";
 import { OrderStatusBadgeLive } from "@/components/loja/OrderStatusBadge";
 import { StoreNotFound } from "@/components/loja/StoreNotFound";
 
-const FULFILLMENT_LABEL: Record<string, string> = { delivery: "Entrega", pickup: "Retirada" };
+const FULFILLMENT_LABEL: Record<string, string> = { delivery: "Entrega", pickup: "Retirada", counter: "Balcão" };
 
 export default async function Page({ params }: PageProps<"/loja/[slug]/pedido/[orderId]">) {
   const { slug, orderId } = await params;

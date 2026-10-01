@@ -87,15 +87,17 @@ describe("computeEstimatedMargin", () => {
 });
 
 describe("computeChannelSplit", () => {
-  it("separa contagem e receita por delivery/retirada, ignorando cancelados", () => {
+  it("separa contagem e receita por delivery/retirada/balcão, ignorando cancelados", () => {
     const orders = [
       makeOrder({ fulfillment_type: "delivery", total: 40 }),
       makeOrder({ fulfillment_type: "pickup", total: 20 }),
+      makeOrder({ fulfillment_type: "counter", total: 15 }),
       makeOrder({ fulfillment_type: "delivery", total: 999, status: "cancelled" }),
     ];
     expect(computeChannelSplit(orders)).toEqual({
       delivery: { count: 1, revenue: 40 },
       pickup: { count: 1, revenue: 20 },
+      counter: { count: 1, revenue: 15 },
     });
   });
 });
@@ -201,15 +203,21 @@ describe("computeDashboardInsights", () => {
       { hour: 11, orders: 1, revenue: 20 },
       { hour: 12, orders: 4, revenue: 80 },
     ];
-    const channels = { delivery: { count: 3, revenue: 80 }, pickup: { count: 1, revenue: 20 } };
+    const channels = { delivery: { count: 3, revenue: 80 }, pickup: { count: 1, revenue: 20 }, counter: { count: 0, revenue: 0 } };
     const insights = computeDashboardInsights(bestSellers, hourly, channels);
     expect(insights).toContainEqual({ label: "Produto destaque", value: "Burger (5 vendidos hoje)" });
     expect(insights).toContainEqual({ label: "Horário de maior movimento hoje", value: "12h" });
     expect(insights).toContainEqual({ label: "Canal forte hoje", value: "Delivery (75%)" });
   });
 
+  it("balcão pode ser o canal forte do dia", () => {
+    const channels = { delivery: { count: 1, revenue: 20 }, pickup: { count: 1, revenue: 20 }, counter: { count: 3, revenue: 60 } };
+    const insights = computeDashboardInsights([], [], channels);
+    expect(insights).toContainEqual({ label: "Canal forte hoje", value: "Balcão (60%)" });
+  });
+
   it("dia sem nenhum pedido não gera insights falsos", () => {
-    const channels = { delivery: { count: 0, revenue: 0 }, pickup: { count: 0, revenue: 0 } };
+    const channels = { delivery: { count: 0, revenue: 0 }, pickup: { count: 0, revenue: 0 }, counter: { count: 0, revenue: 0 } };
     expect(computeDashboardInsights([], [], channels)).toEqual([]);
   });
 });
