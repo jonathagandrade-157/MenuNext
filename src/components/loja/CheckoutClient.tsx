@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useBag } from "@/contexts/BagContext";
 import { submitOrderAction } from "@/lib/actions/orders";
 import { getDeliveryQuoteAction } from "@/lib/actions/delivery-quote";
+import { validateCouponAction } from "@/lib/actions/couponValidate";
 import { formatCepInput, isCompleteCep, lookupCep } from "@/lib/cep";
 import {
   PAYMENT_METHOD_LABELS,
@@ -88,6 +89,17 @@ export function CheckoutClient({
   const [redirecting, setRedirecting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [idempotencyKey, setIdempotencyKey] = useState<string | null>(null);
+
+  // Cupom de desconto (área "Marketing" do redesign) — preview sem efeito
+  // colateral via validate_coupon (não incrementa uses_count; só
+  // create_order faz isso de verdade na redenção). O desconto mostrado
+  // aqui é só prévia — create_order recalcula e revalida tudo de novo ao
+  // criar o pedido, mesmo padrão já usado para o frete por distância
+  // (quote, abaixo).
+  const [couponInput, setCouponInput] = useState("");
+  const [couponApplied, setCouponApplied] = useState<{ code: string; discountAmount: number } | null>(null);
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [couponValidating, setCouponValidating] = useState(false);
 
   // Frete por distância (Fase 4.1.1): só entra em jogo quando a loja
   // configurou raio máximo e/ou método "por km" — no caso comum (taxa fixa
@@ -193,8 +205,30 @@ export function CheckoutClient({
   }, [items.length, redirecting, router, slug]);
 
   const effectiveDeliveryFee = needsDeliveryQuote ? quote?.fee ?? null : (deliveryFee ?? 0);
-  const total = totalPrice + (effectiveDeliveryFee ?? 0);
+  const discountAmount = couponApplied?.discountAmount ?? 0;
+  const total = totalPrice - discountAmount + (effectiveDeliveryFee ?? 0);
   const changeForValue = changeForInput.trim() ? parseMoneyInput(changeForInput) : null;
+
+  async function handleApplyCoupon() {
+    const code = couponInput.trim();
+    if (!code) return;
+    setCouponError(null);
+    setCouponValidating(true);
+    const result = await validateCouponAction(slug, code, totalPrice);
+    setCouponValidating(false);
+    if (result.status === "error") {
+      setCouponApplied(null);
+      setCouponError(result.message);
+      return;
+    }
+    setCouponApplied({ code: result.code, discountAmount: result.discountAmount });
+  }
+
+  function handleRemoveCoupon() {
+    setCouponApplied(null);
+    setCouponInput("");
+    setCouponError(null);
+  }
 
   const canSubmit =
     availablePaymentMethods.length > 0 &&
@@ -245,6 +279,7 @@ export function CheckoutClient({
       observation,
       items: buildOrderItemsPayload(items),
       idempotencyKey,
+      couponCode: couponApplied?.code ?? null,
     });
 
     if (result.status === "error") {
@@ -462,6 +497,42 @@ export function CheckoutClient({
           />
         </section>
 
+        <section className="space-y-2">
+          <h2 className="text-sm font-extrabold text-graphite">Cupom de desconto</h2>
+          {couponApplied ? (
+            <div className="flex items-center justify-between gap-2 rounded-xl border border-emerald/30 bg-emerald/10 px-3.5 py-2.5">
+              <div>
+                <p className="text-sm font-bold text-graphite">{couponApplied.code}</p>
+                <p className="text-xs font-semibold text-emerald">-{formatCurrencyBRL(couponApplied.discountAmount)} aplicado</p>
+              </div>
+              <button type="button" onClick={handleRemoveCoupon} className="text-xs font-semibold text-red hover:underline">
+                Remover
+              </button>
+            </div>
+          ) : (
+            <div className="flex gap-2">
+              <input
+                value={couponInput}
+                onChange={(e) => {
+                  setCouponInput(e.target.value.toUpperCase());
+                  setCouponError(null);
+                }}
+                placeholder="Código do cupom"
+                className="flex-1 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm uppercase text-graphite placeholder:text-slate-400 placeholder:normal-case focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              />
+              <button
+                type="button"
+                disabled={!couponInput.trim() || couponValidating}
+                onClick={handleApplyCoupon}
+                className="shrink-0 rounded-xl border border-border px-4 text-sm font-bold text-graphite transition-colors hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {couponValidating ? "..." : "Aplicar"}
+              </button>
+            </div>
+          )}
+          {couponError && <p className="text-xs font-semibold text-red">{couponError}</p>}
+        </section>
+
         <section className="space-y-2 rounded-2xl border border-border bg-surface-subdued/60 p-3.5">
           <h2 className="text-sm font-extrabold text-graphite">Resumo</h2>
           <div className="space-y-1 text-xs">
@@ -479,6 +550,12 @@ export function CheckoutClient({
               <span>Subtotal</span>
               <span className="font-semibold text-graphite">{formatCurrencyBRL(totalPrice)}</span>
             </div>
+            {discountAmount > 0 && (
+              <div className="flex justify-between text-emerald">
+                <span>Cupom ({couponApplied?.code})</span>
+                <span className="font-semibold">-{formatCurrencyBRL(discountAmount)}</span>
+              </div>
+            )}
             <div className="flex justify-between text-text-muted">
               <span>Taxa de entrega</span>
               <span className="font-semibold text-graphite">

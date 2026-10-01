@@ -28,6 +28,7 @@ export type SubmitOrderInput = {
   observation: string;
   items: CreateOrderItemPayload[];
   idempotencyKey: string;
+  couponCode: string | null;
 };
 
 export type SubmitOrderResult =
@@ -77,6 +78,15 @@ function friendlyOrderError(message: string): string {
   if (normalized.includes("addon_group_selection_invalid")) {
     return "A seleção de adicionais de algum item da sacola não é mais válida. Revise a sacola.";
   }
+  if (normalized.includes("coupon_not_found")) return "Cupom não encontrado. Remova-o para continuar.";
+  if (normalized.includes("coupon_inactive")) return "Este cupom não está mais ativo. Remova-o para continuar.";
+  if (normalized.includes("coupon_expired")) return "Este cupom expirou. Remova-o para continuar.";
+  if (normalized.includes("coupon_usage_limit_reached")) {
+    return "Este cupom atingiu o limite de usos. Remova-o para continuar.";
+  }
+  if (normalized.includes("coupon_below_minimum_order")) {
+    return "Seu pedido não atinge mais o mínimo exigido pelo cupom. Remova-o ou adicione mais itens.";
+  }
   return "Não foi possível finalizar o pedido. Seus itens continuam na sacola. Tente novamente.";
 }
 
@@ -123,6 +133,7 @@ export async function submitOrderAction(input: SubmitOrderInput): Promise<Submit
     p_change_for: input.changeFor,
     p_observation: input.observation || null,
     p_delivery_distance_km: distanceKm,
+    p_coupon_code: input.couponCode,
   });
 
   if (error) return { status: "error", message: friendlyOrderError(error.message) };

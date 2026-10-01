@@ -162,6 +162,9 @@ export type Order = {
   observation: string | null;
   subtotal: number;
   delivery_fee: number;
+  coupon_id: string | null;
+  coupon_code: string | null;
+  discount_amount: number;
   total: number;
   status: OrderStatus;
   confirmed_at: string | null;
@@ -188,6 +191,7 @@ export function normalizeOrderFields<T extends Record<string, unknown>>(row: T):
     ...row,
     subtotal: Number(row.subtotal),
     delivery_fee: Number(row.delivery_fee),
+    discount_amount: Number(row.discount_amount),
     total: Number(row.total),
     change_for: row.change_for === null ? null : Number(row.change_for),
   };

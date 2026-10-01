@@ -80,6 +80,37 @@ export async function getDeliveryZones(supabase: SupabaseClient, restaurantId: s
   );
 }
 
+export type Coupon = {
+  id: string;
+  restaurant_id: string;
+  code: string;
+  discount_type: "percent" | "fixed";
+  discount_value: number;
+  min_order_value: number | null;
+  max_uses: number | null;
+  uses_count: number;
+  is_active: boolean;
+  expires_at: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function getCoupons(supabase: SupabaseClient, restaurantId: string): Promise<Coupon[]> {
+  const { data, error } = await supabase
+    .from("coupons")
+    .select("*")
+    .eq("restaurant_id", restaurantId)
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return ((data ?? []) as (Coupon & { discount_value: string | number; min_order_value: string | number | null })[]).map(
+    (row) => ({
+      ...row,
+      discount_value: Number(row.discount_value),
+      min_order_value: row.min_order_value === null ? null : Number(row.min_order_value),
+    })
+  );
+}
+
 export type OnboardingProgress = {
   restaurant_id: string;
   current_step: number;

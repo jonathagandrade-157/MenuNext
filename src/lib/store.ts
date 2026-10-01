@@ -257,6 +257,8 @@ export type PublicOrder = {
   observation: string | null;
   subtotal: number;
   delivery_fee: number;
+  discount_amount: number;
+  coupon_code: string | null;
   total: number;
   created_at: string;
   restaurant_name: string;
@@ -281,6 +283,7 @@ export async function getPublicOrder(supabase: SupabaseClient, slug: string, pub
     change_for: row.change_for === null ? null : Number(row.change_for),
     subtotal: Number(row.subtotal),
     delivery_fee: Number(row.delivery_fee),
+    discount_amount: Number(row.discount_amount),
     total: Number(row.total),
     items: (row.items ?? []) as PublicOrderItem[],
   } as PublicOrder;

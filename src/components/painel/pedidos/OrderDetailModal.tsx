@@ -134,6 +134,12 @@ export function OrderDetailModal({
               <span>Subtotal</span>
               <span className="font-semibold text-graphite">{formatCurrencyBRL(order.subtotal)}</span>
             </div>
+            {order.discount_amount > 0 && (
+              <div className="flex justify-between text-emerald">
+                <span>Cupom ({order.coupon_code})</span>
+                <span className="font-semibold">-{formatCurrencyBRL(order.discount_amount)}</span>
+              </div>
+            )}
             {order.fulfillment_type === "delivery" && (
               <div className="flex justify-between text-text-muted">
                 <span>Entrega</span>
