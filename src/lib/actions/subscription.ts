@@ -4,11 +4,14 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import { getMyRestaurant } from "@/lib/tenant";
-import { createAsaasCustomer, createAsaasSubscription, isAsaasConfigured } from "@/lib/asaas";
+import { createAsaasCustomer, createAsaasSubscription, deleteAsaasSubscription, isAsaasConfigured } from "@/lib/asaas";
 
 export type SubscribeToPlanResult = { status: "success" } | { status: "error"; message: string };
 
 const PLANO_PATH = "/painel/plano";
+
+const ALREADY_SUBSCRIBED_MESSAGE =
+  "Seu restaurante já tem uma assinatura. Se há pagamento pendente ou atrasado, finalize-o pelo link que o Asaas enviou ao seu e-mail.";
 
 /**
  * Fluxo de assinatura do lojista — diferente de todo o resto do app, esta
@@ -34,6 +37,17 @@ export async function subscribeToPlanAction(planId: string): Promise<SubscribeTo
 
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) redirect("/onboarding/passo-1");
+
+  // Trava antes de qualquer chamada ao Asaas: assinatura viva (active/pending/
+  // overdue) não pode ser duplicada — a RPC repete a checagem no banco.
+  const { data: current } = await supabase
+    .from("restaurants")
+    .select("asaas_subscription_id, subscription_status")
+    .eq("id", restaurant.id)
+    .maybeSingle();
+  if (current?.asaas_subscription_id && current.subscription_status !== "cancelled") {
+    return { status: "error", message: ALREADY_SUBSCRIBED_MESSAGE };
+  }
 
   const { data: plan, error: planError } = await supabase
     .from("plans")
@@ -76,7 +90,13 @@ export async function subscribeToPlanAction(planId: string): Promise<SubscribeTo
     p_asaas_subscription_id: subscriptionResult.data.id,
   });
   if (rpcError) {
-    return { status: "error", message: "Assinatura criada, mas não foi possível registrá-la. Entre em contato com o suporte." };
+    // Melhor esforço: remove a assinatura que acabou de ser criada no Asaas
+    // para não deixar uma cobrança órfã sem registro no MenuNext.
+    await deleteAsaasSubscription(subscriptionResult.data.id);
+    if (rpcError.message.includes("already_subscribed")) {
+      return { status: "error", message: ALREADY_SUBSCRIBED_MESSAGE };
+    }
+    return { status: "error", message: "Não foi possível registrar sua assinatura. Tente novamente em instantes." };
   }
 
   revalidatePath(PLANO_PATH);

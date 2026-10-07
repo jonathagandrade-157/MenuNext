@@ -83,6 +83,15 @@ export async function createAsaasCustomer(params: {
   });
 }
 
+/** Remove uma assinatura no Asaas — usado só para desfazer uma assinatura
+ * recém-criada quando não foi possível registrá-la no banco, evitando uma
+ * assinatura órfã que continuaria cobrando o lojista. */
+export async function deleteAsaasSubscription(subscriptionId: string): Promise<AsaasResult<{ deleted: boolean }>> {
+  return asaasRequest<{ deleted: boolean }>(`/subscriptions/${encodeURIComponent(subscriptionId)}`, {
+    method: "DELETE",
+  });
+}
+
 export type AsaasSubscription = { id: string; status: string; nextDueDate: string };
 
 /** Assinatura mensal recorrente — billingType "UNDEFINED" deixa o próprio

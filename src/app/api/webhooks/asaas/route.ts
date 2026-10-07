@@ -15,14 +15,7 @@
  */
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-
-const STATUS_BY_EVENT: Record<string, "active" | "overdue" | "cancelled"> = {
-  PAYMENT_CONFIRMED: "active",
-  PAYMENT_RECEIVED: "active",
-  PAYMENT_OVERDUE: "overdue",
-  PAYMENT_DELETED: "cancelled",
-  PAYMENT_REFUNDED: "cancelled",
-};
+import { resolveSubscriptionStatusChange, type AsaasWebhookBody } from "@/lib/asaasWebhook";
 
 export async function POST(request: Request) {
   const token = request.headers.get("asaas-access-token");
@@ -30,32 +23,28 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "missing_token" }, { status: 401 });
   }
 
-  let body: { event?: string; payment?: { id?: string; subscription?: string; nextDueDate?: string } };
+  let body: AsaasWebhookBody;
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "invalid_payload" }, { status: 400 });
   }
 
-  const eventType = body.event;
-  const subscriptionId = body.payment?.subscription;
-  const paymentId = body.payment?.id;
-
-  // Evento que não mexe no status da assinatura (ex.: PAYMENT_CREATED) —
-  // reconhecido mas ignorado, sempre 200 para o Asaas não reenviar.
-  const newStatus = eventType ? STATUS_BY_EVENT[eventType] : undefined;
-  if (!newStatus || !subscriptionId || !paymentId) {
+  // Evento que não mexe no status da assinatura (ex.: PAYMENT_CREATED, ou
+  // cobrança avulsa sem assinatura) — reconhecido mas ignorado, sempre 200
+  // para o Asaas não reenviar.
+  const change = resolveSubscriptionStatusChange(body);
+  if (!change) {
     return NextResponse.json({ ok: true, ignored: true });
   }
 
   const supabase = await createClient();
   const { error } = await supabase.rpc("process_asaas_webhook", {
     p_webhook_token: token,
-    p_asaas_event_id: `${eventType}:${paymentId}`,
-    p_event_type: eventType,
-    p_asaas_subscription_id: subscriptionId,
-    p_new_status: newStatus,
-    p_current_period_end: body.payment?.nextDueDate ? new Date(body.payment.nextDueDate).toISOString() : null,
+    p_asaas_event_id: change.eventId,
+    p_event_type: body.event,
+    p_asaas_subscription_id: change.subscriptionId,
+    p_new_status: change.status,
   });
 
   if (error) {

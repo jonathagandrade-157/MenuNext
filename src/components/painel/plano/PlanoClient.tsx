@@ -47,6 +47,7 @@ export function PlanoClient({
   }
 
   const status = STATUS_LABEL[subscriptionStatus];
+  const hasLiveSubscription = currentPlan !== null && subscriptionStatus !== "cancelled";
 
   return (
     <div className="space-y-6">
@@ -61,6 +62,14 @@ export function PlanoClient({
       {!asaasConfigured && (
         <div className="rounded-xl border border-amber/20 bg-amber/10 px-3.5 py-2.5 text-xs font-medium text-amber">
           A cobrança de assinaturas ainda não foi configurada pela plataforma. Tente novamente mais tarde.
+        </div>
+      )}
+
+      {hasLiveSubscription && (
+        <div className="rounded-xl border border-border bg-surface px-3.5 py-2.5 text-xs font-medium text-text-muted">
+          {subscriptionStatus === "active"
+            ? "Sua assinatura está em dia. Para trocar de plano, fale com o suporte."
+            : "Finalize o pagamento pelo link que o Asaas enviou ao seu e-mail. Assim que for confirmado, o acesso é liberado."}
         </div>
       )}
 
@@ -86,7 +95,7 @@ export function PlanoClient({
               </p>
               <button
                 type="button"
-                disabled={isCurrent || isPending || !asaasConfigured}
+                disabled={isCurrent || isPending || !asaasConfigured || hasLiveSubscription}
                 onClick={() => handleSubscribe(plan.id)}
                 className="mt-auto inline-flex h-11 items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-white transition-colors hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
               >
