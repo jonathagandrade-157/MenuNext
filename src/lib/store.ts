@@ -46,6 +46,7 @@ export type PublicRestaurant = {
   bio: string | null;
   contact_whatsapp: string | null;
   theme_primary_color: string | null;
+  subscription_blocked: boolean;
 };
 
 /** Busca o restaurante pelo slug via RPC pública — null se não existir ou não estiver publicado. */

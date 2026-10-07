@@ -88,6 +88,11 @@ export const initialThemeColorState: ThemeColorActionState = { status: "idle" };
 export type CouponActionState = { status: "idle" | "success" | "error"; message?: string };
 export const initialCouponState: CouponActionState = { status: "idle" };
 
+// Planos de assinatura (/master/assinaturas) e configurações de billing —
+// mesmo formato de CategoryActionState/ProductActionState.
+export type PlanActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialPlanState: PlanActionState = { status: "idle" };
+
 export const WEEK_DAYS = [
   { value: 0, label: "Domingo" },
   { value: 1, label: "Segunda" },

@@ -43,9 +43,40 @@ export type Restaurant = {
   bio: string | null;
   free_delivery_threshold: number | null;
   theme_primary_color: string | null;
+  plan_id: string | null;
+  subscription_status: "active" | "pending" | "overdue" | "cancelled";
+  subscription_current_period_end: string | null;
   created_at: string;
   updated_at: string;
 };
+
+export type Plan = {
+  id: string;
+  name: string;
+  description: string | null;
+  price: number;
+  is_active: boolean;
+  display_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function getActivePlans(supabase: SupabaseClient): Promise<Plan[]> {
+  const { data, error } = await supabase
+    .from("plans")
+    .select("*")
+    .eq("is_active", true)
+    .order("display_order")
+    .order("price");
+  if (error) throw error;
+  return ((data ?? []) as (Plan & { price: string | number })[]).map((row) => ({ ...row, price: Number(row.price) }));
+}
+
+export async function getAllPlans(supabase: SupabaseClient): Promise<Plan[]> {
+  const { data, error } = await supabase.from("plans").select("*").order("display_order").order("price");
+  if (error) throw error;
+  return ((data ?? []) as (Plan & { price: string | number })[]).map((row) => ({ ...row, price: Number(row.price) }));
+}
 
 /** Uma zona de entrega por bairro (área "Delivery" do redesign) — refinamento
  * opcional sobre a taxa global: se o bairro do pedido bater com uma zona

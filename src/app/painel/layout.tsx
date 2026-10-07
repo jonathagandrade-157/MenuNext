@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { PanelSidebar, type NavGroup } from "@/components/layout/PanelSidebar";
 import { PanelTopbar } from "@/components/layout/PanelTopbar";
+import { SubscriptionGate } from "@/components/painel/SubscriptionGate";
 import { getAuthedUser, getMyRestaurant, getMyMembership } from "@/lib/tenant";
 
 // ownerOnly (JON-10): STAFF (convidado via JON-27) só vê o operacional do
@@ -75,13 +76,19 @@ export default async function PainelLayout({ children }: { children: React.React
         (group) => group.items.length > 0
       );
 
+  const subscriptionBlocked = restaurant.subscription_status === "overdue" || restaurant.subscription_status === "cancelled";
+
   return (
     <div className="flex min-h-screen flex-col bg-surface lg:flex-row">
-      <PanelSidebar brandLabel="Painel do Lojista" groups={navGroups} />
-      <div className="flex flex-1 flex-col">
-        <PanelTopbar storeName={restaurant.name} storeSlug={restaurant.slug} isOpen={restaurant.status === "active"} />
-        <div className="flex-1">{children}</div>
-      </div>
+      <SubscriptionGate
+        blocked={subscriptionBlocked}
+        sidebarAndTopbar={<PanelSidebar brandLabel="Painel do Lojista" groups={navGroups} />}
+      >
+        <div className="flex flex-1 flex-col">
+          <PanelTopbar storeName={restaurant.name} storeSlug={restaurant.slug} isOpen={restaurant.status === "active"} />
+          <div className="flex-1">{children}</div>
+        </div>
+      </SubscriptionGate>
     </div>
   );
 }

@@ -23,6 +23,21 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
   const restaurant = await getPublicRestaurantBySlug(supabase, slug);
   if (!restaurant) return <StoreNotFound />;
 
+  // Assinatura do lojista atrasada/cancelada (decisão tomada com o
+  // usuário): bloqueia a loja pública inteira, nunca só o painel — o
+  // cliente final não vê o cardápio nem consegue navegar.
+  if (restaurant.subscription_blocked) {
+    return (
+      <div className="flex min-h-[70vh] flex-col items-center justify-center gap-3 px-6 text-center">
+        <span className="rounded-full bg-surface-subdued px-3 py-1 text-xs font-semibold uppercase tracking-wide text-text-muted">
+          Loja indisponível
+        </span>
+        <h1 className="text-xl font-extrabold text-graphite">Esta loja está temporariamente indisponível</h1>
+        <p className="max-w-xs text-sm text-text-muted">Volte mais tarde.</p>
+      </div>
+    );
+  }
+
   const getImageUrl = (path: string) => getPublicAssetUrl(supabase, path);
 
   const [categories, combos, businessHours] = await Promise.all([
