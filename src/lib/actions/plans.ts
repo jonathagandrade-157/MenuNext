@@ -88,7 +88,15 @@ export async function deletePlanAction(planId: string): Promise<{ ok: boolean; e
   const { supabase } = await requireMasterPage();
 
   const { data, error } = await supabase.from("plans").delete().eq("id", planId).select("id");
-  if (error) return { ok: false, error: "Não foi possível excluir. Verifique se nenhum restaurante está nesse plano." };
+  if (error) {
+    const inUse = error.message.toLowerCase().includes("foreign key");
+    return {
+      ok: false,
+      error: inUse
+        ? "Há restaurantes assinando este plano. Desative-o em vez de excluir."
+        : "Não foi possível excluir. Tente novamente.",
+    };
+  }
   if (!data || data.length === 0) return { ok: false, error: "Plano não encontrado." };
 
   revalidatePath(ASSINATURAS_PATH);
@@ -104,7 +112,13 @@ export async function updateBillingSettingsAction(
   const token = String(formData.get("asaasWebhookToken") ?? "").trim();
 
   const { error } = await supabase.rpc("update_billing_settings", { p_asaas_webhook_token: token || null });
-  if (error) return { status: "error", message: "Não foi possível salvar. Tente novamente." };
+  if (error) {
+    const invalidLength = error.message.includes("invalid_token_length");
+    return {
+      status: "error",
+      message: invalidLength ? "O token deve ter entre 32 e 255 caracteres." : "Não foi possível salvar. Tente novamente.",
+    };
+  }
 
   revalidatePath(ASSINATURAS_PATH);
   return { status: "success" };

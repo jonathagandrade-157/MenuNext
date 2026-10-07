@@ -28,8 +28,9 @@ export function BillingSettingsForm() {
     <Card className="p-5">
       <h2 className="text-sm font-bold text-graphite">Integração Asaas</h2>
       <p className="mt-0.5 text-xs text-text-muted">
-        Token de acesso do webhook (configurado também no painel do Asaas, em Integrações → Webhooks). A chave de API
-        (ASAAS_API_KEY) é configurada como variável de ambiente do servidor, nunca aqui.
+        Token de acesso do webhook (configurado também no painel do Asaas, em Integrações → Webhooks). Use um valor
+        aleatório de 32 a 255 caracteres. A chave de API (ASAAS_API_KEY) é configurada como variável de ambiente do
+        servidor, nunca aqui.
       </p>
 
       <form action={formAction} className="mt-4 space-y-3">
