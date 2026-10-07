@@ -1,11 +1,17 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { requireMasterPage } from "@/lib/tenant";
+import { getMasterDashboardStats } from "@/lib/masterDashboard";
+import { getMasterRestaurants } from "@/lib/masterRestaurants";
+import { MasterDashboardView } from "@/components/master/MasterDashboardView";
 
-export default function Page() {
-  return (
-    <ScreenPlaceholder
-      screenId="SCREEN_10"
-      title="Dashboard Master"
-      description="Visão geral da plataforma: restaurantes ativos, assinaturas e métricas do SaaS."
-    />
-  );
+const OVERDUE_PREVIEW_SIZE = 5;
+
+export default async function Page() {
+  const { supabase } = await requireMasterPage();
+
+  const [stats, overdue] = await Promise.all([
+    getMasterDashboardStats(supabase),
+    getMasterRestaurants(supabase, { search: null, subscriptionStatus: "overdue", page: 1 }),
+  ]);
+
+  return <MasterDashboardView stats={stats} overdue={overdue.rows.slice(0, OVERDUE_PREVIEW_SIZE)} overdueTotal={overdue.total} />;
 }
