@@ -5,9 +5,8 @@ import { BillingSettingsForm } from "@/components/master/BillingSettingsForm";
 // Assinaturas SaaS (decisão tomada com o usuário): planos cadastrados aqui
 // pelo MASTER (nome/preço reais, nunca inventados pelo código) — ver
 // migration add_subscription_billing.sql. Listagem de assinaturas ATIVAS
-// por restaurante fica fora desta entrega (precisaria de uma forma de
-// MASTER ler todos os restaurantes, que não existe ainda — /master/restaurantes
-// também é placeholder).
+// por restaurante é vista em /master/restaurantes (lista e detalhe, via as
+// RPCs master_list_restaurants/master_get_restaurant).
 export default async function AssinaturasPage() {
   const { supabase } = await requireMasterPage();
 

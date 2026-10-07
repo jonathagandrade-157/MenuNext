@@ -1,13 +1,20 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { notFound } from "next/navigation";
+import { requireMasterPage } from "@/lib/tenant";
+import { getMasterRestaurant } from "@/lib/masterRestaurants";
+import { RestaurantDetailView } from "@/components/master/RestaurantDetailView";
 
-export default function Page() {
-  return (
-    <ScreenPlaceholder
-      screenId="SCREEN_9"
-      title="Detalhes do restaurante"
-      description="Dados, plano e status de um restaurante específico, visão do Master."
-      backHref="/master/restaurantes"
-      backLabel="Voltar para restaurantes"
-    />
-  );
+const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export default async function Page(props: PageProps<"/master/restaurantes/[id]">) {
+  const { supabase } = await requireMasterPage();
+
+  // Um id que não é UUID faria o Postgres lançar erro de cast (500); aqui
+  // vira 404 como qualquer restaurante inexistente.
+  const { id } = await props.params;
+  if (!UUID_PATTERN.test(id)) notFound();
+
+  const detail = await getMasterRestaurant(supabase, id);
+  if (!detail) notFound();
+
+  return <RestaurantDetailView detail={detail} />;
 }

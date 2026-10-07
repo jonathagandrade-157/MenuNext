@@ -1,12 +1,12 @@
-import { ScreenPlaceholder } from "@/components/scaffold/ScreenPlaceholder";
+import { requireMasterPage } from "@/lib/tenant";
+import { getMasterRestaurants, parseListParams } from "@/lib/masterRestaurants";
+import { RestaurantsListView } from "@/components/master/RestaurantsListView";
 
-export default function Page() {
-  return (
-    <ScreenPlaceholder
-      title="Restaurantes"
-      description="Lista de restaurantes (lojistas) cadastrados na plataforma. Tela de listagem não veio explícita no export do Stitch — apenas o detalhe (SCREEN_9); estrutura preparada para a Sprint 1."
-      backHref="/master"
-      backLabel="Voltar ao dashboard Master"
-    />
-  );
+export default async function Page(props: PageProps<"/master/restaurantes">) {
+  const { supabase } = await requireMasterPage();
+
+  const params = parseListParams(await props.searchParams);
+  const { rows, total } = await getMasterRestaurants(supabase, params);
+
+  return <RestaurantsListView rows={rows} total={total} params={params} />;
 }
