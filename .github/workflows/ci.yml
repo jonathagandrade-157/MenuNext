@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    # Valores falsos: o build só precisa das variáveis públicas do Supabase
+    # existirem; nenhum segredo é usado nem exposto no CI.
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://placeholder.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm test
+      # O build gera os tipos de rota (PageProps etc.) que o tsc precisa,
+      # por isso o tsc roda depois dele.
+      - run: npm run build
+      - run: npx tsc --noEmit

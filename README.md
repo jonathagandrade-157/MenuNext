@@ -18,6 +18,26 @@ Abra [http://localhost:3000](http://localhost:3000).
 
 Outros scripts: `npm run build`, `npm run lint`, `npm test`.
 
+### Variáveis de ambiente
+
+Ver `.env.example` (todas comentadas). Só as duas do Supabase são obrigatórias:
+
+- `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` — projeto Supabase.
+- `GOOGLE_MAPS_GEOCODING_API_KEY` — opcional; sem ela o frete "Por KM" fica indisponível e a taxa fixa continua funcionando.
+- `ASAAS_API_KEY` e `ASAAS_ENV` (`sandbox` por padrão, ou `production`) — opcionais; sem a chave, "Assinar plano" mostra um aviso em vez de fingir sucesso. Nunca prefixar com `NEXT_PUBLIC_`.
+
+### Cobrança (Asaas)
+
+A assinatura do lojista é cobrada pelo Asaas (o pedido do cliente final continua sendo Pix direto, sem gateway). Para operar:
+
+1. Defina `ASAAS_API_KEY` (comece pelo sandbox).
+2. Crie os planos em `/master/assinaturas` (nome e valor reais, nada é semeado).
+3. Gere um token aleatório de 32 a 255 caracteres, salve-o em `/master/assinaturas` e configure o **mesmo** valor no webhook do Asaas (Integrações → Webhooks → Token de acesso), apontando para `https://<seu-domínio>/api/webhooks/asaas`. Sem token salvo, nenhum webhook é aceito.
+
+### Testes
+
+`npm test` roda o Vitest. Os testes cobrem a lógica pura de `src/lib/` (módulos testados usam import relativo, porque o Vitest do projeto não resolve o alias `@/`). Server Actions, funções do banco e regras de acesso por restaurante ainda não têm teste automatizado.
+
 ## Banco de dados
 
 Todo o schema (tabelas, RLS, RPCs) vive em `supabase/migrations/` — esse diretório é a fonte de verdade do estado do banco em produção; qualquer alteração de schema deve ser adicionada ali como uma nova migration (nunca aplicada só em produção sem o arquivo correspondente).
@@ -27,10 +47,9 @@ Todo o schema (tabelas, RLS, RPCs) vive em `supabase/migrations/` — esse diret
 - **Cadastro/login** com CPF ou CNPJ obrigatório (trial de 30 dias, 1 documento = 1 trial).
 - **Onboarding guiado** (7 passos) + checklist de configuração reaproveitável no painel.
 - **Loja pública** (`/loja/[slug]`): cardápio com categorias/adicionais/combos, carrinho, checkout e acompanhamento do pedido — sem exigir login do cliente final.
-- **Painel do lojista** (`/painel`): pedidos (Kanban em tempo real), cozinha (KDS), cadastro de produtos/categorias/adicionais/combos, configuração de delivery/horários/pagamentos/aparência, equipe (convites de STAFF) e mais.
-- **Painel administrativo** (`/master`) — bootstrap inicial; ainda sem controle de acesso real por papel (item conhecido em aberto).
-
-Billing/assinatura, cupons/marketing e frente de caixa (PDV) ainda não foram implementados — dependem de decisões de produto/infra em aberto.
+- **Painel do lojista** (`/painel`): dashboard, pedidos (Kanban em tempo real), cozinha (KDS), frente de caixa (PDV), cadastro de produtos/categorias/adicionais/combos, cupons e marketing, clientes, configuração de delivery (inclui zonas por bairro)/horários/pagamentos/aparência, equipe (convites de STAFF), plano e assinatura, e ajuda.
+- **Cobrança e acesso:** trial de 30 dias no cadastro; depois dele, assinatura de um plano via Asaas. Sem plano após o trial, com pagamento atrasado ou com assinatura cancelada, o painel **e** a loja pública ficam bloqueados (só `/painel/plano` continua acessível para regularizar). A regra vive no banco (função `_restaurant_access_state`) e vale também no `create_order`.
+- **Painel administrativo** (`/master`): acesso restrito a quem tem `profiles.is_master` (só concedível pelo editor SQL do Supabase). Telas reais: dashboard da plataforma, restaurantes (lista e detalhe), assinaturas (planos e token do webhook) e configurações. **Ainda em branco:** Usuários, Métricas, Suporte e Auditoria.
 
 ## Estrutura
 

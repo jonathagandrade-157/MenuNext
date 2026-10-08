@@ -48,8 +48,14 @@ const FAQ: FaqItem[] = [
     answer: "O cliente recebe um link de acompanhamento que mostra o status em tempo real, do recebimento até a entrega.",
   },
   {
-    question: "Como altero meu plano?",
-    answer: "Gestão de plano e assinatura ainda não está disponível no painel — em breve.",
+    question: "Como assino ou altero meu plano?",
+    answer:
+      "Em Plano (menu Conta, só para o dono da loja) você vê a situação da assinatura e escolhe um plano. Para trocar de plano com uma assinatura ativa, fale com o suporte.",
+  },
+  {
+    question: "O que acontece quando o período de teste termina?",
+    answer:
+      "Depois dos 30 dias de teste, o painel e a loja pública ficam bloqueados até você assinar um plano em Plano. O mesmo vale para pagamento em atraso ou assinatura cancelada.",
   },
 ];
 
