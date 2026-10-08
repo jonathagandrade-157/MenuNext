@@ -36,7 +36,9 @@ A assinatura do lojista é cobrada pelo Asaas (o pedido do cliente final continu
 
 ### Testes
 
-`npm test` roda o Vitest. Os testes cobrem a lógica pura de `src/lib/` (módulos testados usam import relativo, porque o Vitest do projeto não resolve o alias `@/`). Server Actions, funções do banco e regras de acesso por restaurante ainda não têm teste automatizado.
+`npm test` roda o Vitest. Os testes cobrem a lógica pura de `src/lib/` (módulos testados usam import relativo, porque o Vitest do projeto não resolve o alias `@/`). Server Actions ainda não têm teste automatizado.
+
+**Isolamento entre restaurantes (banco):** `supabase/tests/tenant_isolation.sql` verifica RLS e RPCs com quatro personas (dono da loja A, usuário sem loja, master fora da loja e visitante anônimo): ninguém lê nem altera dados de outra loja, o master só enxerga lojas alheias pelas RPCs `master_*`, e o checkout público recusa produto de outra loja. Cole o arquivo no SQL Editor do Supabase; ele roda numa transação que sempre é desfeita e o relatório vem na mensagem final (`RESULTADO: OK | N verificacoes` ou `RESULTADO: FALHOU ...`). Rode-o depois de qualquer mudança em policies ou RPCs. Ele ainda não roda no CI, que não tem banco.
 
 ## Banco de dados
 
