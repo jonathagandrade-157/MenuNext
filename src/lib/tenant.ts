@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { parseAccessState, type AccessState } from "@/lib/accessState";
 import type { PixKeyType } from "@/lib/pix";
 
 export type RestaurantStatus = "draft" | "active" | "paused" | "closed";
@@ -209,6 +210,15 @@ export async function getMyRestaurant(supabase: SupabaseClient): Promise<Restaur
   const { data, error } = await supabase.from("restaurants").select("*").maybeSingle();
   if (error) throw error;
   return data as Restaurant | null;
+}
+
+/** Motivo do bloqueio de acesso do restaurante do usuário (null = liberado).
+ * A regra (assinatura atrasada/cancelada ou trial expirado sem plano) vive
+ * no banco, na função get_my_access_state. */
+export async function getMyAccessState(supabase: SupabaseClient): Promise<AccessState | null> {
+  const { data, error } = await supabase.rpc("get_my_access_state");
+  if (error) throw error;
+  return parseAccessState(data);
 }
 
 export async function getOnboardingProgress(

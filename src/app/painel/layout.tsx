@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import { PanelSidebar, type NavGroup } from "@/components/layout/PanelSidebar";
 import { PanelTopbar } from "@/components/layout/PanelTopbar";
 import { SubscriptionGate } from "@/components/painel/SubscriptionGate";
-import { getAuthedUser, getMyRestaurant, getMyMembership } from "@/lib/tenant";
+import { getAuthedUser, getMyAccessState, getMyRestaurant, getMyMembership } from "@/lib/tenant";
 
 // ownerOnly (JON-10): STAFF (convidado via JON-27) só vê o operacional do
 // dia a dia + cardápio — administração da loja, relacionamento e conta
@@ -76,12 +76,13 @@ export default async function PainelLayout({ children }: { children: React.React
         (group) => group.items.length > 0
       );
 
-  const subscriptionBlocked = restaurant.subscription_status === "overdue" || restaurant.subscription_status === "cancelled";
+  const accessState = await getMyAccessState(supabase);
 
   return (
     <div className="flex min-h-screen flex-col bg-surface lg:flex-row">
       <SubscriptionGate
-        blocked={subscriptionBlocked}
+        accessState={accessState}
+        isOwner={isOwner}
         sidebarAndTopbar={<PanelSidebar brandLabel="Painel do Lojista" groups={navGroups} />}
       >
         <div className="flex flex-1 flex-col">

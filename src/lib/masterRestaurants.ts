@@ -1,4 +1,5 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { ACCESS_STATE_COPY, parseAccessState, type AccessState } from "./accessState";
 
 export type SubscriptionStatus = "active" | "pending" | "overdue" | "cancelled";
 export type RestaurantStatus = "draft" | "active" | "paused" | "closed";
@@ -13,6 +14,14 @@ export const SUBSCRIPTION_STATUS_BADGE: Record<SubscriptionStatus, { label: stri
   overdue: { label: "Atrasada", tone: "danger" },
   cancelled: { label: "Cancelada", tone: "neutral" },
 };
+
+/** Selo da assinatura. Trial expirado não aparece em subscription_status
+ * (continua "active" sem plano), então o estado de acesso tem prioridade —
+ * senão a tela mostraria "Em dia" para uma loja bloqueada. */
+export function subscriptionBadge(status: SubscriptionStatus, accessState: AccessState | null): { label: string; tone: Tone } {
+  if (accessState === "trial_expired") return { label: ACCESS_STATE_COPY.trial_expired.badge, tone: "danger" };
+  return SUBSCRIPTION_STATUS_BADGE[status];
+}
 
 export const RESTAURANT_STATUS_BADGE: Record<RestaurantStatus, { label: string; tone: Tone }> = {
   draft: { label: "Em configuração", tone: "warning" },
@@ -35,6 +44,7 @@ export type MasterRestaurantRow = {
   subscription_status: SubscriptionStatus;
   orders_total: number;
   last_order_at: string | null;
+  access_state: AccessState | null;
 };
 
 export type MasterRestaurantDetail = {
@@ -62,6 +72,7 @@ export type MasterRestaurantDetail = {
   last_order_at: string | null;
   products_count: number;
   open_business_days: number;
+  access_state: AccessState | null;
 };
 
 export type MasterListParams = {
@@ -203,6 +214,7 @@ export async function getMasterRestaurants(
       subscription_status: row.subscription_status as SubscriptionStatus,
       orders_total: Number(row.orders_total),
       last_order_at: (row.last_order_at as string | null) ?? null,
+      access_state: parseAccessState(row.access_state),
     })
   );
   const total = raw.length > 0 ? Number(raw[0].total_count) : 0;
@@ -244,5 +256,6 @@ export async function getMasterRestaurant(
     last_order_at: (row.last_order_at as string | null) ?? null,
     products_count: Number(row.products_count),
     open_business_days: Number(row.open_business_days),
+    access_state: parseAccessState(row.access_state),
   };
 }

@@ -1,4 +1,4 @@
-import { getActivePlans, requireOwnerPage } from "@/lib/tenant";
+import { getActivePlans, getMyAccessState, requireOwnerPage } from "@/lib/tenant";
 import { isAsaasConfigured } from "@/lib/asaas";
 import { PlanoClient } from "@/components/painel/plano/PlanoClient";
 
@@ -10,7 +10,7 @@ import { PlanoClient } from "@/components/painel/plano/PlanoClient";
 export default async function PlanoPage() {
   const { supabase, restaurant } = await requireOwnerPage();
 
-  const plans = await getActivePlans(supabase);
+  const [plans, accessState] = await Promise.all([getActivePlans(supabase), getMyAccessState(supabase)]);
   const currentPlan = restaurant.plan_id ? plans.find((p) => p.id === restaurant.plan_id) ?? null : null;
 
   return (
@@ -24,6 +24,7 @@ export default async function PlanoPage() {
         plans={plans}
         currentPlan={currentPlan}
         subscriptionStatus={restaurant.subscription_status}
+        accessState={accessState}
         asaasConfigured={isAsaasConfigured()}
       />
     </div>

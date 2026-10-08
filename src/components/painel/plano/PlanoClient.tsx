@@ -4,6 +4,7 @@ import { useState, useTransition } from "react";
 import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { ErrorState } from "@/components/ui/States";
+import { ACCESS_STATE_COPY, type AccessState } from "@/lib/accessState";
 import { subscribeToPlanAction } from "@/lib/actions/subscription";
 import { formatCurrencyBRL } from "@/lib/products";
 import type { Plan, Restaurant } from "@/lib/tenant";
@@ -19,11 +20,13 @@ export function PlanoClient({
   plans,
   currentPlan,
   subscriptionStatus,
+  accessState,
   asaasConfigured,
 }: {
   plans: Plan[];
   currentPlan: Plan | null;
   subscriptionStatus: Restaurant["subscription_status"];
+  accessState: AccessState | null;
   asaasConfigured: boolean;
 }) {
   const [subscribingId, setSubscribingId] = useState<string | null>(null);
@@ -46,7 +49,12 @@ export function PlanoClient({
     });
   }
 
-  const status = STATUS_LABEL[subscriptionStatus];
+  // Trial expirado não aparece em subscription_status (continua "active" sem
+  // plano), então o selo vem do estado de acesso.
+  const status =
+    accessState === "trial_expired"
+      ? { label: ACCESS_STATE_COPY.trial_expired.badge, tone: "danger" as const }
+      : STATUS_LABEL[subscriptionStatus];
   const hasLiveSubscription = currentPlan !== null && subscriptionStatus !== "cancelled";
 
   return (
@@ -58,6 +66,12 @@ export function PlanoClient({
         </div>
         <Badge tone={status.tone}>{status.label}</Badge>
       </Card>
+
+      {accessState !== null && (
+        <div className="rounded-xl border border-red/20 bg-red/10 px-3.5 py-2.5 text-sm font-semibold text-red">
+          {ACCESS_STATE_COPY[accessState].message}
+        </div>
+      )}
 
       {!asaasConfigured && (
         <div className="rounded-xl border border-amber/20 bg-amber/10 px-3.5 py-2.5 text-xs font-medium text-amber">

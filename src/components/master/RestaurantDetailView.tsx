@@ -5,7 +5,7 @@ import { formatCurrencyBRL } from "@/lib/products";
 import { StatCard } from "./StatCard";
 import {
   RESTAURANT_STATUS_BADGE,
-  SUBSCRIPTION_STATUS_BADGE,
+  subscriptionBadge,
   buildActivationSteps,
   computeActivationProgress,
   computeCompletionRate,
@@ -37,7 +37,7 @@ function ProgressBar({ percent, tone }: { percent: number; tone: "primary" | "su
  * master_get_restaurant; nada aqui é estimado ou de exemplo. */
 export function RestaurantDetailView({ detail }: { detail: MasterRestaurantDetail }) {
   const status = RESTAURANT_STATUS_BADGE[detail.status];
-  const subscription = SUBSCRIPTION_STATUS_BADGE[detail.subscription_status];
+  const subscription = subscriptionBadge(detail.subscription_status, detail.access_state);
   const mrr = computeMrr(detail.plan_price, detail.subscription_status);
   const completionRate = computeCompletionRate(detail.orders_completed, detail.orders_cancelled);
   const steps = buildActivationSteps(detail);

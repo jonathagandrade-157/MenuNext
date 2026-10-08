@@ -10,6 +10,7 @@ import {
   SUBSCRIPTION_STATUSES,
   SUBSCRIPTION_STATUS_BADGE,
   buildListHref,
+  subscriptionBadge,
   formatDateBR,
   formatDateTimeBR,
   type MasterListParams,
@@ -31,7 +32,7 @@ function PlanCell({ row }: { row: MasterRestaurantRow }) {
 
 function RestaurantBadges({ row }: { row: MasterRestaurantRow }) {
   const status = RESTAURANT_STATUS_BADGE[row.status];
-  const subscription = SUBSCRIPTION_STATUS_BADGE[row.subscription_status];
+  const subscription = subscriptionBadge(row.subscription_status, row.access_state);
   return (
     <div className="flex flex-wrap gap-1.5">
       <Badge tone={status.tone}>{status.label}</Badge>

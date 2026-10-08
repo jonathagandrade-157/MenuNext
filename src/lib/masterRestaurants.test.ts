@@ -6,6 +6,7 @@ import {
   computeCompletionRate,
   computeMrr,
   parseListParams,
+  subscriptionBadge,
   type MasterRestaurantDetail,
 } from "./masterRestaurants";
 
@@ -35,6 +36,7 @@ function makeDetail(overrides: Partial<MasterRestaurantDetail> = {}): MasterRest
     last_order_at: null,
     products_count: 0,
     open_business_days: 0,
+    access_state: null,
     ...overrides,
   };
 }
@@ -84,6 +86,17 @@ describe("buildListHref", () => {
 
   it("inclui a página a partir da 2", () => {
     expect(buildListHref({ search: null, subscriptionStatus: null, page: 3 })).toBe("/master/restaurantes?page=3");
+  });
+});
+
+describe("subscriptionBadge — loja bloqueada nunca aparece como 'Em dia'", () => {
+  it("sem bloqueio, usa o selo do status da assinatura", () => {
+    expect(subscriptionBadge("active", null)).toEqual({ label: "Em dia", tone: "success" });
+    expect(subscriptionBadge("overdue", "overdue")).toEqual({ label: "Atrasada", tone: "danger" });
+  });
+
+  it("trial expirado tem prioridade, mesmo com status 'active' (sem plano)", () => {
+    expect(subscriptionBadge("active", "trial_expired")).toEqual({ label: "Teste encerrado", tone: "danger" });
   });
 });
 
