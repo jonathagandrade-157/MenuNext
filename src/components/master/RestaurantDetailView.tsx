@@ -3,6 +3,8 @@ import { Badge } from "@/components/ui/Badge";
 import { Card } from "@/components/ui/Card";
 import { formatCurrencyBRL } from "@/lib/products";
 import { StatCard } from "./StatCard";
+import { TrialCourtesyForm } from "./TrialCourtesyForm";
+import type { TrialSummary } from "@/lib/trialExtension";
 import {
   RESTAURANT_STATUS_BADGE,
   subscriptionBadge,
@@ -35,7 +37,7 @@ function ProgressBar({ percent, tone }: { percent: number; tone: "primary" | "su
 
 /** Detalhe de um restaurante, visão do Master. Todo número vem da RPC
  * master_get_restaurant; nada aqui é estimado ou de exemplo. */
-export function RestaurantDetailView({ detail }: { detail: MasterRestaurantDetail }) {
+export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaurantDetail; trial: TrialSummary }) {
   const status = RESTAURANT_STATUS_BADGE[detail.status];
   const subscription = subscriptionBadge(detail.subscription_status, detail.access_state);
   const mrr = computeMrr(detail.plan_price, detail.subscription_status);
@@ -123,6 +125,33 @@ export function RestaurantDetailView({ detail }: { detail: MasterRestaurantDetai
               </div>
             </div>
           </Card>
+
+          {detail.plan_name === null && (
+            <Card className="space-y-4 p-6">
+              <div>
+                <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Período de teste</h2>
+                <p className="mt-1 text-sm text-text-muted">
+                  Teste gratuito do responsável pela loja. Ao acabar sem assinatura, painel e loja pública são bloqueados.
+                </p>
+              </div>
+              <div className="rounded-xl bg-surface-subdued p-4">
+                <p className="text-[11px] font-bold uppercase tracking-wide text-text-muted">Situação do teste</p>
+                <p className="mt-2 text-sm font-bold text-graphite">
+                  {trial.state === "none" && "Sem período de teste"}
+                  {trial.state === "active" &&
+                    `Em andamento até ${formatDateTimeBR(trial.endsAt)} (${trial.daysLeft} ${trial.daysLeft === 1 ? "dia" : "dias"})`}
+                  {trial.state === "expired" && `Encerrado em ${formatDateTimeBR(trial.endsAt)}`}
+                </p>
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-graphite">Cortesia</h3>
+                <p className="mb-3 mt-1 text-xs text-text-muted">
+                  Soma dias ao teste (a partir de hoje, se já acabou). Vale para todas as lojas do mesmo responsável e fica registrado.
+                </p>
+                <TrialCourtesyForm restaurantId={detail.id} />
+              </div>
+            </Card>
+          )}
 
           <Card className="space-y-4 p-6">
             <div className="flex items-start justify-between gap-3">

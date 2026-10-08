@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { requireMasterPage } from "@/lib/tenant";
 import { getMasterRestaurant } from "@/lib/masterRestaurants";
 import { RestaurantDetailView } from "@/components/master/RestaurantDetailView";
+import { getMasterRestaurantTrialEnd, summarizeTrial } from "@/lib/trialExtension";
 
 const UUID_PATTERN = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
@@ -16,5 +17,7 @@ export default async function Page(props: PageProps<"/master/restaurantes/[id]">
   const detail = await getMasterRestaurant(supabase, id);
   if (!detail) notFound();
 
-  return <RestaurantDetailView detail={detail} />;
+  const trial = summarizeTrial(await getMasterRestaurantTrialEnd(supabase, id), new Date());
+
+  return <RestaurantDetailView detail={detail} trial={trial} />;
 }

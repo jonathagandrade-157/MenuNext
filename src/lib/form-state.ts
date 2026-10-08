@@ -68,6 +68,9 @@ export const initialInviteState: InviteActionState = { status: "idle" };
 export type PlatformSettingsActionState = { status: "idle" | "success" | "error"; message?: string };
 export const initialPlatformSettingsState: PlatformSettingsActionState = { status: "idle" };
 
+export type TrialExtensionActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialTrialExtensionState: TrialExtensionActionState = { status: "idle" };
+
 // Contato e bio do restaurante (/painel/configuracoes) — mesmo formato de
 // CategoryActionState/ProductActionState.
 export type ContactInfoActionState = { status: "idle" | "success" | "error"; message?: string };
