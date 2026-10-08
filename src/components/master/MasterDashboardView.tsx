@@ -11,10 +11,10 @@ import {
 } from "@/lib/masterDashboard";
 import type { MasterRestaurantRow } from "@/lib/masterRestaurants";
 import { formatCurrencyBRL } from "@/lib/products";
+import { LINE_CHART_SIZE, LineChart } from "./LineChart";
 import { StatCard } from "./StatCard";
 
 const PLAN_COLORS = ["bg-primary", "bg-amber", "bg-blue", "bg-emerald"];
-const CHART = { width: 600, height: 220, padX: 28, padY: 24 };
 
 function formatPercent(value: number): string {
   return `${(Math.round(value * 10) / 10).toLocaleString("pt-BR")}%`;
@@ -34,32 +34,12 @@ function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) 
 }
 
 function GrowthChart({ stats }: { stats: MasterDashboardStats }) {
-  const chart = buildGrowthChart(stats.growth, CHART);
-  const lastIndex = chart.dots.length - 1;
-
   return (
-    <svg viewBox={`0 0 ${CHART.width} ${CHART.height}`} className="h-auto w-full text-primary" role="img" aria-label="Restaurantes cadastrados por mês">
-      <line x1={CHART.padX} x2={CHART.width - CHART.padX} y1={CHART.height - CHART.padY} y2={CHART.height - CHART.padY} stroke="currentColor" strokeOpacity="0.15" />
-      {chart.area && <path d={chart.area} fill="currentColor" fillOpacity="0.1" />}
-      {chart.line && <path d={chart.line} fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />}
-      {chart.dots.map((dot, index) => (
-        <g key={dot.label}>
-          <circle cx={dot.x} cy={dot.y} r={index === lastIndex ? 5 : 3.5} fill="currentColor">
-            <title>{`${dot.label}: ${dot.value} cadastrados no total`}</title>
-          </circle>
-          {(index % 2 === 1 || index === lastIndex) && (
-            <text x={dot.x} y={CHART.height - 6} textAnchor="middle" fontSize="11" className="fill-text-muted">
-              {dot.label}
-            </text>
-          )}
-        </g>
-      ))}
-      {lastIndex >= 0 && (
-        <text x={chart.dots[lastIndex].x} y={chart.dots[lastIndex].y - 12} textAnchor="end" fontSize="13" fontWeight="700" className="fill-graphite">
-          {chart.dots[lastIndex].value}
-        </text>
-      )}
-    </svg>
+    <LineChart
+      chart={buildGrowthChart(stats.growth, LINE_CHART_SIZE)}
+      ariaLabel="Restaurantes cadastrados por mês"
+      tooltip={(dot) => `${dot.label}: ${dot.value} cadastrados no total`}
+    />
   );
 }
 

@@ -133,7 +133,8 @@ export type ChartGeometry = {
  * toda zerada vira uma linha reta na base, sem divisão por zero). */
 export function buildGrowthChart(
   points: GrowthPoint[],
-  size: { width: number; height: number; padX: number; padY: number }
+  size: { width: number; height: number; padX: number; padY: number },
+  labelOf: (key: string) => string = formatMonthLabel
 ): ChartGeometry {
   const { width, height, padX, padY } = size;
   const max = Math.max(0, ...points.map((p) => p.total));
@@ -143,7 +144,7 @@ export function buildGrowthChart(
   const dots = points.map((point, index) => {
     const x = points.length === 1 ? padX + innerW / 2 : padX + (index / (points.length - 1)) * innerW;
     const y = max === 0 ? padY + innerH : padY + innerH - (point.total / max) * innerH;
-    return { x: round(x), y: round(y), label: formatMonthLabel(point.month), value: point.total };
+    return { x: round(x), y: round(y), label: labelOf(point.month), value: point.total };
   });
 
   if (dots.length === 0) return { line: "", area: "", dots, max };

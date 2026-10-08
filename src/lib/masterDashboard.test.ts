@@ -129,6 +129,18 @@ describe("buildGrowthChart", () => {
     expect(chart.area).toContain("L90,45 L10,45");
   });
 
+  it("aceita uma função de rótulo própria (ex.: dias em vez de meses)", () => {
+    const chart = buildGrowthChart(
+      [
+        { month: "2026-10-07", total: 1 },
+        { month: "2026-10-08", total: 2 },
+      ],
+      size,
+      (key) => `dia ${key.slice(-2)}`
+    );
+    expect(chart.dots.map((d) => d.label)).toEqual(["dia 07", "dia 08"]);
+  });
+
   it("um único ponto fica centralizado", () => {
     const chart = buildGrowthChart([{ month: "2026-09", total: 3 }], size);
     expect(chart.dots[0].x).toBe(50);
