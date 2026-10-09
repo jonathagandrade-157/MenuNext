@@ -1,5 +1,5 @@
 import { getActivePlans, getMyAccessState, requireOwnerPage } from "@/lib/tenant";
-import { isAsaasConfigured } from "@/lib/asaas";
+import { isBillingConfigured } from "@/lib/billingConfig";
 import { PlanoClient } from "@/components/painel/plano/PlanoClient";
 
 // Restrita ao OWNER (JON-10): billing é decisão de dono, fora do escopo
@@ -25,7 +25,7 @@ export default async function PlanoPage() {
         currentPlan={currentPlan}
         subscriptionStatus={restaurant.subscription_status}
         accessState={accessState}
-        asaasConfigured={isAsaasConfigured()}
+        asaasConfigured={isBillingConfigured()}
       />
     </div>
   );

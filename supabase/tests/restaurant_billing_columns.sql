@@ -26,7 +26,7 @@
 --   0 catálogo   privilégios, classificação de colunas, trigger
 --   1 ataques    colunas de cobrança, trial, estrutura, cross-tenant; e
 --                atualização operacional legítima (controle positivo)
---   2 fluxos     trial, assinatura, webhook (atraso, pagamento, cancelamento)
+--   2 fluxos     trial, assinatura (abrir, registrar ids, webhook: pagamento, atraso, cancelamento)
 --   3 2ª camada  reabre o GRANT de propósito: o trigger ainda deve barrar
 
 do $$
@@ -37,6 +37,8 @@ declare
   u_master  uuid := gen_random_uuid();
   u_stranger uuid := gen_random_uuid();
   r_a uuid; r_b uuid; v_plan uuid;
+  v_sub_id uuid := gen_random_uuid();   -- id fixo da 1a assinatura da loja A
+  v_sub_id2 uuid := gen_random_uuid();  -- id fixo da re-assinatura (fase 3)
 
   protected_cols text[] := array['plan_id', 'subscription_status', 'asaas_customer_id',
                                  'asaas_subscription_id', 'subscription_current_period_end'];
@@ -263,27 +265,40 @@ begin
    (2,'sys','allow','prepara: trial vencido de novo para isolar o fluxo de assinatura',
     format($s$ update public.profiles set trial_ends_at = now() - interval '1 day' where user_id = %L $s$, u_owner_a),
     format($v$ public._restaurant_access_state(%L) = 'trial_expired' $v$, r_a)),
-   (2,'staff_a','deny','STAFF NAO inicia assinatura (RPC exige OWNER)',
-    format('select public.start_restaurant_subscription(%L, %L, %L)', v_plan, 'cus_staff', 'sub_staff'),
-    format($v$ (select plan_id is null and asaas_subscription_id is null from public.restaurants where id = %L) $v$, r_a)),
-   (2,'owner_a','allow','FLUXO LEGITIMO: OWNER inicia a assinatura pela RPC',
-    format('select public.start_restaurant_subscription(%L, %L, %L)', v_plan, 'cus_ok', 'sub_ok'),
-    format($v$ (select plan_id = %L and subscription_status = 'pending' and asaas_customer_id = 'cus_ok'
-                       and asaas_subscription_id = 'sub_ok' from public.restaurants where id = %L)
-               and public._restaurant_access_state(%L) is null $v$, v_plan, r_a, r_a)),
-   (2,'anon','allow','FLUXO LEGITIMO: webhook marca atraso (token correto)',
-    format('select public.process_asaas_webhook(%L, %L, %L, %L, %L)', w, 'evt-1', 'PAYMENT_OVERDUE', 'sub_ok', 'overdue'),
+   (2,'staff_a','deny','STAFF NAO abre assinatura (RPC exige OWNER)',
+    format('select public.billing_begin_subscription(%L)', v_plan),
+    format($v$ not exists (select 1 from public.billing_subscriptions where restaurant_id = %L) $v$, r_a)),
+   (2,'owner_a','allow','FLUXO LEGITIMO: OWNER abre a assinatura pela RPC (valor vem do plano)',
+    format('select * from public.billing_begin_subscription(%L)', v_plan),
+    format($v$ exists (select 1 from public.billing_subscriptions where restaurant_id = %L and status = 'initiated' and amount = 49.90)
+               and public._restaurant_access_state(%L) = 'trial_expired' $v$, r_a, r_a)),
+   (2,'sys','allow','prepara: id fixo para a assinatura aberta',
+    format($s$ update public.billing_subscriptions set id = %L where restaurant_id = %L and status = 'initiated' $s$, v_sub_id, r_a), null),
+   (2,'owner_a','deny','OWNER NAO registra ids do provedor (so o backend, via service_role)',
+    format('select public.billing_attach_provider_subscription(%L, %L, %L, 49.90)', v_sub_id, 'cus_000000000A01', 'sub_000000000A01'),
+    format($v$ (select status = 'initiated' from public.billing_subscriptions where id = %L) $v$, v_sub_id)),
+   (2,'service','allow','FLUXO LEGITIMO: o backend registra os ids do provedor (pending) e isso NAO libera acesso',
+    format('select public.billing_attach_provider_subscription(%L, %L, %L, 49.90)', v_sub_id, 'cus_000000000A01', 'sub_000000000A01'),
+    format($v$ (select plan_id = %L and subscription_status = 'pending' and asaas_customer_id = 'cus_000000000A01'
+                       and asaas_subscription_id = 'sub_000000000A01' from public.restaurants where id = %L)
+               and public._restaurant_access_state(%L) = 'trial_expired' $v$, v_plan, r_a, r_a)),
+   (2,'anon','allow','FLUXO LEGITIMO: webhook confirma o 1o pagamento (token correto): libera a loja',
+    format('select public.process_asaas_webhook(%L, %L, %L, null, %L, %L, %L, %L, %L, null, null)', w, 'evt-1', 'PAYMENT_CONFIRMED', 'sub_000000000A01', 'cus_000000000A01', 'pay_000000000A01', 49.90, '2020-01-10'),
+    format($v$ (select subscription_status = 'active' from public.restaurants where id = %L)
+               and public._restaurant_access_state(%L) is null $v$, r_a, r_a)),
+   (2,'anon','allow','FLUXO LEGITIMO: webhook marca atraso da renovacao (token correto)',
+    format('select public.process_asaas_webhook(%L, %L, %L, null, %L, %L, %L, %L, %L, null, null)', w, 'evt-2', 'PAYMENT_OVERDUE', 'sub_000000000A01', 'cus_000000000A01', 'pay_000000000A02', 49.90, '2020-02-10'),
     format($v$ (select subscription_status = 'overdue' from public.restaurants where id = %L)
                and public._restaurant_access_state(%L) = 'overdue' $v$, r_a, r_a)),
    (2,'anon','deny','webhook com token errado e recusado e nao muda nada',
-    format('select public.process_asaas_webhook(%L, %L, %L, %L, %L)', 'token-errado', 'evt-x', 'PAYMENT_CONFIRMED', 'sub_ok', 'active'),
+    format('select public.process_asaas_webhook(%L, %L, %L, null, %L, %L, %L, %L, %L, null, null)', 'token-errado', 'evt-x', 'PAYMENT_CONFIRMED', 'sub_000000000A01', 'cus_000000000A01', 'pay_000000000A02', 49.90, '2020-02-10'),
     format($v$ (select subscription_status = 'overdue' from public.restaurants where id = %L) $v$, r_a)),
    (2,'anon','allow','FLUXO LEGITIMO: pagamento confirmado reativa a loja',
-    format('select public.process_asaas_webhook(%L, %L, %L, %L, %L)', w, 'evt-2', 'PAYMENT_CONFIRMED', 'sub_ok', 'active'),
+    format('select public.process_asaas_webhook(%L, %L, %L, null, %L, %L, %L, %L, %L, null, null)', w, 'evt-3', 'PAYMENT_CONFIRMED', 'sub_000000000A01', 'cus_000000000A01', 'pay_000000000A02', 49.90, '2020-02-10'),
     format($v$ (select subscription_status = 'active' from public.restaurants where id = %L)
                and public._restaurant_access_state(%L) is null $v$, r_a, r_a)),
    (2,'anon','allow','FLUXO LEGITIMO: webhook cancela a assinatura',
-    format('select public.process_asaas_webhook(%L, %L, %L, %L, %L)', w, 'evt-3', 'SUBSCRIPTION_DELETED', 'sub_ok', 'cancelled'),
+    format('select public.process_asaas_webhook(%L, %L, %L, null, %L, %L, %L, %L, %L, null, null)', w, 'evt-4', 'SUBSCRIPTION_DELETED', 'sub_000000000A01', 'cus_000000000A01', null, null, null),
     format($v$ (select subscription_status = 'cancelled' from public.restaurants where id = %L)
                and public._restaurant_access_state(%L) = 'cancelled' $v$, r_a, r_a)),
    (2,'owner_a','deny','loja cancelada: OWNER NAO se reativa por UPDATE direto',
@@ -316,11 +331,16 @@ begin
    (3,'owner_a','allow',null,'CONTROLE: com GRANT amplo, edicao operacional segue funcionando',
     format($s$ update public.restaurants set bio = 'pos-regrant' where id = %L $s$, r_a),
     format($v$ (select bio = 'pos-regrant' from public.restaurants where id = %L) $v$, r_a)),
-   (3,'owner_a','allow',null,'FLUXO LEGITIMO: re-assinatura apos cancelamento passa pelo trigger (RPC definer)',
-    format('select public.start_restaurant_subscription(%L, %L, %L)', v_plan, 'cus_2', 'sub_2'),
-    format($v$ (select asaas_subscription_id = 'sub_2' and subscription_status = 'pending' from public.restaurants where id = %L) $v$, r_a)),
+   (3,'owner_a','allow',null,'FLUXO LEGITIMO: re-assinatura apos cancelamento: OWNER abre a nova assinatura (definer)',
+    format('select * from public.billing_begin_subscription(%L)', v_plan),
+    format($v$ exists (select 1 from public.billing_subscriptions where restaurant_id = %L and status = 'initiated') $v$, r_a)),
+   (3,'sys','allow',null,'prepara: id fixo para a nova assinatura',
+    format($s$ update public.billing_subscriptions set id = %L where restaurant_id = %L and status = 'initiated' $s$, v_sub_id2, r_a), null),
+   (3,'service','allow',null,'FLUXO LEGITIMO: registro dos novos ids passa pelo trigger (RPC definer)',
+    format('select public.billing_attach_provider_subscription(%L, %L, %L, 49.90)', v_sub_id2, 'cus_000000000A02', 'sub_000000000A02'),
+    format($v$ (select asaas_subscription_id = 'sub_000000000A02' and subscription_status = 'pending' from public.restaurants where id = %L) $v$, r_a)),
    (3,'anon','allow',null,'FLUXO LEGITIMO: webhook passa pelo trigger (RPC definer)',
-    format('select public.process_asaas_webhook(%L, %L, %L, %L, %L)', w, 'evt-4', 'PAYMENT_CONFIRMED', 'sub_2', 'active'),
+    format('select public.process_asaas_webhook(%L, %L, %L, null, %L, %L, %L, %L, %L, null, null)', w, 'evt-5', 'PAYMENT_CONFIRMED', 'sub_000000000A02', 'cus_000000000A02', 'pay_000000000A03', 49.90, '2026-12-10'),
     format($v$ (select subscription_status = 'active' from public.restaurants where id = %L) $v$, r_a));
 
   -- ---------- execucao ----------
@@ -335,12 +355,13 @@ begin
       reset role;
       if c.persona <> 'sys' then
         perform set_config('request.jwt.claims',
-          case c.persona when 'anon' then ''
+          case when c.persona in ('anon', 'service') then ''
             else json_build_object('sub',
               case c.persona when 'owner_a' then u_owner_a when 'staff_a' then u_staff_a
                              when 'owner_b' then u_owner_b when 'master' then u_master else u_stranger end,
               'role', 'authenticated')::text end, true);
-        execute format('set local role %I', case when c.persona = 'anon' then 'anon' else 'authenticated' end);
+        execute format('set local role %I',
+          case c.persona when 'anon' then 'anon' when 'service' then 'service_role' else 'authenticated' end);
       end if;
 
       ok := false; err := null; n := 0;
