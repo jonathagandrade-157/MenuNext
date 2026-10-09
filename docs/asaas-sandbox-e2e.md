@@ -1,71 +1,101 @@
-# Teste ponta a ponta com o Asaas Sandbox
+# Teste ponta a ponta da cobrança (Asaas simulado e Asaas Sandbox)
 
-Roteiro para validar a cobrança de assinaturas contra o **sandbox** do Asaas, **sem pagamentos reais**. Faça em um ambiente
-isolado (Preview da Vercel ou máquina local com túnel), com um projeto Supabase de teste, nunca na produção.
+Valida a cobrança de assinaturas **sem pagamentos reais e sem tocar na produção**: banco PostgreSQL isolado, o backend
+Next.js real e, no lugar do Asaas, primeiro um servidor simulado e depois o **Sandbox** do Asaas.
 
-## 0. Pré-requisitos
+## 1. Peças
 
-| Item | Valor |
-|---|---|
-| Conta | `https://sandbox.asaas.com` (chave de **sandbox**) |
-| `ASAAS_ENV` | `sandbox` |
-| `ASAAS_API_KEY` | chave do sandbox |
-| `SUPABASE_SERVICE_ROLE_KEY` | chave de servidor do projeto Supabase **de teste** |
-| `CRON_SECRET` | valor aleatório com 16+ caracteres |
-| Banco | migrations aplicadas no projeto de teste e ao menos 1 plano ativo com preço maior que zero |
-| Webhook | URL pública `https://<ambiente>/api/webhooks/asaas` (Preview ou túnel) |
-
-Gere um token de webhook aleatório (32+ caracteres), cadastre-o em **/master/assinaturas** e cole o **mesmo valor** no Asaas
-(Integrações → Webhooks → *Token de acesso*). Eventos a marcar: `PAYMENT_CREATED`, `PAYMENT_CONFIRMED`, `PAYMENT_RECEIVED`,
-`PAYMENT_OVERDUE`, `PAYMENT_REFUNDED`, `PAYMENT_DELETED`, `PAYMENT_RESTORED`, `PAYMENT_CHARGEBACK_REQUESTED`,
-`SUBSCRIPTION_DELETED`, `SUBSCRIPTION_INACTIVATED`.
-
-## 1. Conferir as suposições da API (script do repositório)
-
-```bash
-ASAAS_API_KEY=<chave-sandbox> node scripts/asaas-sandbox-check.mjs
-ASAAS_API_KEY=<chave-sandbox> node scripts/asaas-sandbox-check.mjs --create
-```
-
-O primeiro só confirma a chave. O segundo cria e remove uma assinatura de R$ 5,00 e confere: leitura de volta (cliente, valor,
-status e referência), busca por `externalReference` e leitura das cobranças. O script recusa chave de produção.
-
-## 2. Roteiro do fluxo (marque o resultado esperado)
-
-| # | Ação | Resultado esperado |
+| Peça | Onde | Função |
 |---|---|---|
-| 1 | Com uma loja de teste cujo teste gratuito já terminou, o OWNER abre **/painel/plano** e assina | Mensagem de sucesso; no Asaas aparece a assinatura com a referência do MenuNext; no banco a assinatura fica `pending`; o painel **continua bloqueado** |
-| 2 | Clicar em assinar de novo | Não cria outra assinatura no Asaas (reencontra a da mesma tentativa) ou responde que já existe |
-| 3 | No Asaas sandbox, confirmar o pagamento da primeira cobrança (botão de confirmar/receber pagamento do sandbox) | Webhook `PAYMENT_CONFIRMED`/`RECEIVED` chega; o painel e a loja pública são liberados; a assinatura vira `active` e o período vai até um mês após o vencimento |
-| 4 | Reenviar o mesmo evento pelo painel do Asaas | Resposta `duplicate`, sem mudança |
-| 5 | Forjar um evento: `curl` ao webhook com o token **certo** e o id de uma cobrança que ainda está pendente no Asaas | Resposta `unverified` (a API do Asaas não confirma); nada muda |
-| 6 | `curl` ao webhook **sem** o token, ou com token errado | `401`; nenhum registro novo em `asaas_webhook_events` |
-| 7 | Deixar a cobrança do mês seguinte vencer (ou usar a função de vencimento do sandbox, se existir) | `PAYMENT_OVERDUE`: assinatura `overdue`, painel e loja bloqueados |
-| 8 | Pagar a cobrança vencida | Assinatura volta a `active`; acesso liberado |
-| 9 | Cancelar a assinatura no Asaas | `SUBSCRIPTION_DELETED`: status `cancelled`, **acesso mantido até o fim do período pago**; depois bloqueia |
-| 10 | Reabrir **/painel/plano** | Pode assinar de novo (nova assinatura) |
-| 11 | **Webhook perdido:** pausar a fila de webhooks no Asaas (ou desligar a URL), pagar uma cobrança e então chamar a reconciliação (abaixo) | A cobrança é aplicada pela reconciliação e a loja é liberada |
-| 12 | **Estorno:** estornar a cobrança paga no sandbox | `PAYMENT_REFUNDED`: o período correspondente deixa de contar e o acesso acaba |
+| Banco isolado | PostgreSQL 17 + PostgREST locais, com todas as migrations (a nova inclusive) | Nunca é o Supabase real |
+| Backend | `next start` do projeto, apontado para o banco isolado | Webhook, reconciliação e Server Action de verdade |
+| Asaas simulado | `src/integration/fakeAsaas.ts` | Mesmos endpoints e formatos de payload; permite forjar divergências |
+| Ensaio completo | `src/integration/billing.e2e.test.ts` (17 cenários) | Roda contra o Asaas simulado |
+| Roteiro do Sandbox | `src/integration/billing.sandbox.test.ts` (9 passos) | Age pela API do Asaas e espera o efeito no banco; alvo `fake` ou `real` |
+| Porteiro do webhook | `scripts/webhook-gate.mjs` | Única porta exposta à internet: só `POST /api/webhooks/asaas` |
+| Conferência da API | `scripts/asaas-sandbox-check.mjs` | Confere as suposições da API do Sandbox (recusa chave de produção) |
 
-### Chamar a reconciliação manualmente
+Os testes de integração **só rodam com variáveis de ambiente** (`BILLING_E2E=1` ou `SANDBOX_E2E=1`) e ficam "ignorados" na
+suíte normal e na CI.
+
+## 2. O que o ensaio completo cobre (Asaas simulado)
+
+Assinatura legítima; ids inventados e vínculo com dados de outra conta; leitura de volta divergente (valor, cliente,
+referência, status); cobrança pendente; confirmação forjada; pagamento de valor incorreto; confirmação, duplicidade e
+`RECEIVED` da mesma cobrança; evento fora de ordem; renovação com atraso; estorno; webhook perdido (pagamento, estorno e
+cancelamento) recuperado pela reconciliação; cancelamento com período pago; Asaas fora do ar (503).
+
+## 3. Como rodar no Sandbox real
+
+### 3.1 Pré-requisitos (você)
+
+1. Conta no `https://sandbox.asaas.com` e uma **chave de API do Sandbox** (Integrações → Chave de API).
+2. Guarde a chave **apenas** em um arquivo fora do repositório (uma pasta sua, fora da pasta do projeto), com uma linha
+   `ASAAS_API_KEY=<chave>`. Não cole a chave em conversas, issues ou commits. Carregue o arquivo no ambiente só ao rodar; o
+   roteiro lê a variável `ASAAS_API_KEY` e nunca a imprime.
+3. Um endereço público HTTPS temporário que aponte para o **porteiro** (item 3.2).
+
+### 3.2 Endereço público temporário
+
+O Asaas só entrega webhooks em um endereço público. Aponte o túnel para o porteiro (porta 3100), **nunca** para o Next
+diretamente:
 
 ```bash
-curl -s -H "Authorization: Bearer <CRON_SECRET>" https://<ambiente>/api/cron/billing-reconcile
-# esperado: {"ok":true,"checked":N,"applied":M,"unavailable":0,"notFound":0,"errors":0}
+node scripts/webhook-gate.mjs
 ```
 
-Sem o cabeçalho, ou com segredo errado, a resposta deve ser `401`; sem `CRON_SECRET` configurado, `503`.
+Opções de túnel (escolher uma; ambas gratuitas e sem conta):
 
-## 3. Critérios de aprovação
+- `cloudflared tunnel --url http://127.0.0.1:3100` (baixar o executável do repositório oficial da Cloudflare e conferir o
+  SHA-256 publicado na página da versão).
+- `ssh -R 80:127.0.0.1:3100 nokey@localhost.run` (não instala nada; usa o OpenSSH do Windows).
+
+Riscos e mitigações:
+
+- O provedor do túnel enxerga o tráfego, **inclusive o token do webhook**: use um token de teste exclusivo, gerado só para isso,
+  e descarte-o depois.
+- O porteiro expõe uma única rota, corpo de até 64 KB e 60 requisições por minuto; todo o resto (painel, login, reconciliação,
+  arquivos) responde 404. Sem o token certo, o backend responde 401.
+- O endereço é aleatório e existe só enquanto o túnel estiver aberto. Feche o túnel ao terminar e apague o webhook no painel
+  do Sandbox.
+- Nenhuma credencial de produção (Supabase ou Asaas) existe no ambiente.
+
+### 3.3 Configurar o webhook no Sandbox
+
+No painel do Sandbox: URL `https://<endereço do túnel>/api/webhooks/asaas`, **Token de acesso** igual ao token do laboratório e
+os eventos `PAYMENT_CREATED`, `PAYMENT_CONFIRMED`, `PAYMENT_RECEIVED`, `PAYMENT_OVERDUE`, `PAYMENT_REFUNDED`,
+`PAYMENT_DELETED`, `PAYMENT_RESTORED`, `PAYMENT_CHARGEBACK_REQUESTED`, `SUBSCRIPTION_DELETED`, `SUBSCRIPTION_INACTIVATED`.
+
+### 3.4 Executar
+
+Com o banco isolado e o `next start` rodando (mesma `ASAAS_API_KEY` do Sandbox e `ASAAS_ENV=sandbox`, **sem**
+`ASAAS_BASE_URL`):
+
+```bash
+SANDBOX_E2E=1 SANDBOX_TARGET=real BILLING_LAB_STATE=<estado-do-laboratório> npx vitest run src/integration/billing.sandbox.test.ts
+```
+
+O roteiro recusa `ASAAS_ENV=production` e chave de produção, cria assinaturas de R$ 5,00 com dados fictícios, remove tudo
+no Sandbox ao final e imprime, para cada efeito, se chegou por **webhook** ou só pela **reconciliação**. `SANDBOX_WEBHOOKS=0`
+pula a espera por webhooks (só reconciliação).
+
+## 4. O que o Sandbox pode não permitir
+
+A documentação do Asaas não detalha tudo o que o Sandbox simula. O roteiro usa `receiveInCash` (gera `PAYMENT_RECEIVED`),
+estorno e remoção de assinatura pela API. **Atraso (`PAYMENT_OVERDUE`) e chargeback** dependem de recursos do painel do Sandbox
+que podem não existir; nesse caso ficam cobertos pelos testes do banco e pelo ensaio com o Asaas simulado, e o resultado
+registra a limitação.
+
+## 5. Critérios de aprovação
 
 - Nenhuma etapa libera acesso antes de pagamento confirmado **na API do Asaas**.
 - Eventos repetidos, forjados ou fora de ordem não mudam o estado.
 - Webhook perdido é recuperado pela reconciliação.
-- Cancelar preserva o período pago; estorno e chargeback removem o período correspondente.
-- O checkout dos clientes finais da loja continua funcionando durante todo o roteiro.
-- Nenhum dado do Asaas de produção foi usado.
+- Cancelar preserva o período pago; estorno remove o período correspondente.
+- O checkout dos clientes finais continua funcionando durante todo o roteiro.
+- Nenhum dado de produção foi usado.
 
-## 4. Depois do sandbox
+## 6. Depois do Sandbox
 
 Só então trocar para a chave de produção (`ASAAS_ENV=production`), cadastrar o token de webhook de produção e repetir os
-passos 1 a 3 com um plano de valor baixo e uma conta real controlada por você.
+passos com um plano de valor baixo e uma conta real controlada por você.

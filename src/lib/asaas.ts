@@ -29,8 +29,30 @@ export function isAsaasConfigured(): boolean {
   return Boolean(process.env.ASAAS_API_KEY);
 }
 
+/**
+ * Endereço da API. Só "production" usa a API real de cobrança. Para ensaios
+ * locais (Asaas simulado) aceita `ASAAS_BASE_URL`, mas SOMENTE se apontar para
+ * este mesmo computador (http://127.0.0.1 ou http://localhost) e fora de
+ * produção: a chave do Asaas nunca é enviada a outro endereço por essa variável.
+ */
+export function resolveAsaasBaseUrl(env: { ASAAS_ENV?: string; ASAAS_BASE_URL?: string }): string {
+  const override = env.ASAAS_BASE_URL;
+  if (override && env.ASAAS_ENV !== "production") {
+    try {
+      const url = new URL(override);
+      const isLoopback = url.hostname === "127.0.0.1" || url.hostname === "localhost";
+      if (url.protocol === "http:" && isLoopback && !url.username && !url.password) {
+        return override.replace(/\/+$/, "");
+      }
+    } catch {
+      // URL inválida: ignora o override
+    }
+  }
+  return env.ASAAS_ENV === "production" ? "https://api.asaas.com/v3" : "https://api-sandbox.asaas.com/v3";
+}
+
 function getBaseUrl(): string {
-  return process.env.ASAAS_ENV === "production" ? "https://api.asaas.com/v3" : "https://api-sandbox.asaas.com/v3";
+  return resolveAsaasBaseUrl({ ASAAS_ENV: process.env.ASAAS_ENV, ASAAS_BASE_URL: process.env.ASAAS_BASE_URL });
 }
 
 async function asaasRequest<T>(path: string, init: RequestInit): Promise<AsaasResult<T>> {
