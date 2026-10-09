@@ -40,9 +40,13 @@ A assinatura do lojista é cobrada pelo Asaas (o pedido do cliente final continu
 
 **Isolamento entre restaurantes (banco):** `supabase/tests/tenant_isolation.sql` verifica RLS e RPCs com quatro personas (dono da loja A, usuário sem loja, master fora da loja e visitante anônimo): ninguém lê nem altera dados de outra loja, o master só enxerga lojas alheias pelas RPCs `master_*`, e o checkout público recusa produto de outra loja. Cole o arquivo no SQL Editor do Supabase; ele roda numa transação que sempre é desfeita e o relatório vem na mensagem final (`RESULTADO: OK | N verificacoes` ou `RESULTADO: FALHOU ...`). Rode-o depois de qualquer mudança em policies ou RPCs. Ele ainda não roda no CI, que não tem banco.
 
+**Proteção das colunas de cobrança:** `supabase/tests/restaurant_billing_columns.sql` (139 verificações) garante que nenhum usuário da API (OWNER, STAFF, outra loja ou anônimo) altera `plan_id`, `subscription_status` e demais colunas de cobrança de `restaurants`, que os fluxos legítimos continuam funcionando e que a segunda camada (trigger) barra mesmo com um `GRANT` amplo. **Rode só em banco isolado** (ele cria usuários em `auth.users`); não use contra a produção.
+
 ## Banco de dados
 
 Todo o schema (tabelas, RLS, RPCs) vive em `supabase/migrations/` — esse diretório é a fonte de verdade do estado do banco em produção; qualquer alteração de schema deve ser adicionada ali como uma nova migration (nunca aplicada só em produção sem o arquivo correspondente).
+
+Documentação relacionada: [reconciliação do histórico de migrations](docs/migrations-reconciliacao.md) (versões dos arquivos × versões registradas no Supabase) e [regras de manutenção das colunas de cobrança](docs/seguranca/restaurants-colunas-de-cobranca.md).
 
 ## Funcionalidades principais
 
