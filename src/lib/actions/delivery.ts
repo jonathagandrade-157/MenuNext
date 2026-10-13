@@ -1,28 +1,12 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import { requireOwnerAction } from "@/lib/tenant";
 import { buildGeocodableAddress, needsRestaurantLocation, type DeliveryFeeMethod } from "@/lib/delivery";
 import { geocodeAddress, isGeocodingConfigured } from "@/lib/geocoding";
 import type { DeliveryConfigActionState } from "@/lib/form-state";
 
 const DELIVERY_PATH = "/painel/delivery";
-
-async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaurant: Restaurant }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
-
-  return { supabase, restaurant };
-}
 
 /** Retorna null para vazio, NaN para "preenchido mas inválido" — para os dois
  * casos serem distinguíveis na validação abaixo. */
@@ -51,7 +35,7 @@ export async function saveDeliveryConfigAction(
   _prev: DeliveryConfigActionState,
   formData: FormData
 ): Promise<DeliveryConfigActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const serviceDelivery = formData.get("service_delivery") === "on";
   const servicePickup = formData.get("service_pickup") === "on";

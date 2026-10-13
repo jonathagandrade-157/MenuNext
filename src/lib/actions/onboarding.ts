@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant, getOnboardingProgress, ONBOARDING_STEP_PATHS, type Restaurant } from "@/lib/tenant";
+import { getOnboardingProgress, ONBOARDING_STEP_PATHS, type Restaurant, requireOwnerAction } from "@/lib/tenant";
 import type { StepActionState } from "@/lib/form-state";
 import { WEEK_DAYS } from "@/lib/form-state";
 import { validateProductDescription, validateProductName, validateProductPrice } from "@/lib/products";
@@ -29,19 +29,6 @@ function normalizeSlug(input: string): string {
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-}
-
-async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaurant: Restaurant }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
-
-  return { supabase, restaurant };
 }
 
 /**
@@ -95,7 +82,7 @@ async function advanceStep(
  * sobrescreve nenhuma coluna), só avança o progresso.
  */
 export async function skipOnboardingStepAction(step: number): Promise<void> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
   await advanceStep(supabase, restaurant, step, false);
 }
 
@@ -153,7 +140,7 @@ export async function savePasso1Action(_prev: StepActionState, formData: FormDat
 // ---------------------------------------------------------------------------
 
 export async function savePasso2Action(_prev: StepActionState, formData: FormData): Promise<StepActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const address = {
     address_zip: String(formData.get("zip") ?? "").trim(),
@@ -181,7 +168,7 @@ export async function savePasso2Action(_prev: StepActionState, formData: FormDat
 // ---------------------------------------------------------------------------
 
 export async function savePasso3Action(_prev: StepActionState, formData: FormData): Promise<StepActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const serviceDelivery = formData.get("service_delivery") === "on";
   const servicePickup = formData.get("service_pickup") === "on";
@@ -205,7 +192,7 @@ export async function savePasso3Action(_prev: StepActionState, formData: FormDat
 // ---------------------------------------------------------------------------
 
 export async function savePasso4Action(_prev: StepActionState, formData: FormData): Promise<StepActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const feeRaw = String(formData.get("delivery_fee") ?? "").replace(",", ".");
   const radiusRaw = String(formData.get("delivery_radius_km") ?? "").replace(",", ".");
@@ -291,7 +278,7 @@ export async function savePasso4Action(_prev: StepActionState, formData: FormDat
  * add_business_hours_periods) — por isso delete+insert em vez de upsert.
  */
 export async function savePasso5Action(_prev: StepActionState, formData: FormData): Promise<StepActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const rows: { restaurant_id: string; day_of_week: number; period_order: number; opens_at: string; closes_at: string }[] = [];
 
@@ -323,7 +310,7 @@ export async function savePasso5Action(_prev: StepActionState, formData: FormDat
 // ---------------------------------------------------------------------------
 
 export async function savePasso6Action(_prev: StepActionState, formData: FormData): Promise<StepActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const paymentPix = formData.get("payment_pix") === "on";
   const paymentCash = formData.get("payment_cash") === "on";
@@ -368,7 +355,7 @@ export async function savePasso6Action(_prev: StepActionState, formData: FormDat
  * duplicando se já existir alguma.
  */
 export async function savePasso7Action(_prev: StepActionState, formData: FormData): Promise<StepActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();

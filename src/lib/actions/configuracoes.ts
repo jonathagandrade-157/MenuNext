@@ -1,9 +1,7 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant } from "@/lib/tenant";
+import { requireOwnerAction } from "@/lib/tenant";
 import type { ContactInfoActionState } from "@/lib/form-state";
 
 const CONFIGURACOES_PATH = "/painel/configuracoes";
@@ -25,14 +23,7 @@ const BIO_MAX_LENGTH = 160;
  * {status,message} de form-state.ts.
  */
 export async function toggleRestaurantStatusAction(nextStatus: "active" | "paused"): Promise<{ ok: boolean; error?: string }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
+  const { supabase, restaurant } = await requireOwnerAction();
 
   if (restaurant.status !== "active" && restaurant.status !== "paused") {
     return { ok: false, error: "Esta loja ainda não pode ser pausada ou reaberta." };
@@ -57,14 +48,7 @@ export async function saveContactInfoAction(
   _prev: ContactInfoActionState,
   formData: FormData
 ): Promise<ContactInfoActionState> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const contactWhatsapp = String(formData.get("contact_whatsapp") ?? "").replace(/\D/g, "");
   const contactEmail = String(formData.get("contact_email") ?? "").trim();

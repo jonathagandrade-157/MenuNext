@@ -50,11 +50,14 @@ export function ProdutosClient({
   categories,
   addonGroups,
   productAddonGroups,
+  canEdit,
 }: {
   initialProducts: ProductUI[];
   categories: Category[];
   addonGroups: AddonGroup[];
   productAddonGroups: ProductAddonGroupWithGroup[];
+  /** OWNER cadastra, edita, exclui e reordena; STAFF só liga/desliga a disponibilidade (P1-02). O banco também recusa. */
+  canEdit: boolean;
 }) {
   // Sincroniza com initialProducts quando o Server Component busca dados
   // novos (após revalidatePath), ajustando durante o render (não em efeito).
@@ -174,26 +177,32 @@ export function ProdutosClient({
         <div>
           <h1 className="text-2xl font-black tracking-tight text-graphite">Produtos</h1>
           <p className="mt-0.5 text-sm font-medium text-text-muted">
-            Gerencie os itens disponíveis no cardápio da sua loja em tempo real.
+            {canEdit
+              ? "Gerencie os itens disponíveis no cardápio da sua loja em tempo real."
+              : "Ligue ou desligue a disponibilidade dos itens do cardápio em tempo real."}
           </p>
         </div>
-        <Link
-          href="/painel/produtos/novo"
-          className="inline-flex h-11 shrink-0 items-center justify-center gap-2 self-start rounded-xl bg-primary px-5 text-sm font-semibold text-white shadow-[0_8px_20px_-4px_rgba(249,87,33,0.35)] transition-all hover:bg-[#ff5436] sm:self-auto"
-        >
-          <span className="text-lg leading-none">+</span>
-          Novo produto
-        </Link>
+        {canEdit && (
+          <Link
+            href="/painel/produtos/novo"
+            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 self-start rounded-xl bg-primary px-5 text-sm font-semibold text-white shadow-[0_8px_20px_-4px_rgba(249,87,33,0.35)] transition-all hover:bg-[#ff5436] sm:self-auto"
+          >
+            <span className="text-lg leading-none">+</span>
+            Novo produto
+          </Link>
+        )}
       </div>
 
       {products.length === 0 ? (
         <EmptyState
           title="Você ainda não possui produtos."
-          description="Cadastre o primeiro produto do seu cardápio."
+          description={canEdit ? "Cadastre o primeiro produto do seu cardápio." : "O responsável pela loja ainda não cadastrou produtos."}
           action={
-            <Link href="/painel/produtos/novo" className="mt-2 text-sm font-semibold text-primary hover:underline">
-              Novo produto →
-            </Link>
+            canEdit ? (
+              <Link href="/painel/produtos/novo" className="mt-2 text-sm font-semibold text-primary hover:underline">
+                Novo produto →
+              </Link>
+            ) : undefined
           }
         />
       ) : (
@@ -345,43 +354,45 @@ export function ProdutosClient({
                         </button>
                       </div>
 
-                      <div className="flex items-center justify-end gap-1.5 border-t border-border pt-2 md:col-span-2 md:border-t-0 md:pt-0">
-                        <button
-                          type="button"
-                          title="Mover para cima"
-                          disabled={isFirst || isRowPending}
-                          onClick={() => handleMove(product, "up")}
-                          className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
-                        >
-                          <ChevronUpIcon />
-                        </button>
-                        <button
-                          type="button"
-                          title="Mover para baixo"
-                          disabled={isLast || isRowPending}
-                          onClick={() => handleMove(product, "down")}
-                          className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
-                        >
-                          <ChevronDownIcon />
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setEditingId(product.id)}
-                          className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setDeleteError(null);
-                            setDeletingId(product.id);
-                          }}
-                          className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
-                        >
-                          Excluir
-                        </button>
-                      </div>
+                      {canEdit && (
+                        <div className="flex items-center justify-end gap-1.5 border-t border-border pt-2 md:col-span-2 md:border-t-0 md:pt-0">
+                          <button
+                            type="button"
+                            title="Mover para cima"
+                            disabled={isFirst || isRowPending}
+                            onClick={() => handleMove(product, "up")}
+                            className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
+                          >
+                            <ChevronUpIcon />
+                          </button>
+                          <button
+                            type="button"
+                            title="Mover para baixo"
+                            disabled={isLast || isRowPending}
+                            onClick={() => handleMove(product, "down")}
+                            className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
+                          >
+                            <ChevronDownIcon />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setEditingId(product.id)}
+                            className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDeleteError(null);
+                              setDeletingId(product.id);
+                            }}
+                            className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
+                          >
+                            Excluir
+                          </button>
+                        </div>
+                      )}
                     </div>
                   );
                 })}

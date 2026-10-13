@@ -33,7 +33,16 @@ function ChevronDownIcon() {
 }
 
 /** Modal "Gerenciar itens" de um grupo — aberta a partir da lista de grupos. */
-export function ManageAddonsModal({ group, onClose }: { group: AddonGroupWithAddons | null; onClose: () => void }) {
+export function ManageAddonsModal({
+  group,
+  onClose,
+  canEdit,
+}: {
+  group: AddonGroupWithAddons | null;
+  onClose: () => void;
+  /** OWNER cria, edita, exclui e reordena; STAFF só liga/desliga a disponibilidade (P1-02). O banco também recusa. */
+  canEdit: boolean;
+}) {
   const [createOpen, setCreateOpen] = useState(false);
   const [editing, setEditing] = useState<Addon | null>(null);
   const [deleting, setDeleting] = useState<Addon | null>(null);
@@ -88,10 +97,12 @@ export function ManageAddonsModal({ group, onClose }: { group: AddonGroupWithAdd
               <p className="text-xs font-medium text-text-muted">
                 {sorted.length} adicional{sorted.length === 1 ? "" : "is"} neste grupo
               </p>
-              <Button size="sm" onClick={() => setCreateOpen(true)}>
-                <span className="text-base leading-none">+</span>
-                Adicionar adicional
-              </Button>
+              {canEdit && (
+                <Button size="sm" onClick={() => setCreateOpen(true)}>
+                  <span className="text-base leading-none">+</span>
+                  Adicionar adicional
+                </Button>
+              )}
             </div>
 
             {rowError && <ErrorState message={rowError} />}
@@ -120,24 +131,28 @@ export function ManageAddonsModal({ group, onClose }: { group: AddonGroupWithAdd
                         {addon.is_available ? "Disponível" : "Indisponível"}
                       </Badge>
                       <div className="flex items-center gap-1">
-                        <button
-                          type="button"
-                          title="Mover para cima"
-                          disabled={index === 0 || isRowPending}
-                          onClick={() => handleMove(addon, "up")}
-                          className="rounded-lg p-1 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
-                        >
-                          <ChevronUpIcon />
-                        </button>
-                        <button
-                          type="button"
-                          title="Mover para baixo"
-                          disabled={index === sorted.length - 1 || isRowPending}
-                          onClick={() => handleMove(addon, "down")}
-                          className="rounded-lg p-1 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
-                        >
-                          <ChevronDownIcon />
-                        </button>
+                        {canEdit && (
+                          <>
+                            <button
+                              type="button"
+                              title="Mover para cima"
+                              disabled={index === 0 || isRowPending}
+                              onClick={() => handleMove(addon, "up")}
+                              className="rounded-lg p-1 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
+                            >
+                              <ChevronUpIcon />
+                            </button>
+                            <button
+                              type="button"
+                              title="Mover para baixo"
+                              disabled={index === sorted.length - 1 || isRowPending}
+                              onClick={() => handleMove(addon, "down")}
+                              className="rounded-lg p-1 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
+                            >
+                              <ChevronDownIcon />
+                            </button>
+                          </>
+                        )}
                         <button
                           type="button"
                           disabled={isRowPending}
@@ -146,23 +161,27 @@ export function ManageAddonsModal({ group, onClose }: { group: AddonGroupWithAdd
                         >
                           {addon.is_available ? "Desativar" : "Ativar"}
                         </button>
-                        <button
-                          type="button"
-                          onClick={() => setEditing(addon)}
-                          className="rounded-lg px-2 py-1 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
-                        >
-                          Editar
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setDeleteError(null);
-                            setDeleting(addon);
-                          }}
-                          className="rounded-lg px-2 py-1 text-xs font-semibold text-red hover:bg-red/10"
-                        >
-                          Excluir
-                        </button>
+                        {canEdit && (
+                          <>
+                            <button
+                              type="button"
+                              onClick={() => setEditing(addon)}
+                              className="rounded-lg px-2 py-1 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
+                            >
+                              Editar
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => {
+                                setDeleteError(null);
+                                setDeleting(addon);
+                              }}
+                              className="rounded-lg px-2 py-1 text-xs font-semibold text-red hover:bg-red/10"
+                            >
+                              Excluir
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                   );

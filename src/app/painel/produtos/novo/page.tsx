@@ -1,15 +1,11 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { getAuthedUser, getCategories, getMyRestaurant } from "@/lib/tenant";
+import { getCategories, requireOwnerPage } from "@/lib/tenant";
 import { NovoProdutoForm } from "@/components/painel/produtos/NovoProdutoForm";
 import { EmptyState } from "@/components/ui/States";
 
 export default async function NovoProdutoPage() {
-  const { supabase, user } = await getAuthedUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
+  // Cadastrar produto é do OWNER (P1-02): STAFF volta para /painel.
+  const { supabase, restaurant } = await requireOwnerPage();
 
   const categories = await getCategories(supabase, restaurant.id);
 

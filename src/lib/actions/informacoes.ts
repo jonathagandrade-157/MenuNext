@@ -1,26 +1,10 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import { requireOwnerAction } from "@/lib/tenant";
 import type { InformacoesActionState } from "@/lib/form-state";
 
 const INFORMACOES_PATH = "/painel/informacoes";
-
-async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaurant: Restaurant }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
-
-  return { supabase, restaurant };
-}
 
 const COMBINING_DIACRITICS_RANGE_START = 0x0300;
 const COMBINING_DIACRITICS_RANGE_END = 0x036f;
@@ -56,7 +40,7 @@ export async function saveInformacoesAction(
   _prev: InformacoesActionState,
   formData: FormData
 ): Promise<InformacoesActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const name = String(formData.get("name") ?? "").trim();
   const slug = normalizeSlug(String(formData.get("slug") ?? ""));

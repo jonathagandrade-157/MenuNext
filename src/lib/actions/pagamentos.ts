@@ -1,29 +1,13 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import { requireOwnerAction } from "@/lib/tenant";
 import type { PagamentosActionState } from "@/lib/form-state";
 import type { PixKeyType } from "@/lib/pix";
 
 const PIX_KEY_TYPES: PixKeyType[] = ["cpf_cnpj", "email", "telefone", "aleatoria"];
 
 const PAGAMENTOS_PATH = "/painel/pagamentos";
-
-async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaurant: Restaurant }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
-
-  return { supabase, restaurant };
-}
 
 /**
  * Edição de formas de pagamento (separação onboarding/painel) — mesma
@@ -35,7 +19,7 @@ export async function savePagamentosConfigAction(
   _prev: PagamentosActionState,
   formData: FormData
 ): Promise<PagamentosActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const paymentPix = formData.get("payment_pix") === "on";
   const paymentCash = formData.get("payment_cash") === "on";

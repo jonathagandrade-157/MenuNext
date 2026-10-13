@@ -36,7 +36,14 @@ function ChevronDownIcon() {
   );
 }
 
-export function AdicionaisClient({ initialGroups }: { initialGroups: AddonGroupWithAddons[] }) {
+export function AdicionaisClient({
+  initialGroups,
+  canEdit,
+}: {
+  initialGroups: AddonGroupWithAddons[];
+  /** OWNER gerencia grupos e itens; STAFF só liga/desliga a disponibilidade de cada item (P1-02). O banco também recusa. */
+  canEdit: boolean;
+}) {
   // Sincroniza com initialGroups quando o Server Component busca dados novos
   // (após revalidatePath numa Server Action) — ajuste durante o render.
   const [groups, setGroups] = useState(initialGroups);
@@ -127,23 +134,33 @@ export function AdicionaisClient({ initialGroups }: { initialGroups: AddonGroupW
         <div>
           <h1 className="text-2xl font-black tracking-tight text-graphite">Adicionais e complementos</h1>
           <p className="mt-0.5 text-sm font-medium text-text-muted">
-            Grupos de adicionais obrigatórios ou opcionais aplicáveis aos produtos do seu cardápio.
+            {canEdit
+              ? "Grupos de adicionais obrigatórios ou opcionais aplicáveis aos produtos do seu cardápio."
+              : "Abra um grupo para ligar ou desligar a disponibilidade de cada adicional."}
           </p>
         </div>
-        <Button onClick={() => setCreateOpen(true)} className="self-start sm:self-auto">
-          <span className="text-lg leading-none">+</span>
-          Novo grupo
-        </Button>
+        {canEdit && (
+          <Button onClick={() => setCreateOpen(true)} className="self-start sm:self-auto">
+            <span className="text-lg leading-none">+</span>
+            Novo grupo
+          </Button>
+        )}
       </div>
 
       {groups.length === 0 ? (
         <EmptyState
           title="Você ainda não possui grupos de adicionais."
-          description="Crie o primeiro grupo (ex.: Borda recheada, Tamanho, Ponto da carne) para começar a compor os produtos do seu cardápio."
+          description={
+            canEdit
+              ? "Crie o primeiro grupo (ex.: Borda recheada, Tamanho, Ponto da carne) para começar a compor os produtos do seu cardápio."
+              : "O responsável pela loja ainda não criou grupos de adicionais."
+          }
           action={
-            <Button onClick={() => setCreateOpen(true)} className="mt-2">
-              Criar grupo
-            </Button>
+            canEdit ? (
+              <Button onClick={() => setCreateOpen(true)} className="mt-2">
+                Criar grupo
+              </Button>
+            ) : undefined
           }
         />
       ) : (
@@ -222,56 +239,64 @@ export function AdicionaisClient({ initialGroups }: { initialGroups: AddonGroupW
                     </div>
 
                     <div className="mt-auto flex flex-wrap items-center justify-end gap-1.5 border-t border-border pt-3">
-                      <button
-                        type="button"
-                        title="Mover para cima"
-                        disabled={isFirst || isRowPending}
-                        onClick={() => handleMove(group, "up")}
-                        className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
-                      >
-                        <ChevronUpIcon />
-                      </button>
-                      <button
-                        type="button"
-                        title="Mover para baixo"
-                        disabled={isLast || isRowPending}
-                        onClick={() => handleMove(group, "down")}
-                        className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
-                      >
-                        <ChevronDownIcon />
-                      </button>
+                      {canEdit && (
+                        <>
+                          <button
+                            type="button"
+                            title="Mover para cima"
+                            disabled={isFirst || isRowPending}
+                            onClick={() => handleMove(group, "up")}
+                            className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
+                          >
+                            <ChevronUpIcon />
+                          </button>
+                          <button
+                            type="button"
+                            title="Mover para baixo"
+                            disabled={isLast || isRowPending}
+                            onClick={() => handleMove(group, "down")}
+                            className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
+                          >
+                            <ChevronDownIcon />
+                          </button>
+                        </>
+                      )}
                       <button
                         type="button"
                         onClick={() => setManagingId(group.id)}
                         className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
                       >
-                        Gerenciar itens
+                        {canEdit ? "Gerenciar itens" : "Ver itens"}
                       </button>
-                      <button
-                        type="button"
-                        disabled={isRowPending}
-                        onClick={() => handleToggle(group)}
-                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
-                      >
-                        {group.is_active ? "Desativar" : "Ativar"}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setEditingId(group.id)}
-                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
-                      >
-                        Editar
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setDeleteError(null);
-                          setDeletingId(group.id);
-                        }}
-                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
-                      >
-                        Excluir
-                      </button>
+                      {canEdit && (
+                        <>
+                          <button
+                            type="button"
+                            disabled={isRowPending}
+                            onClick={() => handleToggle(group)}
+                            className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
+                          >
+                            {group.is_active ? "Desativar" : "Ativar"}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setEditingId(group.id)}
+                            className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
+                          >
+                            Editar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setDeleteError(null);
+                              setDeletingId(group.id);
+                            }}
+                            className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
+                          >
+                            Excluir
+                          </button>
+                        </>
+                      )}
                     </div>
                   </Card>
                 );
@@ -296,7 +321,7 @@ export function AdicionaisClient({ initialGroups }: { initialGroups: AddonGroupW
         )}
       </Modal>
 
-      <ManageAddonsModal group={managingGroup} onClose={() => setManagingId(null)} />
+      <ManageAddonsModal group={managingGroup} onClose={() => setManagingId(null)} canEdit={canEdit} />
 
       <Modal open={deletingGroup !== null} onClose={() => setDeletingId(null)} title="Excluir grupo?">
         <div className="space-y-4">

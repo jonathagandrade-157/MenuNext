@@ -1,10 +1,7 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import { requireOwnerAction } from "@/lib/tenant";
 import type { CategoryActionState } from "@/lib/form-state";
 import {
   CATEGORY_NAME_MAX_LENGTH,
@@ -16,19 +13,6 @@ import {
 export type { CategoryActionState };
 
 const CATEGORIES_PATH = "/painel/categorias";
-
-async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaurant: Restaurant }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
-
-  return { supabase, restaurant };
-}
 
 function friendlyCategoryError(message: string): string {
   const normalized = message.toLowerCase();
@@ -55,7 +39,7 @@ export async function createCategoryAction(
   _prev: CategoryActionState,
   formData: FormData
 ): Promise<CategoryActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
@@ -86,7 +70,7 @@ export async function updateCategoryAction(
   _prev: CategoryActionState,
   formData: FormData
 ): Promise<CategoryActionState> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const categoryId = String(formData.get("categoryId") ?? "");
   const name = String(formData.get("name") ?? "").trim();
@@ -120,7 +104,7 @@ export async function toggleCategoryActiveAction(
   categoryId: string,
   nextActive: boolean
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data, error } = await supabase
     .from("categories")
@@ -143,7 +127,7 @@ export async function toggleCategoryActiveAction(
 // de FK estourar cru para o usuário.
 // ---------------------------------------------------------------------------
 export async function deleteCategoryAction(categoryId: string): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { count, error: countError } = await supabase
     .from("products")
@@ -177,7 +161,7 @@ export async function moveCategoryAction(
   categoryId: string,
   direction: "up" | "down"
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { error } = await supabase.rpc("move_category", {
     p_category_id: categoryId,

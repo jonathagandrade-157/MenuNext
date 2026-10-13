@@ -1,26 +1,10 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import { requireOwnerAction } from "@/lib/tenant";
 import type { CouponActionState } from "@/lib/form-state";
 
 const MARKETING_PATH = "/painel/marketing";
-
-async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaurant: Restaurant }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
-
-  return { supabase, restaurant };
-}
 
 /** null para vazio, NaN para "preenchido mas inválido" — mesmo padrão de
  * parseOptionalDecimal em actions/deliveryZones.ts. */
@@ -96,7 +80,7 @@ function readCouponForm(formData: FormData): { ok: true; data: CouponFormData } 
 }
 
 export async function createCouponAction(_prev: CouponActionState, formData: FormData): Promise<CouponActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const result = readCouponForm(formData);
   if (!result.ok) return { status: "error", message: result.error };
@@ -109,7 +93,7 @@ export async function createCouponAction(_prev: CouponActionState, formData: For
 }
 
 export async function updateCouponAction(_prev: CouponActionState, formData: FormData): Promise<CouponActionState> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const couponId = String(formData.get("couponId") ?? "");
   if (!couponId) return { status: "error", message: "Cupom inválido." };
@@ -126,7 +110,7 @@ export async function updateCouponAction(_prev: CouponActionState, formData: For
 }
 
 export async function toggleCouponActiveAction(couponId: string, nextActive: boolean): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data, error } = await supabase.from("coupons").update({ is_active: nextActive }).eq("id", couponId).select("id");
   if (error) return { ok: false, error: "Não foi possível atualizar. Tente novamente." };
@@ -137,7 +121,7 @@ export async function toggleCouponActiveAction(couponId: string, nextActive: boo
 }
 
 export async function deleteCouponAction(couponId: string): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data, error } = await supabase.from("coupons").delete().eq("id", couponId).select("id");
   if (error) return { ok: false, error: "Não foi possível excluir. Tente novamente." };

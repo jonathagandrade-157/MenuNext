@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import { getMyRestaurant, type Restaurant, requireOwnerAction } from "@/lib/tenant";
 import type { ProductActionState } from "@/lib/form-state";
 import { validateProductCost, validateProductDescription, validateProductName, validateProductPrice } from "@/lib/products";
 import {
@@ -59,7 +59,7 @@ export async function createProductAction(
   _prev: ProductActionState,
   formData: FormData
 ): Promise<ProductActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
@@ -133,7 +133,7 @@ export async function updateProductAction(
   _prev: ProductActionState,
   formData: FormData
 ): Promise<ProductActionState> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const productId = String(formData.get("productId") ?? "");
   const name = String(formData.get("name") ?? "").trim();
@@ -197,7 +197,7 @@ export async function moveProductAction(
   productId: string,
   direction: "up" | "down"
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { error } = await supabase.rpc("move_product", { p_product_id: productId, p_direction: direction });
   if (error) return { ok: false, error: "Não foi possível reordenar. Tente novamente." };
@@ -211,7 +211,7 @@ export async function moveProductAction(
 // banco cuida das linhas de product_images quando o produto é apagado).
 // ---------------------------------------------------------------------------
 export async function deleteProductAction(productId: string): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   // products -> combo_items não tem cascade (Fase 2.4): o próprio banco já
   // recusaria a exclusão de um produto usado em algum combo. A contagem
@@ -258,7 +258,7 @@ export async function addProductImageAction(
   productId: string,
   file: File
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const { data: product, error: productError } = await supabase
     .from("products")
@@ -295,7 +295,7 @@ export async function addProductImageAction(
 }
 
 export async function removeProductImageAction(imageId: string): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const result = await deleteProductImage(supabase, { imageId });
   if (!result.ok) return { ok: false, error: result.error };
@@ -308,7 +308,7 @@ export async function moveProductImageAction(
   imageId: string,
   direction: "up" | "down"
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { error } = await supabase.rpc("move_product_image", { p_image_id: imageId, p_direction: direction });
   if (error) return { ok: false, error: "Não foi possível reordenar a imagem. Tente novamente." };
@@ -327,7 +327,7 @@ export async function moveProductImageAction(
  * que estava (nunca num estado inválido), e o lojista pode tentar de novo.
  */
 export async function setPrimaryProductImageAction(imageId: string): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data: image, error: imageError } = await supabase
     .from("product_images")

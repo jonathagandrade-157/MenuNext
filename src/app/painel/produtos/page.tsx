@@ -3,6 +3,7 @@ import {
   getAddonGroupsWithAddons,
   getAuthedUser,
   getCategories,
+  getMyMembership,
   getMyRestaurant,
   getProductAddonGroupsForRestaurant,
   getProductsWithImages,
@@ -16,6 +17,9 @@ export default async function ProdutosPage() {
 
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) redirect("/onboarding/passo-1");
+
+  const membership = await getMyMembership(supabase, restaurant.id);
+  const canEdit = membership?.role === "OWNER";
 
   const [products, categories, addonGroups, productAddonGroups] = await Promise.all([
     getProductsWithImages(supabase, restaurant.id),
@@ -37,6 +41,7 @@ export default async function ProdutosPage() {
       categories={categories}
       addonGroups={addonGroups}
       productAddonGroups={productAddonGroups}
+      canEdit={canEdit}
     />
   );
 }

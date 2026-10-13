@@ -271,6 +271,22 @@ export async function requireOwnerPage(): Promise<{ supabase: SupabaseClient; re
   return { supabase, restaurant };
 }
 
+/**
+ * Guarda das Server Actions administrativas (P1-02). Mesma regra de
+ * requireOwnerPage — só o OWNER da loja segue; STAFF vai para /painel sem que
+ * nada seja gravado. Server Actions são endpoints POST chamáveis sem passar
+ * pelas páginas, então a checagem de papel NÃO pode ficar só na página. O banco
+ * também recusa (RLS por papel e triggers de guarda): esta é a primeira camada,
+ * não a única.
+ *
+ * Ações que o STAFF pode executar (operar pedidos, ligar/desligar a
+ * disponibilidade de produto e adicional) NÃO usam esta função; ver
+ * src/lib/actions/ownerGuard.test.ts, que lista cada ação e o guarda esperado.
+ */
+export async function requireOwnerAction(): Promise<{ supabase: SupabaseClient; restaurant: Restaurant }> {
+  return requireOwnerPage();
+}
+
 /** Um período de funcionamento (área "Horários" do redesign — antes, 1
  * linha por dia; agora cada linha é um turno, period_order 1..3). Um dia
  * sem nenhuma linha está fechado — não existe mais um boolean is_open
