@@ -6,20 +6,25 @@
 --   RESULTADO: FALHOU (k) | N verificacoes | ...
 --
 -- Garante que:
---   * anon, authenticated e PUBLIC não têm TRUNCATE, TRIGGER nem REFERENCES em nenhuma tabela de public
---     (tabela ou coluna), e que tabelas futuras criadas por quem roda as migrations já nascem sem eles;
+--   * anon, authenticated e PUBLIC não têm TRUNCATE, TRIGGER, REFERENCES nem MAINTAIN (este só existe no
+--     PostgreSQL 17+) em nenhuma tabela de public (tabela ou coluna), nem por herança de papel, e que tabelas
+--     futuras criadas por quem roda as migrations já nascem sem eles;
 --   * o que o app usa continua concedido (SELECT/INSERT/UPDATE/DELETE do jeito que estava, inclusive o
 --     UPDATE por coluna de restaurants e profiles e a ausência total de acesso a trial_extensions);
 --   * service_role mantém tudo;
---   * authenticated e anon realmente recebem "permission denied" ao tentar TRUNCATE.
+--   * authenticated e anon realmente recebem "permission denied" ao tentar TRUNCATE e REINDEX (MAINTAIN).
 
 do $$
 declare
   fails text[] := '{}'; notes text[] := '{}'; total int := 0;
   n bigint; t record; p text; col record; err text;
-  dangerous text[] := array['TRUNCATE', 'TRIGGER', 'REFERENCES'];
+  v_pg17 boolean := current_setting('server_version_num')::int >= 170000;
+  dangerous text[] := case when current_setting('server_version_num')::int >= 170000
+                           then array['TRUNCATE', 'TRIGGER', 'REFERENCES', 'MAINTAIN']
+                           else array['TRUNCATE', 'TRIGGER', 'REFERENCES'] end;
 begin
-  -- 1. nenhuma tabela de public concede os três privilégios a anon, authenticated ou PUBLIC
+  -- 1. nenhuma tabela de public concede os privilégios perigosos a anon, authenticated ou PUBLIC
+  --    (has_table_privilege considera PUBLIC e a herança por pertencimento a papéis)
   for t in
     select c.relname from pg_class c
     where c.relnamespace = 'public'::regnamespace and c.relkind in ('r', 'p') order by 1
@@ -66,7 +71,7 @@ begin
 
   -- 5. tabela criada agora (como quem roda as migrations) nasce sem os privilegios
   create table public._priv_probe (id int);
-  total := total + 4;
+  total := total + 1 + array_length(dangerous, 1);
   foreach p in array dangerous loop
     if has_table_privilege('anon', 'public._priv_probe', p) or has_table_privilege('authenticated', 'public._priv_probe', p) then
       fails := fails || format('tabela nova nasce com %s para anon/authenticated', p);
@@ -87,10 +92,22 @@ begin
             and has_table_privilege('service_role', format('public.%I', t.relname), 'INSERT')
             and has_table_privilege('service_role', format('public.%I', t.relname), 'UPDATE')
             and has_table_privilege('service_role', format('public.%I', t.relname), 'DELETE')
-            and has_table_privilege('service_role', format('public.%I', t.relname), 'TRUNCATE')) then
+            and has_table_privilege('service_role', format('public.%I', t.relname), 'TRUNCATE')
+            and has_table_privilege('service_role', format('public.%I', t.relname), 'TRIGGER')
+            and has_table_privilege('service_role', format('public.%I', t.relname), 'REFERENCES')
+            and (not v_pg17 or has_table_privilege('service_role', format('public.%I', t.relname), 'MAINTAIN'))) then
       fails := fails || format('service_role perdeu privilegio em public.%s', t.relname);
     end if;
   end loop;
+
+  -- 6b. o dono das tabelas (autovacuum e operacoes administrativas) segue com tudo
+  total := total + 1;
+  select count(*) into n
+  from pg_class c
+  where c.relnamespace = 'public'::regnamespace and c.relkind in ('r', 'p')
+    and not (has_table_privilege(c.relowner, c.oid, 'SELECT') and has_table_privilege(c.relowner, c.oid, 'TRUNCATE')
+             and (not v_pg17 or has_table_privilege(c.relowner, c.oid, 'MAINTAIN')));
+  if n <> 0 then fails := fails || format('o dono perdeu privilegios em %s tabelas', n); end if;
 
   -- 7. o que o app usa continua concedido
   total := total + 1;
@@ -120,7 +137,7 @@ begin
     fails := fails || 'trial_extensions deveria seguir sem acesso para anon/authenticated'::text;
   end if;
 
-  -- 8. na pratica: TRUNCATE e negado
+  -- 8. na pratica: TRUNCATE e (no PostgreSQL 17+) REINDEX/MAINTAIN sao negados
   foreach p in array array['authenticated', 'anon'] loop
     total := total + 1;
     begin
@@ -134,6 +151,20 @@ begin
       end if;
     end;
     reset role;
+    if v_pg17 then
+      total := total + 1;
+      begin
+        execute format('set local role %I', p);
+        execute 'reindex table public.categories';
+        fails := fails || format('%s executou REINDEX em public.categories (MAINTAIN)', p);
+      exception when others then
+        err := sqlerrm;
+        if err not like '%permission denied%' and err not like '%must be owner%' then
+          fails := fails || format('%s: REINDEX falhou por outro motivo (inconclusivo): %s', p, err);
+        end if;
+      end;
+      reset role;
+    end if;
   end loop;
 
   -- notas (informativas, nao falham): privilegios padrao de outros papeis que criam tabelas em public

@@ -53,17 +53,21 @@ suítes SQL só em banco isolado (elas criam usuários em `auth.users`; tudo é 
 
 ## Privilégios de tabela (anon e authenticated)
 
-Migration separada: `supabase/migrations/20261009030000_harden_table_privileges.sql`. Retira `TRUNCATE`, `TRIGGER` e
-`REFERENCES` de `anon` e `authenticated` em todas as tabelas de `public` e faz as tabelas futuras criadas por quem roda
-as migrations já nascerem sem eles. São privilégios que nenhuma funcionalidade usa e que não passam pela RLS nem pelos
-triggers de linha. Não muda `SELECT`, `INSERT`, `UPDATE` e `DELETE` (a migration confere a contagem antes e depois e
-aborta se mudar), nem `service_role`.
+Migration separada: `supabase/migrations/20261009030000_harden_table_privileges.sql`. Retira `TRUNCATE`, `TRIGGER`,
+`REFERENCES` e `MAINTAIN` (este só existe no PostgreSQL 17+) de `anon` e `authenticated` em todas as tabelas de
+`public` e faz as tabelas futuras criadas por quem roda as migrations já nascerem sem eles. São privilégios que nenhuma
+funcionalidade usa e que não passam pela RLS nem pelos triggers de linha. Não muda `SELECT`, `INSERT`, `UPDATE` e
+`DELETE` (a migration confere a contagem antes e depois e aborta se mudar), nem `service_role`, nem o dono das tabelas
+(o autovacuum e as operações administrativas continuam funcionando).
 
-`supabase/tests/table_privileges.sql` (122 verificações) garante: nenhum dos três privilégios para `anon`,
-`authenticated` ou `PUBLIC` (tabela ou coluna); tabela nova já nasce sem eles; o DML que o app usa continua concedido
-(inclusive o `UPDATE` por coluna de `restaurants` e `profiles`); `service_role` mantém tudo; e `TRUNCATE` recebe
-`permission denied` na prática. Se uma tabela passar a ser criada por outro papel com privilégios padrão amplos, esse
-teste acusa.
+`supabase/tests/table_privileges.sql` (153 verificações) garante: nenhum dos quatro privilégios para `anon`,
+`authenticated` ou `PUBLIC` (tabela ou coluna, inclusive por herança de papel); tabela nova já nasce sem eles; o DML que
+o app usa continua concedido (inclusive o `UPDATE` por coluna de `restaurants` e `profiles`); `service_role` e o dono
+mantêm tudo; e `TRUNCATE` e `REINDEX` recebem `permission denied` na prática. Se uma tabela passar a ser criada por
+outro papel com privilégios padrão amplos, esse teste acusa.
+
+Limite conhecido: quem tem `UPDATE` ou `DELETE` numa tabela ainda pode usar `LOCK TABLE`, que não depende desses
+privilégios; essa operação só existe por SQL direto, que a API pública não oferece.
 
 ## Observações para quem for estender
 
