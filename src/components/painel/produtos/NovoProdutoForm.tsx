@@ -5,7 +5,7 @@ import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/Button";
 import { ErrorState } from "@/components/ui/States";
 import { createProductAction } from "@/lib/actions/products";
-import { MAX_PRODUCT_IMAGES } from "@/lib/storage/assets";
+import { MAX_PRODUCT_IMAGES } from "@/lib/storage/constants";
 import { initialProductState } from "@/lib/form-state";
 import type { Category } from "@/lib/tenant";
 

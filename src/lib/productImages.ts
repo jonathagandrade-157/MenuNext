@@ -10,7 +10,7 @@
 // Import relativo: o vitest deste projeto não resolve o alias "@/" em
 // runtime para imports de VALOR (só tipos, que são erasados em build) — ver
 // mesmo ajuste em src/lib/orders.ts.
-import { MAX_PRODUCT_IMAGES } from "./storage/assets";
+import { MAX_PRODUCT_IMAGES } from "./storage/constants";
 
 export type ProductImageOrder = { id: string; display_order: number };
 

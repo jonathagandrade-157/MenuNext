@@ -8,7 +8,7 @@ import {
   removeProductImageAction,
   setPrimaryProductImageAction,
 } from "@/lib/actions/products";
-import { MAX_PRODUCT_IMAGES } from "@/lib/storage/assets";
+import { MAX_PRODUCT_IMAGES } from "@/lib/storage/constants";
 import type { ProductImage } from "@/lib/tenant";
 
 type ImageWithUrl = ProductImage & { url: string };
