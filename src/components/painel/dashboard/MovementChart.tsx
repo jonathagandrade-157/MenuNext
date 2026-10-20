@@ -59,10 +59,10 @@ export function MovementChart({ points }: { points: HourlyMovementPoint[] }) {
         <p className="py-10 text-center text-sm text-text-muted">Nenhum pedido hoje ainda.</p>
       ) : (
         <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="mt-4 w-full" role="img" aria-label="Gráfico de movimento por hora">
-          <path d={areaPath} fill="var(--color-primary, #f95721)" opacity={0.08} />
-          <path d={linePath} fill="none" stroke="var(--color-primary, #f95721)" strokeWidth={2} />
+          <path d={areaPath} fill="var(--color-primary, #ab2f00)" opacity={0.08} />
+          <path d={linePath} fill="none" stroke="var(--color-primary, #ab2f00)" strokeWidth={2} />
           {coords.map((c, i) => (
-            <circle key={i} cx={c.x} cy={c.y} r={i === peakIndex ? 4 : 2} fill="var(--color-primary, #f95721)" />
+            <circle key={i} cx={c.x} cy={c.y} r={i === peakIndex ? 4 : 2} fill="var(--color-primary, #ab2f00)" />
           ))}
         </svg>
       )}

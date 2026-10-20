@@ -179,7 +179,7 @@ export function ProdutosClient({
         </div>
         <Link
           href="/painel/produtos/novo"
-          className="inline-flex h-11 shrink-0 items-center justify-center gap-2 self-start rounded-xl bg-primary px-5 text-sm font-semibold text-white shadow-[0_8px_20px_-4px_rgba(249,87,33,0.35)] transition-all hover:bg-[#ff5436] sm:self-auto"
+          className="inline-flex h-11 shrink-0 items-center justify-center gap-2 self-start rounded-xl bg-primary px-5 text-sm font-semibold text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] transition-all hover:bg-primary-container sm:self-auto"
         >
           <span className="text-lg leading-none">+</span>
           Novo produto

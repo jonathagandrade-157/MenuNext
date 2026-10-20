@@ -99,7 +99,7 @@ export default async function ConvitePage({ params }: PageProps<"/convite/[token
           <div className="space-y-3">
             <Link
               href={`/cadastro?next=${encodeURIComponent(nextParam)}&email=${encodeURIComponent(invite.email)}`}
-              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-white transition-all hover:bg-[#ff5436]"
+              className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-primary px-5 text-sm font-semibold text-white transition-all hover:bg-primary-container"
             >
               Criar conta e entrar
             </Link>

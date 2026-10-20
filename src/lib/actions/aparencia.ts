@@ -74,7 +74,7 @@ export async function saveThemeColorAction(_prev: ThemeColorActionState, formDat
   const color = raw === "" ? null : raw;
 
   if (color !== null && !HEX_COLOR_PATTERN.test(color)) {
-    return { status: "error", message: "Informe uma cor válida (ex.: #F95721)." };
+    return { status: "error", message: "Informe uma cor válida (ex.: #AB2F00)." };
   }
 
   const { error } = await supabase.from("restaurants").update({ theme_primary_color: color }).eq("id", restaurant.id);

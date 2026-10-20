@@ -212,7 +212,7 @@ export function OrderDetailModal({
                   type="button"
                   onClick={onAdvance}
                   disabled={isAdvancing}
-                  className="flex h-11 flex-1 items-center justify-center rounded-xl bg-primary text-sm font-bold text-white transition-all hover:bg-[#ff5436] disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex h-11 flex-1 items-center justify-center rounded-xl bg-primary text-sm font-bold text-white transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {isAdvancing ? "Atualizando..." : actionLabel}
                 </button>

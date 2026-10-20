@@ -171,7 +171,7 @@ export default function FanpagePage() {
               <h1 className="text-4xl font-extrabold leading-tight text-graphite md:text-5xl">
                 Seu restaurante.
                 <br />
-                Seu cardápio.
+                <span className="text-primary">Seu cardápio.</span>
                 <br />
                 Seus pedidos.
               </h1>
@@ -341,7 +341,7 @@ export default function FanpagePage() {
               {PLANS.map((plan) => (
                 <Card
                   key={plan.name}
-                  className={`relative flex flex-col p-6 ${plan.highlighted ? "border-primary shadow-[0_8px_20px_-4px_rgba(249,87,33,0.25)]" : ""}`}
+                  className={`relative flex flex-col p-6 ${plan.highlighted ? "border-primary shadow-[0_8px_20px_-4px_rgba(171,47,0,0.25)]" : ""}`}
                 >
                   {plan.highlighted && (
                     <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-xs font-bold text-white">

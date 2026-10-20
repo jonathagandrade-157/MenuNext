@@ -577,7 +577,7 @@ export function CheckoutClient({
             type="button"
             disabled={!canSubmit}
             onClick={handleSubmit}
-            className="flex h-12 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-white shadow-[0_8px_20px_-4px_rgba(249,87,33,0.35)] transition-all hover:bg-[#ff5436] disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-12 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Enviando pedido..." : `Finalizar pedido · ${formatCurrencyBRL(total)}`}
           </button>

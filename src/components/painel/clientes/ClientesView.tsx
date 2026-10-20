@@ -103,7 +103,7 @@ function NotesSection({
           type="button"
           onClick={handleSave}
           disabled={isPending || !draft.trim()}
-          className="shrink-0 rounded-lg bg-primary px-3.5 text-sm font-semibold text-white transition-all hover:bg-[#ff5436] disabled:cursor-not-allowed disabled:opacity-50"
+          className="shrink-0 rounded-lg bg-primary px-3.5 text-sm font-semibold text-white transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isPending ? "Salvando..." : "Salvar"}
         </button>

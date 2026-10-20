@@ -7,7 +7,7 @@ import { initialAparenciaState, initialThemeColorState } from "@/lib/form-state"
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 
-const DEFAULT_PRIMARY_COLOR = "#f95721";
+const DEFAULT_PRIMARY_COLOR = "#ab2f00";
 
 function ThemeColorCard({ themePrimaryColor }: { themePrimaryColor: string | null }) {
   const [state, formAction] = useActionState(saveThemeColorAction, initialThemeColorState);

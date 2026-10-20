@@ -260,7 +260,7 @@ export function ProductDetailClient({
             type="button"
             disabled={!canSubmit}
             onClick={handleAddToBag}
-            className="flex h-12 w-full items-center justify-between rounded-xl bg-primary px-4 text-sm font-bold text-white shadow-[0_8px_20px_-4px_rgba(249,87,33,0.35)] transition-all hover:bg-[#ff5436] disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-12 w-full items-center justify-between rounded-xl bg-primary px-4 text-sm font-bold text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span>Adicionar à sacola</span>
             <span>{formatCurrencyBRL(subtotal)}</span>

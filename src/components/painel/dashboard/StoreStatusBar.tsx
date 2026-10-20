@@ -55,7 +55,7 @@ export function StoreStatusBar({
           className={
             isActive
               ? "h-9 rounded-lg border border-red/30 px-4 text-sm font-bold text-red transition-all hover:bg-red/5 disabled:cursor-not-allowed disabled:opacity-50"
-              : "h-9 rounded-lg bg-primary px-4 text-sm font-bold text-white transition-all hover:bg-[#ff5436] disabled:cursor-not-allowed disabled:opacity-50"
+              : "h-9 rounded-lg bg-primary px-4 text-sm font-bold text-white transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
           }
         >
           {isPending ? "Atualizando..." : isActive ? "Pausar pedidos" : "Reabrir loja"}

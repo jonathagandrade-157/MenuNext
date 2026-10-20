@@ -36,7 +36,7 @@ export function LiveQueueCard({ queue }: { queue: LiveQueue }) {
 
       <Link
         href="/painel/pedidos"
-        className="mt-4 inline-flex h-10 items-center justify-center rounded-xl bg-primary text-sm font-bold text-white transition-all hover:bg-[#ff5436]"
+        className="mt-4 inline-flex h-10 items-center justify-center rounded-xl bg-primary text-sm font-bold text-white transition-all hover:bg-primary-container"
       >
         Ver pedidos no Kanban →
       </Link>

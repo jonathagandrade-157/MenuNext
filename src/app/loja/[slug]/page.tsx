@@ -56,7 +56,10 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
   // MenuNext no rodapé usa uma cor fixa (não text-primary) de propósito, para
   // não ser recolorido junto com a marca do restaurante.
   const themeStyle = restaurant.theme_primary_color
-    ? ({ "--color-primary": restaurant.theme_primary_color } as React.CSSProperties)
+    ? ({
+        "--color-primary": restaurant.theme_primary_color,
+        "--color-primary-container": `color-mix(in srgb, ${restaurant.theme_primary_color} 82%, white)`,
+      } as React.CSSProperties)
     : undefined;
 
   return (
@@ -132,7 +135,7 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
       )}
 
       <p className="px-3.5 py-6 text-center text-[11px] font-medium text-text-muted">
-        Tecnologia de pedidos online por Menu<span className="text-[#f95721]">Next</span>
+        Tecnologia de pedidos online por Menu<span className="text-[#ab2f00]">Next</span>
       </p>
 
       {restaurant.contact_whatsapp && <StoreWhatsAppButton whatsapp={restaurant.contact_whatsapp} storeName={restaurant.name} />}

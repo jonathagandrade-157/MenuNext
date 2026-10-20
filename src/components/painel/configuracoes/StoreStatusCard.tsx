@@ -59,7 +59,7 @@ export function StoreStatusCard({ initialStatus }: { initialStatus: "active" | "
         className={
           isActive
             ? "h-11 rounded-xl border border-red/30 px-5 text-sm font-bold text-red transition-all hover:bg-red/5 disabled:cursor-not-allowed disabled:opacity-50"
-            : "h-11 rounded-xl bg-primary px-5 text-sm font-bold text-white transition-all hover:bg-[#ff5436] disabled:cursor-not-allowed disabled:opacity-50"
+            : "h-11 rounded-xl bg-primary px-5 text-sm font-bold text-white transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
         }
       >
         {isPending ? "Atualizando..." : isActive ? "Pausar loja" : "Reabrir loja"}

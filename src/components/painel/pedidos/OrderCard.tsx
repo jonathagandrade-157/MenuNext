@@ -81,7 +81,7 @@ export function OrderCard({
           type="button"
           onClick={onAdvance}
           disabled={isAdvancing}
-          className="mt-2.5 flex h-9 w-full items-center justify-center rounded-lg bg-primary text-xs font-bold text-white transition-all hover:bg-[#ff5436] disabled:cursor-not-allowed disabled:opacity-50"
+          className="mt-2.5 flex h-9 w-full items-center justify-center rounded-lg bg-primary text-xs font-bold text-white transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
         >
           {isAdvancing ? "Atualizando..." : actionLabel}
         </button>

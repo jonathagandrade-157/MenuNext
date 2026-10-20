@@ -56,7 +56,7 @@ export function StoreHeader({
               // eslint-disable-next-line @next/next/no-img-element
               <img src={logoUrl} alt={`Logo de ${name}`} className="h-full w-full rounded-xl object-cover" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center rounded-xl bg-gradient-to-br from-primary to-[#ff5436] text-lg font-extrabold text-white">
+              <div className="flex h-full w-full items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-container text-lg font-extrabold text-white">
                 {getInitials(name)}
               </div>
             )}
