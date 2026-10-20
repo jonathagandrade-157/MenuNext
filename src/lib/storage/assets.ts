@@ -201,12 +201,24 @@ export async function uploadProductImage(
   const uploaded = await uploadToBucket(supabase, path, file, validation.mimeType);
   if (!uploaded.ok) return uploaded;
 
-  const { error } = await supabase
+  // Sem upsert/onConflict de propósito: a unique (product_id, display_order)
+  // é DEFERRABLE (a reordenação troca display_order de duas linhas) e o
+  // Postgres recusa ON CONFLICT em constraint deferrable (55000). Por isso:
+  // atualiza a linha daquela posição se existir, senão insere.
+  const { data: existing, error: lookupError } = await supabase
     .from("product_images")
-    .upsert(
-      { restaurant_id: restaurantId, product_id: productId, storage_path: path, display_order: displayOrder },
-      { onConflict: "product_id,display_order" }
-    );
+    .select("id")
+    .eq("product_id", productId)
+    .eq("display_order", displayOrder)
+    .maybeSingle();
+
+  const { error } = lookupError
+    ? { error: lookupError }
+    : existing
+      ? await supabase.from("product_images").update({ storage_path: path }).eq("id", existing.id)
+      : await supabase
+          .from("product_images")
+          .insert({ restaurant_id: restaurantId, product_id: productId, storage_path: path, display_order: displayOrder });
   if (error) {
     await supabase.storage.from(RESTAURANT_ASSETS_BUCKET).remove([path]);
     return { ok: false, error: "Não foi possível salvar a imagem do produto. Tente novamente." };
