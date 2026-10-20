@@ -30,7 +30,10 @@ export function MovementChart({ points }: { points: HourlyMovementPoint[] }) {
   const linePath = coords.map((c, i) => `${i === 0 ? "M" : "L"} ${c.x.toFixed(1)} ${c.y.toFixed(1)}`).join(" ");
   const areaPath = `${linePath} L ${coords[coords.length - 1]?.x ?? PADDING} ${HEIGHT - PADDING} L ${PADDING} ${HEIGHT - PADDING} Z`;
 
-  const peakIndex = values.indexOf(maxValue);
+  // Pico real (0 quando não há movimento). Não usar maxValue aqui: ele tem
+  // piso 1 só para a escala do gráfico e apontaria para um índice inexistente.
+  const peakValue = Math.max(0, ...values);
+  const peakIndex = values.indexOf(peakValue);
 
   return (
     <Card className="p-5">
@@ -72,10 +75,10 @@ export function MovementChart({ points }: { points: HourlyMovementPoint[] }) {
         {points.length > 1 && <span>{String(points[points.length - 1].hour).padStart(2, "0")}h</span>}
       </div>
 
-      {maxValue > 0 && (
+      {peakValue > 0 && (
         <p className="mt-2 text-xs font-medium text-text-muted">
           Pico às {String(points[peakIndex]?.hour ?? 0).padStart(2, "0")}h —{" "}
-          {metric === "orders" ? `${values[peakIndex]} pedidos` : formatCurrencyBRL(values[peakIndex])}
+          {metric === "orders" ? `${peakValue} ${peakValue === 1 ? "pedido" : "pedidos"}` : formatCurrencyBRL(peakValue)}
         </p>
       )}
     </Card>
