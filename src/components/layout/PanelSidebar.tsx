@@ -79,9 +79,11 @@ function NavLinks({
   );
 }
 
-function Brand({ onClick }: { onClick?: () => void }) {
+/** O logo leva à home da área em que a pessoa está (painel ou master), nunca à
+ * landing page pública — quem está logado não quer sair do app ao clicar nele. */
+function Brand({ href, onClick }: { href: string; onClick?: () => void }) {
   return (
-    <Link href="/" className="text-base font-extrabold text-graphite" onClick={onClick}>
+    <Link href={href} className="text-base font-extrabold text-graphite" onClick={onClick}>
       Menu<span className="text-primary">Next</span>
     </Link>
   );
@@ -93,7 +95,7 @@ function Brand({ onClick }: { onClick?: () => void }) {
  * com a navegação completa. A navegação fixa fica em PanelSideNav (painel) ou
  * PanelSidebar (master).
  */
-export function PanelMobileNav({ brandLabel, groups }: { brandLabel: string; groups: NavGroup[] }) {
+export function PanelMobileNav({ brandLabel, groups, homeHref = "/painel" }: { brandLabel: string; groups: NavGroup[]; homeHref?: string }) {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -108,7 +110,7 @@ export function PanelMobileNav({ brandLabel, groups }: { brandLabel: string; gro
   return (
     <>
       <div className="flex h-14 items-center justify-between border-b border-border bg-surface-card px-4 lg:hidden">
-        <Brand />
+        <Brand href={homeHref} />
         <button
           type="button"
           onClick={() => setOpen(true)}
@@ -129,7 +131,7 @@ export function PanelMobileNav({ brandLabel, groups }: { brandLabel: string; gro
           />
           <aside className="relative flex h-full w-72 max-w-[85vw] flex-col bg-surface-card shadow-[var(--shadow-modal)]">
             <div className="flex h-16 items-center justify-between border-b border-border px-6">
-              <Brand onClick={() => setOpen(false)} />
+              <Brand href={homeHref} onClick={() => setOpen(false)} />
               <button
                 type="button"
                 onClick={() => setOpen(false)}
@@ -163,13 +165,13 @@ export function PanelSideNav({ groups }: { groups: NavGroup[] }) {
  * Sidebar completa (barra mobile + menu lateral de altura total) — usada pelo
  * painel Master. O painel do lojista usa PanelMobileNav + PanelSideNav.
  */
-export function PanelSidebar({ brandLabel, groups }: { brandLabel: string; groups: NavGroup[] }) {
+export function PanelSidebar({ brandLabel, groups, homeHref = "/master" }: { brandLabel: string; groups: NavGroup[]; homeHref?: string }) {
   return (
     <>
-      <PanelMobileNav brandLabel={brandLabel} groups={groups} />
+      <PanelMobileNav brandLabel={brandLabel} groups={groups} homeHref={homeHref} />
       <aside className="hidden w-64 shrink-0 flex-col border-r border-border bg-surface-card lg:flex">
         <div className="flex h-16 items-center border-b border-border px-6">
-          <Brand />
+          <Brand href={homeHref} />
         </div>
         <div className="px-6 py-3 text-label-sm uppercase tracking-wider text-text-muted">{brandLabel}</div>
         <NavLinks groups={groups} />
