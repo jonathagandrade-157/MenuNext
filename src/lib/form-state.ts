@@ -86,6 +86,10 @@ export const initialDeliveryZoneState: DeliveryZoneActionState = { status: "idle
 export type ThemeColorActionState = { status: "idle" | "success" | "error"; message?: string };
 export const initialThemeColorState: ThemeColorActionState = { status: "idle" };
 
+// Banner promocional da loja (/painel/aparencia).
+export type BannerActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialBannerState: BannerActionState = { status: "idle" };
+
 // Cupons de desconto (/painel/marketing) — mesmo formato de
 // CategoryActionState/ProductActionState.
 export type CouponActionState = { status: "idle" | "success" | "error"; message?: string };

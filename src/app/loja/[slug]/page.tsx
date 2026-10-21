@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getPublicAssetUrl } from "@/lib/storage/assets";
 import {
   computeStoreOpenState,
+  getPublicBanner,
   getPublicBusinessHours,
   getPublicCategoriesWithProducts,
   getPublicCombosWithItems,
@@ -16,6 +17,8 @@ import { StoreHeader } from "@/components/loja/StoreHeader";
 import { StoreNotFound } from "@/components/loja/StoreNotFound";
 import { StoreOpenBadge } from "@/components/loja/StoreOpenBadge";
 import { StoreWhatsAppButton } from "@/components/loja/StoreWhatsAppButton";
+import { StoreBanner } from "@/components/loja/StoreBanner";
+import { pickFeaturedProducts } from "@/lib/banner";
 
 export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug]">) {
   const { slug } = await params;
@@ -41,11 +44,13 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
 
   const getImageUrl = (path: string) => getPublicAssetUrl(supabase, path);
 
-  const [categories, combos, businessHours] = await Promise.all([
+  const [categories, combos, businessHours, banner] = await Promise.all([
     getPublicCategoriesWithProducts(supabase, restaurant.id, getImageUrl),
     getPublicCombosWithItems(supabase, restaurant.id, getImageUrl),
     getPublicBusinessHours(supabase, restaurant.id),
+    getPublicBanner(supabase, restaurant.id),
   ]);
+  const featuredProducts = pickFeaturedProducts(categories.flatMap((category) => category.products));
 
   const openState = computeStoreOpenState(restaurant.status, businessHours);
   const hasAnyProduct = categories.some((category) => category.products.length > 0);
@@ -80,6 +85,8 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
         minimumOrderValue={restaurant.minimum_order_value}
       />
 
+      {banner && <StoreBanner message={banner.message} />}
+
       {openState.status === "closed_hours" && (
         <div className="mx-3.5 mt-3 rounded-xl border border-border bg-surface-subdued px-3.5 py-2.5 text-xs font-medium text-text-muted">
           Esta loja está fechada no momento. Você pode navegar pelo cardápio, mas novos pedidos não estão disponíveis
@@ -103,7 +110,7 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
         <>
           <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:gap-2">
             <div>
-              <StoreCatalog slug={slug} categories={categories} combos={combos} />
+              <StoreCatalog slug={slug} categories={categories} combos={combos} featured={featuredProducts} />
             </div>
             <StoreBagAside slug={slug} />
           </div>

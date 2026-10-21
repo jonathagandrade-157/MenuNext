@@ -17,6 +17,7 @@ const product = (id: string, price: number, cost: number | null, extra: Partial<
   price,
   cost,
   is_available: true,
+  is_featured: false,
   display_order: 0,
   created_at: "2026-10-01T00:00:00Z",
   updated_at: "2026-10-01T00:00:00Z",

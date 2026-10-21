@@ -363,6 +363,8 @@ export type Product = {
   price: number;
   cost: number | null;
   is_available: boolean;
+  /** Aparece em "Destaques" na loja (só o OWNER marca). */
+  is_featured: boolean;
   display_order: number;
   created_at: string;
   updated_at: string;

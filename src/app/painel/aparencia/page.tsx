@@ -6,6 +6,12 @@ import { AparenciaClient } from "@/components/painel/aparencia/AparenciaClient";
 export default async function AparenciaPage() {
   const { supabase, restaurant } = await requireOwnerPage();
 
+  const { data: banner } = await supabase
+    .from("restaurant_banners")
+    .select("is_enabled, message")
+    .eq("restaurant_id", restaurant.id)
+    .maybeSingle();
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-6 py-8">
       <div>
@@ -17,6 +23,7 @@ export default async function AparenciaPage() {
 
       <AparenciaClient
         storeName={restaurant.name}
+        banner={banner ? { isEnabled: banner.is_enabled as boolean, message: banner.message as string } : null}
         logoUrl={restaurant.logo_path ? getPublicAssetUrl(supabase, restaurant.logo_path) : null}
         coverUrl={restaurant.cover_path ? getPublicAssetUrl(supabase, restaurant.cover_path) : null}
         themePrimaryColor={restaurant.theme_primary_color}
