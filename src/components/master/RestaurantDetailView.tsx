@@ -17,6 +17,8 @@ import {
   formatTimeBR,
   type MasterRestaurantDetail,
 } from "@/lib/masterRestaurants";
+import { AuditList } from "@/components/audit/AuditList";
+import type { MasterAuditEntry } from "@/lib/audit";
 
 function InfoRow({ label, value }: { label: string; value: string | null }) {
   return (
@@ -37,7 +39,15 @@ function ProgressBar({ percent, tone }: { percent: number; tone: "primary" | "su
 
 /** Detalhe de um restaurante, visão do Master. Todo número vem da RPC
  * master_get_restaurant; nada aqui é estimado ou de exemplo. */
-export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaurantDetail; trial: TrialSummary }) {
+export function RestaurantDetailView({
+  detail,
+  trial,
+  audit,
+}: {
+  detail: MasterRestaurantDetail;
+  trial: TrialSummary;
+  audit: MasterAuditEntry[];
+}) {
   const status = RESTAURANT_STATUS_BADGE[detail.status];
   const subscription = subscriptionBadge(detail.subscription_status, detail.access_state);
   const mrr = computeMrr(detail.plan_price, detail.subscription_status);
@@ -241,6 +251,19 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
           </Card>
         </div>
       </div>
+
+      <Card className="space-y-2 p-6">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-body-lg font-bold text-graphite">Atividade recente da loja</h2>
+            <p className="text-body-sm text-text-muted">Alterações de configuração feitas por pessoas, com autor e papel.</p>
+          </div>
+          <Link href={`/master/auditoria?loja=${detail.id}`} className="shrink-0 text-label-lg text-primary hover:underline">
+            Ver tudo →
+          </Link>
+        </div>
+        <AuditList entries={audit} emptyText="Nenhuma atividade registrada para esta loja." />
+      </Card>
     </div>
   );
 }

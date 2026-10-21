@@ -132,3 +132,9 @@ Feito e em produção, grupos A e B:
 - Master: card de restaurantes recentes no dashboard.
 
 Falta nos grupos A e B: reestruturar visualmente Caixa, Marketing (só cupons), Informações/Configurações num único card, Ajuda (guias), master (Assinaturas, Métricas, Detalhes) e as demais telas do onboarding. Grupo C aguarda decisão.
+
+### Grupo C (21/10/2026)
+
+- **Banner promocional e produtos em destaque:** feito e em produção (migration `featured_products_and_banner`).
+- **Registro de auditoria:** feito e em produção (migration `audit_log`): tela Auditoria do master com paginação e filtro por loja, "Atividade recente" em Usuários e "Atividade recente da loja" no detalhe do restaurante no master. Registra só ações de pessoas em tabelas de configuração, só nomes de campos alterados, nunca valores.
+- Falta: sessões de caixa e promoções automáticas.
