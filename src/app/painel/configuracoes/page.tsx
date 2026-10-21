@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { requireOwnerPage } from "@/lib/tenant";
+import { getActivePlans, getAuthedUser, requireOwnerPage } from "@/lib/tenant";
 import { getRecentOrders } from "@/lib/orders";
 import { getStoreUrl } from "@/lib/site-url";
 import { Card } from "@/components/ui/Card";
@@ -24,10 +24,15 @@ import { StoreShareCard } from "@/components/painel/dashboard/StoreShareCard";
 export default async function ConfiguracoesPage() {
   const { supabase, restaurant } = await requireOwnerPage();
 
-  const [recentOrders, storeUrl] = await Promise.all([
+  const [recentOrders, storeUrl, plans, { user }] = await Promise.all([
     getRecentOrders(supabase, restaurant.id, 1),
     getStoreUrl(restaurant.slug),
+    getActivePlans(supabase),
+    getAuthedUser(),
   ]);
+  const planName = restaurant.plan_id ? (plans.find((p) => p.id === restaurant.plan_id)?.name ?? null) : null;
+  const rawOwnerName = user?.user_metadata?.name;
+  const ownerName = typeof rawOwnerName === "string" && rawOwnerName.trim() ? rawOwnerName.trim() : null;
 
   // draft/closed não são estados que este toggle sabe reverter (draft ainda
   // nem terminou o onboarding; closed não é exposto ao lojista) — mostra um
@@ -70,6 +75,33 @@ export default async function ConfiguracoesPage() {
         isActive={restaurant.status === "active"}
         hasAnyOrder={recentOrders.length > 0}
       />
+      <Card className="p-6">
+        <h2 className="text-body-lg font-bold text-graphite">Dados da conta MenuNext</h2>
+        <dl className="mt-3 grid gap-4 sm:grid-cols-3">
+          <div>
+            <dt className="text-label-sm uppercase text-text-muted">Proprietário</dt>
+            <dd className="mt-0.5 text-body-md text-graphite">{ownerName ?? "—"}</dd>
+          </div>
+          <div>
+            <dt className="text-label-sm uppercase text-text-muted">E-mail de acesso</dt>
+            <dd className="mt-0.5 break-all text-body-md text-graphite">{user?.email ?? "—"}</dd>
+          </div>
+          <div>
+            <dt className="text-label-sm uppercase text-text-muted">Plano</dt>
+            <dd className="mt-0.5 text-body-md text-graphite">{planName ?? "Sem plano contratado"}</dd>
+          </div>
+        </dl>
+        <Link href="/painel/plano" className="mt-4 inline-block text-label-lg text-primary hover:underline">
+          Ver plano e assinatura →
+        </Link>
+        <p className="mt-3 text-body-sm text-text-muted">
+          Para convidar atendentes, use{" "}
+          <Link href="/painel/usuarios" className="font-semibold text-primary underline">
+            Usuários
+          </Link>
+          .
+        </p>
+      </Card>
     </div>
   );
 }

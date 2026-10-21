@@ -9,6 +9,8 @@ import { subscribeToPlanAction } from "@/lib/actions/subscription";
 import { getPendingPaymentLinkAction } from "@/lib/actions/pendingPayment";
 import { formatCurrencyBRL } from "@/lib/products";
 import type { Plan, Restaurant } from "@/lib/tenant";
+import { Hourglass } from "lucide-react";
+import type { TrialProgress } from "@/lib/trial";
 
 const STATUS_LABEL: Record<Restaurant["subscription_status"], { label: string; tone: "success" | "warning" | "danger" | "neutral" }> = {
   active: { label: "Em dia", tone: "success" },
@@ -24,6 +26,7 @@ export function PlanoClient({
   accessState,
   billingConfigured,
   provider,
+  trial,
 }: {
   plans: Plan[];
   currentPlan: Plan | null;
@@ -32,6 +35,8 @@ export function PlanoClient({
   billingConfigured: boolean;
   /** Provedor ativo escolhido pelo Master. */
   provider: "asaas" | "mercadopago";
+  /** Progresso do teste grátis (null = sem teste em andamento). */
+  trial: TrialProgress | null;
 }) {
   const [subscribingId, setSubscribingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -89,6 +94,39 @@ export function PlanoClient({
         </div>
         <Badge tone={status.tone}>{status.label}</Badge>
       </Card>
+
+      {trial && subscriptionStatus !== "active" && accessState === null && (
+        <Card className="space-y-3 p-5">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+              <Hourglass className="h-5 w-5" aria-hidden />
+            </span>
+            <div>
+              <p className="text-body-lg font-bold text-graphite">
+                Período de teste: {trial.daysLeft === 1 ? "resta 1 dia" : `restam ${trial.daysLeft} dias`}
+              </p>
+              <p className="text-body-sm text-text-muted">
+                Você tem acesso completo durante o teste. Escolha um plano abaixo para continuar depois.
+              </p>
+            </div>
+          </div>
+          <div>
+            <div
+              role="progressbar"
+              aria-valuemin={0}
+              aria-valuemax={trial.totalDays}
+              aria-valuenow={trial.usedDays}
+              aria-label="Dias de teste utilizados"
+              className="h-2 overflow-hidden rounded-full bg-surface-subdued"
+            >
+              <div className="h-full rounded-full bg-primary" style={{ width: `${trial.percentUsed}%` }} />
+            </div>
+            <p className="mt-1 text-right text-body-sm text-text-muted">
+              {trial.usedDays} de {trial.totalDays} dias utilizados
+            </p>
+          </div>
+        </Card>
+      )}
 
       {accessState !== null && (
         <div className="rounded-xl border border-red/20 bg-red/10 px-3.5 py-2.5 text-label-lg text-red">
