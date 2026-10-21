@@ -1,27 +1,11 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import { requireOwnerAction } from "@/lib/tenant";
 import type { DeliveryZoneActionState } from "@/lib/form-state";
 
 const DELIVERY_PATH = "/painel/delivery";
 const NEIGHBORHOOD_MAX_LENGTH = 80;
-
-async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaurant: Restaurant }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
-
-  return { supabase, restaurant };
-}
 
 /** null para vazio, NaN para "preenchido mas inválido" — mesmo padrão de
  * parseOptionalDecimal em actions/delivery.ts. */
@@ -95,7 +79,7 @@ export async function createDeliveryZoneAction(
   _prev: DeliveryZoneActionState,
   formData: FormData
 ): Promise<DeliveryZoneActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const result = readZoneForm(formData);
   if (!result.ok) return { status: "error", message: result.error };
@@ -111,7 +95,7 @@ export async function updateDeliveryZoneAction(
   _prev: DeliveryZoneActionState,
   formData: FormData
 ): Promise<DeliveryZoneActionState> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const zoneId = String(formData.get("zoneId") ?? "");
   if (!zoneId) return { status: "error", message: "Zona inválida." };
@@ -128,7 +112,7 @@ export async function updateDeliveryZoneAction(
 }
 
 export async function toggleDeliveryZoneActiveAction(zoneId: string, nextActive: boolean): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data, error } = await supabase.from("delivery_zones").update({ is_active: nextActive }).eq("id", zoneId).select("id");
   if (error) return { ok: false, error: "Não foi possível atualizar. Tente novamente." };
@@ -139,7 +123,7 @@ export async function toggleDeliveryZoneActiveAction(zoneId: string, nextActive:
 }
 
 export async function deleteDeliveryZoneAction(zoneId: string): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data, error } = await supabase.from("delivery_zones").delete().eq("id", zoneId).select("id");
   if (error) return { ok: false, error: "Não foi possível excluir. Tente novamente." };

@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getAddonGroupsWithAddons, getAuthedUser, getMyRestaurant } from "@/lib/tenant";
+import { getAddonGroupsWithAddons, getAuthedUser, getMyMembership, getMyRestaurant } from "@/lib/tenant";
 import { AdicionaisClient } from "@/components/painel/adicionais/AdicionaisClient";
 
 export default async function AdicionaisPage() {
@@ -9,7 +9,8 @@ export default async function AdicionaisPage() {
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) redirect("/onboarding/passo-1");
 
+  const membership = await getMyMembership(supabase, restaurant.id);
   const groups = await getAddonGroupsWithAddons(supabase, restaurant.id);
 
-  return <AdicionaisClient initialGroups={groups} />;
+  return <AdicionaisClient initialGroups={groups} canEdit={membership?.role === "OWNER"} />;
 }

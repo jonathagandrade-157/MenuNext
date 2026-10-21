@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import { getMyRestaurant, type Restaurant, requireOwnerAction } from "@/lib/tenant";
 import type { AddonActionState } from "@/lib/form-state";
 import {
   ADDON_GROUP_MAX_SELECTIONS_LIMIT,
@@ -70,7 +70,7 @@ export async function createAddonGroupAction(
   _prev: AddonActionState,
   formData: FormData
 ): Promise<AddonActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
@@ -113,7 +113,7 @@ export async function updateAddonGroupAction(
   _prev: AddonActionState,
   formData: FormData
 ): Promise<AddonActionState> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const groupId = String(formData.get("groupId") ?? "");
   const name = String(formData.get("name") ?? "").trim();
@@ -155,7 +155,7 @@ export async function toggleAddonGroupActiveAction(
   groupId: string,
   nextActive: boolean
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data, error } = await supabase
     .from("addon_groups")
@@ -174,7 +174,7 @@ export async function toggleAddonGroupActiveAction(
 // cascade), a contagem aqui só dá uma mensagem amigável com o número real de
 // itens, em vez de deixar o erro de FK estourar cru para o usuário.
 export async function deleteAddonGroupAction(groupId: string): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { count, error: countError } = await supabase
     .from("addons")
@@ -202,7 +202,7 @@ export async function moveAddonGroupAction(
   groupId: string,
   direction: "up" | "down"
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { error } = await supabase.rpc("move_addon_group", { p_group_id: groupId, p_direction: direction });
   if (error) return { ok: false, error: "Não foi possível reordenar. Tente novamente." };
@@ -216,7 +216,7 @@ export async function moveAddonGroupAction(
 // ---------------------------------------------------------------------------
 
 export async function createAddonAction(_prev: AddonActionState, formData: FormData): Promise<AddonActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const addonGroupId = String(formData.get("addonGroupId") ?? "");
   const name = String(formData.get("name") ?? "").trim();
@@ -247,7 +247,7 @@ export async function createAddonAction(_prev: AddonActionState, formData: FormD
 }
 
 export async function updateAddonAction(_prev: AddonActionState, formData: FormData): Promise<AddonActionState> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const addonId = String(formData.get("addonId") ?? "");
   const name = String(formData.get("name") ?? "").trim();
@@ -298,7 +298,7 @@ export async function toggleAddonAvailableAction(
 // Excluir item — remove só o item; grupo, produtos e outros itens nunca são
 // afetados (sem cascade nenhum envolvido aqui).
 export async function deleteAddonAction(addonId: string): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data, error } = await supabase.from("addons").delete().eq("id", addonId).select("id");
 
@@ -313,7 +313,7 @@ export async function moveAddonAction(
   addonId: string,
   direction: "up" | "down"
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { error } = await supabase.rpc("move_addon", { p_addon_id: addonId, p_direction: direction });
   if (error) return { ok: false, error: "Não foi possível reordenar. Tente novamente." };
@@ -333,7 +333,7 @@ export async function addProductAddonGroupAction(
   productId: string,
   addonGroupId: string
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { error } = await supabase.rpc("add_product_addon_group", {
     p_product_id: productId,
@@ -352,7 +352,7 @@ export async function addProductAddonGroupAction(
 export async function removeProductAddonGroupAction(
   associationId: string
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data, error } = await supabase
     .from("product_addon_groups")
@@ -371,7 +371,7 @@ export async function moveProductAddonGroupAction(
   associationId: string,
   direction: "up" | "down"
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { error } = await supabase.rpc("move_product_addon_group", {
     p_association_id: associationId,

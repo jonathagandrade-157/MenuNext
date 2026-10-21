@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getAuthedUser, getMyRestaurant, getProducts } from "@/lib/tenant";
+import { getAuthedUser, getMyMembership, getMyRestaurant, getProducts } from "@/lib/tenant";
 import { formatCurrencyBRL, getDashboardOrderMetrics, getRecentOrders } from "@/lib/orders";
 import { getBestSellingProducts } from "@/lib/bestsellers";
 import { getCustomerOrders } from "@/lib/customers";
@@ -42,6 +42,9 @@ export default async function PainelDashboardPage() {
 
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) redirect("/onboarding/passo-1");
+
+  const membership = await getMyMembership(supabase, restaurant.id);
+  const isOwner = membership?.role === "OWNER";
 
   const [
     metrics,
@@ -96,7 +99,11 @@ export default async function PainelDashboardPage() {
         <p className="mt-1 text-sm text-text-muted">Aqui está o resumo real da operação de hoje.</p>
       </div>
 
-      <StoreStatusBar initialStatus={restaurant.status === "active" ? "active" : "paused"} unavailableProductCount={unavailableProductCount} />
+      <StoreStatusBar
+        initialStatus={restaurant.status === "active" ? "active" : "paused"}
+        unavailableProductCount={unavailableProductCount}
+        canToggle={isOwner}
+      />
 
       <StoreShareCard
         storeUrl={storeUrl}
@@ -105,7 +112,7 @@ export default async function PainelDashboardPage() {
         hasAnyOrder={hasAnyOrder}
       />
 
-      <SetupChecklistCard checklist={checklist} storeSlug={restaurant.slug} />
+      {isOwner && <SetupChecklistCard checklist={checklist} storeSlug={restaurant.slug} />}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="p-5">
@@ -177,7 +184,7 @@ export default async function PainelDashboardPage() {
 
       <InsightsRow insights={insights} />
 
-      <QuickActionsCard />
+      {isOwner && <QuickActionsCard />}
     </div>
   );
 }

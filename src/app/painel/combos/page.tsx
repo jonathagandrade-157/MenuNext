@@ -1,14 +1,10 @@
-import { redirect } from "next/navigation";
-import { getAuthedUser, getCombosWithItems, getMyRestaurant, getProducts } from "@/lib/tenant";
+import { getCombosWithItems, getProducts, requireOwnerPage } from "@/lib/tenant";
 import { getPublicAssetUrl } from "@/lib/storage/assets";
 import { CombosClient } from "@/components/painel/combos/CombosClient";
 
 export default async function CombosPage() {
-  const { supabase, user } = await getAuthedUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
+  // Combos são do OWNER (P1-02): STAFF volta para /painel.
+  const { supabase, restaurant } = await requireOwnerPage();
 
   const [combos, products] = await Promise.all([
     getCombosWithItems(supabase, restaurant.id),

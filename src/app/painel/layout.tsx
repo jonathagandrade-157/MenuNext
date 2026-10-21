@@ -5,10 +5,12 @@ import { SubscriptionGate } from "@/components/painel/SubscriptionGate";
 import { getPublicAssetUrl } from "@/lib/storage/assets";
 import { getAuthedUser, getMyAccessState, getMyRestaurant, getMyMembership } from "@/lib/tenant";
 
-// ownerOnly (JON-10): STAFF (convidado via JON-27) só vê o operacional do
-// dia a dia + cardápio — administração da loja, relacionamento e conta
-// ficam restritas ao OWNER. As páginas correspondentes também aplicam
-// requireOwnerPage() (defesa em profundidade — esconder o link não basta).
+// ownerOnly (JON-10, P1-02): STAFF (convidado via JON-27) só vê o operacional
+// do dia a dia e, no cardápio, Produtos e Adicionais SOMENTE para ligar/desligar
+// a disponibilidade. Administração da loja, categorias, combos, relacionamento
+// e conta ficam restritas ao OWNER. As páginas aplicam requireOwnerPage(), as
+// Server Actions aplicam requireOwnerAction() e o banco recusa a escrita
+// (RLS por papel + triggers): esconder o link não basta.
 const ALL_NAV_GROUPS: NavGroup[] = [
   {
     title: "Operação",
@@ -22,10 +24,10 @@ const ALL_NAV_GROUPS: NavGroup[] = [
   {
     title: "Cardápio",
     items: [
-      { href: "/painel/categorias", label: "Categorias", icon: "categorias" },
+      { href: "/painel/categorias", label: "Categorias", icon: "categorias", ownerOnly: true },
       { href: "/painel/produtos", label: "Produtos", icon: "produtos" },
       { href: "/painel/adicionais", label: "Adicionais", icon: "adicionais" },
-      { href: "/painel/combos", label: "Combos", icon: "combos" },
+      { href: "/painel/combos", label: "Combos", icon: "combos", ownerOnly: true },
     ],
   },
   {

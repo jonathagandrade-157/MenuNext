@@ -306,7 +306,9 @@ begin
    (3,'owner_a','deny','billing_columns_protected','mesmo com GRANT amplo, o trigger barra OWNER (plan_id)',
     format('update public.restaurants set plan_id = null where id = %L', r_a),
     format($v$ (select plan_id = %L and subscription_status = 'cancelled' from public.restaurants where id = %L) $v$, v_plan, r_a)),
-   (3,'staff_a','deny','billing_columns_protected','mesmo com GRANT amplo, o trigger barra STAFF (subscription_status)',
+   -- (STAFF nao chega mais ao trigger: a RLS de restaurants e do OWNER desde a P1-02;
+   --  a cobertura de STAFF esta em roles_owner_staff.sql)
+   (3,'owner_a','deny','billing_columns_protected','mesmo com GRANT amplo, o trigger barra OWNER (subscription_status)',
     format($s$ update public.restaurants set subscription_status = 'active' where id = %L $s$, r_a),
     format($v$ (select subscription_status = 'cancelled' from public.restaurants where id = %L) $v$, r_a)),
    (3,'owner_a','deny','billing_columns_protected','mesmo com GRANT amplo, o trigger barra asaas_subscription_id',

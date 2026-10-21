@@ -1,10 +1,7 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import { requireOwnerAction } from "@/lib/tenant";
 import type { ComboActionState } from "@/lib/form-state";
 import {
   COMBO_ITEM_QUANTITY_MAX,
@@ -20,19 +17,6 @@ import { deleteComboImage, uploadComboImage, validateImageFile } from "@/lib/sto
 export type { ComboActionState };
 
 const COMBOS_PATH = "/painel/combos";
-
-async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaurant: Restaurant }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
-
-  return { supabase, restaurant };
-}
 
 function friendlyComboError(message: string): string {
   const normalized = message.toLowerCase();
@@ -72,7 +56,7 @@ function parseDraftItems(raw: string): ComboDraftItem[] | null {
 // de remover qualquer item já inserido).
 // ---------------------------------------------------------------------------
 export async function createComboAction(_prev: ComboActionState, formData: FormData): Promise<ComboActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
@@ -137,7 +121,7 @@ export async function createComboAction(_prev: ComboActionState, formData: FormD
 // separadas abaixo, mesmo padrão de produtos/imagens e grupos/itens).
 // ---------------------------------------------------------------------------
 export async function updateComboAction(_prev: ComboActionState, formData: FormData): Promise<ComboActionState> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const comboId = String(formData.get("comboId") ?? "");
   const name = String(formData.get("name") ?? "").trim();
@@ -170,7 +154,7 @@ export async function toggleComboAvailableAction(
   comboId: string,
   nextAvailable: boolean
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data, error } = await supabase
     .from("combos")
@@ -188,7 +172,7 @@ export async function toggleComboAvailableAction(
 // Excluir combo — remove só a composição (combo_items, via ON DELETE
 // CASCADE); nunca remove products/categories/addons.
 export async function deleteComboAction(comboId: string): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data, error } = await supabase.from("combos").delete().eq("id", comboId).select("id");
 
@@ -203,7 +187,7 @@ export async function moveComboAction(
   comboId: string,
   direction: "up" | "down"
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { error } = await supabase.rpc("move_combo", { p_combo_id: comboId, p_direction: direction });
   if (error) return { ok: false, error: "Não foi possível reordenar. Tente novamente." };
@@ -224,7 +208,7 @@ export async function addComboItemAction(
   productId: string,
   quantity: number
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const quantityValidation = validateComboItemQuantity(quantity);
   if (!quantityValidation.ok) return { ok: false, error: quantityValidation.error };
@@ -245,7 +229,7 @@ export async function updateComboItemAction(
   itemId: string,
   quantity: number
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const quantityValidation = validateComboItemQuantity(quantity);
   if (!quantityValidation.ok) return { ok: false, error: quantityValidation.error };
@@ -265,7 +249,7 @@ export async function updateComboItemAction(
 // item, a remoção é bloqueada com uma mensagem amigável (o combo já não
 // pôde ser salvo vazio na criação; a mesma garantia vale depois, na edição).
 export async function removeComboItemAction(itemId: string): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data: item, error: fetchError } = await supabase
     .from("combo_items")
@@ -296,7 +280,7 @@ export async function moveComboItemAction(
   itemId: string,
   direction: "up" | "down"
 ): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { error } = await supabase.rpc("move_combo_item", { p_item_id: itemId, p_direction: direction });
   if (error) return { ok: false, error: "Não foi possível reordenar. Tente novamente." };
@@ -310,7 +294,7 @@ export async function moveComboItemAction(
 // infraestrutura de Storage existente (bucket restaurant-assets).
 // ---------------------------------------------------------------------------
 export async function uploadComboImageAction(comboId: string, file: File): Promise<{ ok: boolean; error?: string }> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const { data: combo, error: comboError } = await supabase
     .from("combos")
@@ -331,7 +315,7 @@ export async function uploadComboImageAction(comboId: string, file: File): Promi
 }
 
 export async function removeComboImageAction(comboId: string): Promise<{ ok: boolean; error?: string }> {
-  const { supabase } = await requireRestaurant();
+  const { supabase } = await requireOwnerAction();
 
   const { data: combo, error: fetchError } = await supabase
     .from("combos")

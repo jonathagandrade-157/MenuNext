@@ -1,26 +1,10 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import { requireOwnerAction } from "@/lib/tenant";
 import { WEEK_DAYS, type HorariosActionState } from "@/lib/form-state";
 
 const HORARIOS_PATH = "/painel/horarios";
-
-async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaurant: Restaurant }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
-
-  return { supabase, restaurant };
-}
 
 const MAX_PERIODS_PER_DAY = 3;
 
@@ -43,7 +27,7 @@ export async function saveHorariosConfigAction(
   _prev: HorariosActionState,
   formData: FormData
 ): Promise<HorariosActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const rows: { restaurant_id: string; day_of_week: number; period_order: number; opens_at: string; closes_at: string }[] = [];
 

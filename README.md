@@ -42,6 +42,10 @@ A assinatura do lojista é cobrada pelo Asaas (o pedido do cliente final continu
 
 **Proteção das colunas de cobrança:** `supabase/tests/restaurant_billing_columns.sql` (139 verificações) garante que nenhum usuário da API (OWNER, STAFF, outra loja ou anônimo) altera `plan_id`, `subscription_status` e demais colunas de cobrança de `restaurants`, que os fluxos legítimos continuam funcionando e que a segunda camada (trigger) barra mesmo com um `GRANT` amplo. **Rode só em banco isolado** (ele cria usuários em `auth.users`); não use contra a produção.
 
+**Papéis OWNER e STAFF:** `supabase/tests/roles_owner_staff.sql` (222 verificações) comprova que o STAFF só opera pedidos e liga/desliga a disponibilidade de produtos e adicionais, no banco (RLS e triggers), nas RPCs e nas Server Actions, e que o OWNER, o checkout público e a venda de balcão seguem funcionando. Regras e camadas em [docs/seguranca/permissoes-owner-staff.md](docs/seguranca/permissoes-owner-staff.md). **Rode só em banco isolado.**
+
+**Privilégios de tabela:** `supabase/tests/table_privileges.sql` (153 verificações) garante que `anon`, `authenticated` e `PUBLIC` não têm `TRUNCATE`, `TRIGGER`, `REFERENCES` nem `MAINTAIN` nas tabelas de `public` (nem nas futuras), que o DML usado pelo app segue concedido e que `service_role` e o dono mantêm tudo. Migration: `20261009030000_harden_table_privileges.sql`. **Rode só em banco isolado.**
+
 ## Banco de dados
 
 Todo o schema (tabelas, RLS, RPCs) vive em `supabase/migrations/` — esse diretório é a fonte de verdade do estado do banco em produção; qualquer alteração de schema deve ser adicionada ali como uma nova migration (nunca aplicada só em produção sem o arquivo correspondente).

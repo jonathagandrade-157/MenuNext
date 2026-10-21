@@ -14,9 +14,12 @@ import { toggleRestaurantStatusAction } from "@/lib/actions/configuracoes";
 export function StoreStatusBar({
   initialStatus,
   unavailableProductCount,
+  canToggle,
 }: {
   initialStatus: "active" | "paused";
   unavailableProductCount: number;
+  /** Só o OWNER pausa/reabre a loja (P1-02); o STAFF vê o estado. O banco também recusa. */
+  canToggle: boolean;
 }) {
   const [status, setStatus] = useState(initialStatus);
   const [error, setError] = useState<string | null>(null);
@@ -48,6 +51,7 @@ export function StoreStatusBar({
             {isActive ? "Recebendo pedidos normalmente" : "Cardápio visível, novos pedidos bloqueados"}
           </p>
         </div>
+        {canToggle && (
         <button
           type="button"
           onClick={handleToggle}
@@ -60,6 +64,7 @@ export function StoreStatusBar({
         >
           {isPending ? "Atualizando..." : isActive ? "Pausar pedidos" : "Reabrir loja"}
         </button>
+        )}
       </div>
 
       {error && (

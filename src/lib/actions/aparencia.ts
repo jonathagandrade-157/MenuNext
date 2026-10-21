@@ -1,29 +1,13 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
-import type { SupabaseClient } from "@supabase/supabase-js";
-import { createClient } from "@/lib/supabase/server";
-import { getMyRestaurant, type Restaurant } from "@/lib/tenant";
+import { requireOwnerAction } from "@/lib/tenant";
 import { uploadRestaurantCover, uploadRestaurantLogo } from "@/lib/storage/assets";
 import type { AparenciaActionState, ThemeColorActionState } from "@/lib/form-state";
 
 const HEX_COLOR_PATTERN = /^#[0-9a-fA-F]{6}$/;
 
 const APARENCIA_PATH = "/painel/aparencia";
-
-async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaurant: Restaurant }> {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/cadastro");
-
-  const restaurant = await getMyRestaurant(supabase);
-  if (!restaurant) redirect("/onboarding/passo-1");
-
-  return { supabase, restaurant };
-}
 
 /**
  * Logo e capa do restaurante — reaproveita integralmente
@@ -32,7 +16,7 @@ async function requireRestaurant(): Promise<{ supabase: SupabaseClient; restaura
  * validação de magic bytes). Nenhuma infraestrutura nova.
  */
 export async function uploadLogoAction(_prev: AparenciaActionState, formData: FormData): Promise<AparenciaActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const file = formData.get("logo");
   if (!(file instanceof File) || file.size === 0) return { status: "error", message: "Selecione uma imagem." };
@@ -46,7 +30,7 @@ export async function uploadLogoAction(_prev: AparenciaActionState, formData: Fo
 }
 
 export async function uploadCoverAction(_prev: AparenciaActionState, formData: FormData): Promise<AparenciaActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const file = formData.get("cover");
   if (!(file instanceof File) || file.size === 0) return { status: "error", message: "Selecione uma imagem." };
@@ -68,7 +52,7 @@ export async function uploadCoverAction(_prev: AparenciaActionState, formData: F
  * todos os restaurantes.
  */
 export async function saveThemeColorAction(_prev: ThemeColorActionState, formData: FormData): Promise<ThemeColorActionState> {
-  const { supabase, restaurant } = await requireRestaurant();
+  const { supabase, restaurant } = await requireOwnerAction();
 
   const raw = String(formData.get("theme_primary_color") ?? "").trim();
   const color = raw === "" ? null : raw;
