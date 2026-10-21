@@ -4,8 +4,9 @@ A tabela `public.restaurants` tem cinco colunas que controlam o acesso pago à p
 
 `plan_id`, `subscription_status`, `asaas_customer_id`, `asaas_subscription_id`, `subscription_current_period_end`.
 
-Elas só podem ser alteradas por funções `SECURITY DEFINER` do banco (hoje `start_restaurant_subscription` e
-`process_asaas_webhook`), nunca por um `update` direto vindo da aplicação ou da API.
+Elas são apenas um **espelho** da assinatura (a fonte de verdade fica em `billing_subscriptions`, veja
+[cobranca-de-assinaturas.md](cobranca-de-assinaturas.md)) e só podem ser alteradas por funções `SECURITY DEFINER` do
+banco, nunca por um `update` direto vindo da aplicação ou da API.
 
 ## Como isso é garantido
 

@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { ErrorState } from "@/components/ui/States";
 import { ACCESS_STATE_COPY, type AccessState } from "@/lib/accessState";
 import { subscribeToPlanAction } from "@/lib/actions/subscription";
+import { getPendingPaymentLinkAction } from "@/lib/actions/pendingPayment";
 import { formatCurrencyBRL } from "@/lib/products";
 import type { Plan, Restaurant } from "@/lib/tenant";
 
@@ -21,21 +22,42 @@ export function PlanoClient({
   currentPlan,
   subscriptionStatus,
   accessState,
-  asaasConfigured,
+  billingConfigured,
+  provider,
 }: {
   plans: Plan[];
   currentPlan: Plan | null;
   subscriptionStatus: Restaurant["subscription_status"];
   accessState: AccessState | null;
-  asaasConfigured: boolean;
+  billingConfigured: boolean;
+  /** Provedor ativo escolhido pelo Master. */
+  provider: "asaas" | "mercadopago";
 }) {
   const [subscribingId, setSubscribingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [info, setInfo] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  // O link de pagamento chega validado do servidor (HTTPS de domínio do Mercado Pago).
+  function goToPayment(url: string) {
+    window.location.assign(url);
+  }
+
+  function handleResumePayment() {
+    setError(null);
+    setInfo(null);
+    startTransition(async () => {
+      const result = await getPendingPaymentLinkAction();
+      if (result.status === "link") return goToPayment(result.url);
+      if (result.status === "info") return setInfo(result.message);
+      setError(result.message);
+    });
+  }
 
   function handleSubscribe(planId: string) {
     setError(null);
+    setInfo(null);
     setSuccess(false);
     setSubscribingId(planId);
     startTransition(async () => {
@@ -45,6 +67,7 @@ export function PlanoClient({
         setError(result.message);
         return;
       }
+      if (result.redirectUrl) return goToPayment(result.redirectUrl);
       setSuccess(true);
     });
   }
@@ -73,7 +96,7 @@ export function PlanoClient({
         </div>
       )}
 
-      {!asaasConfigured && (
+      {!billingConfigured && (
         <div className="rounded-xl border border-amber/20 bg-amber/10 px-3.5 py-2.5 text-xs font-medium text-amber">
           A cobrança de assinaturas ainda não foi configurada pela plataforma. Tente novamente mais tarde.
         </div>
@@ -83,13 +106,29 @@ export function PlanoClient({
         <div className="rounded-xl border border-border bg-surface px-3.5 py-2.5 text-xs font-medium text-text-muted">
           {subscriptionStatus === "active"
             ? "Sua assinatura está em dia. Para trocar de plano, fale com o suporte."
-            : "Finalize o pagamento pelo link que o Asaas enviou ao seu e-mail. Assim que for confirmado, o acesso é liberado."}
+            : provider === "mercadopago"
+              ? "Finalize o pagamento no Mercado Pago. Assim que for confirmado, o acesso é liberado."
+              : "Finalize o pagamento pelo link que o Asaas enviou ao seu e-mail. Assim que for confirmado, o acesso é liberado."}
+          {subscriptionStatus === "pending" && provider === "mercadopago" && (
+            <button
+              type="button"
+              disabled={isPending}
+              onClick={handleResumePayment}
+              className="mt-2 inline-flex h-10 items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-white transition-colors hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              Continuar pagamento no Mercado Pago
+            </button>
+          )}
         </div>
+      )}
+
+      {info && (
+        <div className="rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm font-medium text-graphite">{info}</div>
       )}
 
       {success && (
         <div className="rounded-xl border border-emerald/30 bg-emerald/10 px-3.5 py-2.5 text-sm font-semibold text-emerald">
-          Assinatura criada! Finalize o primeiro pagamento no link que o Asaas vai te enviar por e-mail.
+          Assinatura criada! Finalize o primeiro pagamento no link que o provedor de cobrança vai te enviar por e-mail.
         </div>
       )}
       {error && <ErrorState message={error} />}
@@ -109,7 +148,7 @@ export function PlanoClient({
               </p>
               <button
                 type="button"
-                disabled={isCurrent || isPending || !asaasConfigured || hasLiveSubscription}
+                disabled={isCurrent || isPending || !billingConfigured || hasLiveSubscription}
                 onClick={() => handleSubscribe(plan.id)}
                 className="mt-auto inline-flex h-11 items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-white transition-colors hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
               >

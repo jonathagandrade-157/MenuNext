@@ -17,14 +17,42 @@
 
 export type AsaasResult<T> =
   | { ok: true; data: T }
-  | { ok: false; reason: "not_configured" | "request_failed" | "invalid_response"; message?: string };
+  | {
+      ok: false;
+      reason: "not_configured" | "request_failed" | "invalid_response";
+      message?: string;
+      /** Status HTTP da resposta, quando houve (404 = não existe; 5xx = tentar de novo). */
+      httpStatus?: number;
+    };
 
 export function isAsaasConfigured(): boolean {
   return Boolean(process.env.ASAAS_API_KEY);
 }
 
+/**
+ * Endereço da API. Só "production" usa a API real de cobrança. Para ensaios
+ * locais (Asaas simulado) aceita `ASAAS_BASE_URL`, mas SOMENTE se apontar para
+ * este mesmo computador (http://127.0.0.1 ou http://localhost) e fora de
+ * produção: a chave do Asaas nunca é enviada a outro endereço por essa variável.
+ */
+export function resolveAsaasBaseUrl(env: { ASAAS_ENV?: string; ASAAS_BASE_URL?: string }): string {
+  const override = env.ASAAS_BASE_URL;
+  if (override && env.ASAAS_ENV !== "production") {
+    try {
+      const url = new URL(override);
+      const isLoopback = url.hostname === "127.0.0.1" || url.hostname === "localhost";
+      if (url.protocol === "http:" && isLoopback && !url.username && !url.password) {
+        return override.replace(/\/+$/, "");
+      }
+    } catch {
+      // URL inválida: ignora o override
+    }
+  }
+  return env.ASAAS_ENV === "production" ? "https://api.asaas.com/v3" : "https://api-sandbox.asaas.com/v3";
+}
+
 function getBaseUrl(): string {
-  return process.env.ASAAS_ENV === "production" ? "https://api.asaas.com/v3" : "https://api-sandbox.asaas.com/v3";
+  return resolveAsaasBaseUrl({ ASAAS_ENV: process.env.ASAAS_ENV, ASAAS_BASE_URL: process.env.ASAAS_BASE_URL });
 }
 
 async function asaasRequest<T>(path: string, init: RequestInit): Promise<AsaasResult<T>> {
@@ -57,7 +85,7 @@ async function asaasRequest<T>(path: string, init: RequestInit): Promise<AsaasRe
       body && typeof body === "object" && "errors" in body
         ? JSON.stringify((body as { errors: unknown }).errors)
         : `HTTP ${response.status}`;
-    return { ok: false, reason: "request_failed", message };
+    return { ok: false, reason: "request_failed", message, httpStatus: response.status };
   }
 
   return { ok: true, data: body as T };
@@ -101,6 +129,8 @@ export async function createAsaasSubscription(params: {
   customerId: string;
   value: number;
   description: string;
+  /** ID da assinatura no banco do MenuNext (billing_subscriptions.id). */
+  externalReference: string;
 }): Promise<AsaasResult<AsaasSubscription>> {
   const nextDueDate = new Date();
   nextDueDate.setDate(nextDueDate.getDate() + 1);
@@ -114,6 +144,65 @@ export async function createAsaasSubscription(params: {
       cycle: "MONTHLY",
       nextDueDate: nextDueDate.toISOString().slice(0, 10),
       description: params.description,
+      externalReference: params.externalReference,
     }),
   });
+}
+
+// ---------------------------------------------------------------------------
+// Leituras autenticadas (chave do servidor). Servem para PROVAR a origem de uma
+// assinatura/cobrança antes de registrá-la ou de liberar acesso, e para a
+// reconciliação periódica quando um webhook não é entregue.
+// ---------------------------------------------------------------------------
+
+export type AsaasList<T> = { data: T[]; hasMore: boolean; totalCount?: number };
+
+export type AsaasSubscriptionDetail = {
+  id: string;
+  customer: string;
+  value: number;
+  status: string; // ACTIVE | EXPIRED | INACTIVE
+  externalReference: string | null;
+  deleted?: boolean;
+};
+
+export type AsaasPaymentDetail = {
+  id: string;
+  customer: string;
+  subscription: string | null;
+  value: number;
+  status: string; // PENDING | RECEIVED | CONFIRMED | OVERDUE | REFUNDED | ...
+  dueDate: string | null;
+  paymentDate: string | null;
+  deleted?: boolean;
+};
+
+export function getAsaasSubscription(subscriptionId: string): Promise<AsaasResult<AsaasSubscriptionDetail>> {
+  return asaasRequest<AsaasSubscriptionDetail>(`/subscriptions/${encodeURIComponent(subscriptionId)}`, { method: "GET" });
+}
+
+/** Procura assinaturas pela referência do MenuNext (id interno). Evita criar
+ * uma segunda assinatura quando uma tentativa anterior morreu no meio. */
+export function listAsaasSubscriptionsByExternalReference(
+  externalReference: string
+): Promise<AsaasResult<AsaasList<AsaasSubscriptionDetail>>> {
+  return asaasRequest<AsaasList<AsaasSubscriptionDetail>>(
+    `/subscriptions?externalReference=${encodeURIComponent(externalReference)}&limit=10`,
+    { method: "GET" }
+  );
+}
+
+export function listAsaasSubscriptionPayments(
+  subscriptionId: string,
+  offset: number,
+  limit: number
+): Promise<AsaasResult<AsaasList<AsaasPaymentDetail>>> {
+  return asaasRequest<AsaasList<AsaasPaymentDetail>>(
+    `/subscriptions/${encodeURIComponent(subscriptionId)}/payments?offset=${offset}&limit=${limit}`,
+    { method: "GET" }
+  );
+}
+
+export function getAsaasPayment(paymentId: string): Promise<AsaasResult<AsaasPaymentDetail>> {
+  return asaasRequest<AsaasPaymentDetail>(`/payments/${encodeURIComponent(paymentId)}`, { method: "GET" });
 }

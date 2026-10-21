@@ -157,7 +157,7 @@ begin
    ('anon','deny',null,'anon: advance_order_status',   format('select public.advance_order_status(%L)', ord_a)),
    ('anon','deny',null,'anon: master_metrics',         'select public.master_metrics(30)'),
    ('anon','deny',null,'anon: master_extend_trial',    format('select public.master_extend_trial(%L, 365)', a_id)),
-   ('anon','deny',null,'anon: webhook com token errado', 'select public.process_asaas_webhook(''token-errado'', ''evt-iso'', ''X'', ''sub-iso'', ''active'', null)'),
+   ('anon','deny',null,'anon: webhook com token errado', 'select public.process_asaas_webhook(''token-errado'', ''evt-iso'', ''PAYMENT_CONFIRMED'', null, ''sub-iso'', ''cus-iso'', ''pay-iso'', 49.90, null, null, null)'),
    ('anon','deny',null,'anon NAO cria venda de balcao (counter)', format('select * from public.create_order(%L, %L, %L, %L, %L, %L::jsonb, %L)', slug_a, 'x', '11999999999', 'counter', 'cash', jsonb_build_array(jsonb_build_object('product_id', prod_a, 'quantity', 1))::text, 'iso-c2'));
 
   -- ---------- execução ----------

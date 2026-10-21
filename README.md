@@ -25,22 +25,25 @@ Ver `.env.example` (todas comentadas). Só as duas do Supabase são obrigatória
 - `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` — projeto Supabase.
 - `GOOGLE_MAPS_GEOCODING_API_KEY` — opcional; sem ela o frete "Por KM" fica indisponível e a taxa fixa continua funcionando.
 - `ASAAS_API_KEY` e `ASAAS_ENV` (`sandbox` por padrão, ou `production`) — opcionais; sem a chave, "Assinar plano" mostra um aviso em vez de fingir sucesso. Nunca prefixar com `NEXT_PUBLIC_`.
+- `SUPABASE_SERVICE_ROLE_KEY` e `CRON_SECRET` — só para a cobrança (registro da assinatura provada na API do Asaas e reconciliação diária). Sem elas a cobrança fica desligada. Servidor apenas: nunca prefixar com `NEXT_PUBLIC_`, nunca commitar.
 
 ### Cobrança (Asaas)
 
 A assinatura do lojista é cobrada pelo Asaas (o pedido do cliente final continua sendo Pix direto, sem gateway). Para operar:
 
-1. Defina `ASAAS_API_KEY` (comece pelo sandbox).
+1. Defina `ASAAS_API_KEY` (comece pelo sandbox), `SUPABASE_SERVICE_ROLE_KEY` e `CRON_SECRET`.
 2. Crie os planos em `/master/assinaturas` (nome e valor reais, nada é semeado).
-3. Gere um token aleatório de 32 a 255 caracteres, salve-o em `/master/assinaturas` e configure o **mesmo** valor no webhook do Asaas (Integrações → Webhooks → Token de acesso), apontando para `https://<seu-domínio>/api/webhooks/asaas`. Sem token salvo, nenhum webhook é aceito.
+3. Gere um token aleatório de 32 a 255 caracteres, salve-o em `/master/assinaturas` e configure o **mesmo** valor no webhook do Asaas (Integrações → Webhooks → Token de acesso), apontando para `https://<seu-domínio>/api/webhooks/asaas`. Sem token salvo, nenhum webhook é aceito. O roteiro de teste ponta a ponta com o sandbox está em [docs/asaas-sandbox-e2e.md](docs/asaas-sandbox-e2e.md).
 
 ### Testes
 
-`npm test` roda o Vitest. Os testes cobrem a lógica pura de `src/lib/` (módulos testados usam import relativo, porque o Vitest do projeto não resolve o alias `@/`). Server Actions ainda não têm teste automatizado.
+`npm test` roda o Vitest. Os testes cobrem a lógica de `src/lib/`, o webhook e a rotina de reconciliação do Asaas e a Server Action de assinatura (com dependências simuladas). O `vitest.config.ts` resolve o alias `@/`. As demais Server Actions ainda não têm teste automatizado.
 
 **Isolamento entre restaurantes (banco):** `supabase/tests/tenant_isolation.sql` verifica RLS e RPCs com quatro personas (dono da loja A, usuário sem loja, master fora da loja e visitante anônimo): ninguém lê nem altera dados de outra loja, o master só enxerga lojas alheias pelas RPCs `master_*`, e o checkout público recusa produto de outra loja. Cole o arquivo no SQL Editor do Supabase; ele roda numa transação que sempre é desfeita e o relatório vem na mensagem final (`RESULTADO: OK | N verificacoes` ou `RESULTADO: FALHOU ...`). Rode-o depois de qualquer mudança em policies ou RPCs. Ele ainda não roda no CI, que não tem banco.
 
-**Proteção das colunas de cobrança:** `supabase/tests/restaurant_billing_columns.sql` (139 verificações) garante que nenhum usuário da API (OWNER, STAFF, outra loja ou anônimo) altera `plan_id`, `subscription_status` e demais colunas de cobrança de `restaurants`, que os fluxos legítimos continuam funcionando e que a segunda camada (trigger) barra mesmo com um `GRANT` amplo. **Rode só em banco isolado** (ele cria usuários em `auth.users`); não use contra a produção.
+**Proteção das colunas de cobrança:** `supabase/tests/restaurant_billing_columns.sql` (145 verificações) garante que nenhum usuário da API (OWNER, STAFF, outra loja ou anônimo) altera `plan_id`, `subscription_status` e demais colunas de cobrança de `restaurants`, que os fluxos legítimos continuam funcionando e que a segunda camada (trigger) barra mesmo com um `GRANT` amplo. **Rode só em banco isolado** (ele cria usuários em `auth.users`); não use contra a produção.
+
+**Cobrança de assinaturas:** `supabase/tests/billing_subscriptions.sql` (192 verificações) garante que o acesso pago só é liberado por pagamento confirmado em evento autenticado do provedor: IDs inventados, cobrança pendente, atraso, duplicidade, evento fora de ordem, chargeback, cancelamento com período pago, renovação, reconciliação, webhook inválido, tentativas de OWNER/STAFF, isolamento entre restaurantes e checkout dos clientes intocado. Mesma regra: **só em banco isolado**. Modelo e regras de manutenção em [docs/seguranca/cobranca-de-assinaturas.md](docs/seguranca/cobranca-de-assinaturas.md).
 
 **Papéis OWNER e STAFF:** `supabase/tests/roles_owner_staff.sql` (222 verificações) comprova que o STAFF só opera pedidos e liga/desliga a disponibilidade de produtos e adicionais, no banco (RLS e triggers), nas RPCs e nas Server Actions, e que o OWNER, o checkout público e a venda de balcão seguem funcionando. Regras e camadas em [docs/seguranca/permissoes-owner-staff.md](docs/seguranca/permissoes-owner-staff.md). **Rode só em banco isolado.**
 
@@ -50,7 +53,7 @@ A assinatura do lojista é cobrada pelo Asaas (o pedido do cliente final continu
 
 Todo o schema (tabelas, RLS, RPCs) vive em `supabase/migrations/` — esse diretório é a fonte de verdade do estado do banco em produção; qualquer alteração de schema deve ser adicionada ali como uma nova migration (nunca aplicada só em produção sem o arquivo correspondente).
 
-Documentação relacionada: [reconciliação do histórico de migrations](docs/migrations-reconciliacao.md) (versões dos arquivos × versões registradas no Supabase) e [regras de manutenção das colunas de cobrança](docs/seguranca/restaurants-colunas-de-cobranca.md).
+Documentação relacionada: [reconciliação do histórico de migrations](docs/migrations-reconciliacao.md) (versões dos arquivos × versões registradas no Supabase), [regras de manutenção das colunas de cobrança](docs/seguranca/restaurants-colunas-de-cobranca.md) e [modelo de cobrança de assinaturas](docs/seguranca/cobranca-de-assinaturas.md).
 
 ## Funcionalidades principais
 
