@@ -8,12 +8,10 @@ import {
   getPublicRestaurantBySlug,
 } from "@/lib/store";
 import { StoreBottomNav } from "@/components/loja/StoreBottomNav";
-import { StoreCategoryNav } from "@/components/loja/StoreCategoryNav";
-import { StoreComboCard } from "@/components/loja/StoreComboCard";
+import { StoreCatalog } from "@/components/loja/StoreCatalog";
 import { StoreHeader } from "@/components/loja/StoreHeader";
 import { StoreNotFound } from "@/components/loja/StoreNotFound";
 import { StoreOpenBadge } from "@/components/loja/StoreOpenBadge";
-import { StoreProductCard } from "@/components/loja/StoreProductCard";
 import { StoreWhatsAppButton } from "@/components/loja/StoreWhatsAppButton";
 
 export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug]">) {
@@ -75,6 +73,8 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
         deliveryRadiusKm={restaurant.delivery_radius_km}
         estimatedDeliveryMinMinutes={restaurant.estimated_delivery_min_minutes}
         estimatedDeliveryMaxMinutes={restaurant.estimated_delivery_max_minutes}
+        servicePickup={restaurant.service_pickup}
+        minimumOrderValue={restaurant.minimum_order_value}
       />
 
       {openState.status === "closed_hours" && (
@@ -98,43 +98,11 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
         </div>
       ) : (
         <>
-          <StoreCategoryNav categories={categories.filter((c) => c.products.length > 0)} hasCombos={combos.length > 0} />
-
-          {combos.length > 0 && (
-            <section id="combos" className="px-3.5 py-4">
-              <h2 className="mb-3 text-base font-extrabold tracking-tight text-graphite">🍱 Combos</h2>
-              <div className="space-y-3">
-                {combos.map((combo) => (
-                  <StoreComboCard key={combo.id} combo={combo} />
-                ))}
-              </div>
-            </section>
-          )}
-
-          {categories.map((category) =>
-            category.products.length === 0 ? null : (
-              <section key={category.id} id={`categoria-${category.id}`} className="px-3.5 py-4">
-                <h2 className="mb-3 text-base font-extrabold tracking-tight text-graphite">{category.name}</h2>
-                <div className="space-y-3">
-                  {category.products.map((product) => (
-                    <StoreProductCard
-                      key={product.id}
-                      href={`/loja/${slug}/produto/${product.id}`}
-                      name={product.name}
-                      description={product.description}
-                      price={product.price}
-                      imageUrl={product.imageUrl}
-                      isAvailable={product.is_available}
-                    />
-                  ))}
-                </div>
-              </section>
-            )
-          )}
+          <StoreCatalog slug={slug} categories={categories} combos={combos} />
         </>
       )}
 
-      <p className="px-3.5 py-6 text-center text-[11px] font-medium text-text-muted">
+      <p className="px-3.5 py-6 text-center text-label-md text-text-muted">
         Tecnologia de pedidos online por Menu<span className="text-[#ab2f00]">Next</span>
       </p>
 

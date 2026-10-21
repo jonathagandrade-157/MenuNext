@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
-import { Badge } from "@/components/ui/Badge";
+import { ChevronDown, ChevronUp, CircleCheck, CirclePause, ImageIcon, Package, Pencil, Plus, Search, Tags, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { EmptyState, ErrorState } from "@/components/ui/States";
@@ -18,32 +18,6 @@ type ImageWithUrl = ProductImage & { url: string };
 type ProductUI = Product & { product_images: ImageWithUrl[] };
 
 type StatusFilter = "all" | "available" | "unavailable";
-
-function ChevronUpIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
-      <path d="m6 15 6-6 6 6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function ChevronDownIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
-      <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function ImagePlaceholderIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5} className="h-6 w-6">
-      <rect x="3" y="3" width="18" height="18" rx="3" />
-      <circle cx="9" cy="9" r="1.5" />
-      <path d="m21 15-5-5-9 9" />
-    </svg>
-  );
-}
 
 export function ProdutosClient({
   initialProducts,
@@ -165,18 +139,18 @@ export function ProdutosClient({
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-6 py-8">
-      <nav className="flex items-center gap-2 text-xs font-medium text-text-muted">
+      <nav className="flex items-center gap-2 text-label-md text-text-muted">
         <span>Painel</span>
         <span>/</span>
         <span>Cardápio</span>
         <span>/</span>
-        <span className="font-bold text-graphite">Produtos</span>
+        <span className="text-graphite">Produtos</span>
       </nav>
 
-      <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-graphite">Produtos</h1>
-          <p className="mt-0.5 text-sm font-medium text-text-muted">
+          <h1 className="text-display text-graphite">Produtos</h1>
+          <p className="mt-0.5 text-body-md text-text-muted">
             {canEdit
               ? "Gerencie os itens disponíveis no cardápio da sua loja em tempo real."
               : "Ligue ou desligue a disponibilidade dos itens do cardápio em tempo real."}
@@ -187,7 +161,7 @@ export function ProdutosClient({
             href="/painel/produtos/novo"
             className="inline-flex h-11 shrink-0 items-center justify-center gap-2 self-start rounded-xl bg-primary px-5 text-sm font-semibold text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] transition-all hover:bg-primary-container sm:self-auto"
           >
-            <span className="text-lg leading-none">+</span>
+            <Plus className="h-4 w-4" aria-hidden />
             Novo produto
           </Link>
         )}
@@ -208,37 +182,44 @@ export function ProdutosClient({
       ) : (
         <>
           <div className="grid grid-cols-2 gap-3 lg:grid-cols-4">
-            <Card className="p-4">
-              <p className="text-xs font-medium text-text-muted">Total cadastrado</p>
-              <p className="mt-1 text-2xl font-black text-graphite">{products.length}</p>
-            </Card>
-            <Card className="p-4">
-              <p className="text-xs font-medium text-text-muted">Disponíveis hoje</p>
-              <p className="mt-1 text-2xl font-black text-emerald">{availableCount}</p>
-            </Card>
-            <Card className="p-4">
-              <p className="text-xs font-medium text-text-muted">Pausados/Esgotados</p>
-              <p className="mt-1 text-2xl font-black text-graphite">{unavailableCount}</p>
-            </Card>
-            <Card className="p-4">
-              <p className="text-xs font-medium text-text-muted">Categorias ativas</p>
-              <p className="mt-1 text-2xl font-black text-graphite">{activeCategoriesCount}</p>
-            </Card>
+            {(
+              [
+                { label: "Total cadastrado", value: products.length, unit: "itens", icon: Package, tint: "bg-primary/10 text-primary" },
+                { label: "Disponíveis hoje", value: availableCount, unit: "ativos", icon: CircleCheck, tint: "bg-emerald/10 text-emerald" },
+                { label: "Pausados / Esgotados", value: unavailableCount, unit: "itens", icon: CirclePause, tint: "bg-blue/10 text-blue" },
+                { label: "Categorias ativas", value: activeCategoriesCount, unit: "grupos", icon: Tags, tint: "bg-primary/10 text-primary" },
+              ] as const
+            ).map(({ label, value, unit, icon: Icon, tint }) => (
+              <Card key={label} className="flex items-center gap-3 p-4">
+                <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${tint}`}>
+                  <Icon className="h-5 w-5" aria-hidden />
+                </span>
+                <div className="min-w-0">
+                  <p className="truncate text-label-sm uppercase text-text-muted">{label}</p>
+                  <p className="text-headline-lg text-graphite">
+                    {value} <span className="text-body-sm font-normal text-text-muted">{unit}</span>
+                  </p>
+                </div>
+              </Card>
+            ))}
           </div>
 
           <Card className="flex flex-col gap-3 p-3.5 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Buscar produto por nome..."
-                className="h-9 w-full max-w-md rounded-lg border border-border bg-surface px-3 text-xs text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-              />
+              <div className="relative w-full max-w-md">
+                <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" aria-hidden />
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Buscar produto por nome..."
+                  className="h-10 w-full rounded-xl border border-border bg-surface pl-9 pr-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+                />
+              </div>
               <select
                 value={categoryFilter}
                 onChange={(e) => setCategoryFilter(e.target.value)}
-                className="h-9 rounded-lg border border-border bg-surface px-2.5 text-xs font-semibold text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+                className="h-10 rounded-xl border border-border bg-surface px-3 text-body-md text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
               >
                 <option value="all">Todas as categorias</option>
                 {categories.map((category) => (
@@ -248,7 +229,7 @@ export function ProdutosClient({
                 ))}
               </select>
             </div>
-            <div className="flex items-center gap-1.5 overflow-x-auto">
+            <div className="flex items-center gap-1 overflow-x-auto rounded-xl bg-surface-subdued p-1">
               {(
                 [
                   ["all", `Todos (${products.length})`],
@@ -260,8 +241,8 @@ export function ProdutosClient({
                   key={value}
                   type="button"
                   onClick={() => setStatusFilter(value)}
-                  className={`shrink-0 rounded-md px-2.5 py-1 text-xs font-bold transition-colors ${
-                    statusFilter === value ? "bg-primary text-white" : "text-text-muted hover:bg-surface-subdued"
+                  className={`shrink-0 rounded-lg px-3 py-1.5 text-label-md transition-colors ${
+                    statusFilter === value ? "bg-surface-card text-graphite shadow-card" : "text-text-muted hover:text-graphite"
                   }`}
                 >
                   {label}
@@ -273,7 +254,7 @@ export function ProdutosClient({
           {rowError && <ErrorState message={rowError} />}
 
           <Card className="overflow-hidden p-0">
-            <div className="hidden grid-cols-12 gap-4 border-b border-border bg-surface-subdued/70 px-5 py-3 text-[11px] font-bold uppercase tracking-wide text-text-muted md:grid">
+            <div className="hidden grid-cols-12 gap-4 border-b border-border bg-surface-subdued/70 px-5 py-3 text-label-sm uppercase text-text-muted md:grid">
               <div className="col-span-1 text-center">Ordem</div>
               <div className="col-span-4">Produto</div>
               <div className="col-span-2">Categoria</div>
@@ -303,8 +284,8 @@ export function ProdutosClient({
                       className="flex flex-col gap-3 p-4 transition-colors hover:bg-surface-subdued/60 md:grid md:grid-cols-12 md:items-center md:gap-4 md:px-5 md:py-3.5"
                     >
                       <div className="flex items-center justify-between md:col-span-1 md:justify-center">
-                        <span className="flex h-6 w-6 items-center justify-center rounded-md border border-border bg-surface-subdued text-xs font-bold text-graphite">
-                          {positionInCategory + 1}º
+                        <span className="text-label-md tabular-nums text-text-muted">
+                          {String(positionInCategory + 1).padStart(2, "0")}
                         </span>
                       </div>
 
@@ -314,27 +295,34 @@ export function ProdutosClient({
                           <img src={cover.url} alt={product.name} className="h-14 w-14 shrink-0 rounded-xl object-cover shadow-sm" />
                         ) : (
                           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-surface-subdued text-text-muted">
-                            <ImagePlaceholderIcon />
+                            <ImageIcon className="h-6 w-6" aria-hidden />
                           </div>
                         )}
                         <div className="min-w-0">
-                          <h3 className="text-sm font-bold text-graphite">{product.name}</h3>
+                          <h3 className="text-body-lg font-bold text-graphite">{product.name}</h3>
+                          {(associationsByProduct.get(product.id)?.length ?? 0) > 0 && (
+                            <span className="mt-1 inline-block rounded bg-surface-subdued px-1.5 py-0.5 text-label-sm text-text-muted">
+                              Adicionais ({associationsByProduct.get(product.id)?.length})
+                            </span>
+                          )}
                           {product.description && (
-                            <p className="mt-0.5 truncate text-xs text-text-muted">{product.description}</p>
+                            <p className="mt-0.5 truncate text-body-sm text-text-muted">{product.description}</p>
                           )}
                         </div>
                       </div>
 
                       <div className="md:col-span-2">
-                        <Badge tone="neutral">{category?.name ?? "—"}</Badge>
+                        <span className="inline-block rounded-md bg-surface-subdued px-2 py-1 text-label-md text-graphite">
+                          {category?.name ?? "—"}
+                        </span>
                       </div>
 
                       <div className="flex items-center justify-between md:col-span-2 md:justify-center">
                         <span className="md:hidden text-xs font-medium text-text-muted">Preço:</span>
-                        <span className="text-sm font-extrabold text-graphite">{formatCurrencyBRL(product.price)}</span>
+                        <span className="text-body-lg font-bold text-graphite">{formatCurrencyBRL(product.price)}</span>
                       </div>
 
-                      <div className="flex items-center justify-between gap-3 md:col-span-1 md:justify-center">
+                      <div className="flex items-center justify-between gap-2 md:col-span-1 md:justify-center">
                         <span className="md:hidden text-xs font-medium text-text-muted">Disponível:</span>
                         <button
                           type="button"
@@ -352,6 +340,9 @@ export function ProdutosClient({
                             }`}
                           />
                         </button>
+                        <span className={`hidden text-label-sm xl:inline ${product.is_available ? "text-emerald" : "text-text-muted"}`}>
+                          {product.is_available ? "Ativo" : "Pausado"}
+                        </span>
                       </div>
 
                       {canEdit && (
@@ -363,7 +354,7 @@ export function ProdutosClient({
                             onClick={() => handleMove(product, "up")}
                             className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
                           >
-                            <ChevronUpIcon />
+                            <ChevronUp className="h-4 w-4" aria-hidden />
                           </button>
                           <button
                             type="button"
@@ -372,14 +363,16 @@ export function ProdutosClient({
                             onClick={() => handleMove(product, "down")}
                             className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
                           >
-                            <ChevronDownIcon />
+                            <ChevronDown className="h-4 w-4" aria-hidden />
                           </button>
                           <button
                             type="button"
+                            title="Editar produto"
+                            aria-label={`Editar ${product.name}`}
                             onClick={() => setEditingId(product.id)}
-                            className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
+                            className="rounded-lg p-1.5 text-text-muted hover:bg-primary/10 hover:text-primary"
                           >
-                            Editar
+                            <Pencil className="h-4 w-4" aria-hidden />
                           </button>
                           <button
                             type="button"
@@ -387,9 +380,11 @@ export function ProdutosClient({
                               setDeleteError(null);
                               setDeletingId(product.id);
                             }}
-                            className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
+                            title="Excluir produto"
+                            aria-label={`Excluir ${product.name}`}
+                            className="rounded-lg p-1.5 text-text-muted hover:bg-red/10 hover:text-red"
                           >
-                            Excluir
+                            <Trash2 className="h-4 w-4" aria-hidden />
                           </button>
                         </div>
                       )}
@@ -398,6 +393,12 @@ export function ProdutosClient({
                 })}
               </div>
             )}
+            <div className="flex flex-col gap-1 border-t border-border px-5 py-3 text-body-sm text-text-muted sm:flex-row sm:items-center sm:justify-between">
+              <span>
+                Exibindo {visible.length} de {products.length} produtos
+              </span>
+              {canEdit && <span>Dica: use as setas para mudar a ordem dos produtos dentro da categoria na loja digital.</span>}
+            </div>
           </Card>
         </>
       )}
