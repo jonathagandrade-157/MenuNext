@@ -19,6 +19,7 @@ const ALL_NAV_GROUPS: NavGroup[] = [
       { href: "/painel/pedidos", label: "Pedidos", icon: "pedidos" },
       { href: "/painel/caixa", label: "Frente de Caixa", icon: "caixa" },
       { href: "/painel/kds", label: "Cozinha (KDS)", icon: "kds" },
+      { href: "/painel/insights", label: "Insights", icon: "insights", ownerOnly: true },
     ],
   },
   {
