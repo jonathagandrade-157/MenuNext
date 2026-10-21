@@ -11,6 +11,8 @@ import { CopyLinkButton } from "@/components/onboarding/CopyLinkButton";
 import { removeMemberAction, resendInviteAction, revokeInviteAction } from "@/lib/actions/invites";
 import type { RestaurantInvite, RestaurantMember } from "@/lib/tenant";
 import { InviteFormFields } from "./InviteFormFields";
+import { AuditList } from "@/components/audit/AuditList";
+import type { AuditEntry } from "@/lib/audit";
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
@@ -48,10 +50,13 @@ export function UsuariosClient({
   members,
   invites,
   currentUserId,
+  activity,
 }: {
   members: RestaurantMember[];
   invites: RestaurantInvite[];
   currentUserId: string;
+  /** Atividade recente da loja (registro de auditoria), do mais novo para o mais antigo. */
+  activity: AuditEntry[];
 }) {
   const [inviteOpen, setInviteOpen] = useState(false);
   const [revoking, setRevoking] = useState<RestaurantInvite | null>(null);
@@ -325,6 +330,16 @@ export function UsuariosClient({
           )}
       </Card>
       )}
+
+      <Card className="space-y-2 p-6">
+        <div>
+          <h2 className="text-body-lg font-bold text-graphite">Atividade recente</h2>
+          <p className="text-body-sm text-text-muted">
+            Alterações feitas por você e pela equipe no cardápio, nas configurações e nos convites.
+          </p>
+        </div>
+        <AuditList entries={activity} emptyText="Ainda não há atividade registrada." />
+      </Card>
 
       <Modal open={inviteOpen} onClose={() => setInviteOpen(false)} title="Convidar membro">
         <InviteFormFields onDone={() => setInviteOpen(false)} />
