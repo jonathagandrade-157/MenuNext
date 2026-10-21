@@ -49,7 +49,7 @@ export function StoreBottomNav({ slug }: { slug: string }) {
   const { totalItemCount } = useBag();
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-50 flex justify-center border-t border-border bg-surface-card/95 px-3 py-2 backdrop-blur-md">
+    <nav className="fixed inset-x-0 bottom-0 z-50 flex justify-center border-t border-border bg-surface-card/95 px-3 py-2 backdrop-blur-md lg:hidden">
       <div className="flex w-full max-w-[420px] items-center justify-around">
         <Link href={`/loja/${slug}`} className="flex flex-1 flex-col items-center gap-1 py-1 text-primary">
           <HomeIcon />

@@ -111,7 +111,7 @@ export function StoreCatalog({
       {visibleCombos.length > 0 && (
         <section id="combos" className="scroll-mt-14 px-3.5 py-4">
           <h2 className="mb-3 text-headline-sm text-graphite">Combos</h2>
-          <div className="space-y-3">
+          <div className="grid gap-3 md:grid-cols-2">
             {visibleCombos.map((combo) => (
               <StoreComboCard key={combo.id} combo={combo} />
             ))}
@@ -122,7 +122,7 @@ export function StoreCatalog({
       {visibleCategories.map((category) => (
         <section key={category.id} id={`categoria-${category.id}`} className="scroll-mt-14 px-3.5 py-4">
           <h2 className="mb-3 text-headline-sm text-graphite">{category.name}</h2>
-          <div className="space-y-3">
+          <div className="grid gap-3 md:grid-cols-2">
             {category.products.map((product) => (
               <StoreProductCard
                 key={product.id}

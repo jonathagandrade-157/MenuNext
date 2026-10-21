@@ -254,13 +254,13 @@ export function ProductDetailClient({
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-30 flex justify-center border-t border-border bg-surface-card px-3.5 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
-        <div className="w-full max-w-[420px] space-y-2">
+        <div className="w-full max-w-3xl space-y-2 lg:max-w-5xl">
           {submitError && <p className="text-center text-xs font-semibold text-red">{submitError}</p>}
           <button
             type="button"
             disabled={!canSubmit}
             onClick={handleAddToBag}
-            className="flex h-12 w-full items-center justify-between rounded-xl bg-primary px-4 text-sm font-bold text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-12 w-full items-center justify-between rounded-xl bg-primary md:ml-auto md:w-96 px-4 text-sm font-bold text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span>Adicionar à sacola</span>
             <span>{formatCurrencyBRL(subtotal)}</span>

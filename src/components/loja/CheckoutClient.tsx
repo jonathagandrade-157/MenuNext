@@ -21,6 +21,7 @@ import {
 } from "@/lib/checkout";
 import { parseMoneyInput } from "@/lib/products";
 import { formatCurrencyBRL } from "@/lib/store";
+import { ArrowLeft, Banknote, CreditCard, QrCode, type LucideIcon } from "lucide-react";
 
 function idempotencyStorageKey(slug: string): string {
   return `menunext-checkout-idem-${slug}`;
@@ -40,6 +41,19 @@ function readOrCreateIdempotencyKey(slug: string): string {
   } catch {
     return generateIdempotencyKey();
   }
+}
+
+const PAYMENT_ICONS: Record<string, LucideIcon> = { pix: QrCode, cash: Banknote, card: CreditCard };
+
+const SECTION_CARD = "space-y-3 rounded-2xl border border-border bg-surface-card p-4 shadow-card";
+
+function SectionTitle({ step, title }: { step: number; title: string }) {
+  return (
+    <div className="flex items-center gap-2.5">
+      <span className="flex h-6 w-6 items-center justify-center rounded-md bg-primary/10 text-label-md text-primary">{step}</span>
+      <h2 className="text-body-lg font-bold text-graphite">{title}</h2>
+    </div>
+  );
 }
 
 export function CheckoutClient({
@@ -303,19 +317,20 @@ export function CheckoutClient({
 
   return (
     <div className="pb-32">
-      <div className="sticky top-0 z-20 flex items-center gap-2 bg-surface-card/95 px-3.5 py-3 backdrop-blur-md">
+      <div className="sticky top-0 z-20 flex items-center gap-2 border-b border-border bg-surface-card/95 px-3.5 py-3 backdrop-blur-md">
         <button
           type="button"
           onClick={() => router.push(`/loja/${slug}/sacola`)}
           aria-label="Voltar para a sacola"
           className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-graphite hover:bg-surface-subdued"
         >
-          ←
+          <ArrowLeft className="h-4 w-4" aria-hidden />
         </button>
-        <span className="text-sm font-bold text-graphite">Checkout</span>
+        <h1 className="text-headline-sm text-graphite">Finalizar pedido</h1>
       </div>
 
-      <div className="space-y-5 px-3.5 py-4">
+      <div className="px-3.5 py-4 lg:grid lg:grid-cols-[minmax(0,1fr)_360px] lg:items-start lg:gap-6">
+      <div className="space-y-5">
         {availablePaymentMethods.length === 0 && (
           <div className="rounded-xl border border-amber/20 bg-amber/10 px-3.5 py-2.5 text-xs font-medium text-amber">
             Esta loja ainda não concluiu a configuração de pagamento. Tente novamente mais tarde.
@@ -327,10 +342,10 @@ export function CheckoutClient({
           </div>
         )}
 
-        <section className="space-y-3">
-          <h2 className="text-sm font-extrabold text-graphite">Seus dados</h2>
+        <section className={SECTION_CARD}>
+          <SectionTitle step={1} title="Seus dados" />
           <div>
-            <label className="mb-1 block text-xs font-bold text-graphite" htmlFor="customerName">
+            <label className="mb-1 block text-label-md text-graphite" htmlFor="customerName">
               Nome
             </label>
             <input
@@ -338,11 +353,11 @@ export function CheckoutClient({
               value={customerName}
               onChange={(e) => setCustomerName(e.target.value)}
               placeholder="Seu nome"
-              className="w-full rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              className="w-full rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
           </div>
           <div>
-            <label className="mb-1 block text-xs font-bold text-graphite" htmlFor="customerPhone">
+            <label className="mb-1 block text-label-md text-graphite" htmlFor="customerPhone">
               WhatsApp/telefone
             </label>
             <input
@@ -351,13 +366,13 @@ export function CheckoutClient({
               onChange={(e) => setCustomerPhone(e.target.value)}
               placeholder="(11) 91234-5678"
               inputMode="tel"
-              className="w-full rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              className="w-full rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
           </div>
         </section>
 
-        <section className="space-y-3">
-          <h2 className="text-sm font-extrabold text-graphite">Endereço de entrega</h2>
+        <section className={SECTION_CARD}>
+          <SectionTitle step={2} title="Endereço de entrega" />
 
           <div>
             <input
@@ -366,7 +381,7 @@ export function CheckoutClient({
               placeholder="CEP"
               inputMode="numeric"
               maxLength={9}
-              className="w-full rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              className="w-full rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
             {cepStatus === "loading" && <p className="mt-1 text-xs text-text-muted">Buscando endereço...</p>}
             {cepStatus === "found" && <p className="mt-1 text-xs font-semibold text-emerald">✓ Endereço encontrado.</p>}
@@ -385,44 +400,44 @@ export function CheckoutClient({
               value={street}
               onChange={(e) => setStreet(e.target.value)}
               placeholder="Rua"
-              className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
             <input
               value={number}
               onChange={(e) => setNumber(e.target.value)}
               placeholder="Número"
-              className="rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              className="rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
             <input
               value={complement}
               onChange={(e) => setComplement(e.target.value)}
               placeholder="Complemento (opcional)"
-              className="rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              className="rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
             <input
               value={neighborhood}
               onChange={(e) => setNeighborhood(e.target.value)}
               placeholder="Bairro"
-              className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
             <input
               value={city}
               onChange={(e) => setCity(e.target.value)}
               placeholder="Cidade"
-              className="rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              className="rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
             <input
               value={state}
               onChange={(e) => setState(e.target.value)}
               placeholder="UF"
               maxLength={2}
-              className="rounded-xl border border-border bg-surface-card px-3 py-2 text-sm uppercase text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              className="rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md uppercase text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
             <input
               value={reference}
               onChange={(e) => setReference(e.target.value)}
               placeholder="Referência (opcional)"
-              className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              className="col-span-2 rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
           </div>
 
@@ -447,27 +462,32 @@ export function CheckoutClient({
         </section>
 
         {availablePaymentMethods.length > 0 && (
-          <section className="space-y-2">
-            <h2 className="text-sm font-extrabold text-graphite">Forma de pagamento</h2>
-            <div className="flex flex-wrap gap-2">
-              {availablePaymentMethods.map((method) => (
-                <button
-                  key={method}
-                  type="button"
-                  onClick={() => setPaymentMethod(method)}
-                  className={`rounded-xl border px-3 py-2.5 text-sm font-bold transition-colors ${
-                    paymentMethod === method
-                      ? "border-primary bg-primary/10 text-primary"
-                      : "border-border text-graphite hover:bg-surface-subdued"
-                  }`}
-                >
-                  {PAYMENT_METHOD_LABELS[method]}
-                </button>
-              ))}
+          <section className={SECTION_CARD}>
+            <SectionTitle step={3} title="Como você vai pagar?" />
+            <div className="grid grid-cols-3 gap-2">
+              {availablePaymentMethods.map((method) => {
+                const Icon = PAYMENT_ICONS[method] ?? CreditCard;
+                return (
+                  <button
+                    key={method}
+                    type="button"
+                    aria-pressed={paymentMethod === method}
+                    onClick={() => setPaymentMethod(method)}
+                    className={`flex flex-col items-center gap-1.5 rounded-xl border-2 px-2 py-3 text-label-md transition-colors ${
+                      paymentMethod === method
+                        ? "border-primary bg-primary/5 text-primary"
+                        : "border-border text-graphite hover:bg-surface-subdued"
+                    }`}
+                  >
+                    <Icon className="h-5 w-5" aria-hidden />
+                    {PAYMENT_METHOD_LABELS[method]}
+                  </button>
+                );
+              })}
             </div>
             {paymentMethod === "cash" && (
               <div>
-                <label className="mb-1 block text-xs font-bold text-graphite" htmlFor="changeFor">
+                <label className="mb-1 block text-label-md text-graphite" htmlFor="changeFor">
                   Troco para (opcional)
                 </label>
                 <input
@@ -476,16 +496,16 @@ export function CheckoutClient({
                   onChange={(e) => setChangeForInput(e.target.value)}
                   placeholder="Ex.: 50,00"
                   inputMode="decimal"
-                  className="w-full rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+                  className="w-full rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
                 />
               </div>
             )}
           </section>
         )}
 
-        <section className="space-y-2">
-          <label className="block text-sm font-extrabold text-graphite" htmlFor="checkoutObservation">
-            Observação do pedido (opcional)
+        <section className={SECTION_CARD}>
+          <label className="block text-body-lg font-bold text-graphite" htmlFor="checkoutObservation">
+            Observações para o restaurante
           </label>
           <textarea
             id="checkoutObservation"
@@ -493,12 +513,12 @@ export function CheckoutClient({
             onChange={(e) => setObservation(e.target.value)}
             rows={2}
             placeholder="Ex.: interfone quebrado, deixar na portaria..."
-            className="w-full rounded-xl border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            className="w-full rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
           />
         </section>
 
-        <section className="space-y-2">
-          <h2 className="text-sm font-extrabold text-graphite">Cupom de desconto</h2>
+        <section className={SECTION_CARD}>
+          <h2 className="text-body-lg font-bold text-graphite">Cupom de desconto</h2>
           {couponApplied ? (
             <div className="flex items-center justify-between gap-2 rounded-xl border border-emerald/30 bg-emerald/10 px-3.5 py-2.5">
               <div>
@@ -518,7 +538,7 @@ export function CheckoutClient({
                   setCouponError(null);
                 }}
                 placeholder="Código do cupom"
-                className="flex-1 rounded-xl border border-border bg-surface-card px-3 py-2 text-sm uppercase text-graphite placeholder:text-slate-400 placeholder:normal-case focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+                className="flex-1 rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md uppercase text-graphite placeholder:text-slate-400 placeholder:normal-case focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
               />
               <button
                 type="button"
@@ -533,8 +553,11 @@ export function CheckoutClient({
           {couponError && <p className="text-xs font-semibold text-red">{couponError}</p>}
         </section>
 
-        <section className="space-y-2 rounded-2xl border border-border bg-surface-subdued/60 p-3.5">
-          <h2 className="text-sm font-extrabold text-graphite">Resumo</h2>
+      </div>
+
+      <aside className="mt-5 lg:sticky lg:top-20 lg:mt-0">
+        <section className="space-y-2 rounded-2xl border border-border bg-surface-subdued/60 p-4">
+          <h2 className="text-body-lg font-bold text-graphite">Resumo do pedido</h2>
           <div className="space-y-1 text-xs">
             {items.map((item) => (
               <div key={item.key} className="flex justify-between gap-2 text-text-muted">
@@ -562,22 +585,23 @@ export function CheckoutClient({
                 {effectiveDeliveryFee !== null ? formatCurrencyBRL(effectiveDeliveryFee) : "—"}
               </span>
             </div>
-            <div className="flex justify-between text-base font-extrabold text-graphite">
+            <div className="flex items-baseline justify-between text-headline-sm text-graphite">
               <span>Total</span>
               <span>{formatCurrencyBRL(total)}</span>
             </div>
           </div>
         </section>
+      </aside>
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-30 flex justify-center border-t border-border bg-surface-card px-3.5 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
-        <div className="w-full max-w-[420px] space-y-2">
+        <div className="w-full max-w-3xl space-y-2 lg:max-w-5xl">
           {errorMessage && <p className="text-center text-xs font-semibold text-red">{errorMessage}</p>}
           <button
             type="button"
             disabled={!canSubmit}
             onClick={handleSubmit}
-            className="flex h-12 w-full items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-12 w-full items-center justify-center rounded-xl bg-primary md:ml-auto md:w-96 px-4 text-sm font-bold text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
           >
             {loading ? "Enviando pedido..." : `Finalizar pedido · ${formatCurrencyBRL(total)}`}
           </button>
