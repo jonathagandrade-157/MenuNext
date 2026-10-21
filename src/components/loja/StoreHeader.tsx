@@ -1,3 +1,4 @@
+import { Bike, Clock, ShoppingBag, Store, Wallet } from "lucide-react";
 import type { StoreOpenState } from "@/lib/store";
 import { formatCurrencyBRL } from "@/lib/store";
 import { StoreOpenBadge } from "./StoreOpenBadge";
@@ -20,6 +21,8 @@ export function StoreHeader({
   deliveryRadiusKm,
   estimatedDeliveryMinMinutes,
   estimatedDeliveryMaxMinutes,
+  servicePickup,
+  minimumOrderValue,
 }: {
   name: string;
   bio: string | null;
@@ -31,8 +34,31 @@ export function StoreHeader({
   deliveryRadiusKm: number | null;
   estimatedDeliveryMinMinutes: number | null;
   estimatedDeliveryMaxMinutes: number | null;
+  servicePickup: boolean;
+  minimumOrderValue: number | null;
 }) {
   const hasEstimate = estimatedDeliveryMinMinutes !== null && estimatedDeliveryMaxMinutes !== null;
+
+  // Só informações que a loja de fato configurou — nada de valor inventado.
+  const info: { label: string; value: string; icon: typeof Clock; tint: string }[] = [];
+  if (hasEstimate) {
+    info.push({ label: "Tempo estimado", value: `${estimatedDeliveryMinMinutes}–${estimatedDeliveryMaxMinutes} min`, icon: Clock, tint: "bg-primary/10 text-primary" });
+  }
+  if (serviceDelivery) {
+    info.push({
+      label: "Taxa de entrega",
+      value: `${deliveryFee !== null ? formatCurrencyBRL(deliveryFee) : "A combinar"}${deliveryRadiusKm !== null ? ` · até ${deliveryRadiusKm} km` : ""}`,
+      icon: Bike,
+      tint: "bg-emerald/10 text-emerald",
+    });
+  }
+  if (minimumOrderValue !== null && minimumOrderValue > 0) {
+    info.push({ label: "Pedido mínimo", value: formatCurrencyBRL(minimumOrderValue), icon: Wallet, tint: "bg-blue/10 text-blue" });
+  }
+  const modes = [serviceDelivery && "Delivery", servicePickup && "Retirada"].filter(Boolean).join(" • ");
+  if (modes) {
+    info.push({ label: "Modalidade", value: modes, icon: serviceDelivery ? ShoppingBag : Store, tint: "bg-amber/10 text-amber" });
+  }
 
   return (
     <header className="relative">
@@ -62,28 +88,24 @@ export function StoreHeader({
             )}
           </div>
           <div className="pb-1">
-            <h1 className="text-xl font-extrabold tracking-tight text-graphite">{name}</h1>
-            <p className="text-xs font-medium text-text-muted">{bio || "Cardápio digital"}</p>
+            <h1 className="text-headline-md text-graphite">{name}</h1>
+            <p className="text-body-sm text-text-muted">{bio || "Cardápio digital"}</p>
           </div>
         </div>
 
-        {serviceDelivery && (
+        {info.length > 0 && (
           <div className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-3">
-            <div className="rounded-xl bg-surface-subdued p-2.5">
-              <p className="text-[11px] font-medium text-text-muted">Taxa de entrega</p>
-              <p className="text-xs font-bold text-graphite">
-                {deliveryFee !== null ? formatCurrencyBRL(deliveryFee) : "A combinar"}
-                {deliveryRadiusKm !== null && ` · até ${deliveryRadiusKm} km`}
-              </p>
-            </div>
-            {hasEstimate && (
-              <div className="rounded-xl bg-surface-subdued p-2.5">
-                <p className="text-[11px] font-medium text-text-muted">Tempo estimado</p>
-                <p className="text-xs font-bold text-graphite">
-                  {estimatedDeliveryMinMinutes}–{estimatedDeliveryMaxMinutes} min
-                </p>
+            {info.map(({ label, value, icon: Icon, tint }) => (
+              <div key={label} className="flex items-center gap-2.5 rounded-xl border border-border bg-surface p-2.5">
+                <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${tint}`}>
+                  <Icon className="h-4 w-4" aria-hidden />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-label-sm text-text-muted">{label}</p>
+                  <p className="text-label-md text-graphite">{value}</p>
+                </div>
               </div>
-            )}
+            ))}
           </div>
         )}
       </div>
