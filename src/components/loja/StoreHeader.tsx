@@ -62,7 +62,7 @@ export function StoreHeader({
 
   return (
     <header className="relative">
-      <div className="relative h-40 w-full overflow-hidden bg-graphite">
+      <div className="relative h-40 w-full overflow-hidden bg-graphite md:h-56">
         {coverUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={coverUrl} alt={`Capa de ${name}`} className="h-full w-full object-cover opacity-90" />
@@ -76,7 +76,7 @@ export function StoreHeader({
       </div>
 
       <div className="relative px-4 pb-4">
-        <div className="-mt-10 flex items-end gap-3">
+        <div className="-mt-10 md:-mt-12">
           <div className="h-20 w-20 shrink-0 rounded-2xl border-2 border-white bg-white p-1 shadow-lg">
             {logoUrl ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -87,14 +87,14 @@ export function StoreHeader({
               </div>
             )}
           </div>
-          <div className="pb-1">
+          <div className="mt-3">
             <h1 className="text-headline-md text-graphite">{name}</h1>
             <p className="text-body-sm text-text-muted">{bio || "Cardápio digital"}</p>
           </div>
         </div>
 
         {info.length > 0 && (
-          <div className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-3">
+          <div className="mt-4 grid grid-cols-2 gap-2 border-t border-border pt-3 lg:grid-cols-4">
             {info.map(({ label, value, icon: Icon, tint }) => (
               <div key={label} className="flex items-center gap-2.5 rounded-xl border border-border bg-surface p-2.5">
                 <span className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg ${tint}`}>

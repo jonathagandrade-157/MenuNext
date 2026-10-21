@@ -7,6 +7,8 @@ import {
   getPublicCombosWithItems,
   getPublicRestaurantBySlug,
 } from "@/lib/store";
+import { StoreBagAside } from "@/components/loja/StoreBagAside";
+import { StoreBagBar } from "@/components/loja/StoreBagBar";
 import { StoreBottomNav } from "@/components/loja/StoreBottomNav";
 import { StoreCatalog } from "@/components/loja/StoreCatalog";
 import { StoreHeader } from "@/components/loja/StoreHeader";
@@ -61,7 +63,7 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
     : undefined;
 
   return (
-    <div className="pb-24" style={themeStyle}>
+    <div className="pb-36 lg:pb-8" style={themeStyle}>
       <StoreHeader
         name={restaurant.name}
         bio={restaurant.bio}
@@ -98,7 +100,12 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
         </div>
       ) : (
         <>
-          <StoreCatalog slug={slug} categories={categories} combos={combos} />
+          <div className="lg:grid lg:grid-cols-[minmax(0,1fr)_320px] lg:items-start lg:gap-2">
+            <div>
+              <StoreCatalog slug={slug} categories={categories} combos={combos} />
+            </div>
+            <StoreBagAside slug={slug} />
+          </div>
         </>
       )}
 
@@ -108,6 +115,7 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
 
       {restaurant.contact_whatsapp && <StoreWhatsAppButton whatsapp={restaurant.contact_whatsapp} storeName={restaurant.name} />}
 
+      <StoreBagBar slug={slug} />
       <StoreBottomNav slug={slug} />
     </div>
   );
