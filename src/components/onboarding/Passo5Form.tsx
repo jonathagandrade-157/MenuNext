@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
+import { Copy } from "lucide-react";
 import { savePasso5Action, skipOnboardingStepAction } from "@/lib/actions/onboarding";
 import { initialStepState, WEEK_DAYS } from "@/lib/form-state";
 import { ErrorMessage, StepNavigation } from "@/components/onboarding/OnboardingShell";
@@ -20,10 +21,37 @@ export function Passo5Form({ businessHours }: { businessHours: BusinessHour[] })
     Object.fromEntries(WEEK_DAYS.map(({ value }) => [value, openDaysSet.has(value)]))
   );
 
+  // Horários controlados: permitem "copiar para todos os dias" sem digitar sete vezes.
+  const [times, setTimes] = useState<Record<number, { opens: string; closes: string }>>(
+    Object.fromEntries(
+      WEEK_DAYS.map(({ value }) => {
+        const row = firstPeriodByDay.get(value);
+        return [value, { opens: row?.opens_at?.slice(0, 5) ?? "08:00", closes: row?.closes_at?.slice(0, 5) ?? "18:00" }];
+      })
+    )
+  );
+  const firstOpenDay = WEEK_DAYS.find(({ value }) => openDays[value]);
+
+  function copyToAllDays() {
+    if (!firstOpenDay) return;
+    const source = times[firstOpenDay.value];
+    setOpenDays(Object.fromEntries(WEEK_DAYS.map(({ value }) => [value, true])));
+    setTimes(Object.fromEntries(WEEK_DAYS.map(({ value }) => [value, { ...source }])));
+  }
+
   return (
     <form action={formAction} className="space-y-3">
+      {firstOpenDay && (
+        <button
+          type="button"
+          onClick={copyToAllDays}
+          className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-border bg-surface-card px-3 text-label-md text-graphite hover:bg-surface-subdued"
+        >
+          <Copy className="h-4 w-4" aria-hidden />
+          Usar o horário de {firstOpenDay.label.toLowerCase()} em todos os dias
+        </button>
+      )}
       {WEEK_DAYS.map(({ value, label }) => {
-        const row = firstPeriodByDay.get(value);
         const isOpen = openDays[value];
         return (
           <div key={value} className="flex flex-col gap-3 rounded-xl border border-border p-4 sm:flex-row sm:items-center">
@@ -42,14 +70,16 @@ export function Passo5Form({ businessHours }: { businessHours: BusinessHour[] })
                 <input
                   type="time"
                   name={`opens_at_${value}`}
-                  defaultValue={row?.opens_at?.slice(0, 5) ?? "08:00"}
+                  value={times[value].opens}
+                  onChange={(e) => setTimes((prev) => ({ ...prev, [value]: { ...prev[value], opens: e.target.value } }))}
                   className="h-10 rounded-xl border border-border px-2 text-body-md"
                 />
                 <span className="text-body-md text-text-muted">às</span>
                 <input
                   type="time"
                   name={`closes_at_${value}`}
-                  defaultValue={row?.closes_at?.slice(0, 5) ?? "18:00"}
+                  value={times[value].closes}
+                  onChange={(e) => setTimes((prev) => ({ ...prev, [value]: { ...prev[value], closes: e.target.value } }))}
                   className="h-10 rounded-xl border border-border px-2 text-body-md"
                 />
               </div>
