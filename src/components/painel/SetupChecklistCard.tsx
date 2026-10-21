@@ -12,9 +12,9 @@ export function SetupChecklistCard({ checklist, storeSlug }: { checklist: SetupC
   if (checklist.isComplete) {
     return (
       <Card className="p-6 text-center">
-        <p className="text-2xl">🎉</p>
+        <p className="text-headline-lg">🎉</p>
         <h2 className="mt-2 text-headline-sm text-graphite">Sua loja está pronta!</h2>
-        <p className="mt-1 text-sm text-text-muted">Sua loja está 100% configurada.</p>
+        <p className="mt-1 text-body-md text-text-muted">Sua loja está 100% configurada.</p>
         <LinkButton href={`/loja/${storeSlug}`} className="mt-4">
           Ver minha loja
         </LinkButton>
@@ -25,7 +25,7 @@ export function SetupChecklistCard({ checklist, storeSlug }: { checklist: SetupC
   return (
     <Card className="p-6">
       <h2 className="text-headline-sm text-graphite">Configure sua loja</h2>
-      <p className="mt-1 text-sm text-text-muted">Complete estas configurações para começar a vender.</p>
+      <p className="mt-1 text-body-md text-text-muted">Complete estas configurações para começar a vender.</p>
 
       <div className="mt-4">
         <div className="mb-1.5 flex items-center justify-between text-label-md text-text-muted">
@@ -40,7 +40,7 @@ export function SetupChecklistCard({ checklist, storeSlug }: { checklist: SetupC
       </div>
 
       {checklist.percent < 100 && checklist.completedCount < checklist.totalCount && (
-        <p className="mt-4 text-xs font-medium text-amber">
+        <p className="mt-4 text-body-sm font-medium text-amber">
           Faltam algumas configurações para sua loja começar a vender.
         </p>
       )}
@@ -57,8 +57,8 @@ export function SetupChecklistCard({ checklist, storeSlug }: { checklist: SetupC
                 {item.completed ? "✓" : "○"}
               </span>
               <span className="min-w-0">
-                <span className="block text-sm font-bold text-graphite">{item.title}</span>
-                <span className="block truncate text-xs text-text-muted">
+                <span className="block text-body-md font-bold text-graphite">{item.title}</span>
+                <span className="block truncate text-body-sm text-text-muted">
                   {item.completed ? item.completedDescription : item.pendingDescription}
                 </span>
               </span>

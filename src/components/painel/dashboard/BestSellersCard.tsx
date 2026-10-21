@@ -14,7 +14,7 @@ export function BestSellersCard({ products }: { products: BestSellerProduct[] })
       <h2 className="text-body-lg font-bold text-graphite">Produtos mais vendidos</h2>
 
       {products.length === 0 ? (
-        <p className="py-10 text-center text-sm text-text-muted">
+        <p className="py-10 text-center text-body-md text-text-muted">
           Ainda não há vendas suficientes para montar um ranking.
         </p>
       ) : (
@@ -26,11 +26,11 @@ export function BestSellersCard({ products }: { products: BestSellerProduct[] })
                   {index + 1}
                 </span>
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-bold text-graphite">{product.productName}</p>
-                  <p className="text-xs text-text-muted">{product.quantitySold} vendidos</p>
+                  <p className="truncate text-body-md font-bold text-graphite">{product.productName}</p>
+                  <p className="text-body-sm text-text-muted">{product.quantitySold} vendidos</p>
                 </div>
               </div>
-              <p className="shrink-0 text-sm font-bold text-graphite">{formatCurrencyBRL(product.revenue)}</p>
+              <p className="shrink-0 text-body-md font-bold text-graphite">{formatCurrencyBRL(product.revenue)}</p>
             </li>
           ))}
         </ul>

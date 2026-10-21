@@ -156,7 +156,7 @@ export function OrderDetailModal({
                   onChange={(e) => setCancelOtherText(e.target.value)}
                   placeholder="Descreva o motivo"
                   maxLength={200}
-                  className="h-10 w-full rounded-lg border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-red focus:outline-none focus:ring-[3px] focus:ring-red/15"
+                  className="h-10 w-full rounded-xl border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-red focus:outline-none focus:ring-[3px] focus:ring-red/15"
                 />
               )}
               <div className="flex gap-2">
@@ -164,7 +164,7 @@ export function OrderDetailModal({
                   type="button"
                   onClick={() => setCancelPanelOpen(false)}
                   disabled={isCancelling}
-                  className="h-10 flex-1 rounded-lg border border-border text-label-lg text-graphite hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-50"
+                  className="h-10 flex-1 rounded-xl border border-border text-label-lg text-graphite hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Voltar
                 </button>

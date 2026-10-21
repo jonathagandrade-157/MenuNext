@@ -14,7 +14,7 @@ export function Passo4Form({ restaurant }: { restaurant: Restaurant }) {
   if (!restaurant.service_delivery) {
     return (
       <form action={formAction} className="space-y-5">
-        <p className="rounded-lg bg-surface-subdued px-4 py-3 text-sm text-text-muted">
+        <p className="rounded-lg bg-surface-subdued px-4 py-3 text-body-md text-text-muted">
           Você configurou apenas retirada no local no passo anterior, então não é preciso definir taxa ou raio de
           entrega agora. Você pode ativar o delivery depois no painel.
         </p>

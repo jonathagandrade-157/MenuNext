@@ -20,7 +20,7 @@ export function EmptyState({
   return (
     <div className="flex flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border bg-surface-card px-6 py-12 text-center">
       <p className="font-semibold text-graphite">{title}</p>
-      {description && <p className="max-w-sm text-sm text-text-muted">{description}</p>}
+      {description && <p className="max-w-sm text-body-md text-text-muted">{description}</p>}
       {action}
     </div>
   );
@@ -28,7 +28,7 @@ export function EmptyState({
 
 export function ErrorState({ message }: { message: string }) {
   return (
-    <div className="flex items-center gap-2 rounded-xl border border-[#FEF2F2] bg-[#FEF2F2] px-4 py-3 text-sm font-medium text-red">
+    <div className="flex items-center gap-2 rounded-xl border border-red/20 bg-red/10 px-4 py-3 text-body-md font-medium text-red">
       {message}
     </div>
   );

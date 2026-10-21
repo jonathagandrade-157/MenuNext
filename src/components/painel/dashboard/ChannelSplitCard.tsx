@@ -11,14 +11,14 @@ export function ChannelSplitCard({ split }: { split: ChannelSplit }) {
       <h2 className="text-body-lg font-bold text-graphite">Como compraram hoje</h2>
 
       {total === 0 ? (
-        <p className="mt-3 text-sm text-text-muted">Nenhum pedido hoje ainda.</p>
+        <p className="mt-3 text-body-md text-text-muted">Nenhum pedido hoje ainda.</p>
       ) : (
         <div className="mt-3 space-y-2">
           {(Object.keys(LABELS) as (keyof ChannelSplit)[]).map((channel) => {
             const percent = Math.round((split[channel].count / total) * 100);
             return (
               <div key={channel}>
-                <div className="flex items-center justify-between text-sm">
+                <div className="flex items-center justify-between text-body-md">
                   <span className="font-medium text-graphite">{LABELS[channel]}</span>
                   <span className="text-text-muted">
                     {split[channel].count} pedidos ({percent}%)

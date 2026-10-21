@@ -126,7 +126,7 @@ export function AdicionaisClient({
         </div>
         {canEdit && (
           <Button onClick={() => setCreateOpen(true)} className="self-start sm:self-auto">
-            <span className="text-lg leading-none">+</span>
+            <span className="text-headline-sm leading-none">+</span>
             Novo grupo
           </Button>
         )}
@@ -183,7 +183,7 @@ export function AdicionaisClient({
                 ))}
               </div>
             </div>
-            <p className="shrink-0 text-xs font-medium text-text-muted">
+            <p className="shrink-0 text-body-sm font-medium text-text-muted">
               <span className="font-bold text-graphite">{groups.length}</span> grupos cadastrados
             </p>
           </Card>
@@ -191,7 +191,7 @@ export function AdicionaisClient({
           {rowError && <ErrorState message={rowError} />}
 
           {visible.length === 0 ? (
-            <p className="px-5 py-8 text-center text-sm text-text-muted">
+            <p className="px-5 py-8 text-center text-body-md text-text-muted">
               Nenhum grupo encontrado para essa busca/filtro.
             </p>
           ) : (
@@ -208,10 +208,10 @@ export function AdicionaisClient({
                           <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-border bg-surface-subdued text-label-md font-bold text-graphite">
                             {position}º
                           </span>
-                          <h3 className="truncate text-sm font-bold text-graphite">{group.name}</h3>
+                          <h3 className="truncate text-body-md font-bold text-graphite">{group.name}</h3>
                         </div>
                         {group.description && (
-                          <p className="mt-1 truncate text-xs text-text-muted">{group.description}</p>
+                          <p className="mt-1 truncate text-body-sm text-text-muted">{group.description}</p>
                         )}
                       </div>
                       <Badge tone={group.is_active ? "success" : "neutral"} pulse={group.is_active}>
@@ -317,7 +317,7 @@ export function AdicionaisClient({
 
       <Modal open={deletingGroup !== null} onClose={() => setDeletingId(null)} title="Excluir grupo?">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">
+          <p className="text-body-md text-text-muted">
             Tem certeza que deseja excluir{" "}
             <span className="font-semibold text-graphite">{deletingGroup?.name}</span>? Essa ação não poderá ser
             desfeita.
@@ -331,7 +331,7 @@ export function AdicionaisClient({
               type="button"
               onClick={handleConfirmDelete}
               disabled={isPending}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-label-lg text-white transition-all duration-150 hover:bg-red/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isPending && pendingId === deletingGroup?.id && (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

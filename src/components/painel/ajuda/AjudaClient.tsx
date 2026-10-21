@@ -86,8 +86,8 @@ export function AjudaClient({
   return (
     <div className="mx-auto max-w-4xl space-y-8 px-6 py-10">
       <div>
-        <h1 className="text-2xl font-extrabold text-graphite">Ajuda e manual de uso</h1>
-        <p className="mt-1 text-sm text-text-muted">Encontre respostas rápidas para configurar e operar seu restaurante.</p>
+        <h1 className="text-headline-lg font-extrabold text-graphite">Ajuda e manual de uso</h1>
+        <p className="mt-1 text-body-md text-text-muted">Encontre respostas rápidas para configurar e operar seu restaurante.</p>
       </div>
 
       <label className="block">
@@ -96,7 +96,7 @@ export function AjudaClient({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Pesquise por pedido, cardápio, delivery, Pix, pausar loja..."
-          className="h-12 w-full rounded-xl border border-border bg-surface-card px-4 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          className="h-12 w-full rounded-xl border border-border bg-surface-card px-4 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
         />
       </label>
 
@@ -105,14 +105,14 @@ export function AjudaClient({
       <div>
         <h2 className="mb-3 text-body-lg font-bold uppercase tracking-wide text-text-muted">Guias rápidos</h2>
         {filteredGuides.length === 0 ? (
-          <p className="text-sm text-text-muted">Nenhum guia encontrado para essa busca.</p>
+          <p className="text-body-md text-text-muted">Nenhum guia encontrado para essa busca.</p>
         ) : (
           <div className="grid gap-3 sm:grid-cols-2">
             {filteredGuides.map((guide) => (
               <Link key={guide.href} href={guide.href}>
                 <Card className="h-full p-4 transition-colors hover:border-primary/40">
-                  <h3 className="text-sm font-bold text-graphite">{guide.title}</h3>
-                  <p className="mt-1 text-xs text-text-muted">{guide.description}</p>
+                  <h3 className="text-body-md font-bold text-graphite">{guide.title}</h3>
+                  <p className="mt-1 text-body-sm text-text-muted">{guide.description}</p>
                 </Card>
               </Link>
             ))}
@@ -123,7 +123,7 @@ export function AjudaClient({
       <div>
         <h2 className="mb-3 text-body-lg font-bold uppercase tracking-wide text-text-muted">Perguntas frequentes</h2>
         {filteredFaq.length === 0 ? (
-          <p className="text-sm text-text-muted">Nenhuma pergunta encontrada para essa busca.</p>
+          <p className="text-body-md text-text-muted">Nenhuma pergunta encontrada para essa busca.</p>
         ) : (
           <Card className="divide-y divide-border overflow-hidden p-0">
             {filteredFaq.map((item, index) => {
@@ -135,10 +135,10 @@ export function AjudaClient({
                     onClick={() => setOpenFaqIndex(open ? null : index)}
                     className="flex w-full items-center justify-between gap-3 px-5 py-3.5 text-left"
                   >
-                    <span className="text-sm font-semibold text-graphite">{item.question}</span>
+                    <span className="text-label-lg text-graphite">{item.question}</span>
                     <span className="shrink-0 text-text-muted">{open ? "−" : "+"}</span>
                   </button>
-                  {open && <p className="px-5 pb-4 text-sm text-text-muted">{item.answer}</p>}
+                  {open && <p className="px-5 pb-4 text-body-md text-text-muted">{item.answer}</p>}
                 </div>
               );
             })}
@@ -149,14 +149,14 @@ export function AjudaClient({
       {(supportEmail || supportWhatsapp) && (
         <Card className="p-5">
           <h2 className="text-body-lg font-bold text-graphite">Precisa de ajuda humana?</h2>
-          <p className="mt-1 text-sm text-text-muted">Fale direto com o suporte do MenuNext.</p>
+          <p className="mt-1 text-body-md text-text-muted">Fale direto com o suporte do MenuNext.</p>
           <div className="mt-3 flex flex-wrap gap-2.5">
             {supportWhatsapp && (
               <a
                 href={`https://wa.me/55${supportWhatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-10 items-center rounded-xl bg-emerald px-4 text-sm font-semibold text-white transition-all hover:opacity-90"
+                className="inline-flex h-10 items-center rounded-xl bg-emerald px-4 text-label-lg text-white transition-all hover:opacity-90"
               >
                 Falar no WhatsApp
               </a>
@@ -164,7 +164,7 @@ export function AjudaClient({
             {supportEmail && (
               <a
                 href={`mailto:${supportEmail}`}
-                className="inline-flex h-10 items-center rounded-xl border border-border bg-surface-card px-4 text-sm font-semibold text-graphite hover:bg-surface"
+                className="inline-flex h-10 items-center rounded-xl border border-border bg-surface-card px-4 text-label-lg text-graphite hover:bg-surface"
               >
                 {supportEmail}
               </a>

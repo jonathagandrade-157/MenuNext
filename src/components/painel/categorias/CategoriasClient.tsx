@@ -122,7 +122,7 @@ export function CategoriasClient({
           </p>
         </div>
         <Button onClick={() => setCreateOpen(true)} className="self-start sm:self-auto">
-          <span className="text-lg leading-none">+</span>
+          <span className="text-headline-sm leading-none">+</span>
           Nova categoria
         </Button>
       </div>
@@ -172,7 +172,7 @@ export function CategoriasClient({
                 ))}
               </div>
             </div>
-            <p className="shrink-0 text-xs font-medium text-text-muted">
+            <p className="shrink-0 text-body-sm font-medium text-text-muted">
               <span className="font-bold text-graphite">{categories.length}</span> categorias cadastradas
             </p>
           </Card>
@@ -189,7 +189,7 @@ export function CategoriasClient({
             </div>
 
             {visible.length === 0 ? (
-              <p className="px-5 py-8 text-center text-sm text-text-muted">
+              <p className="px-5 py-8 text-center text-body-md text-text-muted">
                 Nenhuma categoria encontrada para essa busca/filtro.
               </p>
             ) : (
@@ -210,14 +210,14 @@ export function CategoriasClient({
                       </div>
 
                       <div className="min-w-0 md:col-span-5">
-                        <h3 className="text-sm font-bold text-graphite">{category.name}</h3>
+                        <h3 className="text-body-md font-bold text-graphite">{category.name}</h3>
                         {category.description && (
-                          <p className="mt-0.5 truncate text-xs text-text-muted">{category.description}</p>
+                          <p className="mt-0.5 truncate text-body-sm text-text-muted">{category.description}</p>
                         )}
                       </div>
 
                       <div className="flex items-center justify-between md:col-span-2 md:justify-center">
-                        <span className="md:hidden text-xs font-medium text-text-muted">Produtos:</span>
+                        <span className="md:hidden text-body-sm font-medium text-text-muted">Produtos:</span>
                         <Badge tone="neutral">
                           {productCounts[category.id] ?? 0} produto{(productCounts[category.id] ?? 0) === 1 ? "" : "s"}
                         </Badge>
@@ -293,7 +293,7 @@ export function CategoriasClient({
             )}
           </Card>
 
-          <div className="flex flex-col items-start justify-between gap-2 text-xs font-medium text-text-muted sm:flex-row sm:items-center">
+          <div className="flex flex-col items-start justify-between gap-2 text-body-sm font-medium text-text-muted sm:flex-row sm:items-center">
             <p>
               Total de <span className="font-bold text-graphite">{categories.length}</span> categoria
               {categories.length === 1 ? "" : "s"} • <span className="font-bold text-graphite">{activeLinkedProducts}</span>{" "}
@@ -324,7 +324,7 @@ export function CategoriasClient({
 
       <Modal open={deleting !== null} onClose={() => setDeleting(null)} title="Excluir categoria?">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">
+          <p className="text-body-md text-text-muted">
             Tem certeza que deseja excluir <span className="font-semibold text-graphite">{deleting?.name}</span>? Essa
             ação não poderá ser desfeita.
           </p>
@@ -337,7 +337,7 @@ export function CategoriasClient({
               type="button"
               onClick={handleConfirmDelete}
               disabled={isPending}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-label-lg text-white transition-all duration-150 hover:bg-red/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isPending && pendingId === deleting?.id && (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

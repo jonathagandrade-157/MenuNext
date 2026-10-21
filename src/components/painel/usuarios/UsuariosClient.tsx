@@ -121,7 +121,7 @@ export function UsuariosClient({
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-6 py-8">
-      <nav className="flex items-center gap-2 text-xs font-medium text-text-muted">
+      <nav className="flex items-center gap-2 text-body-sm font-medium text-text-muted">
         <span>Painel</span>
         <span>/</span>
         <span className="font-bold text-graphite">Usuários</span>
@@ -135,22 +135,22 @@ export function UsuariosClient({
           </p>
         </div>
         <Button onClick={() => setInviteOpen(true)} className="self-start sm:self-auto">
-          <span className="text-lg leading-none">+</span>
+          <span className="text-headline-sm leading-none">+</span>
           Convidar membro
         </Button>
       </div>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
         <Card className="p-4">
-          <p className="text-xs font-medium text-text-muted">Total de usuários</p>
+          <p className="text-body-sm font-medium text-text-muted">Total de usuários</p>
           <p className="mt-1 text-headline-lg text-graphite">{members.length}</p>
         </Card>
         <Card className="p-4">
-          <p className="text-xs font-medium text-text-muted">Colaboradores</p>
+          <p className="text-body-sm font-medium text-text-muted">Colaboradores</p>
           <p className="mt-1 text-headline-lg text-graphite">{staffCount}</p>
         </Card>
         <Card className="p-4">
-          <p className="text-xs font-medium text-text-muted">Convites pendentes</p>
+          <p className="text-body-sm font-medium text-text-muted">Convites pendentes</p>
           <p className="mt-1 text-headline-lg text-graphite">{pendingInvites.length}</p>
         </Card>
       </div>
@@ -161,7 +161,7 @@ export function UsuariosClient({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar por nome, e-mail ou telefone..."
-          className="h-9 w-full max-w-md rounded-lg border border-border bg-surface px-3 text-xs text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          className="h-9 w-full max-w-md rounded-xl border border-border bg-surface px-3 text-body-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
         />
       </Card>
 
@@ -169,7 +169,7 @@ export function UsuariosClient({
 
       <Card className="overflow-hidden p-0">
         <div className="border-b border-border bg-surface-subdued/70 px-5 py-3">
-          <h2 className="text-sm font-bold text-graphite">Equipe ({filteredMembers.length})</h2>
+          <h2 className="text-body-md font-bold text-graphite">Equipe ({filteredMembers.length})</h2>
         </div>
         <div className="divide-y divide-border">
           {filteredMembers.map((member) => (
@@ -177,14 +177,14 @@ export function UsuariosClient({
               <div className="flex min-w-0 items-center gap-3">
                 <Avatar label={member.name || member.email} tone={member.role === "OWNER" ? "owner" : "staff"} />
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-bold text-graphite">
+                  <p className="truncate text-body-md font-bold text-graphite">
                     {member.name || member.email}
                     {member.user_id === currentUserId && (
-                      <span className="ml-2 text-xs font-medium text-text-muted">(Você)</span>
+                      <span className="ml-2 text-body-sm font-medium text-text-muted">(Você)</span>
                     )}
                   </p>
-                  <p className="truncate text-xs text-text-muted">{member.email}</p>
-                  {member.phone && <p className="truncate text-xs text-text-muted">{member.phone}</p>}
+                  <p className="truncate text-body-sm text-text-muted">{member.email}</p>
+                  {member.phone && <p className="truncate text-body-sm text-text-muted">{member.phone}</p>}
                 </div>
               </div>
               <div className="flex shrink-0 items-center gap-2">
@@ -216,7 +216,7 @@ export function UsuariosClient({
 
       <Card className="overflow-hidden p-0">
         <div className="border-b border-border bg-surface-subdued/70 px-5 py-3">
-          <h2 className="text-sm font-bold text-graphite">Convites pendentes ({filteredPendingInvites.length})</h2>
+          <h2 className="text-body-md font-bold text-graphite">Convites pendentes ({filteredPendingInvites.length})</h2>
         </div>
 
           {(revokeError || resendError) && (
@@ -239,8 +239,8 @@ export function UsuariosClient({
                   <div className="flex min-w-0 items-center gap-3">
                     <Avatar label={invite.email} tone="invite" />
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-bold text-graphite">{invite.email}</p>
-                      <p className="text-xs text-text-muted">Enviado em {formatDate(invite.created_at)}</p>
+                      <p className="truncate text-body-md font-bold text-graphite">{invite.email}</p>
+                      <p className="text-body-sm text-text-muted">Enviado em {formatDate(invite.created_at)}</p>
                     </div>
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
@@ -272,7 +272,7 @@ export function UsuariosClient({
           {historyInvites.length > 0 && (
             <>
               <div className="border-y border-border bg-surface-subdued/70 px-5 py-3">
-                <h2 className="text-sm font-bold text-graphite">Histórico</h2>
+                <h2 className="text-body-md font-bold text-graphite">Histórico</h2>
               </div>
               <div className="divide-y divide-border">
                 {historyInvites.map((invite) => (
@@ -280,8 +280,8 @@ export function UsuariosClient({
                     <div className="flex min-w-0 items-center gap-3">
                       <Avatar label={invite.email} tone="invite" />
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-bold text-graphite">{invite.email}</p>
-                        <p className="text-xs text-text-muted">Enviado em {formatDate(invite.created_at)}</p>
+                        <p className="truncate text-body-md font-bold text-graphite">{invite.email}</p>
+                        <p className="text-body-sm text-text-muted">Enviado em {formatDate(invite.created_at)}</p>
                       </div>
                     </div>
                     {inviteStatusBadge(invite)}
@@ -298,7 +298,7 @@ export function UsuariosClient({
 
       <Modal open={revoking !== null} onClose={() => setRevoking(null)} title="Revogar convite?">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">
+          <p className="text-body-md text-text-muted">
             O link enviado para <span className="font-semibold text-graphite">{revoking?.email}</span> deixará de
             funcionar. Você pode convidar essa pessoa novamente depois.
           </p>
@@ -310,7 +310,7 @@ export function UsuariosClient({
               type="button"
               onClick={handleConfirmRevoke}
               disabled={isPending}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-label-lg text-white transition-all duration-150 hover:bg-red/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isPending && <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}
               Revogar
@@ -321,7 +321,7 @@ export function UsuariosClient({
 
       <Modal open={removing !== null} onClose={() => setRemoving(null)} title="Remover da equipe?">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">
+          <p className="text-body-md text-text-muted">
             <span className="font-semibold text-graphite">{removing?.name || removing?.email}</span> perderá o
             acesso ao painel imediatamente. Você pode convidar essa pessoa novamente depois, se precisar.
           </p>
@@ -333,7 +333,7 @@ export function UsuariosClient({
               type="button"
               onClick={handleConfirmRemove}
               disabled={isPending}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-label-lg text-white transition-all duration-150 hover:bg-red/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isPending && <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}
               Remover
@@ -344,9 +344,9 @@ export function UsuariosClient({
 
       <Modal open={resendUrl !== null} onClose={() => setResendUrl(null)} title="Convite reenviado">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">Novo link gerado (o anterior parou de funcionar). Copie e compartilhe:</p>
+          <p className="text-body-md text-text-muted">Novo link gerado (o anterior parou de funcionar). Copie e compartilhe:</p>
           <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-subdued px-3 py-2.5">
-            <p className="min-w-0 flex-1 truncate text-sm font-medium text-graphite">{resendUrl}</p>
+            <p className="min-w-0 flex-1 truncate text-body-md font-medium text-graphite">{resendUrl}</p>
           </div>
           <div className="flex justify-end gap-2">
             {resendUrl && <CopyLinkButton url={resendUrl} />}

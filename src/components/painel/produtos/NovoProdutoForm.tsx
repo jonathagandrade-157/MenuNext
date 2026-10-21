@@ -19,7 +19,7 @@ function SubmitButton() {
 }
 
 const inputClass =
-  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
+  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
 
 type StagedImage = { id: string; file: File; previewUrl: string };
 
@@ -86,8 +86,8 @@ export function NovoProdutoForm({ categories }: { categories: Category[] }) {
   return (
     <form action={formAction} className="space-y-5">
       <div>
-        <label className="mb-1.5 block text-sm font-semibold text-graphite">Imagens do produto</label>
-        <p className="mb-2 text-xs text-text-muted">
+        <label className="mb-1.5 block text-label-lg text-graphite">Imagens do produto</label>
+        <p className="mb-2 text-body-sm text-text-muted">
           Até {MAX_PRODUCT_IMAGES} fotos (JPEG, PNG ou WebP, 5 MB cada). A primeira é a foto principal.
         </p>
 
@@ -123,7 +123,7 @@ export function NovoProdutoForm({ categories }: { categories: Category[] }) {
                     title="Mover para a esquerda"
                     disabled={index === 0}
                     onClick={() => handleMove(image.id, "left")}
-                    className="rounded p-0.5 text-xs text-text-muted hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-30"
+                    className="rounded p-0.5 text-body-sm text-text-muted hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-30"
                   >
                     ←
                   </button>
@@ -131,7 +131,7 @@ export function NovoProdutoForm({ categories }: { categories: Category[] }) {
                     type="button"
                     title="Remover"
                     onClick={() => handleRemove(image.id)}
-                    className="rounded p-0.5 text-xs text-red hover:bg-red/10"
+                    className="rounded p-0.5 text-body-sm text-red hover:bg-red/10"
                   >
                     ✕
                   </button>
@@ -140,7 +140,7 @@ export function NovoProdutoForm({ categories }: { categories: Category[] }) {
                     title="Mover para a direita"
                     disabled={index === staged.length - 1}
                     onClick={() => handleMove(image.id, "right")}
-                    className="rounded p-0.5 text-xs text-text-muted hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-30"
+                    className="rounded p-0.5 text-body-sm text-text-muted hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-30"
                   >
                     →
                   </button>
@@ -151,7 +151,7 @@ export function NovoProdutoForm({ categories }: { categories: Category[] }) {
 
           {staged.length < MAX_PRODUCT_IMAGES && (
             <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-border text-text-muted hover:border-primary hover:text-primary">
-              <span className="text-xl leading-none">+</span>
+              <span className="text-headline-md leading-none">+</span>
               <span className="text-[10px] font-semibold">Adicionar</span>
               <input
                 ref={pickerInputRef}
@@ -167,23 +167,23 @@ export function NovoProdutoForm({ categories }: { categories: Category[] }) {
       </div>
 
       <label className="block">
-        <span className="mb-1.5 block text-sm font-semibold text-graphite">Nome do produto *</span>
+        <span className="mb-1.5 block text-label-lg text-graphite">Nome do produto *</span>
         <input name="name" type="text" required maxLength={120} placeholder="Ex.: Pizza Calabresa" className={inputClass} />
       </label>
 
       <label className="block">
-        <span className="mb-1.5 block text-sm font-semibold text-graphite">Descrição</span>
+        <span className="mb-1.5 block text-label-lg text-graphite">Descrição</span>
         <textarea
           name="description"
           rows={3}
           maxLength={500}
           placeholder="Ex.: Molho de tomate, calabresa fatiada e cebola"
-          className="w-full rounded-lg border border-border bg-surface-card px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          className="w-full rounded-lg border border-border bg-surface-card px-3 py-2 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
         />
       </label>
 
       <label className="block">
-        <span className="mb-1.5 block text-sm font-semibold text-graphite">Categoria *</span>
+        <span className="mb-1.5 block text-label-lg text-graphite">Categoria *</span>
         <select name="categoryId" required defaultValue="" className={inputClass}>
           <option value="" disabled>
             Selecione uma categoria
@@ -198,21 +198,21 @@ export function NovoProdutoForm({ categories }: { categories: Category[] }) {
 
       <div className="grid grid-cols-2 gap-4">
         <label className="block">
-          <span className="mb-1.5 block text-sm font-semibold text-graphite">Preço de venda *</span>
+          <span className="mb-1.5 block text-label-lg text-graphite">Preço de venda *</span>
           <input name="price" type="text" inputMode="decimal" required placeholder="0,00" className={inputClass} />
         </label>
         <label className="block">
-          <span className="mb-1.5 block text-sm font-semibold text-graphite">Custo de produção</span>
+          <span className="mb-1.5 block text-label-lg text-graphite">Custo de produção</span>
           <input name="cost" type="text" inputMode="decimal" placeholder="0,00" className={inputClass} />
         </label>
       </div>
-      <p className="-mt-3 text-xs text-text-muted">
+      <p className="-mt-3 text-body-sm text-text-muted">
         O custo é interno e nunca aparece na loja pública — usado futuramente para análises de margem.
       </p>
 
       <label className="flex items-center gap-2">
         <input type="checkbox" name="isAvailable" defaultChecked className="h-4 w-4 rounded border-border" />
-        <span className="text-sm font-semibold text-graphite">Disponível para venda</span>
+        <span className="text-label-lg text-graphite">Disponível para venda</span>
       </label>
 
       {state.status === "error" && <ErrorState message={state.message ?? "Não foi possível salvar."} />}

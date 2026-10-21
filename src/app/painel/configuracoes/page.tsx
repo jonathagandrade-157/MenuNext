@@ -46,7 +46,7 @@ export default async function ConfiguracoesPage() {
       ) : (
         <Card className="p-6">
           <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Status da loja</h2>
-          <p className="mt-1 text-sm text-text-muted">
+          <p className="mt-1 text-body-md text-text-muted">
             Finalize o cadastro da sua loja para poder pausar ou reabrir o recebimento de pedidos por aqui.
           </p>
         </Card>
@@ -54,10 +54,10 @@ export default async function ConfiguracoesPage() {
 
       <Card className="p-6">
         <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Nome e endereço</h2>
-        <p className="mt-1 text-sm text-text-muted">
+        <p className="mt-1 text-body-md text-text-muted">
           Nome do restaurante, URL da loja e endereço completo ficam em Informações do restaurante.
         </p>
-        <Link href="/painel/informacoes" className="mt-2 inline-block text-sm font-semibold text-primary hover:underline">
+        <Link href="/painel/informacoes" className="mt-2 inline-block text-label-lg text-primary hover:underline">
           Editar informações do restaurante →
         </Link>
       </Card>

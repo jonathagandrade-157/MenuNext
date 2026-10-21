@@ -35,7 +35,7 @@ export function Passo5Form({ businessHours }: { businessHours: BusinessHour[] })
                 onChange={(e) => setOpenDays((prev) => ({ ...prev, [value]: e.target.checked }))}
                 className="h-5 w-5 accent-primary"
               />
-              <span className="text-sm font-semibold text-graphite">{label}</span>
+              <span className="text-label-lg text-graphite">{label}</span>
             </label>
             {isOpen ? (
               <div className="flex flex-1 items-center gap-2">
@@ -43,18 +43,18 @@ export function Passo5Form({ businessHours }: { businessHours: BusinessHour[] })
                   type="time"
                   name={`opens_at_${value}`}
                   defaultValue={row?.opens_at?.slice(0, 5) ?? "08:00"}
-                  className="h-10 rounded-lg border border-border px-2 text-sm"
+                  className="h-10 rounded-xl border border-border px-2 text-body-md"
                 />
-                <span className="text-sm text-text-muted">às</span>
+                <span className="text-body-md text-text-muted">às</span>
                 <input
                   type="time"
                   name={`closes_at_${value}`}
                   defaultValue={row?.closes_at?.slice(0, 5) ?? "18:00"}
-                  className="h-10 rounded-lg border border-border px-2 text-sm"
+                  className="h-10 rounded-xl border border-border px-2 text-body-md"
                 />
               </div>
             ) : (
-              <span className="text-sm text-text-muted">Fechado</span>
+              <span className="text-body-md text-text-muted">Fechado</span>
             )}
           </div>
         );

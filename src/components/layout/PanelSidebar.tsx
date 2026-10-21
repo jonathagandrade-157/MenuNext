@@ -83,7 +83,7 @@ function NavLinks({
  * landing page pública — quem está logado não quer sair do app ao clicar nele. */
 function Brand({ href, onClick }: { href: string; onClick?: () => void }) {
   return (
-    <Link href={href} className="text-base font-extrabold text-graphite" onClick={onClick}>
+    <Link href={href} className="text-body-lg font-extrabold text-graphite" onClick={onClick}>
       Menu<span className="text-primary">Next</span>
     </Link>
   );

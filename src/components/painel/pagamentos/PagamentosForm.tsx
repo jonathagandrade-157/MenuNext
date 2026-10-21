@@ -82,7 +82,7 @@ function PixQrCodePreview({ pixKey, holderName, city }: { pixKey: string; holder
       )}
       <p className="text-center text-label-md text-text-muted">Cliente escaneia pelo app do banco para pagamento imediato</p>
       <div className="flex w-full items-center gap-2 rounded-lg border border-border bg-surface-card px-3 py-2">
-        <p className="min-w-0 flex-1 truncate text-xs text-graphite">{brCode}</p>
+        <p className="min-w-0 flex-1 truncate text-body-sm text-graphite">{brCode}</p>
         <CopyButton value={brCode} label="Copiar código" />
       </div>
       <p className="text-center text-[11px] text-text-muted">
@@ -200,7 +200,7 @@ export function PagamentosForm({ restaurant }: { restaurant: Restaurant }) {
 
                 <div className="rounded-lg border border-border bg-surface-subdued/60 px-3.5 py-2.5">
                   <p className="text-label-md text-graphite">Modo de confirmação: manual</p>
-                  <p className="mt-0.5 text-xs text-text-muted">
+                  <p className="mt-0.5 text-body-sm text-text-muted">
                     Você confere o Pix no extrato/app do banco e avança o pedido para &ldquo;Em preparação&rdquo; no Kanban — o MenuNext ainda não confirma pagamentos automaticamente.
                   </p>
                 </div>

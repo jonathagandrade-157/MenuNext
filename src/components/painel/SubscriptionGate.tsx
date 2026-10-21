@@ -33,13 +33,13 @@ export function SubscriptionGate({
           {copy.badge}
         </span>
         <h1 className="text-headline-md text-graphite">O acesso ao painel está bloqueado</h1>
-        <p className="max-w-sm text-sm text-text-muted">
+        <p className="max-w-sm text-body-md text-text-muted">
           {isOwner ? copy.message : "O acesso da loja está bloqueado. Fale com o responsável pela loja para regularizar."}
         </p>
         {isOwner && (
           <Link
             href={PLANO_PATH}
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-bold text-white hover:bg-primary-container"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-body-md font-bold text-white hover:bg-primary-container"
           >
             Ver planos e assinatura
           </Link>

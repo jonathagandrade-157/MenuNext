@@ -29,11 +29,11 @@ export default async function CadastroPage(props: PageProps<"/cadastro">) {
   return (
     <div className="min-h-screen bg-surface md:grid md:grid-cols-2">
       <div className="hidden flex-col justify-between bg-graphite p-12 text-white md:flex">
-        <Link href="/" className="text-lg font-extrabold">
+        <Link href="/" className="text-headline-sm font-extrabold">
           Menu<span className="text-primary">Next</span>
         </Link>
         <div className="space-y-6">
-          <p className="text-xs font-bold uppercase tracking-widest text-primary">Etapa 02 &bull; Cadastro Imediato</p>
+          <p className="text-body-sm font-bold uppercase tracking-widest text-primary">Etapa 02 &bull; Cadastro Imediato</p>
           <h1 className="text-3xl font-extrabold leading-tight">
             Em poucos minutos seu restaurante estará vendendo online.
           </h1>
@@ -43,14 +43,14 @@ export default async function CadastroPage(props: PageProps<"/cadastro">) {
           </p>
           <ul className="space-y-3">
             {BENEFITS.map((benefit) => (
-              <li key={benefit} className="flex items-center gap-2 text-sm text-white/80">
+              <li key={benefit} className="flex items-center gap-2 text-body-md text-white/80">
                 <CheckCircleIcon className="h-4 w-4 shrink-0 text-emerald" />
                 {benefit}
               </li>
             ))}
           </ul>
         </div>
-        <p className="text-xs text-white/40">© 2026 MenuNext Tecnologia para Gastronomia Ltda.</p>
+        <p className="text-body-sm text-white/40">© 2026 MenuNext Tecnologia para Gastronomia Ltda.</p>
       </div>
 
       <div className="flex items-center justify-center p-6 md:p-12">

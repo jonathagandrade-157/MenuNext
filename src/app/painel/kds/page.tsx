@@ -27,7 +27,7 @@ export default async function KdsPage() {
     <div className="flex h-[calc(100vh-4rem)] flex-col">
       <div className="px-4 pt-4">
         <h1 className="text-headline-md text-graphite">Cozinha (KDS)</h1>
-        <p className="text-sm text-text-muted">
+        <p className="text-body-md text-text-muted">
           Fila de preparo em tempo real — novos pedidos, em preparo e prontos para despacho.
           {metrics.averagePrepMinutes !== null && (
             <> Meta de preparo hoje: {Math.round(metrics.averagePrepMinutes)} min.</>

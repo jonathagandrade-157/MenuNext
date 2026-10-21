@@ -8,9 +8,9 @@ import { initialCouponState, type CouponActionState } from "@/lib/form-state";
 import type { Coupon } from "@/lib/tenant";
 
 const inputClass =
-  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
+  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
 
-const fieldLabelClass = "mb-1.5 block text-sm font-semibold text-graphite";
+const fieldLabelClass = "mb-1.5 block text-label-lg text-graphite";
 
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
@@ -68,7 +68,7 @@ export function CouponFormFields({
           <button
             type="button"
             onClick={() => setDiscountType("percent")}
-            className={`rounded-lg border px-3 py-2.5 text-sm font-bold transition-colors ${
+            className={`rounded-lg border px-3 py-2.5 text-body-md font-bold transition-colors ${
               discountType === "percent" ? "border-primary bg-primary/10 text-primary" : "border-border text-graphite hover:bg-surface-subdued"
             }`}
           >
@@ -77,7 +77,7 @@ export function CouponFormFields({
           <button
             type="button"
             onClick={() => setDiscountType("fixed")}
-            className={`rounded-lg border px-3 py-2.5 text-sm font-bold transition-colors ${
+            className={`rounded-lg border px-3 py-2.5 text-body-md font-bold transition-colors ${
               discountType === "fixed" ? "border-primary bg-primary/10 text-primary" : "border-border text-graphite hover:bg-surface-subdued"
             }`}
           >

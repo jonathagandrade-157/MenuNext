@@ -37,7 +37,7 @@ export function StoreStatusCard({ initialStatus }: { initialStatus: "active" | "
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Status da loja</h2>
-          <p className="mt-1 text-sm text-text-muted">
+          <p className="mt-1 text-body-md text-text-muted">
             {isActive
               ? "Sua loja está aberta e recebendo novos pedidos normalmente."
               : "Sua loja está pausada — o cardápio continua visível para os clientes, mas o checkout fica bloqueado para novos pedidos até você reabrir."}
@@ -49,7 +49,7 @@ export function StoreStatusCard({ initialStatus }: { initialStatus: "active" | "
       </div>
 
       {error && (
-        <div className="rounded-lg border border-[#FEF2F2] bg-[#FEF2F2] px-3 py-2 text-sm font-medium text-red">{error}</div>
+        <div className="rounded-lg border border-red/20 bg-red/10 px-3 py-2 text-body-md font-medium text-red">{error}</div>
       )}
 
       <button
@@ -58,8 +58,8 @@ export function StoreStatusCard({ initialStatus }: { initialStatus: "active" | "
         disabled={isPending}
         className={
           isActive
-            ? "h-11 rounded-xl border border-red/30 px-5 text-sm font-bold text-red transition-all hover:bg-red/5 disabled:cursor-not-allowed disabled:opacity-50"
-            : "h-11 rounded-xl bg-primary px-5 text-sm font-bold text-white transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
+            ? "h-11 rounded-xl border border-red/30 px-5 text-body-md font-bold text-red transition-all hover:bg-red/5 disabled:cursor-not-allowed disabled:opacity-50"
+            : "h-11 rounded-xl bg-primary px-5 text-body-md font-bold text-white transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
         }
       >
         {isPending ? "Atualizando..." : isActive ? "Pausar loja" : "Reabrir loja"}

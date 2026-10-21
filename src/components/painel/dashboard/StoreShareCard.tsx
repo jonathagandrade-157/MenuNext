@@ -35,7 +35,7 @@ export function StoreShareCard({
           <p className="text-label-md uppercase tracking-wide text-text-muted">
             {hasAnyOrder ? "Sua loja" : "🎯 Receba seu primeiro pedido"}
           </p>
-          <p className="mt-1 text-sm text-text-muted">
+          <p className="mt-1 text-body-md text-text-muted">
             {hasAnyOrder
               ? "Continue compartilhando o link da sua loja para vender mais."
               : "Compartilhe o link da sua loja com seus clientes para começar a vender."}
@@ -47,7 +47,7 @@ export function StoreShareCard({
       </div>
 
       <div className="mt-4 flex items-center gap-2 rounded-lg border border-border bg-surface-subdued px-3 py-2.5">
-        <p className="min-w-0 flex-1 truncate text-sm font-medium text-graphite">{storeUrl}</p>
+        <p className="min-w-0 flex-1 truncate text-body-md font-medium text-graphite">{storeUrl}</p>
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2.5">

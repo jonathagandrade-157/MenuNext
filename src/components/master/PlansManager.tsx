@@ -59,10 +59,10 @@ export function PlansManager({ initialPlans }: { initialPlans: Plan[] }) {
       <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Planos</h2>
-          <p className="mt-1 text-sm text-text-muted">Os lojistas veem e assinam estes planos em /painel/plano.</p>
+          <p className="mt-1 text-body-md text-text-muted">Os lojistas veem e assinam estes planos em /painel/plano.</p>
         </div>
         <Button onClick={() => setCreateOpen(true)} className="shrink-0">
-          <span className="text-lg leading-none">+</span>
+          <span className="text-headline-sm leading-none">+</span>
           Novo plano
         </Button>
       </div>
@@ -89,15 +89,15 @@ export function PlansManager({ initialPlans }: { initialPlans: Plan[] }) {
                   className="flex flex-col gap-2 p-3.5 md:grid md:grid-cols-12 md:items-center md:gap-4 md:px-4 md:py-3"
                 >
                   <div className="md:col-span-4">
-                    <span className="text-sm font-bold text-graphite">{plan.name}</span>
-                    {plan.description && <p className="truncate text-xs text-text-muted">{plan.description}</p>}
+                    <span className="text-body-md font-bold text-graphite">{plan.name}</span>
+                    {plan.description && <p className="truncate text-body-sm text-text-muted">{plan.description}</p>}
                   </div>
                   <div className="flex items-center justify-between md:col-span-3 md:justify-center">
-                    <span className="md:hidden text-xs font-medium text-text-muted">Preço:</span>
+                    <span className="md:hidden text-body-sm font-medium text-text-muted">Preço:</span>
                     <span className="text-body-lg font-bold text-graphite">{formatCurrencyBRL(plan.price)}</span>
                   </div>
                   <div className="flex items-center justify-between gap-3 md:col-span-2 md:justify-center">
-                    <span className="md:hidden text-xs font-medium text-text-muted">Status:</span>
+                    <span className="md:hidden text-body-sm font-medium text-text-muted">Status:</span>
                     <button
                       type="button"
                       role="switch"
@@ -154,7 +154,7 @@ export function PlansManager({ initialPlans }: { initialPlans: Plan[] }) {
 
       <Modal open={deleting !== null} onClose={() => setDeleting(null)} title="Excluir plano?">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">
+          <p className="text-body-md text-text-muted">
             Tem certeza que deseja excluir o plano <span className="font-semibold text-graphite">{deleting?.name}</span>? Isso falha se algum
             restaurante estiver nesse plano no momento.
           </p>
@@ -167,7 +167,7 @@ export function PlansManager({ initialPlans }: { initialPlans: Plan[] }) {
               type="button"
               onClick={handleConfirmDelete}
               disabled={isPending}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-label-lg text-white transition-all duration-150 hover:bg-red/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isPending && pendingId === deleting?.id && (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

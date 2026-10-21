@@ -11,7 +11,7 @@ export function InsightsRow({ insights }: { insights: DashboardInsight[] }) {
         {insights.map((insight) => (
           <Card key={insight.label} className="p-4">
             <p className="text-label-sm uppercase text-primary">{insight.label}</p>
-            <p className="mt-1 text-sm font-semibold text-graphite">{insight.value}</p>
+            <p className="mt-1 text-label-lg text-graphite">{insight.value}</p>
           </Card>
         ))}
       </div>

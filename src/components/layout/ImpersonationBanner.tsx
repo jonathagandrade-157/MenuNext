@@ -7,7 +7,7 @@ import Link from "next/link";
  */
 export function ImpersonationBanner({ storeName }: { storeName: string }) {
   return (
-    <div className="flex items-center justify-between gap-4 bg-amber px-6 py-2 text-sm font-semibold text-graphite">
+    <div className="flex items-center justify-between gap-4 bg-amber px-6 py-2 text-label-lg text-graphite">
       <span>Você está gerenciando esta loja: {storeName}</span>
       <Link href="/master" className="underline underline-offset-2 hover:no-underline">
         Voltar ao painel Master
