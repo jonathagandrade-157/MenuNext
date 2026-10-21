@@ -1,17 +1,21 @@
 import { getActivePlans, getMyAccessState, requireOwnerPage } from "@/lib/tenant";
-import { isBillingConfigured } from "@/lib/billingConfig";
+import { isBillingConfiguredFor, type SubscriptionProvider } from "@/lib/billingConfig";
 import { PlanoClient } from "@/components/painel/plano/PlanoClient";
 
 // Restrita ao OWNER (JON-10): billing é decisão de dono, fora do escopo
 // operacional. Decisão tomada com o usuário: planos reais cadastrados pelo
-// MASTER em /master/assinaturas, gateway Asaas, assinatura overdue/cancelled
-// bloqueia painel + loja pública (ver middleware em painel/layout.tsx e
-// checagem em loja/[slug]/page.tsx).
+// MASTER em /master/assinaturas, gateway escolhido pelo MASTER (Asaas ou
+// Mercado Pago), assinatura overdue/cancelled bloqueia painel + loja pública
+// (ver middleware em painel/layout.tsx e checagem em loja/[slug]/page.tsx).
 export default async function PlanoPage() {
   const { supabase, restaurant } = await requireOwnerPage();
 
   const [plans, accessState] = await Promise.all([getActivePlans(supabase), getMyAccessState(supabase)]);
   const currentPlan = restaurant.plan_id ? plans.find((p) => p.id === restaurant.plan_id) ?? null : null;
+
+  // Provedor ativo escolhido pelo Master (padrão asaas se a leitura falhar).
+  const { data: providerData } = await supabase.rpc("billing_subscription_provider");
+  const provider: SubscriptionProvider = providerData === "mercadopago" ? "mercadopago" : "asaas";
 
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-6 py-8">
@@ -25,7 +29,8 @@ export default async function PlanoPage() {
         currentPlan={currentPlan}
         subscriptionStatus={restaurant.subscription_status}
         accessState={accessState}
-        asaasConfigured={isBillingConfigured()}
+        billingConfigured={isBillingConfiguredFor(provider)}
+        provider={provider}
       />
     </div>
   );

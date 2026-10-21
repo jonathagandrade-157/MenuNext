@@ -61,6 +61,23 @@ export function isMercadoPagoCheckoutUrl(value: unknown): value is string {
   }
 }
 
+/**
+ * Data de vencimento da fatura (dia, no fuso de Brasília) a partir do
+ * `debit_date` ISO do Mercado Pago. O período pago é derivado deste dia.
+ */
+export function debitDateToBrasiliaDate(value: unknown): string | null {
+  if (typeof value !== "string") return null;
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return null;
+  const parts = new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
+  return /^\d{4}-\d{2}-\d{2}$/.test(parts) ? parts : null;
+}
+
 export type MpPaymentOutcome = "paid" | "pending" | "failed" | "cancelled";
 
 /**

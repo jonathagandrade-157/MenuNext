@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  debitDateToBrasiliaDate,
   isMercadoPagoCheckoutUrl,
   mercadoPagoPaymentOutcome,
   sameMpAmount,
@@ -81,6 +82,19 @@ describe("verifyMercadoPagoPreapproval", () => {
 
   it("recusa objeto ausente", () => {
     expect(verifyMercadoPagoPreapproval(null, expected)).toEqual({ ok: false, reason: "missing_preapproval" });
+  });
+});
+
+describe("debitDateToBrasiliaDate", () => {
+  it("converte para o dia em Brasília (fuso -03)", () => {
+    expect(debitDateToBrasiliaDate("2026-10-10T12:00:00.000-03:00")).toBe("2026-10-10");
+    expect(debitDateToBrasiliaDate("2026-10-11T01:30:00.000Z")).toBe("2026-10-10"); // 22:30 do dia 10 em Brasília
+    expect(debitDateToBrasiliaDate("2026-10-10T23:30:00.000-03:00")).toBe("2026-10-10");
+  });
+  it("devolve null para valor inválido", () => {
+    expect(debitDateToBrasiliaDate("ontem")).toBeNull();
+    expect(debitDateToBrasiliaDate(null)).toBeNull();
+    expect(debitDateToBrasiliaDate(12345)).toBeNull();
   });
 });
 

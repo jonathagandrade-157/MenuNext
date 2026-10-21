@@ -3,6 +3,7 @@ import {
   buildMercadoPagoManifest,
   computeMercadoPagoSignature,
   parseMercadoPagoWebhook,
+  getMercadoPagoSignatureTs,
   verifyMercadoPagoSignature,
 } from "./mercadopagoWebhook";
 
@@ -71,6 +72,15 @@ describe("verifyMercadoPagoSignature", () => {
   });
 });
 
+describe("getMercadoPagoSignatureTs", () => {
+  it("lê o ts do cabeçalho e devolve null se malformado ou ausente", () => {
+    expect(getMercadoPagoSignatureTs(`ts=1700000000000,v1=${"a".repeat(64)}`)).toBe("1700000000000");
+    expect(getMercadoPagoSignatureTs("ts=abc,v1=zz")).toBeNull();
+    expect(getMercadoPagoSignatureTs("")).toBeNull();
+    expect(getMercadoPagoSignatureTs(null)).toBeNull();
+  });
+});
+
 describe("parseMercadoPagoWebhook", () => {
   it("lê evento de assinatura (preapproval)", () => {
     const event = parseMercadoPagoWebhook(
@@ -106,7 +116,15 @@ describe("parseMercadoPagoWebhook", () => {
   });
 
   it("gera id de evento composto quando o corpo não traz id", () => {
-    const event = parseMercadoPagoWebhook({ type: "subscription_preapproval", action: "created" }, { dataId: "abc", topic: null });
-    expect(event?.eventId).toBe("mp:preapproval:abc:created");
+    const event = parseMercadoPagoWebhook(
+      { type: "subscription_preapproval", action: "created" },
+      { dataId: "abc", topic: null, ts: "1700000000000" }
+    );
+    expect(event?.eventId).toBe("mp:preapproval:abc:created:1700000000000");
+    const other = parseMercadoPagoWebhook(
+      { type: "subscription_preapproval", action: "created" },
+      { dataId: "abc", topic: null, ts: "1700000000999" }
+    );
+    expect(other?.eventId).not.toBe(event?.eventId);
   });
 });

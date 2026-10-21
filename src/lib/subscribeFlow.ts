@@ -13,7 +13,8 @@
 import type { AsaasList, AsaasResult, AsaasSubscription, AsaasSubscriptionDetail, AsaasCustomer } from "./asaas";
 import { verifyAsaasSubscription } from "./billingVerify";
 
-export type SubscribeToPlanResult = { status: "success" } | { status: "error"; message: string };
+/** `redirectUrl`: link de pagamento hospedado pelo provedor (Mercado Pago); o Asaas envia o link por e-mail. */
+export type SubscribeToPlanResult = { status: "success"; redirectUrl?: string } | { status: "error"; message: string };
 
 type RpcOutcome = { data: unknown; error: { message: string } | null };
 

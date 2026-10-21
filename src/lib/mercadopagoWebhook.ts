@@ -42,6 +42,11 @@ function parseSignatureHeader(header: string): { ts: string; v1: string } | null
   return { ts, v1 };
 }
 
+/** `ts` (ms) do cabeçalho x-signature, ou null se malformado. Já faz parte do que foi assinado. */
+export function getMercadoPagoSignatureTs(xSignature: string | null): string | null {
+  return xSignature ? (parseSignatureHeader(xSignature)?.ts ?? null) : null;
+}
+
 /** Confere a assinatura em tempo constante. Sem segredo ou cabeçalho válido: false (falha fechado). */
 export function verifyMercadoPagoSignature(input: {
   xSignature: string | null;
@@ -97,7 +102,7 @@ const KIND_BY_TOPIC: Record<string, MercadoPagoEventKind> = {
  */
 export function parseMercadoPagoWebhook(
   body: MercadoPagoWebhookBody | null | undefined,
-  query: { dataId: string | null; topic: string | null }
+  query: { dataId: string | null; topic: string | null; ts?: string | null }
 ): MercadoPagoEvent | null {
   if (!body || typeof body !== "object") return null;
   const resourceId = str(query.dataId);
@@ -111,6 +116,8 @@ export function parseMercadoPagoWebhook(
   if (bodyDataId && bodyDataId.toLowerCase() !== resourceId.toLowerCase()) return null;
 
   const action = str(body.action, 100);
-  const eventId = str(body.id) ?? `${kind}:${resourceId}:${action ?? "event"}`;
+  // Sem `id` no corpo, o id composto inclui o `ts` assinado: sem ele, dois eventos
+  // diferentes com a mesma ação ("updated") seriam tratados como duplicados.
+  const eventId = str(body.id) ?? `${kind}:${resourceId}:${action ?? "event"}:${str(query.ts) ?? "nots"}`;
   return { kind, eventId: `mp:${eventId}`, resourceId, action };
 }

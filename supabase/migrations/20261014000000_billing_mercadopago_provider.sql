@@ -118,10 +118,15 @@ $$;
 revoke all on function public._billing_map_mp_payment_status(text, boolean) from public, anon, authenticated;
 
 -- ============================================================
--- 4. Abertura da assinatura: o provedor tem de ser o escolhido pelo Master.
---    (Mesma assinatura da P1-01; só muda a validação do provedor.)
+-- 4. Abertura da assinatura: o provedor é SEMPRE o escolhido pelo Master.
+--    p_provider nulo (padrão) = usa o escolhido; informado = tem de ser igual
+--    ao escolhido. O servidor descobre o provedor pelo out_provider devolvido.
+--    O padrão passa de 'asaas' para nulo: é preciso recriar a função (o
+--    Postgres não permite remover/alterar o padrão com CREATE OR REPLACE).
 -- ============================================================
-create or replace function public.billing_begin_subscription(p_plan_id uuid, p_provider text default 'asaas')
+drop function if exists public.billing_begin_subscription(uuid, text);
+
+create function public.billing_begin_subscription(p_plan_id uuid, p_provider text default null)
 returns table (out_subscription_id uuid, out_amount numeric, out_currency text, out_plan_name text, out_provider text)
 language plpgsql
 security definer
@@ -149,7 +154,7 @@ begin
   end if;
 
   select s.subscription_provider into v_selected from public.billing_settings s where s.id = true;
-  if p_provider is distinct from v_selected then
+  if p_provider is not null and p_provider is distinct from v_selected then
     raise exception 'invalid_provider' using errcode = '22023';
   end if;
 
@@ -180,12 +185,12 @@ begin
 
   if found then
     update public.billing_subscriptions
-    set plan_id = p_plan_id, amount = v_price, provider = p_provider
+    set plan_id = p_plan_id, amount = v_price, provider = v_selected
     where id = v_sub.id
     returning * into v_sub;
   else
     insert into public.billing_subscriptions (restaurant_id, plan_id, provider, amount, currency, status)
-    values (v_restaurant_id, p_plan_id, p_provider, v_price, 'BRL', 'initiated')
+    values (v_restaurant_id, p_plan_id, v_selected, v_price, 'BRL', 'initiated')
     returning * into v_sub;
   end if;
 
@@ -285,6 +290,29 @@ $$;
 revoke all on function public.billing_attach_provider_subscription(uuid, text, text, numeric)
   from public, anon, authenticated;
 grant execute on function public.billing_attach_provider_subscription(uuid, text, text, numeric) to service_role;
+
+-- ============================================================
+-- 5b. Assinatura PENDENTE do próprio OWNER (para retomar o pagamento: quem
+--     fecha a aba do Mercado Pago antes de pagar precisa do link de novo).
+--     Só devolve a do restaurante do chamador e só para o OWNER; o link em si
+--     é lido pelo servidor na API autenticada do provedor.
+-- ============================================================
+create or replace function public.billing_pending_subscription()
+returns table (out_subscription_id uuid, out_provider text, out_subscription_ref text, out_amount numeric)
+language sql
+stable
+security definer
+set search_path to 'public'
+as $$
+  select b.id, b.provider, b.provider_subscription_id, b.amount
+  from public.restaurant_members rm
+  join public.billing_subscriptions b on b.restaurant_id = rm.restaurant_id
+  where rm.user_id = auth.uid() and rm.role = 'OWNER' and b.status = 'pending'
+  limit 1;
+$$;
+
+revoke all on function public.billing_pending_subscription() from public, anon;
+grant execute on function public.billing_pending_subscription() to authenticated;
 
 -- ============================================================
 -- 6. Evento do Mercado Pago. SÓ service_role: o backend já verificou a
@@ -477,6 +505,9 @@ begin
   if has_function_privilege('anon', 'public.process_mercadopago_event(text, text, timestamptz, text, text, text, text, text, text, numeric, date, timestamptz)', 'execute')
      or has_function_privilege('authenticated', 'public.process_mercadopago_event(text, text, timestamptz, text, text, text, text, text, text, numeric, date, timestamptz)', 'execute') then
     raise exception 'billing_mercadopago: process_mercadopago_event nao pode ser executavel por anon/authenticated';
+  end if;
+  if has_function_privilege('anon', 'public.billing_pending_subscription()', 'execute') then
+    raise exception 'billing_mercadopago: billing_pending_subscription nao pode ser executavel por anon';
   end if;
   if has_function_privilege('anon', 'public.billing_subscription_provider()', 'execute') then
     raise exception 'billing_mercadopago: billing_subscription_provider nao pode ser executavel por anon';

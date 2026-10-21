@@ -160,12 +160,11 @@ begin
   perform pg_temp._ck('M1 OWNER NAO consegue abrir assinatura pelo Mercado Pago enquanto o Master escolheu Asaas',
     pg_temp._begin(sa[1], v_plan, 'mercadopago') like '%invalid_provider%');
   r := pg_temp._begin(sa[1], v_plan, 'stripe');
-  r2 := pg_temp._run(sa[1], format('select out_subscription_id::text from public.billing_begin_subscription(%L, null)', v_plan));
-  perform pg_temp._ck('M1 provedor desconhecido ou nulo e recusado', r like '%invalid_provider%' and r2 like '%invalid_provider%');
+  perform pg_temp._ck('M1 provedor desconhecido e recusado', r like '%invalid_provider%');
 
-  r := pg_temp._begin(si[1], v_plan, 'asaas');
-  perform pg_temp._ck('M1 com Asaas escolhido, o fluxo atual continua funcionando (provedor asaas, initiated)',
-    r not like 'ERR:%'
+  r := pg_temp._run(si[1], format('select out_provider from public.billing_begin_subscription(%L)', v_plan));
+  perform pg_temp._ck('M1 sem informar o provedor (como a P1-01 chamava), o banco usa o escolhido (asaas) e devolve out_provider',
+    r = 'asaas'
     and exists (select 1 from public.billing_subscriptions where restaurant_id = si[2] and provider = 'asaas' and status = 'initiated'));
 
   r := pg_temp._run(sa[1], 'select public.master_set_subscription_provider(''mercadopago'')');
@@ -184,9 +183,9 @@ begin
     and pg_temp._run(sa[1], 'select public.billing_subscription_provider()') = 'mercadopago');
 
   r := pg_temp._begin(sa[1], v_plan, 'asaas');
-  r2 := pg_temp._run(sa[1], format('select out_subscription_id::text from public.billing_begin_subscription(%L)', v_plan));
-  perform pg_temp._ck('M1 com Mercado Pago escolhido, o OWNER nao consegue forcar o Asaas (nem pelo padrao)',
-    r like '%invalid_provider%' and r2 like '%invalid_provider%');
+  perform pg_temp._ck('M1 com Mercado Pago escolhido, o OWNER nao consegue forcar o Asaas', r like '%invalid_provider%');
+  r2 := pg_temp._run(sa[1], format('select out_provider from public.billing_begin_subscription(%L)', v_plan));
+  perform pg_temp._ck('M1 com Mercado Pago escolhido, sem informar o provedor o banco usa o Mercado Pago', r2 = 'mercadopago');
   r := pg_temp._begin(sa[1], v_plan, 'mercadopago');
   perform pg_temp._ck('M1 OWNER abre assinatura pelo Mercado Pago: initiated, valor e moeda do PLANO',
     r not like 'ERR:%'
@@ -223,6 +222,14 @@ begin
            from public.billing_subscriptions where id = v_id::uuid));
   perform pg_temp._ck('M2 pending NAO libera acesso: loja continua bloqueada',
     public._restaurant_access_state(sb[2]) = 'trial_expired');
+  r := pg_temp._run(sb[1], 'select out_provider || '':'' || out_subscription_ref || '':'' || out_amount::text from public.billing_pending_subscription()');
+  perform pg_temp._ck('M2 OWNER enxerga a propria assinatura pendente (para retomar o pagamento)',
+    r = 'mercadopago:MPpre00000000B1:49.90');
+  r := pg_temp._run(sa[1], 'select count(*)::text from public.billing_pending_subscription()');
+  r2 := pg_temp._run(u_staff, 'select count(*)::text from public.billing_pending_subscription()');
+  h1 := pg_temp._run(null, 'select count(*)::text from public.billing_pending_subscription()');
+  perform pg_temp._ck('M2 pendente e so do OWNER dono: outro restaurante, STAFF e anonimo nao a enxergam (initiated tambem nao)',
+    r = '0' and r2 = '0' and h1 like '%permission denied%');
   perform pg_temp._ck('M2 espelho do restaurante: pending, sem ids do Asaas',
     (select subscription_status = 'pending' and asaas_subscription_id is null and asaas_customer_id is null
        from public.restaurants where id = sb[2]));
