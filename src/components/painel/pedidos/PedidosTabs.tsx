@@ -18,8 +18,10 @@ export function PedidosTabs({
   initialActiveOrders,
   initialHistoryOrders,
   initialSelectedOrderId = null,
+  storeName = null,
 }: {
   restaurantId: string;
+  storeName?: string | null;
   initialActiveOrders: OrderWithItems[];
   initialHistoryOrders: OrderWithItems[];
   initialSelectedOrderId?: string | null;
@@ -31,30 +33,28 @@ export function PedidosTabs({
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex gap-1.5 px-4 pt-4">
-        <button
-          type="button"
-          onClick={() => setView("kanban")}
-          className={`rounded-lg px-3.5 py-2 text-sm font-bold transition-colors ${
-            view === "kanban" ? "bg-graphite text-white" : "text-text-muted hover:text-graphite"
-          }`}
-        >
-          Kanban
-        </button>
-        <button
-          type="button"
-          onClick={() => setView("historico")}
-          className={`rounded-lg px-3.5 py-2 text-sm font-bold transition-colors ${
-            view === "historico" ? "bg-graphite text-white" : "text-text-muted hover:text-graphite"
-          }`}
-        >
-          Histórico
-        </button>
+      <div className="px-4 pt-4">
+        <div role="tablist" aria-label="Visão dos pedidos" className="inline-flex gap-1 rounded-xl bg-surface-subdued p-1">
+          {(["kanban", "historico"] as const).map((id) => (
+            <button
+              key={id}
+              type="button"
+              role="tab"
+              aria-selected={view === id}
+              onClick={() => setView(id)}
+              className={`rounded-lg px-4 py-1.5 text-label-lg transition-colors ${
+                view === id ? "bg-surface-card text-graphite shadow-card" : "text-text-muted hover:text-graphite"
+              }`}
+            >
+              {id === "kanban" ? "Kanban" : "Histórico"}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div className="min-h-0 flex-1">
         {view === "kanban" ? (
-          <KanbanBoard restaurantId={restaurantId} initialOrders={initialActiveOrders} />
+          <KanbanBoard restaurantId={restaurantId} initialOrders={initialActiveOrders} storeName={storeName} />
         ) : (
           <OrderHistoryView initialOrders={initialHistoryOrders} initialSelectedOrderId={initialSelectedOrderId} />
         )}

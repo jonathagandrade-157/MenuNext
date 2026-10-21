@@ -1,5 +1,6 @@
 "use client";
 
+import { Bike, Clock, ShoppingBag, Store } from "lucide-react";
 import { FULFILLMENT_TYPE_LABELS, PAYMENT_METHOD_LABELS } from "@/lib/checkout";
 import { ORDER_STATUS_ACTION_LABEL, formatCurrencyBRL, formatOrderTime, getNextOrderStatus, type OrderWithItems } from "@/lib/orders";
 
@@ -11,12 +12,15 @@ export function OrderCard({
   onAdvance,
   elapsedMinutes,
   isOverdue = false,
+  accentClass = "border-l-primary",
 }: {
   order: OrderWithItems;
   isNew: boolean;
   isAdvancing: boolean;
   onOpenDetails: () => void;
   onAdvance: () => void;
+  /** Classe da borda de acento (cor da etapa da coluna). */
+  accentClass?: string;
   /** Minutos decorridos no status atual (KDS, JON-23) — omitido no Kanban
    * operacional de /painel/pedidos, que não passa esta prop. */
   elapsedMinutes?: number;
@@ -27,27 +31,42 @@ export function OrderCard({
 
   return (
     <div
-      className={`rounded-xl border bg-surface-card p-3.5 shadow-[var(--shadow-card)] transition-all ${
-        isNew ? "border-primary ring-2 ring-primary/30" : "border-border"
+      className={`rounded-xl border-l-4 bg-surface-card p-3.5 shadow-card transition-all hover:shadow-md ${accentClass} ${
+        isNew ? "ring-2 ring-primary/40" : ""
       }`}
     >
       <button type="button" onClick={onOpenDetails} className="w-full text-left">
-        <div className="flex items-start justify-between gap-2">
-          <div>
-            <p className="text-sm font-extrabold text-graphite">#{order.order_number}</p>
-            <p className="text-xs font-semibold text-graphite">{order.customer_name}</p>
-          </div>
-          <div className="text-right">
-            <p className="text-[11px] font-medium text-text-muted">{formatOrderTime(order.created_at)}</p>
-            <p className="text-[11px] font-bold text-primary">{FULFILLMENT_TYPE_LABELS[order.fulfillment_type]}</p>
-            {elapsedMinutes !== undefined && (
-              <p className={`text-[11px] font-bold ${isOverdue ? "text-red" : "text-text-muted"}`}>
-                {isOverdue ? "⚠ " : "⏱ "}
-                {elapsedMinutes} min
-              </p>
-            )}
-          </div>
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-headline-sm font-extrabold text-primary">#{order.order_number}</p>
+          <span className="rounded-full bg-primary/10 px-2 py-0.5 text-label-sm text-primary">
+            {formatOrderTime(order.created_at)}
+          </span>
         </div>
+
+        <div className="mt-1 flex items-center justify-between gap-2">
+          <p className="truncate text-body-lg font-bold text-graphite">{order.customer_name}</p>
+          <span className="inline-flex shrink-0 items-center gap-1 text-label-sm text-text-muted">
+            {order.fulfillment_type === "delivery" ? (
+              <Bike className="h-3.5 w-3.5" aria-hidden />
+            ) : order.fulfillment_type === "counter" ? (
+              <ShoppingBag className="h-3.5 w-3.5" aria-hidden />
+            ) : (
+              <Store className="h-3.5 w-3.5" aria-hidden />
+            )}
+            {FULFILLMENT_TYPE_LABELS[order.fulfillment_type]}
+          </span>
+        </div>
+
+        {elapsedMinutes !== undefined && (
+          <p
+            className={`mt-1.5 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-label-sm ${
+              isOverdue ? "bg-red/10 text-red" : "bg-surface-subdued text-text-muted"
+            }`}
+          >
+            <Clock className="h-3 w-3" aria-hidden />
+            {elapsedMinutes} min{isOverdue ? " · atrasado" : ""}
+          </p>
+        )}
 
         <div className="mt-2 space-y-0.5">
           {order.order_items.map((item) => (

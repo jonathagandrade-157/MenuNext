@@ -27,14 +27,15 @@ export default async function Page(props: PageProps<"/painel/pedidos">) {
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col">
       <div className="px-4 pt-4">
-        <h1 className="text-xl font-extrabold text-graphite">Pedidos</h1>
-        <p className="text-sm text-text-muted">Acompanhe pedidos em tempo real ou consulte o histórico completo.</p>
+        <h1 className="text-headline-lg text-graphite">Pedidos</h1>
+        <p className="text-body-md text-text-muted">Acompanhe pedidos em tempo real ou consulte o histórico completo.</p>
       </div>
       <PedidosTabs
         restaurantId={restaurant.id}
         initialActiveOrders={initialActiveOrders}
         initialHistoryOrders={initialHistoryOrders}
         initialSelectedOrderId={initialSelectedOrderId}
+        storeName={restaurant.name}
       />
     </div>
   );
