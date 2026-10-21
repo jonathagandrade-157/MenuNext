@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import { Mail, Search, UserCog, Users, type LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -61,6 +62,7 @@ export function UsuariosClient({
   const [resendError, setResendError] = useState<string | null>(null);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [view, setView] = useState<"todos" | "equipe" | "convites">("todos");
   const [isPending, startTransition] = useTransition();
 
   const pendingInvites = invites.filter((invite) => invite.status === "pending");
@@ -121,13 +123,13 @@ export function UsuariosClient({
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-6 py-8">
-      <nav className="flex items-center gap-2 text-body-sm font-medium text-text-muted">
+      <nav className="flex items-center gap-2 text-label-md text-text-muted">
         <span>Painel</span>
         <span>/</span>
-        <span className="font-bold text-graphite">Usuários</span>
+        <span className="text-graphite">Usuários</span>
       </nav>
 
-      <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <h1 className="text-headline-lg text-graphite">Usuários e permissões</h1>
           <p className="mt-0.5 text-body-md text-text-muted">
@@ -141,39 +143,68 @@ export function UsuariosClient({
       </div>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-        <Card className="p-4">
-          <p className="text-body-sm font-medium text-text-muted">Total de usuários</p>
-          <p className="mt-1 text-headline-lg text-graphite">{members.length}</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-body-sm font-medium text-text-muted">Colaboradores</p>
-          <p className="mt-1 text-headline-lg text-graphite">{staffCount}</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-body-sm font-medium text-text-muted">Convites pendentes</p>
-          <p className="mt-1 text-headline-lg text-graphite">{pendingInvites.length}</p>
-        </Card>
+        {(
+          [
+            { label: "Total de usuários", value: members.length, icon: Users, tint: "bg-primary/10 text-primary" },
+            { label: "Colaboradores", value: staffCount, icon: UserCog, tint: "bg-blue/10 text-blue" },
+            { label: "Convites pendentes", value: pendingInvites.length, icon: Mail, tint: "bg-amber/10 text-amber-strong" },
+          ] as { label: string; value: number; icon: LucideIcon; tint: string }[]
+        ).map(({ label, value, icon: Icon, tint }) => (
+          <Card key={label} className="flex items-center gap-3 p-4">
+            <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${tint}`}>
+              <Icon className="h-5 w-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <p className="truncate text-label-sm uppercase text-text-muted">{label}</p>
+              <p className="text-headline-lg text-graphite">{value}</p>
+            </div>
+          </Card>
+        ))}
       </div>
 
-      <Card className="p-3.5">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Buscar por nome, e-mail ou telefone..."
-          className="h-9 w-full max-w-md rounded-xl border border-border bg-surface px-3 text-body-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-        />
+      <Card className="flex flex-col gap-3 p-3.5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-1 overflow-x-auto rounded-xl bg-surface-subdued p-1">
+          {(
+            [
+              ["todos", "Todos"],
+              ["equipe", `Equipe (${members.length})`],
+              ["convites", `Convites (${pendingInvites.length})`],
+            ] as const
+          ).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setView(id)}
+              className={`shrink-0 rounded-lg px-3 py-1.5 text-label-md transition-colors ${
+                view === id ? "bg-surface-card text-graphite shadow-card" : "text-text-muted hover:text-graphite"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <div className="relative w-full sm:max-w-md">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" aria-hidden />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar por nome, e-mail ou telefone..."
+            className="h-10 w-full rounded-xl border border-border bg-surface pl-9 pr-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          />
+        </div>
       </Card>
 
       {removeError && <ErrorState message={removeError} />}
 
+      {view !== "convites" && (
       <Card className="overflow-hidden p-0">
         <div className="border-b border-border bg-surface-subdued/70 px-5 py-3">
           <h2 className="text-body-md font-bold text-graphite">Equipe ({filteredMembers.length})</h2>
         </div>
         <div className="divide-y divide-border">
           {filteredMembers.map((member) => (
-            <div key={member.id} className="flex items-center justify-between gap-3 px-5 py-3.5">
+            <div key={member.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-5">
               <div className="flex min-w-0 items-center gap-3">
                 <Avatar label={member.name || member.email} tone={member.role === "OWNER" ? "owner" : "staff"} />
                 <div className="min-w-0">
@@ -213,7 +244,9 @@ export function UsuariosClient({
           )}
         </div>
       </Card>
+      )}
 
+      {view !== "equipe" && (
       <Card className="overflow-hidden p-0">
         <div className="border-b border-border bg-surface-subdued/70 px-5 py-3">
           <h2 className="text-body-md font-bold text-graphite">Convites pendentes ({filteredPendingInvites.length})</h2>
@@ -235,7 +268,7 @@ export function UsuariosClient({
           ) : (
             <div className="divide-y divide-border">
               {filteredPendingInvites.map((invite) => (
-                <div key={invite.id} className="flex items-center justify-between gap-3 px-5 py-3.5">
+                <div key={invite.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-5">
                   <div className="flex min-w-0 items-center gap-3">
                     <Avatar label={invite.email} tone="invite" />
                     <div className="min-w-0">
@@ -276,7 +309,7 @@ export function UsuariosClient({
               </div>
               <div className="divide-y divide-border">
                 {historyInvites.map((invite) => (
-                  <div key={invite.id} className="flex items-center justify-between gap-3 px-5 py-3.5 opacity-70">
+                  <div key={invite.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-5 opacity-70">
                     <div className="flex min-w-0 items-center gap-3">
                       <Avatar label={invite.email} tone="invite" />
                       <div className="min-w-0">
@@ -291,6 +324,7 @@ export function UsuariosClient({
             </>
           )}
       </Card>
+      )}
 
       <Modal open={inviteOpen} onClose={() => setInviteOpen(false)} title="Convidar membro">
         <InviteFormFields onDone={() => setInviteOpen(false)} />
