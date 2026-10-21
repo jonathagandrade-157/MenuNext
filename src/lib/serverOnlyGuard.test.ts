@@ -55,9 +55,9 @@ describe("credenciais de servidor da cobrança", () => {
     expect(users).toEqual(["lib/mercadopago.ts"]);
   });
 
-  it("o segredo do webhook do Mercado Pago só é lido na rota do webhook", () => {
+  it("o segredo do webhook do Mercado Pago só é lido em src/lib/mercadopago.ts", () => {
     const users = prod.filter((f) => read(f).includes("process.env.MERCADOPAGO_WEBHOOK_SECRET")).map(rel);
-    expect(users).toEqual(["app/api/webhooks/mercadopago/route.ts"]);
+    expect(users).toEqual(["lib/mercadopago.ts"]);
   });
 
   it("o CRON_SECRET só é lido na rota agendada", () => {
@@ -109,6 +109,7 @@ describe("credenciais de servidor da cobrança", () => {
       "lib/mercadopagoVerify.ts",
       "lib/mercadopagoWebhook.ts",
       "lib/mercadopagoWebhookHandler.ts",
+      "lib/mercadopagoReconcile.ts",
       "lib/subscribeFlowMp.ts",
       "lib/pendingPaymentLink.ts",
       "lib/actions/pendingPayment.ts",

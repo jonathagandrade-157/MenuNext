@@ -804,9 +804,9 @@ begin
     and has_function_privilege('service_role', 'public.billing_reconcile_subscription(text,text,text,text,boolean)', 'EXECUTE')
     and not has_function_privilege('authenticated', 'public.billing_reconcile_subscription(text,text,text,text,boolean)', 'EXECUTE')
     and not has_function_privilege('anon', 'public.billing_reconcile_subscription(text,text,text,text,boolean)', 'EXECUTE')
-    and has_function_privilege('service_role', 'public.billing_list_reconcilable(integer)', 'EXECUTE')
-    and not has_function_privilege('authenticated', 'public.billing_list_reconcilable(integer)', 'EXECUTE')
-    and not has_function_privilege('anon', 'public.billing_list_reconcilable(integer)', 'EXECUTE'));
+    and has_function_privilege('service_role', 'public.billing_list_reconcilable(integer,text[])', 'EXECUTE')
+    and not has_function_privilege('authenticated', 'public.billing_list_reconcilable(integer,text[])', 'EXECUTE')
+    and not has_function_privilege('anon', 'public.billing_list_reconcilable(integer,text[])', 'EXECUTE'));
   perform pg_temp._ck('S8 funcoes internas nao sao executaveis por anon/authenticated',
     (select count(*) = 9 and bool_and(not has_function_privilege('anon', p.oid, 'EXECUTE') and not has_function_privilege('authenticated', p.oid, 'EXECUTE'))
        from pg_proc p where p.pronamespace = 'public'::regnamespace

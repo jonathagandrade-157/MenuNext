@@ -407,6 +407,39 @@ grant execute on function public.process_mercadopago_event(text, text, timestamp
 --    Asaas: status cru do Asaas. Mercado Pago: status combinado
 --    "<fatura>/<pagamento>" (ver mapeamento acima).
 -- ============================================================
+-- Lista para reconciliar, com filtro opcional por provedor: o cron só pede os provedores
+-- configurados, para as assinaturas de um provedor SEM credenciais (que nunca são
+-- reconciliadas) não ocuparem o lote e não deixarem as demais sem leitura. O padrão
+-- (nulo) lista todos, como antes. Recriada porque o Postgres não permite acrescentar
+-- parâmetro com CREATE OR REPLACE (e dois formatos ficariam ambíguos).
+drop function if exists public.billing_list_reconcilable(integer);
+
+create function public.billing_list_reconcilable(p_limit integer default 100, p_providers text[] default null)
+returns table (
+  out_subscription_id uuid,
+  out_provider text,
+  out_subscription_ref text,
+  out_customer_ref text,
+  out_status text,
+  out_amount numeric
+)
+language sql
+stable
+security definer
+set search_path to 'public'
+as $$
+  select b.id, b.provider, b.provider_subscription_id, b.provider_customer_id, b.status, b.amount
+  from public.billing_subscriptions b
+  where (b.status in ('pending', 'active', 'overdue')
+         or (b.status = 'cancelled' and b.cancelled_at > now() - interval '60 days'))
+    and (p_providers is null or b.provider = any (p_providers))
+  order by b.last_reconciled_at nulls first, b.created_at
+  limit greatest(1, least(coalesce(p_limit, 100), 200));
+$$;
+
+revoke all on function public.billing_list_reconcilable(integer, text[]) from public, anon, authenticated;
+grant execute on function public.billing_list_reconcilable(integer, text[]) to service_role;
+
 create or replace function public.billing_reconcile_payment(
   p_provider text,
   p_subscription_ref text,

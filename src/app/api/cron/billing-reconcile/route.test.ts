@@ -6,6 +6,9 @@ const h = vi.hoisted(() => ({
   asaasConfigured: { value: true },
   getSubscription: vi.fn(),
   listPayments: vi.fn(),
+  mpConfigured: { value: false },
+  mpGetPreapproval: vi.fn(),
+  mpListPayments: vi.fn(),
 }));
 
 vi.mock("@/lib/supabase/admin", () => ({
@@ -16,6 +19,12 @@ vi.mock("@/lib/asaas", () => ({
   isAsaasConfigured: () => h.asaasConfigured.value,
   getAsaasSubscription: h.getSubscription,
   listAsaasSubscriptionPayments: h.listPayments,
+}));
+
+vi.mock("@/lib/mercadopago", () => ({
+  isMercadoPagoConfigured: () => h.mpConfigured.value,
+  getMercadoPagoPreapproval: h.mpGetPreapproval,
+  listMercadoPagoAuthorizedPayments: h.mpListPayments,
 }));
 
 import { GET } from "./route";
@@ -32,6 +41,9 @@ beforeEach(() => {
   process.env.CRON_SECRET = SECRET;
   h.adminConfigured.value = true;
   h.asaasConfigured.value = true;
+  h.mpConfigured.value = false;
+  h.mpGetPreapproval.mockResolvedValue({ ok: true, data: { id: "pre_1", status: "authorized", external_reference: "ref_1" } });
+  h.mpListPayments.mockResolvedValue({ ok: true, data: { results: [], paging: { total: 0 } } });
   h.adminRpc.mockImplementation(async (fn: string) => {
     if (fn === "billing_list_reconcilable") return { data: [row], error: null };
     return { data: "applied", error: null };
@@ -61,7 +73,7 @@ describe("GET /api/cron/billing-reconcile — proteção da rota", () => {
     expect(h.getSubscription).not.toHaveBeenCalled();
   });
 
-  it("sem a chave do Asaas ou a chave de servidor do Supabase: 503", async () => {
+  it("sem a chave de NENHUM provedor ou sem a chave de servidor do Supabase: 503", async () => {
     h.asaasConfigured.value = false;
     expect((await call(`Bearer ${SECRET}`)).status).toBe(503);
     h.asaasConfigured.value = true;
@@ -78,7 +90,7 @@ describe("GET /api/cron/billing-reconcile — execução", () => {
     const body = await res.json();
     expect(body).toMatchObject({ ok: true, checked: 1 });
     expect(Object.keys(body).sort()).toEqual(["applied", "checked", "errors", "notFound", "ok", "unavailable"]);
-    expect(h.adminRpc).toHaveBeenCalledWith("billing_list_reconcilable", { p_limit: 40 });
+    expect(h.adminRpc).toHaveBeenCalledWith("billing_list_reconcilable", { p_limit: 40, p_providers: ["asaas"] });
     expect(JSON.stringify(body)).not.toContain("sub_1");
   });
 
@@ -94,5 +106,54 @@ describe("GET /api/cron/billing-reconcile — execução", () => {
     const body = await (await call(`Bearer ${SECRET}`)).json();
     expect(body).toMatchObject({ checked: 1, unavailable: 1, applied: 0 });
     expect(h.adminRpc.mock.calls.filter(([fn]) => fn !== "billing_list_reconcilable")).toHaveLength(0);
+  });
+});
+
+describe("GET /api/cron/billing-reconcile — Mercado Pago", () => {
+  const mpRow = { out_provider: "mercadopago", out_subscription_ref: "pre_1", out_customer_ref: "ref_1" };
+  const listing = (rows: unknown[]) => async (fn: string) =>
+    fn === "billing_list_reconcilable" ? { data: rows, error: null } : { data: "applied", error: null };
+
+  it("só o Mercado Pago configurado: pede só ele ao banco, reconcilia e não toca no Asaas", async () => {
+    h.asaasConfigured.value = false;
+    h.mpConfigured.value = true;
+    h.adminRpc.mockImplementation(listing([mpRow]));
+    const res = await call(`Bearer ${SECRET}`);
+    expect(res.status).toBe(200);
+    expect(await res.json()).toMatchObject({ ok: true, checked: 1 });
+    expect(h.adminRpc).toHaveBeenCalledWith("billing_list_reconcilable", { p_limit: 40, p_providers: ["mercadopago"] });
+    expect(h.mpGetPreapproval).toHaveBeenCalledWith("pre_1");
+    expect(h.getSubscription).not.toHaveBeenCalled();
+  });
+
+  it("os dois configurados: pede os dois, despacha cada linha ao seu provedor e soma o resumo", async () => {
+    h.mpConfigured.value = true;
+    h.adminRpc.mockImplementation(listing([row, mpRow]));
+    const body = await (await call(`Bearer ${SECRET}`)).json();
+    expect(body).toMatchObject({ ok: true, checked: 2 });
+    expect(Object.keys(body).sort()).toEqual(["applied", "checked", "errors", "notFound", "ok", "unavailable"]);
+    expect(h.adminRpc).toHaveBeenCalledWith("billing_list_reconcilable", { p_limit: 40, p_providers: ["asaas", "mercadopago"] });
+    expect(h.getSubscription).toHaveBeenCalledWith("sub_1");
+    expect(h.mpGetPreapproval).toHaveBeenCalledWith("pre_1");
+    expect(JSON.stringify(body)).not.toContain("pre_1");
+  });
+
+  it("Mercado Pago fora do ar: conta indisponível e não altera nada dele", async () => {
+    h.asaasConfigured.value = false;
+    h.mpConfigured.value = true;
+    h.mpGetPreapproval.mockResolvedValue({ ok: false, reason: "request_failed", httpStatus: 503 });
+    h.adminRpc.mockImplementation(listing([mpRow]));
+    const body = await (await call(`Bearer ${SECRET}`)).json();
+    expect(body).toMatchObject({ checked: 1, unavailable: 1, applied: 0 });
+    expect(h.adminRpc.mock.calls.filter(([fn]) => fn !== "billing_list_reconcilable")).toHaveLength(0);
+  });
+
+  it("linha de um provedor desconhecido na lista é ignorada (nenhuma chamada a nenhum provedor)", async () => {
+    h.mpConfigured.value = true;
+    h.adminRpc.mockImplementation(listing([{ ...row, out_provider: "stripe" }]));
+    const body = await (await call(`Bearer ${SECRET}`)).json();
+    expect(body).toMatchObject({ checked: 0 });
+    expect(h.getSubscription).not.toHaveBeenCalled();
+    expect(h.mpGetPreapproval).not.toHaveBeenCalled();
   });
 });

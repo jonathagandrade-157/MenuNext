@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 import { requireMasterPage } from "@/lib/tenant";
+import { isBillingConfiguredFor } from "@/lib/billingConfig";
 import type { PlanActionState } from "@/lib/form-state";
 
 const ASSINATURAS_PATH = "/master/assinaturas";
@@ -122,4 +123,37 @@ export async function updateBillingSettingsAction(
 
   revalidatePath(ASSINATURAS_PATH);
   return { status: "success" };
+}
+
+/**
+ * O MASTER escolhe por qual provedor (Asaas ou Mercado Pago) as NOVAS assinaturas
+ * são cobradas. Quem decide é o banco (master_set_subscription_provider só
+ * executa para o Master e billing_begin_subscription impõe a escolha); aqui só
+ * se recusa ativar um provedor sem credenciais, para o lojista nunca cair numa
+ * cobrança que não funciona. Assinaturas já existentes mantêm o provedor de origem.
+ */
+export async function updateSubscriptionProviderAction(provider: string): Promise<{ ok: boolean; error?: string }> {
+  const { supabase } = await requireMasterPage();
+
+  if (provider !== "asaas" && provider !== "mercadopago") {
+    return { ok: false, error: "Provedor inválido." };
+  }
+  if (!isBillingConfiguredFor(provider)) {
+    return {
+      ok: false,
+      error:
+        provider === "mercadopago"
+          ? "Configure o token da API e o segredo do webhook do Mercado Pago (variáveis de ambiente) antes de ativá-lo."
+          : "Configure a chave de API do Asaas (variável de ambiente) antes de ativá-lo.",
+    };
+  }
+
+  const { error } = await supabase.rpc("master_set_subscription_provider", { p_provider: provider });
+  if (error) {
+    return { ok: false, error: "Não foi possível alterar o provedor. Tente novamente." };
+  }
+
+  revalidatePath(ASSINATURAS_PATH);
+  revalidatePath("/painel/plano");
+  return { ok: true };
 }

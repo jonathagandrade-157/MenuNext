@@ -34,6 +34,15 @@ export function isMercadoPagoConfigured(): boolean {
   return Boolean(process.env.MERCADOPAGO_ACCESS_TOKEN);
 }
 
+/** Segredo de assinatura do webhook (tela de Webhooks do app no Mercado Pago). Só este módulo lê a variável. */
+export function getMercadoPagoWebhookSecret(): string | undefined {
+  return process.env.MERCADOPAGO_WEBHOOK_SECRET || undefined;
+}
+
+export function isMercadoPagoWebhookConfigured(): boolean {
+  return Boolean(getMercadoPagoWebhookSecret());
+}
+
 export function resolveMercadoPagoBaseUrl(env: { MERCADOPAGO_BASE_URL?: string; NODE_ENV?: string }): string {
   const override = env.MERCADOPAGO_BASE_URL;
   if (override && env.NODE_ENV !== "production") {

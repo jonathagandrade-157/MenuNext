@@ -394,6 +394,16 @@ begin
     and (select last_reconciled_at is not null from public.billing_subscriptions where provider_subscription_id = 'MPpre00000000G1'));
   perform pg_temp._ck('M6 a lista de reconciliacao inclui as assinaturas do Mercado Pago',
     exists (select 1 from public.billing_list_reconcilable(200) l where l.out_provider = 'mercadopago'));
+  perform pg_temp._ck('M6 a lista aceita filtro por provedor: so o pedido, nada do outro, e provedor sem linhas devolve vazio',
+    exists (select 1 from public.billing_list_reconcilable(200, array['mercadopago']))
+    and not exists (select 1 from public.billing_list_reconcilable(200, array['mercadopago']) l where l.out_provider <> 'mercadopago')
+    and not exists (select 1 from public.billing_list_reconcilable(200, array['asaas']) l where l.out_provider <> 'asaas')
+    and not exists (select 1 from public.billing_list_reconcilable(200, array['stripe']))
+    and not exists (select 1 from public.billing_list_reconcilable(200, array[]::text[])));
+  r := pg_temp._run(sg[1], 'select count(*)::text from public.billing_list_reconcilable(200, array[''mercadopago''])');
+  r2 := pg_temp._run(null, 'select count(*)::text from public.billing_list_reconcilable(200)');
+  perform pg_temp._ck('M6 a lista de reconciliacao so e executavel pelo backend (OWNER e anonimo nao)',
+    r like '%permission denied%' and r2 like '%permission denied%');
   r := pg_temp._run(sg[1], format('select public.billing_reconcile_payment(%L, %L, %L, %L, %L, false, 49.90, null, null, null)', 'mercadopago', 'MPpre00000000G1', v_id, '9401', 'processed/approved'));
   r2 := pg_temp._run(null, format('select public.billing_reconcile_subscription(%L, %L, %L, %L, false)', 'mercadopago', 'MPpre00000000G1', v_id, 'cancelled'));
   perform pg_temp._ck('M6 so o backend reconcilia (OWNER e anonimo nao executam)',

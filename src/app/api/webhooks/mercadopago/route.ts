@@ -10,7 +10,12 @@
  */
 import { NextResponse } from "next/server";
 import { createAdminClient, isAdminConfigured } from "@/lib/supabase/admin";
-import { getMercadoPagoAuthorizedPayment, getMercadoPagoPreapproval, isMercadoPagoConfigured } from "@/lib/mercadopago";
+import {
+  getMercadoPagoAuthorizedPayment,
+  getMercadoPagoPreapproval,
+  getMercadoPagoWebhookSecret,
+  isMercadoPagoConfigured,
+} from "@/lib/mercadopago";
 import { handleMercadoPagoWebhook } from "@/lib/mercadopagoWebhookHandler";
 
 export async function POST(request: Request) {
@@ -32,7 +37,7 @@ export async function POST(request: Request) {
       rpc: (fn, args) => createAdminClient().rpc(fn, args),
       getPreapproval: getMercadoPagoPreapproval,
       getAuthorizedPayment: getMercadoPagoAuthorizedPayment,
-      secret: process.env.MERCADOPAGO_WEBHOOK_SECRET,
+      secret: getMercadoPagoWebhookSecret(),
       apiConfigured: isMercadoPagoConfigured(),
     }
   );
