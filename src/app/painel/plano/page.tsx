@@ -1,6 +1,7 @@
 import { getActivePlans, getMyAccessState, requireOwnerPage } from "@/lib/tenant";
 import { isBillingConfiguredFor, type SubscriptionProvider } from "@/lib/billingConfig";
 import { PlanoClient } from "@/components/painel/plano/PlanoClient";
+import { computeTrialProgress } from "@/lib/trial";
 
 // Restrita ao OWNER (JON-10): billing é decisão de dono, fora do escopo
 // operacional. Decisão tomada com o usuário: planos reais cadastrados pelo
@@ -17,6 +18,10 @@ export default async function PlanoPage() {
   const { data: providerData } = await supabase.rpc("billing_subscription_provider");
   const provider: SubscriptionProvider = providerData === "mercadopago" ? "mercadopago" : "asaas";
 
+  // O fim do teste mora no perfil do dono (a política de RLS libera a leitura da própria linha).
+  const { data: profile } = await supabase.from("profiles").select("trial_started_at, trial_ends_at").maybeSingle();
+  const trial = computeTrialProgress(profile?.trial_started_at ?? null, profile?.trial_ends_at ?? null);
+
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-6 py-8">
       <div>
@@ -31,6 +36,7 @@ export default async function PlanoPage() {
         accessState={accessState}
         billingConfigured={isBillingConfiguredFor(provider)}
         provider={provider}
+        trial={trial}
       />
     </div>
   );
