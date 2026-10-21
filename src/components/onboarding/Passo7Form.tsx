@@ -80,10 +80,20 @@ export function Passo7Form({ categories }: { categories: Category[] }) {
           </select>
         </div>
       ) : (
-        <p className="rounded-lg bg-surface-subdued px-4 py-3 text-body-sm text-text-muted">
-          Você ainda não tem categorias — vamos criar uma categoria padrão (&ldquo;Cardápio&rdquo;) para este produto.
-          Você pode organizar melhor depois, no painel.
-        </p>
+        <div>
+          <FieldLabel>Nome da categoria *</FieldLabel>
+          <input
+            name="newCategoryName"
+            type="text"
+            maxLength={60}
+            defaultValue="Cardápio"
+            placeholder="Ex.: Hambúrgueres"
+            className={inputClass}
+          />
+          <p className="mt-1.5 text-body-sm text-text-muted">
+            Você ainda não tem categorias: vamos criar a primeira com este nome. Dá para organizar melhor depois, no painel.
+          </p>
+        </div>
       )}
 
       <ErrorMessage message={state.status === "error" ? state.message : undefined} />
