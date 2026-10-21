@@ -20,8 +20,8 @@ export default async function NovoProdutoPage() {
       </nav>
 
       <div>
-        <h1 className="text-2xl font-black tracking-tight text-graphite">Novo produto</h1>
-        <p className="mt-0.5 text-sm font-medium text-text-muted">
+        <h1 className="text-headline-lg text-graphite">Novo produto</h1>
+        <p className="mt-0.5 text-body-md text-text-muted">
           Apresente fotos atrativas, defina o preço e escolha a categoria do cardápio.
         </p>
       </div>

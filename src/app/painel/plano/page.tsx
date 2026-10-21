@@ -20,8 +20,8 @@ export default async function PlanoPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-6 py-8">
       <div>
-        <h1 className="text-2xl font-black tracking-tight text-graphite">Plano e assinatura</h1>
-        <p className="mt-0.5 text-sm font-medium text-text-muted">Escolha o plano do MenuNext para o seu restaurante.</p>
+        <h1 className="text-headline-lg text-graphite">Plano e assinatura</h1>
+        <p className="mt-0.5 text-body-md text-text-muted">Escolha o plano do MenuNext para o seu restaurante.</p>
       </div>
 
       <PlanoClient

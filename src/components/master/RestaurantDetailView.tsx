@@ -55,8 +55,8 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
         </Link>
         <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
           <div>
-            <h1 className="text-2xl font-black tracking-tight text-graphite">{detail.name}</h1>
-            <p className="mt-0.5 text-sm font-medium text-text-muted">/{detail.slug}</p>
+            <h1 className="text-headline-lg text-graphite">{detail.name}</h1>
+            <p className="mt-0.5 text-body-md text-text-muted">/{detail.slug}</p>
             <div className="mt-2 flex flex-wrap gap-1.5">
               <Badge tone={status.tone}>{status.label}</Badge>
               <Badge tone={subscription.tone}>{subscription.label}</Badge>

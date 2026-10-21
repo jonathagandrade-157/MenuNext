@@ -132,8 +132,8 @@ export function AdicionaisClient({
 
       <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-graphite">Adicionais e complementos</h1>
-          <p className="mt-0.5 text-sm font-medium text-text-muted">
+          <h1 className="text-headline-lg text-graphite">Adicionais e complementos</h1>
+          <p className="mt-0.5 text-body-md text-text-muted">
             {canEdit
               ? "Grupos de adicionais obrigatórios ou opcionais aplicáveis aos produtos do seu cardápio."
               : "Abra um grupo para ligar ou desligar a disponibilidade de cada adicional."}
