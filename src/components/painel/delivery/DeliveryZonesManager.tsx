@@ -70,7 +70,7 @@ export function DeliveryZonesManager({ initialZones }: { initialZones: DeliveryZ
     <Card className="space-y-4 p-6">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Zonas de entrega por bairro</h2>
+          <h2 className="text-body-lg font-bold text-graphite">Zonas de entrega por bairro</h2>
           <p className="mt-1 text-sm text-text-muted">
             Defina taxa, tempo e pedido mínimo específicos por bairro. Bairros sem zona cadastrada usam a configuração
             global acima.
