@@ -9,7 +9,7 @@ import {
   computeMrrBreakdown,
   type MasterDashboardStats,
 } from "@/lib/masterDashboard";
-import type { MasterRestaurantRow } from "@/lib/masterRestaurants";
+import { formatDateBR, subscriptionBadge, type MasterRestaurantRow } from "@/lib/masterRestaurants";
 import { formatCurrencyBRL } from "@/lib/products";
 import { LINE_CHART_SIZE, LineChart } from "./LineChart";
 import { StatCard } from "./StatCard";
@@ -50,10 +50,12 @@ export function MasterDashboardView({
   stats,
   overdue,
   overdueTotal,
+  recent,
 }: {
   stats: MasterDashboardStats;
   overdue: MasterRestaurantRow[];
   overdueTotal: number;
+  recent: MasterRestaurantRow[];
 }) {
   const averageTicket = computeAverageTicket(stats.mrr, stats.subscribers_active);
   const mrr = computeMrrBreakdown(stats.plans);
@@ -234,6 +236,41 @@ export function MasterDashboardView({
           )}
         </Card>
       </div>
+
+      <Card className="space-y-4 p-6">
+        <div className="flex items-start justify-between gap-3">
+          <SectionTitle title="Restaurantes recentes" subtitle="Últimos cadastros e a situação de cada assinatura." />
+          <Link href="/master/restaurantes" className="shrink-0 text-label-lg text-primary hover:underline">
+            Ver todos →
+          </Link>
+        </div>
+        {recent.length === 0 ? (
+          <p className="text-body-md text-text-muted">Nenhum restaurante cadastrado ainda.</p>
+        ) : (
+          <ul className="divide-y divide-border">
+            {recent.map((row) => {
+              const badge = subscriptionBadge(row.subscription_status, row.access_state);
+              return (
+                <li key={row.id}>
+                  <Link
+                    href={`/master/restaurantes/${row.id}`}
+                    className="flex flex-wrap items-center justify-between gap-3 py-3 hover:bg-surface-subdued/60"
+                  >
+                    <span className="min-w-0">
+                      <span className="block truncate text-body-md font-bold text-graphite">{row.name}</span>
+                      <span className="block text-body-sm text-text-muted">
+                        {row.plan_name ?? "Sem plano"} · {row.orders_total.toLocaleString("pt-BR")} pedidos · desde{" "}
+                        {formatDateBR(row.created_at)}
+                      </span>
+                    </span>
+                    <Badge tone={badge.tone}>{badge.label}</Badge>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </Card>
     </div>
   );
 }
