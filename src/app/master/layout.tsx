@@ -5,24 +5,24 @@ import { getAuthedUser, isPlatformAdmin, resolvePostAuthPath } from "@/lib/tenan
 const NAV_GROUPS: NavGroup[] = [
   {
     items: [
-      { href: "/master", label: "Dashboard" },
-      { href: "/master/restaurantes", label: "Restaurantes" },
-      { href: "/master/assinaturas", label: "Assinaturas" },
+      { href: "/master", label: "Dashboard", icon: "dashboard" },
+      { href: "/master/restaurantes", label: "Restaurantes", icon: "loja" },
+      { href: "/master/assinaturas", label: "Assinaturas", icon: "assinaturas" },
     ],
   },
   {
     title: "Plataforma",
     items: [
-      { href: "/master/metricas", label: "Métricas" },
-      { href: "/master/usuarios", label: "Usuários" },
-      { href: "/master/configuracoes", label: "Configurações" },
+      { href: "/master/metricas", label: "Métricas", icon: "metricas" },
+      { href: "/master/usuarios", label: "Usuários", icon: "clientes" },
+      { href: "/master/configuracoes", label: "Configurações", icon: "configuracoes" },
     ],
   },
   {
     title: "Operação",
     items: [
-      { href: "/master/suporte", label: "Suporte" },
-      { href: "/master/auditoria", label: "Auditoria" },
+      { href: "/master/suporte", label: "Suporte", icon: "suporte" },
+      { href: "/master/auditoria", label: "Auditoria", icon: "auditoria" },
     ],
   },
 ];

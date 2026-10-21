@@ -17,12 +17,10 @@ const PLANO_PATH = "/painel/plano";
 export function SubscriptionGate({
   accessState,
   isOwner,
-  sidebarAndTopbar,
   children,
 }: {
   accessState: AccessState | null;
   isOwner: boolean;
-  sidebarAndTopbar: React.ReactNode;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -50,10 +48,5 @@ export function SubscriptionGate({
     );
   }
 
-  return (
-    <>
-      {sidebarAndTopbar}
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }
