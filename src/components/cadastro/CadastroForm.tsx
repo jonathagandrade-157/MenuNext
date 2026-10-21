@@ -129,7 +129,17 @@ export function CadastroForm({
 
         <label className="flex items-start gap-2 text-xs text-text-muted">
           <input type="checkbox" name="terms" required className="mt-0.5 h-4 w-4 rounded border-border" />
-          <span>Li e aceito os Termos de Uso e a Política de Privacidade do MenuNext.</span>
+          <span>
+            Li e aceito os{" "}
+            <Link href="/termos" target="_blank" className="font-semibold text-primary underline">
+              Termos de Uso
+            </Link>{" "}
+            e a{" "}
+            <Link href="/privacidade" target="_blank" className="font-semibold text-primary underline">
+              Política de Privacidade
+            </Link>{" "}
+            do MenuNext.
+          </span>
         </label>
 
         {signUpState.status === "error" && <ErrorMessage message={signUpState.message} />}

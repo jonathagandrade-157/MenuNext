@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const FOOTER_COLUMNS = [
   {
     title: "Produto",
@@ -13,7 +15,11 @@ const FOOTER_COLUMNS = [
   },
   {
     title: "Legal",
-    links: ["Termos de Uso", "Privacidade e LGPD", "Segurança da Informação"],
+    links: [
+      { label: "Termos de Uso", href: "/termos" },
+      { label: "Privacidade e LGPD", href: "/privacidade" },
+      { label: "Segurança da Informação", href: "/privacidade#seguranca" },
+    ],
   },
 ];
 
@@ -34,11 +40,19 @@ export function SiteFooter() {
           <div key={column.title} className="space-y-3">
             <p className="text-sm font-semibold uppercase tracking-wide text-white/40">{column.title}</p>
             <ul className="space-y-2">
-              {column.links.map((link) => (
-                <li key={link} className="text-sm text-white/70 hover:text-white">
-                  {link}
-                </li>
-              ))}
+              {column.links.map((link) =>
+                typeof link === "string" ? (
+                  <li key={link} className="text-sm text-white/70">
+                    {link}
+                  </li>
+                ) : (
+                  <li key={link.label} className="text-sm">
+                    <Link href={link.href} className="text-white/70 hover:text-white">
+                      {link.label}
+                    </Link>
+                  </li>
+                )
+              )}
             </ul>
           </div>
         ))}

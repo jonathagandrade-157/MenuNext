@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getPublicAssetUrl } from "@/lib/storage/assets";
 import {
@@ -111,6 +112,10 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
 
       <p className="px-3.5 py-6 text-center text-label-md text-text-muted">
         Tecnologia de pedidos online por Menu<span className="text-[#ab2f00]">Next</span>
+        {" · "}
+        <Link href="/privacidade" className="underline">
+          Privacidade
+        </Link>
       </p>
 
       {restaurant.contact_whatsapp && <StoreWhatsAppButton whatsapp={restaurant.contact_whatsapp} storeName={restaurant.name} />}
