@@ -13,25 +13,10 @@ import { ComboCompositionManager } from "./ComboCompositionManager";
 import { ComboFormFields } from "./ComboFormFields";
 import { ComboImageManager } from "./ComboImageManager";
 import { CreateComboForm } from "./CreateComboForm";
+import { ChevronDown, ChevronUp, Pencil, Search, Trash2 } from "lucide-react";
 
 type ComboUI = ComboWithItems & { imageUrl: string | null };
 type Filter = "all" | "available" | "unavailable";
-
-function ChevronUpIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
-      <path d="m6 15 6-6 6 6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
-
-function ChevronDownIcon() {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} className="h-4 w-4">
-      <path d="m6 9 6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-}
 
 function ImagePlaceholderIcon() {
   return (
@@ -119,15 +104,15 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-6 py-8">
-      <nav className="flex items-center gap-2 text-xs font-medium text-text-muted">
+      <nav className="flex items-center gap-2 text-label-md text-text-muted">
         <span>Painel</span>
         <span>/</span>
         <span>Cardápio</span>
         <span>/</span>
-        <span className="font-bold text-graphite">Combos</span>
+        <span className="text-graphite">Combos</span>
       </nav>
 
-      <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
           <h1 className="text-headline-lg text-graphite">Combos</h1>
           <p className="mt-0.5 text-body-md text-text-muted">
@@ -154,14 +139,17 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
         <>
           <Card className="flex flex-col justify-between gap-3 p-3.5 sm:flex-row sm:items-center">
             <div className="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="Buscar combo por nome..."
-                className="h-9 w-full max-w-md rounded-lg border border-border bg-surface px-3 text-xs text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-              />
-              <div className="flex items-center gap-1.5 overflow-x-auto">
+              <div className="relative w-full max-w-md">
+                  <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" aria-hidden />
+                  <input
+                    type="text"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Buscar combo por nome..."
+                    className="h-10 w-full rounded-xl border border-border bg-surface pl-9 pr-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+                  />
+              </div>
+              <div className="flex items-center gap-1 overflow-x-auto rounded-xl bg-surface-subdued p-1">
                 {(
                   [
                     ["all", `Todos (${combos.length})`],
@@ -173,8 +161,8 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
                     key={value}
                     type="button"
                     onClick={() => setFilter(value)}
-                    className={`shrink-0 rounded-md px-2.5 py-1 text-xs font-bold transition-colors ${
-                      filter === value ? "bg-primary text-white" : "text-text-muted hover:bg-surface-subdued"
+                    className={`shrink-0 rounded-lg px-3 py-1.5 text-label-md transition-colors ${
+                      filter === value ? "bg-surface-card text-graphite shadow-card" : "text-text-muted hover:text-graphite"
                     }`}
                   >
                     {label}
@@ -243,7 +231,7 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
                         onClick={() => handleMove(combo, "up")}
                         className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
                       >
-                        <ChevronUpIcon />
+                        <ChevronUp className="h-4 w-4" aria-hidden />
                       </button>
                       <button
                         type="button"
@@ -252,7 +240,7 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
                         onClick={() => handleMove(combo, "down")}
                         className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite disabled:cursor-not-allowed disabled:opacity-30"
                       >
-                        <ChevronDownIcon />
+                        <ChevronDown className="h-4 w-4" aria-hidden />
                       </button>
                       <button
                         type="button"
@@ -264,10 +252,12 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
                       </button>
                       <button
                         type="button"
+                        title="Editar"
+                        aria-label="Editar"
                         onClick={() => setEditingId(combo.id)}
-                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
+                        className="rounded-lg p-1.5 text-text-muted hover:bg-primary/10 hover:text-primary"
                       >
-                        Editar
+                          <Pencil className="h-4 w-4" aria-hidden />
                       </button>
                       <button
                         type="button"
@@ -275,9 +265,11 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
                           setDeleteError(null);
                           setDeletingId(combo.id);
                         }}
-                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
+                        title="Excluir"
+                        aria-label="Excluir"
+                        className="rounded-lg p-1.5 text-text-muted hover:bg-red/10 hover:text-red"
                       >
-                        Excluir
+                        <Trash2 className="h-4 w-4" aria-hidden />
                       </button>
                     </div>
                   </Card>
