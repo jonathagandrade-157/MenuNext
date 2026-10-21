@@ -12,9 +12,9 @@ import type { BusinessHour } from "@/lib/tenant";
 import { WEEK_DAYS } from "@/lib/form-state";
 
 const inputClass =
-  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
+  "h-11 w-full rounded-xl border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
 
-const fieldLabelClass = "mb-1.5 block text-sm font-semibold text-graphite";
+const fieldLabelClass = "mb-1.5 block text-body-lg font-bold text-graphite";
 
 function SaveButton() {
   const { pending } = useFormStatus();
@@ -55,8 +55,8 @@ export function DeliveryConfigForm({
             className="mt-0.5 h-5 w-5 accent-primary"
           />
           <span>
-            <span className="block text-sm font-semibold text-graphite">Delivery ativo</span>
-            <span className="block text-sm text-text-muted">
+            <span className="block text-body-lg font-bold text-graphite">Delivery ativo</span>
+            <span className="block text-body-sm text-text-muted">
               Com o delivery desativado, sua loja pública não aceita novos pedidos — mas nada aqui é apagado.
             </span>
           </span>
@@ -70,8 +70,8 @@ export function DeliveryConfigForm({
             className="mt-0.5 h-5 w-5 accent-primary"
           />
           <span>
-            <span className="block text-sm font-semibold text-graphite">Retirada no local</span>
-            <span className="block text-sm text-text-muted">
+            <span className="block text-body-lg font-bold text-graphite">Retirada no local</span>
+            <span className="block text-body-sm text-text-muted">
               Mantido por compatibilidade — a retirada não é oferecida ao cliente na loja pública nesta fase do MenuNext.
             </span>
           </span>
@@ -79,7 +79,7 @@ export function DeliveryConfigForm({
       </Card>
 
       <Card className="space-y-5 p-6">
-        <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Taxa e área de entrega</h2>
+        <h2 className="text-body-lg font-bold text-graphite">Taxa e área de entrega</h2>
 
         <div>
           <span className={fieldLabelClass}>Como calcular a taxa de entrega</span>
@@ -98,8 +98,8 @@ export function DeliveryConfigForm({
                 className="mt-0.5 h-4 w-4 accent-primary"
               />
               <span>
-                <span className="block text-sm font-semibold text-graphite">Taxa fixa</span>
-                <span className="block text-xs text-text-muted">Mesmo valor para qualquer endereço dentro do raio.</span>
+                <span className="block text-body-lg font-bold text-graphite">Taxa fixa</span>
+                <span className="block text-body-sm text-text-muted">Mesmo valor para qualquer endereço dentro do raio.</span>
               </span>
             </label>
             <label
@@ -121,8 +121,8 @@ export function DeliveryConfigForm({
                 className="mt-0.5 h-4 w-4 accent-primary"
               />
               <span>
-                <span className="block text-sm font-semibold text-graphite">Por km</span>
-                <span className="block text-xs text-text-muted">
+                <span className="block text-body-lg font-bold text-graphite">Por km</span>
+                <span className="block text-body-sm text-text-muted">
                   {geocodingConfigured
                     ? "Valor multiplicado pela distância até o cliente."
                     : "Indisponível: requer configurar GOOGLE_MAPS_GEOCODING_API_KEY no servidor."}
@@ -167,7 +167,7 @@ export function DeliveryConfigForm({
             placeholder="Deixe em branco para não exigir um valor mínimo"
             className={inputClass}
           />
-          <p className="mt-1 text-xs text-text-muted">
+          <p className="mt-1 text-body-sm text-text-muted">
             Se preenchido, pedidos abaixo desse valor são recusados automaticamente no checkout.
           </p>
         </div>
@@ -182,14 +182,14 @@ export function DeliveryConfigForm({
             placeholder="Deixe em branco para não oferecer frete grátis"
             className={inputClass}
           />
-          <p className="mt-1 text-xs text-text-muted">
+          <p className="mt-1 text-body-sm text-text-muted">
             Pedidos com subtotal igual ou acima desse valor têm a taxa de entrega zerada automaticamente.
           </p>
         </div>
       </Card>
 
       <Card className="space-y-5 p-6">
-        <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Tempo estimado de entrega</h2>
+        <h2 className="text-body-lg font-bold text-graphite">Tempo estimado de entrega</h2>
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <span className={fieldLabelClass}>De (minutos)</span>
@@ -214,26 +214,26 @@ export function DeliveryConfigForm({
             />
           </div>
         </div>
-        <p className="text-xs text-text-muted">
+        <p className="text-body-sm text-text-muted">
           Exibido para o cliente na loja pública e no acompanhamento do pedido. Deixe os dois campos em branco para não mostrar uma estimativa.
         </p>
       </Card>
 
       <Card className="space-y-2 p-6">
-        <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Dias e horários que aceitam delivery</h2>
-        <p className="text-sm text-graphite">{openDaysSummary(businessHours)}</p>
-        <Link href="/painel/horarios" className="inline-block text-sm font-semibold text-primary hover:underline">
+        <h2 className="text-body-lg font-bold text-graphite">Dias e horários que aceitam delivery</h2>
+        <p className="text-body-md text-graphite">{openDaysSummary(businessHours)}</p>
+        <Link href="/painel/horarios" className="inline-block text-label-lg text-primary hover:underline">
           Editar horários de funcionamento →
         </Link>
       </Card>
 
       {state.status === "error" && (
-        <div className="rounded-lg border border-[#FEF2F2] bg-[#FEF2F2] px-3 py-2 text-sm font-medium text-red">
+        <div className="rounded-xl border border-red/20 bg-red/10 px-3.5 py-2.5 text-body-md font-medium text-red">
           {state.message}
         </div>
       )}
       {state.status === "success" && (
-        <div className="rounded-lg border border-[#ECFDF5] bg-[#ECFDF5] px-3 py-2 text-sm font-medium text-emerald">
+        <div className="rounded-xl border border-emerald/20 bg-emerald/10 px-3.5 py-2.5 text-body-md font-medium text-emerald">
           Configuração salva com sucesso.
         </div>
       )}

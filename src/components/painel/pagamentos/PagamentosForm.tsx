@@ -2,6 +2,7 @@
 
 import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
+import { Banknote, CircleCheck, CreditCard, QrCode, Wallet, type LucideIcon } from "lucide-react";
 import { savePagamentosConfigAction } from "@/lib/actions/pagamentos";
 import { initialPagamentosState } from "@/lib/form-state";
 import { Button } from "@/components/ui/Button";
@@ -12,9 +13,9 @@ import { generatePixBrCode, PIX_KEY_TYPE_LABEL, type PixKeyType } from "@/lib/pi
 import type { Restaurant } from "@/lib/tenant";
 
 const inputClass =
-  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
+  "h-11 w-full rounded-xl border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
 
-const fieldLabelClass = "mb-1.5 block text-sm font-semibold text-graphite";
+const fieldLabelClass = "mb-1.5 block text-label-lg text-graphite";
 
 function SaveButton() {
   const { pending } = useFormStatus();
@@ -25,12 +26,25 @@ function SaveButton() {
   );
 }
 
-function StatTile({ label, value }: { label: string; value: string | number }) {
+function StatTile({ label, value, icon: Icon, tint }: { label: string; value: string | number; icon: LucideIcon; tint: string }) {
   return (
-    <Card className="p-4">
-      <p className="text-xs font-medium text-text-muted">{label}</p>
-      <p className="mt-1 text-headline-md text-graphite">{value}</p>
+    <Card className="flex items-center gap-3 p-4">
+      <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${tint}`}>
+        <Icon className="h-5 w-5" aria-hidden />
+      </span>
+      <div className="min-w-0">
+        <p className="truncate text-label-sm uppercase text-text-muted">{label}</p>
+        <p className="text-headline-md text-graphite">{value}</p>
+      </div>
     </Card>
+  );
+}
+
+function MethodIcon({ icon: Icon, tint }: { icon: LucideIcon; tint: string }) {
+  return (
+    <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${tint}`}>
+      <Icon className="h-5 w-5" aria-hidden />
+    </span>
   );
 }
 
@@ -52,7 +66,7 @@ function PixQrCodePreview({ pixKey, holderName, city }: { pixKey: string; holder
 
   if (!brCode) {
     return (
-      <p className="text-xs text-text-muted">
+      <p className="text-body-sm text-text-muted">
         Preencha a chave, o nome do titular e a cidade para gerar o QR Code Pix.
       </p>
     );
@@ -98,9 +112,9 @@ export function PagamentosForm({ restaurant }: { restaurant: Restaurant }) {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <StatTile label="Métodos ativos" value={activeMethodsCount} />
-        <StatTile label="Pix" value={restaurant.payment_pix ? "Ativo" : "Inativo"} />
-        <StatTile label="Dinheiro / Cartão" value={otherMethodsLabel} />
+        <StatTile label="Métodos ativos" value={activeMethodsCount} icon={CircleCheck} tint="bg-emerald/10 text-emerald" />
+        <StatTile label="Pix" value={restaurant.payment_pix ? "Ativo" : "Inativo"} icon={QrCode} tint="bg-primary/10 text-primary" />
+        <StatTile label="Dinheiro / Cartão" value={otherMethodsLabel} icon={Wallet} tint="bg-blue/10 text-blue" />
       </div>
 
       <form action={formAction} className="space-y-4">
@@ -110,11 +124,12 @@ export function PagamentosForm({ restaurant }: { restaurant: Restaurant }) {
             name="payment_pix"
             checked={pixEnabled}
             onChange={(e) => setPixEnabled(e.target.checked)}
-            className="mt-0.5 h-5 w-5 accent-primary"
+            className="mt-2.5 h-5 w-5 accent-primary"
           />
-          <span className="flex-1">
-            <span className="block text-sm font-semibold text-graphite">Pix</span>
-            <span className="block text-sm text-text-muted">O cliente paga direto na sua chave Pix.</span>
+          <MethodIcon icon={QrCode} tint="bg-emerald/10 text-emerald" />
+          <span className="min-w-0 flex-1">
+            <span className="block text-body-lg font-bold text-graphite">Pix</span>
+            <span className="block text-body-sm text-text-muted">O cliente paga direto na sua chave Pix, sem taxa e sem intermediário.</span>
             {pixEnabled && (
               <div className="mt-4 space-y-4">
                 <div>
@@ -199,9 +214,13 @@ export function PagamentosForm({ restaurant }: { restaurant: Restaurant }) {
             type="checkbox"
             name="payment_cash"
             defaultChecked={restaurant.payment_cash}
-            className="mt-0.5 h-5 w-5 accent-primary"
+            className="mt-2.5 h-5 w-5 accent-primary"
           />
-          <span className="block text-sm font-semibold text-graphite">Dinheiro</span>
+          <MethodIcon icon={Banknote} tint="bg-amber/10 text-amber" />
+          <span className="min-w-0 flex-1">
+            <span className="block text-body-lg font-bold text-graphite">Dinheiro</span>
+            <span className="block text-body-sm text-text-muted">Pago na entrega ou na retirada; o cliente pode informar o valor para troco.</span>
+          </span>
         </label>
 
         <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border bg-surface-card p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
@@ -209,18 +228,22 @@ export function PagamentosForm({ restaurant }: { restaurant: Restaurant }) {
             type="checkbox"
             name="payment_card"
             defaultChecked={restaurant.payment_card}
-            className="mt-0.5 h-5 w-5 accent-primary"
+            className="mt-2.5 h-5 w-5 accent-primary"
           />
-          <span className="block text-sm font-semibold text-graphite">Maquininha / cartão na entrega ou retirada</span>
+          <MethodIcon icon={CreditCard} tint="bg-blue/10 text-blue" />
+          <span className="min-w-0 flex-1">
+            <span className="block text-body-lg font-bold text-graphite">Cartão na entrega ou na retirada</span>
+            <span className="block text-body-sm text-text-muted">Pago na sua maquininha, no momento da entrega ou da retirada.</span>
+          </span>
         </label>
 
         {state.status === "error" && (
-          <div className="rounded-lg border border-[#FEF2F2] bg-[#FEF2F2] px-3 py-2 text-sm font-medium text-red">
+          <div className="rounded-xl border border-red/20 bg-red/10 px-3.5 py-2.5 text-body-md font-medium text-red">
             {state.message}
           </div>
         )}
         {state.status === "success" && (
-          <div className="rounded-lg border border-[#ECFDF5] bg-[#ECFDF5] px-3 py-2 text-sm font-medium text-emerald">
+          <div className="rounded-xl border border-emerald/20 bg-emerald/10 px-3.5 py-2.5 text-body-md font-medium text-emerald">
             Formas de pagamento salvas com sucesso.
           </div>
         )}
