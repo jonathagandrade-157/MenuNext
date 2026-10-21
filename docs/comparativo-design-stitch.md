@@ -31,7 +31,7 @@ Regra do projeto: só dado real. Nada de número, botão ou status que não func
 |---|---|---|
 | Faixa do teste com barra de dias restantes | B | `trial_ends_at` existe |
 | Cartão do plano atual (valor, próxima cobrança, status) | B | Dados da assinatura |
-| Histórico de faturas | B | `billing_payments` existe; link do comprovante depende do provedor |
+| Histórico de faturas | C | Corrigido: `billing_payments` não tem acesso para o lojista; exige uma função nova no banco |
 | Comparativo de planos com lista de recursos | C | Hoje o plano só tem nome, valor e descrição; falta coluna de recursos |
 | Cancelar assinatura | A/B | Conferir se a ação existe; a cobrança está desligada, não dá para testar |
 | Tabelas Start/Pro/Plus do mockup | D | São planos inventados; valem os que o master cadastrar |
@@ -76,8 +76,8 @@ Regra do projeto: só dado real. Nada de número, botão ou status que não func
 ### Ajuda
 | Item | Grupo | Observação |
 |---|---|---|
-| Busca unificada e atalhos por tema | B | Busca sobre o conteúdo da própria Ajuda |
-| Checklist de sucesso com progresso | B | O checklist de configuração já existe no Dashboard |
+| Busca unificada e atalhos por tema | já existe | Corrigido: a busca já estava implementada |
+| Checklist de sucesso com progresso | já existe | Corrigido: já aparece na Ajuda |
 | Guias rápidos e guia lateral passo a passo | A + texto | Conteúdo precisa ser escrito |
 | Fotos nos guias | D | Não temos as imagens |
 | "Manual completo", "suporte VIP" | D | Não existem |
@@ -119,3 +119,16 @@ Vale a pena, nesta ordem, para o restaurante vender mais ou o master operar:
 4. **Registro de auditoria** (alimenta Auditoria do master, atividade da equipe e atividade da loja).
 
 Não recomendo agora: permissões por módulo, tela de suporte/chamados, mapa no cadastro.
+
+## Andamento (21/10/2026)
+
+Feito e em produção, grupos A e B:
+
+- Aparência: prévia da loja ao vivo, aviso de contraste e cores sugeridas pelo logo.
+- Configurações: QR Code com Baixar PNG e Imprimir cartaz no cartão da loja; cartão Dados da conta MenuNext.
+- Plano: faixa do teste com dias restantes e barra de progresso.
+- Usuários: totais com ícone, abas Todos/Equipe/Convites e busca.
+- Onboarding: copiar horário para todos os dias (passo 5) e nome da primeira categoria (passo 7).
+- Master: card de restaurantes recentes no dashboard.
+
+Falta nos grupos A e B: reestruturar visualmente Caixa, Marketing (só cupons), Informações/Configurações num único card, Ajuda (guias), master (Assinaturas, Métricas, Detalhes) e as demais telas do onboarding. Grupo C aguarda decisão.
