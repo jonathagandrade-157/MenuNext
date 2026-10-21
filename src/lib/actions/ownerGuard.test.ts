@@ -47,6 +47,7 @@ const OTHER_GUARDS: Record<string, string> = {
   "invites.ts": "convites: requireOwner próprio e RPCs que exigem OWNER",
   "customerNotes.ts": "notas de clientes: checagem de OWNER própria e RLS só do OWNER",
   "master.ts": "ações do Master: is_platform_admin",
+  "pendingPayment.ts": "retomar pagamento: billing_pending_subscription só devolve a assinatura pendente do OWNER da loja",
   "plans.ts": "planos: is_platform_admin",
   "subscription.ts": "assinatura: a RPC billing/start_restaurant_subscription exige OWNER",
 };
