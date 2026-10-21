@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useBag } from "@/contexts/BagContext";
 import { submitOrderAction } from "@/lib/actions/orders";
@@ -591,6 +592,13 @@ export function CheckoutClient({
             </div>
           </div>
         </section>
+        <p className="mt-3 text-body-sm text-text-muted">
+          Ao finalizar, seu nome, telefone e endereço são enviados ao restaurante para preparar e entregar o pedido. Veja a{" "}
+          <Link href="/privacidade" target="_blank" className="font-semibold text-primary underline">
+            Política de Privacidade
+          </Link>
+          .
+        </p>
       </aside>
       </div>
 

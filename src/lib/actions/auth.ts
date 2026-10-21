@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { isValidDocument, normalizeDocument } from "@/lib/document";
 import type { AuthActionState } from "@/lib/form-state";
+import { LEGAL_LAST_UPDATED } from "@/lib/legal";
 
 function friendlyAuthError(message: string): string {
   const normalized = message.toLowerCase();
@@ -97,7 +98,18 @@ export async function signUpAction(
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
-    options: { data: { name, phone, document, store_name: storeName } },
+    // Prova do aceite (LGPD/contrato): quando e qual versão dos textos legais a
+    // pessoa aceitou, guardado nos metadados do usuário (sem migration).
+    options: {
+      data: {
+        name,
+        phone,
+        document,
+        store_name: storeName,
+        terms_accepted_at: new Date().toISOString(),
+        terms_version: LEGAL_LAST_UPDATED,
+      },
+    },
   });
 
   if (error) {
