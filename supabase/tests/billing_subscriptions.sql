@@ -497,7 +497,7 @@ begin
   perform pg_temp._ck('S6 plano gratuito (preco 0) nao e cobravel',
     pg_temp._run(sb[1], format('select out_subscription_id::text from public.billing_begin_subscription(%L)', v_plan_free)) like '%plan_not_billable%');
   perform pg_temp._ck('S6 provedor nao habilitado e recusado',
-    pg_temp._run(sb[1], format('select out_subscription_id::text from public.billing_begin_subscription(%L, %L)', v_plan, 'mercadopago')) like '%invalid_provider%');
+    pg_temp._run(sb[1], format('select out_subscription_id::text from public.billing_begin_subscription(%L, %L)', v_plan, 'stripe')) like '%invalid_provider%');
   perform pg_temp._ck('S6 as tentativas recusadas nao deixaram assinatura na loja B',
     not exists (select 1 from public.billing_subscriptions where restaurant_id = sb[2]));
 
@@ -695,8 +695,8 @@ begin
     h1 = 'applied' and (select status = 'deleted' from public.billing_payments where provider_payment_id = 'pay_000000000O01')
     and public._restaurant_access_state(so[2]) = 'trial_expired');
   perform pg_temp._ck('S11 provedor invalido na reconciliacao e recusado',
-    pg_temp._svc(format('select public.billing_reconcile_payment(%L, %L, %L, %L, %L, false, 49.90, null, null, null)', 'mercadopago', 'sub_x', 'cus_x', 'pay_x', 'CONFIRMED')) like '%invalid_provider%'
-    and pg_temp._svc(format('select public.billing_reconcile_subscription(%L, %L, %L, %L, false)', 'mercadopago', 'sub_x', 'cus_x', 'INACTIVE')) like '%invalid_provider%');
+    pg_temp._svc(format('select public.billing_reconcile_payment(%L, %L, %L, %L, %L, false, 49.90, null, null, null)', 'stripe', 'sub_x', 'cus_x', 'pay_x', 'CONFIRMED')) like '%invalid_provider%'
+    and pg_temp._svc(format('select public.billing_reconcile_subscription(%L, %L, %L, %L, false)', 'stripe', 'sub_x', 'cus_x', 'INACTIVE')) like '%invalid_provider%');
 
   h1 := pg_temp._svc(format('select public.billing_reconcile_subscription(%L, %L, %L, %L, false)', 'asaas', 'sub_000000000N01', 'cus_000000000N01', 'ACTIVE'));
   perform pg_temp._ck('S11 assinatura ainda ACTIVE na API: nada muda, mas marca a data da conferencia',
@@ -858,7 +858,7 @@ begin
   exception when check_violation then perform pg_temp._ck('S8 valor zero e recusado (check amount)', true);
   end;
   begin
-    insert into public.billing_subscriptions (restaurant_id, plan_id, amount, provider) values (sb[2], v_plan, 10, 'mercadopago');
+    insert into public.billing_subscriptions (restaurant_id, plan_id, amount, provider) values (sb[2], v_plan, 10, 'stripe');
     perform pg_temp._ck('S8 provedor nao habilitado e recusado (check provider; ampliar exige migration)', false);
   exception when check_violation then perform pg_temp._ck('S8 provedor nao habilitado e recusado (check provider; ampliar exige migration)', true);
   end;
