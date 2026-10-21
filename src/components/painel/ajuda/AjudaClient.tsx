@@ -103,7 +103,7 @@ export function AjudaClient({
       {hasChecklistSlot}
 
       <div>
-        <h2 className="mb-3 text-sm font-extrabold uppercase tracking-wide text-text-muted">Guias rápidos</h2>
+        <h2 className="mb-3 text-body-lg font-bold uppercase tracking-wide text-text-muted">Guias rápidos</h2>
         {filteredGuides.length === 0 ? (
           <p className="text-sm text-text-muted">Nenhum guia encontrado para essa busca.</p>
         ) : (
@@ -121,7 +121,7 @@ export function AjudaClient({
       </div>
 
       <div>
-        <h2 className="mb-3 text-sm font-extrabold uppercase tracking-wide text-text-muted">Perguntas frequentes</h2>
+        <h2 className="mb-3 text-body-lg font-bold uppercase tracking-wide text-text-muted">Perguntas frequentes</h2>
         {filteredFaq.length === 0 ? (
           <p className="text-sm text-text-muted">Nenhuma pergunta encontrada para essa busca.</p>
         ) : (
@@ -148,7 +148,7 @@ export function AjudaClient({
 
       {(supportEmail || supportWhatsapp) && (
         <Card className="p-5">
-          <h2 className="text-sm font-extrabold text-graphite">Precisa de ajuda humana?</h2>
+          <h2 className="text-body-lg font-bold text-graphite">Precisa de ajuda humana?</h2>
           <p className="mt-1 text-sm text-text-muted">Fale direto com o suporte do MenuNext.</p>
           <div className="mt-3 flex flex-wrap gap-2.5">
             {supportWhatsapp && (

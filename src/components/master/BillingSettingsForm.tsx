@@ -41,8 +41,8 @@ export function BillingSettingsForm() {
           className="h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
         />
 
-        {state.status === "error" && <p className="text-xs font-semibold text-red">{state.message}</p>}
-        {state.status === "success" && <p className="text-xs font-semibold text-emerald">Salvo com sucesso!</p>}
+        {state.status === "error" && <p className="text-label-md text-red">{state.message}</p>}
+        {state.status === "success" && <p className="text-label-md text-emerald">Salvo com sucesso!</p>}
 
         <SubmitButton />
       </form>

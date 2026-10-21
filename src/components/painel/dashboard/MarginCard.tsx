@@ -11,7 +11,7 @@ import type { EstimatedMargin } from "@/lib/dashboard";
 export function MarginCard({ margin }: { margin: EstimatedMargin | null }) {
   return (
     <Card className="p-5">
-      <h2 className="text-sm font-extrabold text-graphite">Margem estimada</h2>
+      <h2 className="text-body-lg font-bold text-graphite">Margem estimada</h2>
 
       {margin === null ? (
         <p className="mt-3 text-sm text-text-muted">
@@ -23,7 +23,7 @@ export function MarginCard({ margin }: { margin: EstimatedMargin | null }) {
         </p>
       ) : (
         <>
-          <p className="mt-2 text-2xl font-black text-graphite">{margin.marginPercent.toFixed(1)}%</p>
+          <p className="mt-2 text-headline-lg text-graphite">{margin.marginPercent.toFixed(1)}%</p>
           <p className="mt-1 text-xs text-text-muted">
             Faturamento com custo: {formatCurrencyBRL(margin.revenue)} • Custo: {formatCurrencyBRL(margin.cost)}
           </p>

@@ -105,7 +105,7 @@ export default async function PainelLayout({ children }: { children: React.React
   return (
     <div className="min-h-screen bg-surface">
       <SubscriptionGate accessState={accessState} isOwner={isOwner}>
-        <PanelMobileNav brandLabel="Painel do Lojista" groups={navGroups} />
+        <PanelMobileNav brandLabel="Painel do Lojista" groups={navGroups} homeHref="/painel" />
         <PanelTopbar
           storeName={restaurant.name}
           storeSlug={restaurant.slug}

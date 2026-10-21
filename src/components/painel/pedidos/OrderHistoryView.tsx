@@ -131,7 +131,7 @@ export function OrderHistoryView({
             key={t.id}
             type="button"
             onClick={() => setTab(t.id)}
-            className={`rounded-full px-3 py-1.5 text-xs font-bold transition-colors ${
+            className={`rounded-full px-3 py-1.5 text-label-md font-bold transition-colors ${
               tab === t.id ? "bg-primary text-white" : "bg-surface-subdued text-text-muted hover:text-graphite"
             }`}
           >
@@ -161,7 +161,7 @@ export function OrderHistoryView({
       </div>
 
       {errorMessage && (
-        <div className="mx-4 mt-3 rounded-lg border border-red/20 bg-red/10 px-3.5 py-2 text-xs font-semibold text-red">
+        <div className="mx-4 mt-3 rounded-lg border border-red/20 bg-red/10 px-3.5 py-2 text-label-md text-red">
           {errorMessage}
         </div>
       )}
@@ -173,7 +173,7 @@ export function OrderHistoryView({
           <div className="overflow-x-auto rounded-xl border border-border bg-surface-card">
             <table className="w-full min-w-[720px] text-sm">
               <thead>
-                <tr className="border-b border-border text-left text-xs font-semibold uppercase tracking-wide text-text-muted">
+                <tr className="border-b border-border text-left text-label-md uppercase tracking-wide text-text-muted">
                   <th className="px-3.5 py-2.5">Pedido</th>
                   <th className="px-3.5 py-2.5">Cliente</th>
                   <th className="px-3.5 py-2.5">Data</th>

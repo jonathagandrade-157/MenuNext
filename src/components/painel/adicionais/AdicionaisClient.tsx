@@ -205,7 +205,7 @@ export function AdicionaisClient({
                     <div className="flex items-start justify-between gap-2">
                       <div className="min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-border bg-surface-subdued text-xs font-bold text-graphite">
+                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-border bg-surface-subdued text-label-md font-bold text-graphite">
                             {position}º
                           </span>
                           <h3 className="truncate text-sm font-bold text-graphite">{group.name}</h3>
@@ -252,7 +252,7 @@ export function AdicionaisClient({
                       <button
                         type="button"
                         onClick={() => setManagingId(group.id)}
-                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
+                        className="rounded-lg px-2.5 py-1.5 text-label-md text-graphite hover:bg-primary/10 hover:text-primary"
                       >
                         {canEdit ? "Gerenciar itens" : "Ver itens"}
                       </button>
@@ -262,7 +262,7 @@ export function AdicionaisClient({
                             type="button"
                             disabled={isRowPending}
                             onClick={() => handleToggle(group)}
-                            className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
+                            className="rounded-lg px-2.5 py-1.5 text-label-md text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
                           >
                             {group.is_active ? "Desativar" : "Ativar"}
                           </button>

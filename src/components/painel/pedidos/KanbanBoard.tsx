@@ -253,7 +253,7 @@ export function KanbanBoard({
       </div>
 
       {errorMessage && (
-        <div className="mx-4 mt-3 rounded-lg border border-red/20 bg-red/10 px-3.5 py-2 text-xs font-semibold text-red">
+        <div className="mx-4 mt-3 rounded-lg border border-red/20 bg-red/10 px-3.5 py-2 text-label-md text-red">
           {errorMessage}
         </div>
       )}

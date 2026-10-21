@@ -58,7 +58,7 @@ export function PlansManager({ initialPlans }: { initialPlans: Plan[] }) {
     <Card className="space-y-4 p-6">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Planos</h2>
+          <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Planos</h2>
           <p className="mt-1 text-sm text-text-muted">Os lojistas veem e assinam estes planos em /painel/plano.</p>
         </div>
         <Button onClick={() => setCreateOpen(true)} className="shrink-0">
@@ -73,7 +73,7 @@ export function PlansManager({ initialPlans }: { initialPlans: Plan[] }) {
         <EmptyState title="Nenhum plano cadastrado ainda." description="Crie o primeiro plano para liberar a assinatura dos lojistas." />
       ) : (
         <div className="overflow-hidden rounded-xl border border-border">
-          <div className="hidden grid-cols-12 gap-4 border-b border-border bg-surface-subdued/70 px-4 py-2.5 text-[11px] font-bold uppercase tracking-wide text-text-muted md:grid">
+          <div className="hidden grid-cols-12 gap-4 border-b border-border bg-surface-subdued/70 px-4 py-2.5 text-label-sm uppercase text-text-muted md:grid">
             <div className="col-span-4">Nome</div>
             <div className="col-span-3 text-center">Preço/mês</div>
             <div className="col-span-2 text-center">Status</div>
@@ -94,7 +94,7 @@ export function PlansManager({ initialPlans }: { initialPlans: Plan[] }) {
                   </div>
                   <div className="flex items-center justify-between md:col-span-3 md:justify-center">
                     <span className="md:hidden text-xs font-medium text-text-muted">Preço:</span>
-                    <span className="text-sm font-extrabold text-graphite">{formatCurrencyBRL(plan.price)}</span>
+                    <span className="text-body-lg font-bold text-graphite">{formatCurrencyBRL(plan.price)}</span>
                   </div>
                   <div className="flex items-center justify-between gap-3 md:col-span-2 md:justify-center">
                     <span className="md:hidden text-xs font-medium text-text-muted">Status:</span>
@@ -120,7 +120,7 @@ export function PlansManager({ initialPlans }: { initialPlans: Plan[] }) {
                     <button
                       type="button"
                       onClick={() => setEditing(plan)}
-                      className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
+                      className="rounded-lg px-2.5 py-1.5 text-label-md text-graphite hover:bg-primary/10 hover:text-primary"
                     >
                       Editar
                     </button>
@@ -130,7 +130,7 @@ export function PlansManager({ initialPlans }: { initialPlans: Plan[] }) {
                         setDeleteError(null);
                         setDeleting(plan);
                       }}
-                      className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
+                      className="rounded-lg px-2.5 py-1.5 text-label-md text-red hover:bg-red/10"
                     >
                       Excluir
                     </button>

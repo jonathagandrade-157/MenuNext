@@ -40,7 +40,7 @@ export default async function MasterLayout({ children }: { children: React.React
 
   return (
     <div className="flex min-h-screen flex-col bg-surface lg:flex-row">
-      <PanelSidebar brandLabel="Painel Master" groups={NAV_GROUPS} />
+      <PanelSidebar brandLabel="Painel Master" groups={NAV_GROUPS} homeHref="/master" />
       <div className="flex-1">{children}</div>
     </div>
   );

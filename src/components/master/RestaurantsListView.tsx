@@ -112,7 +112,7 @@ export function RestaurantsListView({
         <>
           <Card className="hidden overflow-hidden md:block">
             <table className="w-full text-left text-sm">
-              <thead className="border-b border-border bg-surface-subdued text-xs font-bold uppercase tracking-wide text-text-muted">
+              <thead className="border-b border-border bg-surface-subdued text-label-md font-bold uppercase tracking-wide text-text-muted">
                 <tr>
                   <th className="px-4 py-3">Restaurante</th>
                   <th className="px-4 py-3">Situação</th>

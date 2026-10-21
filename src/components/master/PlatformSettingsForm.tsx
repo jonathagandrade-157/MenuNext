@@ -29,7 +29,7 @@ export function PlatformSettingsForm({ settings }: { settings: PlatformSettings 
   return (
     <Card className="max-w-lg space-y-4 p-6">
       <div>
-        <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Contato de suporte</h2>
+        <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Contato de suporte</h2>
         <p className="mt-1 text-sm text-text-muted">
           Exibido para os lojistas em Ajuda. Deixe em branco para não mostrar esse contato.
         </p>

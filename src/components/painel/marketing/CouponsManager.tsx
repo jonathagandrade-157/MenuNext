@@ -77,22 +77,22 @@ export function CouponsManager({ initialCoupons }: { initialCoupons: Coupon[] })
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <Card className="p-4">
           <p className="text-xs font-medium text-text-muted">Total de cupons</p>
-          <p className="mt-1 text-2xl font-black text-graphite">{coupons.length}</p>
+          <p className="mt-1 text-headline-lg text-graphite">{coupons.length}</p>
         </Card>
         <Card className="p-4">
           <p className="text-xs font-medium text-text-muted">Ativos</p>
-          <p className="mt-1 text-2xl font-black text-emerald">{activeCount}</p>
+          <p className="mt-1 text-headline-lg text-emerald">{activeCount}</p>
         </Card>
         <Card className="p-4">
           <p className="text-xs font-medium text-text-muted">Usos totais</p>
-          <p className="mt-1 text-2xl font-black text-graphite">{totalUses}</p>
+          <p className="mt-1 text-headline-lg text-graphite">{totalUses}</p>
         </Card>
       </div>
 
       <Card className="space-y-4 p-6">
         <div className="flex items-center justify-between gap-3">
           <div>
-            <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Cupons de desconto</h2>
+            <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Cupons de desconto</h2>
             <p className="mt-1 text-sm text-text-muted">
               O cliente digita o código no checkout da loja pública para ativar o desconto.
             </p>
@@ -112,7 +112,7 @@ export function CouponsManager({ initialCoupons }: { initialCoupons: Coupon[] })
           />
         ) : (
           <div className="overflow-hidden rounded-xl border border-border">
-            <div className="hidden grid-cols-12 gap-4 border-b border-border bg-surface-subdued/70 px-4 py-2.5 text-[11px] font-bold uppercase tracking-wide text-text-muted md:grid">
+            <div className="hidden grid-cols-12 gap-4 border-b border-border bg-surface-subdued/70 px-4 py-2.5 text-label-sm uppercase text-text-muted md:grid">
               <div className="col-span-3">Código</div>
               <div className="col-span-2 text-center">Desconto</div>
               <div className="col-span-2 text-center">Pedido mínimo</div>
@@ -142,7 +142,7 @@ export function CouponsManager({ initialCoupons }: { initialCoupons: Coupon[] })
                     </div>
                     <div className="flex items-center justify-between md:col-span-2 md:justify-center">
                       <span className="md:hidden text-xs font-medium text-text-muted">Desconto:</span>
-                      <span className="text-sm font-extrabold text-graphite">{formatDiscount(coupon)}</span>
+                      <span className="text-body-lg font-bold text-graphite">{formatDiscount(coupon)}</span>
                     </div>
                     <div className="flex items-center justify-between md:col-span-2 md:justify-center">
                       <span className="md:hidden text-xs font-medium text-text-muted">Pedido mínimo:</span>
@@ -181,7 +181,7 @@ export function CouponsManager({ initialCoupons }: { initialCoupons: Coupon[] })
                       <button
                         type="button"
                         onClick={() => setEditing(coupon)}
-                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
+                        className="rounded-lg px-2.5 py-1.5 text-label-md text-graphite hover:bg-primary/10 hover:text-primary"
                       >
                         Editar
                       </button>
@@ -191,7 +191,7 @@ export function CouponsManager({ initialCoupons }: { initialCoupons: Coupon[] })
                           setDeleteError(null);
                           setDeleting(coupon);
                         }}
-                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
+                        className="rounded-lg px-2.5 py-1.5 text-label-md text-red hover:bg-red/10"
                       >
                         Excluir
                       </button>

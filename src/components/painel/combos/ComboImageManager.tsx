@@ -42,7 +42,7 @@ export function ComboImageManager({ comboId, imageUrl }: { comboId: string; imag
           </div>
         )}
         <div className="flex flex-col gap-1.5">
-          <label className="cursor-pointer text-xs font-semibold text-primary hover:underline">
+          <label className="cursor-pointer text-label-md text-primary hover:underline">
             {imageUrl ? "Substituir" : "Selecionar imagem"}
             <input
               ref={fileInputRef}
@@ -58,7 +58,7 @@ export function ComboImageManager({ comboId, imageUrl }: { comboId: string; imag
               type="button"
               disabled={isPending}
               onClick={handleRemove}
-              className="text-left text-xs font-semibold text-red hover:underline disabled:cursor-not-allowed disabled:opacity-50"
+              className="text-left text-label-md text-red hover:underline disabled:cursor-not-allowed disabled:opacity-50"
             >
               Remover
             </button>

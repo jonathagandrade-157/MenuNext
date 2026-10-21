@@ -87,7 +87,7 @@ export function ShareStoreModal({
           ) : (
             <div className="h-40 w-40 animate-pulse rounded-lg bg-surface-card" />
           )}
-          <p className="text-center text-xs font-semibold text-text-muted">Escaneie para abrir sua loja</p>
+          <p className="text-center text-label-md text-text-muted">Escaneie para abrir sua loja</p>
           <Button type="button" variant="secondary" size="sm" onClick={handleDownloadQrCode} disabled={!qrCodeDataUrl}>
             Baixar QR Code
           </Button>

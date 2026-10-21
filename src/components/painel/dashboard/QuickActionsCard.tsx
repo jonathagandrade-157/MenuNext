@@ -16,7 +16,7 @@ export function QuickActionsCard() {
 
   return (
     <Card className="p-5">
-      <h2 className="text-sm font-extrabold text-graphite">Atalhos operacionais</h2>
+      <h2 className="text-body-lg font-bold text-graphite">Atalhos operacionais</h2>
       <p className="text-xs text-text-muted">Acesso rápido às funções mais utilizadas</p>
       <div className="mt-3 flex flex-wrap gap-2">
         {actions.map((action) => (

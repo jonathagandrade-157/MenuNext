@@ -116,45 +116,45 @@ export default async function PainelDashboardPage() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Faturamento hoje</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Faturamento hoje</p>
           <p className="mt-1 text-2xl font-extrabold text-graphite">{formatCurrencyBRL(metrics.revenueToday)}</p>
           {revenueComparison !== null && (
-            <p className={`mt-1 text-xs font-bold ${revenueComparison >= 0 ? "text-emerald" : "text-red"}`}>
+            <p className={`mt-1 text-label-md font-bold ${revenueComparison >= 0 ? "text-emerald" : "text-red"}`}>
               {revenueComparison >= 0 ? "↑" : "↓"} {Math.abs(revenueComparison).toFixed(1)}% vs. ontem
             </p>
           )}
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Pedidos hoje</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Pedidos hoje</p>
           <p className="mt-1 text-2xl font-extrabold text-graphite">{metrics.ordersToday}</p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Ticket médio</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Ticket médio</p>
           <p className="mt-1 text-2xl font-extrabold text-graphite">{formatCurrencyBRL(metrics.averageTicketToday)}</p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Clientes hoje</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Clientes hoje</p>
           <p className="mt-1 text-2xl font-extrabold text-graphite">{customersToday.attended}</p>
         </Card>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Entregues hoje</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Entregues hoje</p>
           <p className="mt-1 text-2xl font-extrabold text-emerald">{metrics.deliveredToday}</p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Cancelados hoje</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Cancelados hoje</p>
           <p className="mt-1 text-2xl font-extrabold text-red">{metrics.cancelledToday}</p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Tempo médio de preparo</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Tempo médio de preparo</p>
           <p className="mt-1 text-2xl font-extrabold text-graphite">
             {metrics.averagePrepMinutes !== null ? `${Math.round(metrics.averagePrepMinutes)} min` : "—"}
           </p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Tempo médio até entrega</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Tempo médio até entrega</p>
           <p className="mt-1 text-2xl font-extrabold text-graphite">
             {metrics.averageDeliveryMinutes !== null ? `${Math.round(metrics.averageDeliveryMinutes)} min` : "—"}
           </p>

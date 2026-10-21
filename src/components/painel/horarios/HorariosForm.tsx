@@ -120,7 +120,7 @@ export function HorariosForm({ businessHours }: { businessHours: BusinessHour[] 
                         <button
                           type="button"
                           onClick={() => removePeriod(value, index)}
-                          className="text-xs font-semibold text-red hover:underline"
+                          className="text-label-md text-red hover:underline"
                         >
                           Remover período
                         </button>
@@ -131,7 +131,7 @@ export function HorariosForm({ businessHours }: { businessHours: BusinessHour[] 
                     <button
                       type="button"
                       onClick={() => addPeriod(value)}
-                      className="text-xs font-semibold text-primary hover:underline"
+                      className="text-label-md text-primary hover:underline"
                     >
                       + Adicionar período
                     </button>

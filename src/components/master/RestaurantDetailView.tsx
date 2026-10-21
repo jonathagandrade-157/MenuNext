@@ -103,22 +103,22 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
         <div className="space-y-6 lg:col-span-2">
           <Card className="space-y-4 p-6">
             <div>
-              <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Assinatura</h2>
+              <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Assinatura</h2>
               <p className="mt-1 text-sm text-text-muted">Situação do plano do MenuNext. A cobrança é feita pelo Asaas.</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-xl bg-surface-subdued p-4">
-                <p className="text-[11px] font-bold uppercase tracking-wide text-text-muted">Situação</p>
+                <p className="text-label-sm uppercase text-text-muted">Situação</p>
                 <div className="mt-2">
                   <Badge tone={subscription.tone}>{subscription.label}</Badge>
                 </div>
               </div>
               <div className="rounded-xl bg-surface-subdued p-4">
-                <p className="text-[11px] font-bold uppercase tracking-wide text-text-muted">Plano</p>
+                <p className="text-label-sm uppercase text-text-muted">Plano</p>
                 <p className="mt-2 text-sm font-bold text-graphite">{detail.plan_name ?? "Nenhum plano assinado"}</p>
               </div>
               <div className="rounded-xl bg-surface-subdued p-4">
-                <p className="text-[11px] font-bold uppercase tracking-wide text-text-muted">Valor do plano</p>
+                <p className="text-label-sm uppercase text-text-muted">Valor do plano</p>
                 <p className="mt-2 text-sm font-bold text-graphite">
                   {detail.plan_price !== null ? `${formatCurrencyBRL(detail.plan_price)}/mês` : "—"}
                 </p>
@@ -129,13 +129,13 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
           {detail.plan_name === null && (
             <Card className="space-y-4 p-6">
               <div>
-                <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Período de teste</h2>
+                <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Período de teste</h2>
                 <p className="mt-1 text-sm text-text-muted">
                   Teste gratuito do responsável pela loja. Ao acabar sem assinatura, painel e loja pública são bloqueados.
                 </p>
               </div>
               <div className="rounded-xl bg-surface-subdued p-4">
-                <p className="text-[11px] font-bold uppercase tracking-wide text-text-muted">Situação do teste</p>
+                <p className="text-label-sm uppercase text-text-muted">Situação do teste</p>
                 <p className="mt-2 text-sm font-bold text-graphite">
                   {trial.state === "none" && "Sem período de teste"}
                   {trial.state === "active" &&
@@ -156,7 +156,7 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
           <Card className="space-y-4 p-6">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Progresso de ativação</h2>
+                <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Progresso de ativação</h2>
                 <p className="mt-1 text-sm text-text-muted">Etapas verificadas nos dados reais do restaurante.</p>
               </div>
               <Badge tone={progress.percent === 100 ? "success" : "warning"}>{progress.percent}% ativado</Badge>
@@ -185,21 +185,21 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
 
           <Card className="space-y-4 p-6">
             <div>
-              <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Volume de pedidos</h2>
+              <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Volume de pedidos</h2>
               <p className="mt-1 text-sm text-text-muted">Contagens consolidadas, sem dados operacionais dos clientes.</p>
             </div>
             <div className="grid grid-cols-3 gap-3">
               <div className="rounded-xl bg-surface-subdued p-4">
-                <p className="text-[11px] font-bold uppercase tracking-wide text-text-muted">Hoje</p>
-                <p className="mt-2 text-xl font-black text-graphite">{detail.orders_today.toLocaleString("pt-BR")}</p>
+                <p className="text-label-sm uppercase text-text-muted">Hoje</p>
+                <p className="mt-2 text-headline-md text-graphite">{detail.orders_today.toLocaleString("pt-BR")}</p>
               </div>
               <div className="rounded-xl bg-surface-subdued p-4">
-                <p className="text-[11px] font-bold uppercase tracking-wide text-text-muted">Este mês</p>
-                <p className="mt-2 text-xl font-black text-graphite">{detail.orders_month.toLocaleString("pt-BR")}</p>
+                <p className="text-label-sm uppercase text-text-muted">Este mês</p>
+                <p className="mt-2 text-headline-md text-graphite">{detail.orders_month.toLocaleString("pt-BR")}</p>
               </div>
               <div className="rounded-xl bg-surface-subdued p-4">
-                <p className="text-[11px] font-bold uppercase tracking-wide text-text-muted">Total</p>
-                <p className="mt-2 text-xl font-black text-graphite">{detail.orders_total.toLocaleString("pt-BR")}</p>
+                <p className="text-label-sm uppercase text-text-muted">Total</p>
+                <p className="mt-2 text-headline-md text-graphite">{detail.orders_total.toLocaleString("pt-BR")}</p>
               </div>
             </div>
             <div>
@@ -219,7 +219,7 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
 
         <div className="space-y-6">
           <Card className="p-6">
-            <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Informações cadastrais</h2>
+            <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Informações cadastrais</h2>
             <dl className="mt-2 divide-y divide-border">
               <InfoRow label="Nome comercial" value={detail.name} />
               <InfoRow label="Endereço da loja" value={`/loja/${detail.slug}`} />
@@ -233,7 +233,7 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
           </Card>
 
           <Card className="space-y-3 p-6">
-            <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Cardápio e horários</h2>
+            <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Cardápio e horários</h2>
             <dl className="divide-y divide-border">
               <InfoRow label="Produtos cadastrados" value={detail.products_count.toLocaleString("pt-BR")} />
               <InfoRow label="Dias com horário definido" value={`${detail.open_business_days} de 7`} />

@@ -8,7 +8,7 @@ export function ChannelSplitCard({ split }: { split: ChannelSplit }) {
 
   return (
     <Card className="p-5">
-      <h2 className="text-sm font-extrabold text-graphite">Como compraram hoje</h2>
+      <h2 className="text-body-lg font-bold text-graphite">Como compraram hoje</h2>
 
       {total === 0 ? (
         <p className="mt-3 text-sm text-text-muted">Nenhum pedido hoje ainda.</p>

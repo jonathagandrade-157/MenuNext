@@ -80,7 +80,7 @@ export function BillingProviderCard({
               }`}
             >
               <span className="flex w-full items-center justify-between gap-2">
-                <span className="text-sm font-extrabold text-graphite">{option.name}</span>
+                <span className="text-body-lg font-bold text-graphite">{option.name}</span>
                 {selected && <Badge tone="success">Ativo</Badge>}
               </span>
               <span className="text-xs text-text-muted">{option.hint}</span>
@@ -92,8 +92,8 @@ export function BillingProviderCard({
         })}
       </div>
 
-      {error && <p className="mt-3 text-xs font-semibold text-red">{error}</p>}
-      {saved && !error && <p className="mt-3 text-xs font-semibold text-emerald">Provedor atualizado.</p>}
+      {error && <p className="mt-3 text-label-md text-red">{error}</p>}
+      {saved && !error && <p className="mt-3 text-label-md text-emerald">Provedor atualizado.</p>}
 
       <div className="mt-4 rounded-xl border border-border bg-surface px-3.5 py-3 text-xs text-text-muted">
         <p className="font-semibold text-graphite">Mercado Pago — como configurar</p>
