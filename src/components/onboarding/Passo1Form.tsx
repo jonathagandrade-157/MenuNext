@@ -66,7 +66,7 @@ export function Passo1Form({ suggestedName = "" }: { suggestedName?: string }) {
       <div>
         <FieldLabel>Endereço da sua loja online *</FieldLabel>
         <div className="flex items-center rounded-lg border border-border bg-surface-card focus-within:border-primary focus-within:ring-[3px] focus-within:ring-primary/15">
-          <span className="pl-3 text-sm text-text-muted">menunext.com.br/</span>
+          <span className="pl-3 text-body-md text-text-muted">menunext.com.br/</span>
           <input
             name="slug"
             type="text"
@@ -75,16 +75,16 @@ export function Passo1Form({ suggestedName = "" }: { suggestedName?: string }) {
             value={slug}
             onChange={(e) => handleSlugChange(e.target.value)}
             placeholder="seurestaurante"
-            className="h-11 flex-1 rounded-r-lg bg-transparent px-1 text-sm text-graphite placeholder:text-slate-400 focus:outline-none"
+            className="h-11 flex-1 rounded-r-lg bg-transparent px-1 text-body-md text-graphite placeholder:text-slate-400 focus:outline-none"
           />
         </div>
-        {slugStatus === "checking" && <p className="mt-1.5 text-xs text-text-muted">Verificando disponibilidade...</p>}
+        {slugStatus === "checking" && <p className="mt-1.5 text-body-sm text-text-muted">Verificando disponibilidade...</p>}
         {slugStatus === "available" && (
-          <p className="mt-1.5 text-xs font-semibold text-emerald">✓ Endereço disponível para uso imediato!</p>
+          <p className="mt-1.5 text-body-sm font-semibold text-emerald">✓ Endereço disponível para uso imediato!</p>
         )}
-        {slugStatus === "taken" && <p className="mt-1.5 text-xs font-semibold text-red">Esse endereço já está em uso.</p>}
+        {slugStatus === "taken" && <p className="mt-1.5 text-body-sm font-semibold text-red">Esse endereço já está em uso.</p>}
         {slugStatus === "idle" && (
-          <p className="mt-1.5 text-xs text-text-muted">
+          <p className="mt-1.5 text-body-sm text-text-muted">
             Use apenas letras minúsculas, números e hífens.
           </p>
         )}

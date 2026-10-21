@@ -13,18 +13,18 @@ export default async function LojaProntaPage() {
     <div className="min-h-screen bg-surface">
       <header className="border-b border-border bg-surface-card">
         <div className="mx-auto flex h-16 max-w-2xl items-center px-6">
-          <Link href="/" className="text-base font-extrabold text-graphite">
+          <Link href="/" className="text-body-lg font-extrabold text-graphite">
             Menu<span className="text-primary">Next</span>
           </Link>
         </div>
       </header>
 
       <div className="mx-auto max-w-2xl px-6 py-12 text-center">
-        <p className="text-xs font-bold uppercase tracking-widest text-emerald">
+        <p className="text-body-sm font-bold uppercase tracking-widest text-emerald">
           Onboarding concluído com sucesso
         </p>
         <h1 className="mt-2 text-3xl font-extrabold text-graphite">Sua loja está pronta! 🎉</h1>
-        <p className="mx-auto mt-3 max-w-md text-sm text-text-muted">
+        <p className="mx-auto mt-3 max-w-md text-body-md text-text-muted">
           Você configurou o essencial em minutos. Agora o {restaurant.name} tem uma vitrine digital pronta para
           receber pedidos.
         </p>
@@ -32,8 +32,8 @@ export default async function LojaProntaPage() {
         <Card className="mt-8 p-6 text-left">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-graphite">{restaurant.name}</p>
-              <p className="text-xs text-text-muted">7 de 7 etapas configuradas</p>
+              <p className="text-label-lg text-graphite">{restaurant.name}</p>
+              <p className="text-body-sm text-text-muted">7 de 7 etapas configuradas</p>
             </div>
             <Badge tone="success" pulse>
               Loja Aberta
@@ -41,8 +41,8 @@ export default async function LojaProntaPage() {
           </div>
 
           <div className="mt-5 rounded-lg bg-surface-subdued px-4 py-3">
-            <p className="text-xs font-semibold text-text-muted">Seu endereço digital</p>
-            <p className="mt-1 font-mono text-sm text-graphite">{storeUrl}</p>
+            <p className="text-body-sm font-semibold text-text-muted">Seu endereço digital</p>
+            <p className="mt-1 font-mono text-body-md text-graphite">{storeUrl}</p>
           </div>
 
           <div className="mt-4 flex flex-wrap gap-3">

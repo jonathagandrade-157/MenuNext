@@ -15,8 +15,8 @@ function ThemeColorCard({ themePrimaryColor }: { themePrimaryColor: string | nul
 
   return (
     <Card className="p-5">
-      <h2 className="text-sm font-bold text-graphite">Cor de destaque</h2>
-      <p className="mt-0.5 text-xs text-text-muted">
+      <h2 className="text-body-md font-bold text-graphite">Cor de destaque</h2>
+      <p className="mt-0.5 text-body-sm text-text-muted">
         Usada em botões e destaques na sua loja pública. Não afeta o painel.
       </p>
 
@@ -26,7 +26,7 @@ function ThemeColorCard({ themePrimaryColor }: { themePrimaryColor: string | nul
             type="color"
             value={color}
             onChange={(e) => setColor(e.target.value)}
-            className="h-11 w-14 shrink-0 cursor-pointer rounded-lg border border-border bg-surface-card p-1"
+            className="h-11 w-14 shrink-0 cursor-pointer rounded-xl border border-border bg-surface-card p-1"
           />
           <input
             name="theme_primary_color"
@@ -34,7 +34,7 @@ function ThemeColorCard({ themePrimaryColor }: { themePrimaryColor: string | nul
             value={color}
             onChange={(e) => setColor(e.target.value)}
             placeholder={DEFAULT_PRIMARY_COLOR}
-            className="h-11 flex-1 rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            className="h-11 flex-1 rounded-xl border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
           />
         </div>
 
@@ -84,8 +84,8 @@ function ImageUploadCard({
 
   return (
     <Card className="p-5">
-      <h2 className="text-sm font-bold text-graphite">{title}</h2>
-      <p className="mt-0.5 text-xs text-text-muted">{description}</p>
+      <h2 className="text-body-md font-bold text-graphite">{title}</h2>
+      <p className="mt-0.5 text-body-sm text-text-muted">{description}</p>
 
       <form action={formAction} className="mt-4 space-y-3">
         <div className={`w-full overflow-hidden rounded-xl bg-surface-subdued ${aspectClass}`}>
@@ -93,7 +93,7 @@ function ImageUploadCard({
             // eslint-disable-next-line @next/next/no-img-element
             <img src={displayUrl} alt={title} className="h-full w-full object-cover" />
           ) : (
-            <div className="flex h-full w-full items-center justify-center text-xs text-text-muted">Nenhuma imagem enviada</div>
+            <div className="flex h-full w-full items-center justify-center text-body-sm text-text-muted">Nenhuma imagem enviada</div>
           )}
         </div>
 
@@ -106,7 +106,7 @@ function ImageUploadCard({
             const file = e.target.files?.[0];
             setPreview(file ? URL.createObjectURL(file) : null);
           }}
-          className="block w-full text-sm text-text-muted file:mr-3 file:rounded-lg file:border-0 file:bg-primary/10 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary hover:file:bg-primary/20"
+          className="block w-full text-body-md text-text-muted file:mr-3 file:rounded-lg file:border-0 file:bg-primary/10 file:px-4 file:py-2 file:text-body-md file:font-semibold file:text-primary hover:file:bg-primary/20"
         />
 
         {state.status === "error" && <p className="text-label-md text-red">{state.message}</p>}

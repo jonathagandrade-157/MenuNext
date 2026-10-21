@@ -20,8 +20,8 @@ import {
 
 function InfoRow({ label, value }: { label: string; value: string | null }) {
   return (
-    <div className="py-2.5 text-sm">
-      <dt className="text-xs text-text-muted">{label}</dt>
+    <div className="py-2.5 text-body-md">
+      <dt className="text-body-sm text-text-muted">{label}</dt>
       <dd className="mt-0.5 [overflow-wrap:anywhere] font-semibold text-graphite">{value ?? "—"}</dd>
     </div>
   );
@@ -50,7 +50,7 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6">
       <div>
-        <Link href="/master/restaurantes" className="text-sm font-semibold text-text-muted hover:text-graphite">
+        <Link href="/master/restaurantes" className="text-label-lg text-text-muted hover:text-graphite">
           ← Voltar para todos os restaurantes
         </Link>
         <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
@@ -68,7 +68,7 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
               href={storeHref}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface-card px-5 text-sm font-semibold text-graphite transition-colors hover:border-slate-300 hover:bg-surface"
+              className="inline-flex h-11 shrink-0 items-center justify-center rounded-xl border border-border bg-surface-card px-5 text-label-lg text-graphite transition-colors hover:border-slate-300 hover:bg-surface"
             >
               Abrir loja pública
             </a>
@@ -104,7 +104,7 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
           <Card className="space-y-4 p-6">
             <div>
               <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Assinatura</h2>
-              <p className="mt-1 text-sm text-text-muted">Situação do plano do MenuNext. A cobrança é feita pelo Asaas.</p>
+              <p className="mt-1 text-body-md text-text-muted">Situação do plano do MenuNext. A cobrança é feita pelo Asaas.</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-xl bg-surface-subdued p-4">
@@ -115,11 +115,11 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
               </div>
               <div className="rounded-xl bg-surface-subdued p-4">
                 <p className="text-label-sm uppercase text-text-muted">Plano</p>
-                <p className="mt-2 text-sm font-bold text-graphite">{detail.plan_name ?? "Nenhum plano assinado"}</p>
+                <p className="mt-2 text-body-md font-bold text-graphite">{detail.plan_name ?? "Nenhum plano assinado"}</p>
               </div>
               <div className="rounded-xl bg-surface-subdued p-4">
                 <p className="text-label-sm uppercase text-text-muted">Valor do plano</p>
-                <p className="mt-2 text-sm font-bold text-graphite">
+                <p className="mt-2 text-body-md font-bold text-graphite">
                   {detail.plan_price !== null ? `${formatCurrencyBRL(detail.plan_price)}/mês` : "—"}
                 </p>
               </div>
@@ -130,13 +130,13 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
             <Card className="space-y-4 p-6">
               <div>
                 <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Período de teste</h2>
-                <p className="mt-1 text-sm text-text-muted">
+                <p className="mt-1 text-body-md text-text-muted">
                   Teste gratuito do responsável pela loja. Ao acabar sem assinatura, painel e loja pública são bloqueados.
                 </p>
               </div>
               <div className="rounded-xl bg-surface-subdued p-4">
                 <p className="text-label-sm uppercase text-text-muted">Situação do teste</p>
-                <p className="mt-2 text-sm font-bold text-graphite">
+                <p className="mt-2 text-body-md font-bold text-graphite">
                   {trial.state === "none" && "Sem período de teste"}
                   {trial.state === "active" &&
                     `Em andamento até ${formatDateTimeBR(trial.endsAt)} (${trial.daysLeft} ${trial.daysLeft === 1 ? "dia" : "dias"})`}
@@ -144,8 +144,8 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
                 </p>
               </div>
               <div>
-                <h3 className="text-sm font-bold text-graphite">Cortesia</h3>
-                <p className="mb-3 mt-1 text-xs text-text-muted">
+                <h3 className="text-body-md font-bold text-graphite">Cortesia</h3>
+                <p className="mb-3 mt-1 text-body-sm text-text-muted">
                   Soma dias ao teste (a partir de hoje, se já acabou). Vale para todas as lojas do mesmo responsável e fica registrado.
                 </p>
                 <TrialCourtesyForm restaurantId={detail.id} />
@@ -157,7 +157,7 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
             <div className="flex items-start justify-between gap-3">
               <div>
                 <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Progresso de ativação</h2>
-                <p className="mt-1 text-sm text-text-muted">Etapas verificadas nos dados reais do restaurante.</p>
+                <p className="mt-1 text-body-md text-text-muted">Etapas verificadas nos dados reais do restaurante.</p>
               </div>
               <Badge tone={progress.percent === 100 ? "success" : "warning"}>{progress.percent}% ativado</Badge>
             </div>
@@ -166,8 +166,8 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
               {steps.map((step) => (
                 <li
                   key={step.id}
-                  className={`flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm ${
-                    step.done ? "bg-[#ECFDF5] text-[#047857]" : "bg-surface-subdued text-text-muted"
+                  className={`flex items-center justify-between gap-3 rounded-xl px-4 py-3 text-body-md ${
+                    step.done ? "bg-emerald/10 text-emerald" : "bg-surface-subdued text-text-muted"
                   }`}
                 >
                   <span className="flex items-center gap-3 font-semibold">
@@ -177,7 +177,7 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
                       <span className="sr-only">{step.done ? " — concluída" : " — pendente"}</span>
                     </span>
                   </span>
-                  {step.date && <span className="shrink-0 text-xs">{formatDateBR(step.date)}</span>}
+                  {step.date && <span className="shrink-0 text-body-sm">{formatDateBR(step.date)}</span>}
                 </li>
               ))}
             </ul>
@@ -186,7 +186,7 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
           <Card className="space-y-4 p-6">
             <div>
               <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Volume de pedidos</h2>
-              <p className="mt-1 text-sm text-text-muted">Contagens consolidadas, sem dados operacionais dos clientes.</p>
+              <p className="mt-1 text-body-md text-text-muted">Contagens consolidadas, sem dados operacionais dos clientes.</p>
             </div>
             <div className="grid grid-cols-3 gap-3">
               <div className="rounded-xl bg-surface-subdued p-4">
@@ -203,12 +203,12 @@ export function RestaurantDetailView({ detail, trial }: { detail: MasterRestaura
               </div>
             </div>
             <div>
-              <div className="mb-2 flex items-center justify-between text-sm">
+              <div className="mb-2 flex items-center justify-between text-body-md">
                 <span className="font-semibold text-graphite">Taxa de conclusão</span>
                 <span className="font-bold text-graphite">{completionRate !== null ? `${completionRate.toLocaleString("pt-BR")}%` : "—"}</span>
               </div>
               <ProgressBar percent={completionRate ?? 0} tone="success" />
-              <p className="mt-2 text-xs text-text-muted">
+              <p className="mt-2 text-body-sm text-text-muted">
                 {completionRate !== null
                   ? `${detail.orders_completed.toLocaleString("pt-BR")} entregues ou retirados · ${detail.orders_cancelled.toLocaleString("pt-BR")} cancelados`
                   : "Ainda não há pedidos encerrados para calcular a taxa."}

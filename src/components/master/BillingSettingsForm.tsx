@@ -26,8 +26,8 @@ export function BillingSettingsForm() {
 
   return (
     <Card className="p-5">
-      <h2 className="text-sm font-bold text-graphite">Integração Asaas</h2>
-      <p className="mt-0.5 text-xs text-text-muted">
+      <h2 className="text-body-md font-bold text-graphite">Integração Asaas</h2>
+      <p className="mt-0.5 text-body-sm text-text-muted">
         Token de acesso do webhook (configurado também no painel do Asaas, em Integrações → Webhooks). Use um valor
         aleatório de 32 a 255 caracteres. A chave de API (ASAAS_API_KEY) é configurada como variável de ambiente do
         servidor, nunca aqui.
@@ -38,7 +38,7 @@ export function BillingSettingsForm() {
           name="asaasWebhookToken"
           type="text"
           placeholder="Token de acesso do webhook"
-          className="h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          className="h-11 w-full rounded-xl border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
         />
 
         {state.status === "error" && <p className="text-label-md text-red">{state.message}</p>}

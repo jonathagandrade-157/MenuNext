@@ -13,6 +13,7 @@
   --color-graphite: #151b29;
   --color-emerald: #006947;
   --color-amber: #f59e0b;
+  --color-amber-strong: #b45309;
   --color-red: #ef4444;
   --color-blue: #3b82f6;
 
@@ -33,6 +34,7 @@
   --color-graphite: var(--color-graphite);
   --color-emerald: var(--color-emerald);
   --color-amber: var(--color-amber);
+  --color-amber-strong: var(--color-amber-strong);
   --color-red: var(--color-red);
   --color-blue: var(--color-blue);
 

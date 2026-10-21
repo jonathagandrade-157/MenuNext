@@ -40,7 +40,7 @@ export function MovementChart({ points }: { points: HourlyMovementPoint[] }) {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-body-lg font-bold text-graphite">Movimento de hoje</h2>
-          <p className="text-xs text-text-muted">Pedidos e faturamento ao longo do dia</p>
+          <p className="text-body-sm text-text-muted">Pedidos e faturamento ao longo do dia</p>
         </div>
         <div className="flex gap-1 rounded-lg bg-surface-subdued p-1">
           {(["orders", "revenue"] as const).map((value) => (
@@ -59,7 +59,7 @@ export function MovementChart({ points }: { points: HourlyMovementPoint[] }) {
       </div>
 
       {values.every((v) => v === 0) ? (
-        <p className="py-10 text-center text-sm text-text-muted">Nenhum pedido hoje ainda.</p>
+        <p className="py-10 text-center text-body-md text-text-muted">Nenhum pedido hoje ainda.</p>
       ) : (
         <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="mt-4 w-full" role="img" aria-label="Gráfico de movimento por hora">
           <path d={areaPath} fill="var(--color-primary, #ab2f00)" opacity={0.08} />
@@ -76,7 +76,7 @@ export function MovementChart({ points }: { points: HourlyMovementPoint[] }) {
       </div>
 
       {peakValue > 0 && (
-        <p className="mt-2 text-xs font-medium text-text-muted">
+        <p className="mt-2 text-body-sm font-medium text-text-muted">
           Pico às {String(points[peakIndex]?.hour ?? 0).padStart(2, "0")}h —{" "}
           {metric === "orders" ? `${peakValue} ${peakValue === 1 ? "pedido" : "pedidos"}` : formatCurrencyBRL(peakValue)}
         </p>

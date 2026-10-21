@@ -11,14 +11,14 @@ export function PaymentSplitCard({ split }: { split: PaymentSplit }) {
       <h2 className="text-body-lg font-bold text-graphite">Formas de pagamento hoje</h2>
 
       {total === 0 ? (
-        <p className="mt-3 text-sm text-text-muted">Nenhum pedido hoje ainda.</p>
+        <p className="mt-3 text-body-md text-text-muted">Nenhum pedido hoje ainda.</p>
       ) : (
         <div className="mt-3 space-y-2">
           {(Object.keys(LABELS) as (keyof PaymentSplit)[]).map((method) => {
             const percent = Math.round((split[method].count / total) * 100);
             return (
               <div key={method}>
-                <div className="flex items-center justify-between text-sm">
+                <div className="flex items-center justify-between text-body-md">
                   <span className="font-medium text-graphite">{LABELS[method]}</span>
                   <span className="text-text-muted">{percent}%</span>
                 </div>

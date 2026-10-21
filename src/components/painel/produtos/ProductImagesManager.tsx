@@ -75,8 +75,8 @@ export function ProductImagesManager({ productId, images }: { productId: string;
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between">
-        <span className="text-sm font-semibold text-graphite">Imagens do produto</span>
-        <span className="text-xs text-text-muted">
+        <span className="text-label-lg text-graphite">Imagens do produto</span>
+        <span className="text-body-sm text-text-muted">
           {sorted.length}/{MAX_PRODUCT_IMAGES}
         </span>
       </div>
@@ -115,7 +115,7 @@ export function ProductImagesManager({ productId, images }: { productId: string;
                   title="Mover para a esquerda"
                   disabled={index === 0 || busy}
                   onClick={() => handleMove(image.id, "up")}
-                  className="rounded p-0.5 text-xs text-text-muted hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-30"
+                  className="rounded p-0.5 text-body-sm text-text-muted hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-30"
                 >
                   ←
                 </button>
@@ -124,7 +124,7 @@ export function ProductImagesManager({ productId, images }: { productId: string;
                   title="Remover foto"
                   disabled={busy}
                   onClick={() => handleRemove(image.id)}
-                  className="rounded p-0.5 text-xs text-red hover:bg-red/10 disabled:cursor-not-allowed disabled:opacity-30"
+                  className="rounded p-0.5 text-body-sm text-red hover:bg-red/10 disabled:cursor-not-allowed disabled:opacity-30"
                 >
                   ✕
                 </button>
@@ -133,7 +133,7 @@ export function ProductImagesManager({ productId, images }: { productId: string;
                   title="Mover para a direita"
                   disabled={index === sorted.length - 1 || busy}
                   onClick={() => handleMove(image.id, "down")}
-                  className="rounded p-0.5 text-xs text-text-muted hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-30"
+                  className="rounded p-0.5 text-body-sm text-text-muted hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-30"
                 >
                   →
                 </button>
@@ -155,7 +155,7 @@ export function ProductImagesManager({ productId, images }: { productId: string;
 
         {sorted.length < MAX_PRODUCT_IMAGES && (
           <label className="flex h-20 w-20 cursor-pointer flex-col items-center justify-center gap-1 rounded-lg border border-dashed border-border text-text-muted hover:border-primary hover:text-primary">
-            <span className="text-xl leading-none">+</span>
+            <span className="text-headline-md leading-none">+</span>
             <span className="text-[10px] font-semibold">Adicionar</span>
             <input
               ref={fileInputRef}

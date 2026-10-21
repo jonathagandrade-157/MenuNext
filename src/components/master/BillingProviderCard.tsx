@@ -59,8 +59,8 @@ export function BillingProviderCard({
 
   return (
     <Card className="p-5">
-      <h2 className="text-sm font-bold text-graphite">Provedor de cobrança</h2>
-      <p className="mt-0.5 text-xs text-text-muted">
+      <h2 className="text-body-md font-bold text-graphite">Provedor de cobrança</h2>
+      <p className="mt-0.5 text-body-sm text-text-muted">
         Por onde as <strong>novas</strong> assinaturas são cobradas. Quem já assina continua no provedor em que começou.
       </p>
 
@@ -83,7 +83,7 @@ export function BillingProviderCard({
                 <span className="text-body-lg font-bold text-graphite">{option.name}</span>
                 {selected && <Badge tone="success">Ativo</Badge>}
               </span>
-              <span className="text-xs text-text-muted">{option.hint}</span>
+              <span className="text-body-sm text-text-muted">{option.hint}</span>
               <Badge tone={ready[option.id] ? "success" : "warning"}>
                 {ready[option.id] ? "Credenciais configuradas" : "Credenciais pendentes"}
               </Badge>
@@ -95,7 +95,7 @@ export function BillingProviderCard({
       {error && <p className="mt-3 text-label-md text-red">{error}</p>}
       {saved && !error && <p className="mt-3 text-label-md text-emerald">Provedor atualizado.</p>}
 
-      <div className="mt-4 rounded-xl border border-border bg-surface px-3.5 py-3 text-xs text-text-muted">
+      <div className="mt-4 rounded-xl border border-border bg-surface px-3.5 py-3 text-body-sm text-text-muted">
         <p className="font-semibold text-graphite">Mercado Pago — como configurar</p>
         <ol className="mt-1.5 list-decimal space-y-1 pl-4">
           <li>

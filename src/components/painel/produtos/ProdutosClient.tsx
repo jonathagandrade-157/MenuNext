@@ -159,7 +159,7 @@ export function ProdutosClient({
         {canEdit && (
           <Link
             href="/painel/produtos/novo"
-            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 self-start rounded-xl bg-primary px-5 text-sm font-semibold text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] transition-all hover:bg-primary-container sm:self-auto"
+            className="inline-flex h-11 shrink-0 items-center justify-center gap-2 self-start rounded-xl bg-primary px-5 text-label-lg text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] transition-all hover:bg-primary-container sm:self-auto"
           >
             <Plus className="h-4 w-4" aria-hidden />
             Novo produto
@@ -173,7 +173,7 @@ export function ProdutosClient({
           description={canEdit ? "Cadastre o primeiro produto do seu cardápio." : "O responsável pela loja ainda não cadastrou produtos."}
           action={
             canEdit ? (
-              <Link href="/painel/produtos/novo" className="mt-2 text-sm font-semibold text-primary hover:underline">
+              <Link href="/painel/produtos/novo" className="mt-2 text-label-lg text-primary hover:underline">
                 Novo produto →
               </Link>
             ) : undefined
@@ -264,7 +264,7 @@ export function ProdutosClient({
             </div>
 
             {visible.length === 0 ? (
-              <p className="px-5 py-8 text-center text-sm text-text-muted">
+              <p className="px-5 py-8 text-center text-body-md text-text-muted">
                 Nenhum produto encontrado para essa busca/filtro.
               </p>
             ) : (
@@ -318,12 +318,12 @@ export function ProdutosClient({
                       </div>
 
                       <div className="flex items-center justify-between md:col-span-2 md:justify-center">
-                        <span className="md:hidden text-xs font-medium text-text-muted">Preço:</span>
+                        <span className="md:hidden text-body-sm font-medium text-text-muted">Preço:</span>
                         <span className="text-body-lg font-bold text-graphite">{formatCurrencyBRL(product.price)}</span>
                       </div>
 
                       <div className="flex items-center justify-between gap-2 md:col-span-1 md:justify-center">
-                        <span className="md:hidden text-xs font-medium text-text-muted">Disponível:</span>
+                        <span className="md:hidden text-body-sm font-medium text-text-muted">Disponível:</span>
                         <button
                           type="button"
                           role="switch"
@@ -429,7 +429,7 @@ export function ProdutosClient({
 
       <Modal open={deletingProduct !== null} onClose={() => setDeletingId(null)} title="Excluir produto?">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">
+          <p className="text-body-md text-text-muted">
             Tem certeza que deseja excluir <span className="font-semibold text-graphite">{deletingProduct?.name}</span>
             ? Essa ação não poderá ser desfeita.
           </p>
@@ -442,7 +442,7 @@ export function ProdutosClient({
               type="button"
               onClick={handleConfirmDelete}
               disabled={isPending}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-label-lg text-white transition-all duration-150 hover:bg-red/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isPending && pendingId === deletingProduct?.id && (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

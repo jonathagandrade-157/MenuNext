@@ -84,26 +84,26 @@ export function PlanoClient({
     <div className="space-y-6">
       <Card className="flex items-center justify-between gap-3 p-5">
         <div>
-          <p className="text-xs font-medium text-text-muted">Plano atual</p>
+          <p className="text-body-sm font-medium text-text-muted">Plano atual</p>
           <p className="mt-1 text-headline-sm text-graphite">{currentPlan ? currentPlan.name : "Nenhum plano assinado"}</p>
         </div>
         <Badge tone={status.tone}>{status.label}</Badge>
       </Card>
 
       {accessState !== null && (
-        <div className="rounded-xl border border-red/20 bg-red/10 px-3.5 py-2.5 text-sm font-semibold text-red">
+        <div className="rounded-xl border border-red/20 bg-red/10 px-3.5 py-2.5 text-label-lg text-red">
           {ACCESS_STATE_COPY[accessState].message}
         </div>
       )}
 
       {!billingConfigured && (
-        <div className="rounded-xl border border-amber/20 bg-amber/10 px-3.5 py-2.5 text-xs font-medium text-amber">
+        <div className="rounded-xl border border-amber/20 bg-amber/10 px-3.5 py-2.5 text-body-sm font-medium text-amber">
           A cobrança de assinaturas ainda não foi configurada pela plataforma. Tente novamente mais tarde.
         </div>
       )}
 
       {hasLiveSubscription && (
-        <div className="rounded-xl border border-border bg-surface px-3.5 py-2.5 text-xs font-medium text-text-muted">
+        <div className="rounded-xl border border-border bg-surface px-3.5 py-2.5 text-body-sm font-medium text-text-muted">
           {subscriptionStatus === "active"
             ? "Sua assinatura está em dia. Para trocar de plano, fale com o suporte."
             : provider === "mercadopago"
@@ -114,7 +114,7 @@ export function PlanoClient({
               type="button"
               disabled={isPending}
               onClick={handleResumePayment}
-              className="mt-2 inline-flex h-10 items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-white transition-colors hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
+              className="mt-2 inline-flex h-10 items-center justify-center rounded-xl bg-primary px-4 text-body-md font-bold text-white transition-colors hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
             >
               Continuar pagamento no Mercado Pago
             </button>
@@ -123,11 +123,11 @@ export function PlanoClient({
       )}
 
       {info && (
-        <div className="rounded-xl border border-border bg-surface px-3.5 py-2.5 text-sm font-medium text-graphite">{info}</div>
+        <div className="rounded-xl border border-border bg-surface px-3.5 py-2.5 text-body-md font-medium text-graphite">{info}</div>
       )}
 
       {success && (
-        <div className="rounded-xl border border-emerald/30 bg-emerald/10 px-3.5 py-2.5 text-sm font-semibold text-emerald">
+        <div className="rounded-xl border border-emerald/30 bg-emerald/10 px-3.5 py-2.5 text-label-lg text-emerald">
           Assinatura criada! Finalize o primeiro pagamento no link que o provedor de cobrança vai te enviar por e-mail.
         </div>
       )}
@@ -140,17 +140,17 @@ export function PlanoClient({
             <Card key={plan.id} className="flex flex-col gap-3 p-5">
               <div>
                 <h3 className="text-body-lg font-bold text-graphite">{plan.name}</h3>
-                {plan.description && <p className="mt-1 text-xs text-text-muted">{plan.description}</p>}
+                {plan.description && <p className="mt-1 text-body-sm text-text-muted">{plan.description}</p>}
               </div>
               <p className="text-headline-lg text-graphite">
                 {formatCurrencyBRL(plan.price)}
-                <span className="text-sm font-medium text-text-muted">/mês</span>
+                <span className="text-body-md font-medium text-text-muted">/mês</span>
               </p>
               <button
                 type="button"
                 disabled={isCurrent || isPending || !billingConfigured || hasLiveSubscription}
                 onClick={() => handleSubscribe(plan.id)}
-                className="mt-auto inline-flex h-11 items-center justify-center rounded-xl bg-primary px-4 text-sm font-bold text-white transition-colors hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
+                className="mt-auto inline-flex h-11 items-center justify-center rounded-xl bg-primary px-4 text-body-md font-bold text-white transition-colors hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isCurrent ? "Plano atual" : subscribingId === plan.id ? "Assinando..." : "Assinar este plano"}
               </button>

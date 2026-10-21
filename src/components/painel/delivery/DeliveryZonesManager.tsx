@@ -71,13 +71,13 @@ export function DeliveryZonesManager({ initialZones }: { initialZones: DeliveryZ
       <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="text-body-lg font-bold text-graphite">Zonas de entrega por bairro</h2>
-          <p className="mt-1 text-sm text-text-muted">
+          <p className="mt-1 text-body-md text-text-muted">
             Defina taxa, tempo e pedido mínimo específicos por bairro. Bairros sem zona cadastrada usam a configuração
             global acima.
           </p>
         </div>
         <Button onClick={() => setCreateOpen(true)} className="shrink-0">
-          <span className="text-lg leading-none">+</span>
+          <span className="text-headline-sm leading-none">+</span>
           Nova zona
         </Button>
       </div>
@@ -110,26 +110,26 @@ export function DeliveryZonesManager({ initialZones }: { initialZones: DeliveryZ
                   className="flex flex-col gap-2 p-3.5 md:grid md:grid-cols-12 md:items-center md:gap-4 md:px-4 md:py-3"
                 >
                   <div className="md:col-span-3">
-                    <span className="text-sm font-bold text-graphite">{zone.neighborhood}</span>
+                    <span className="text-body-md font-bold text-graphite">{zone.neighborhood}</span>
                   </div>
                   <div className="flex items-center justify-between md:col-span-2 md:justify-center">
-                    <span className="md:hidden text-xs font-medium text-text-muted">Taxa:</span>
+                    <span className="md:hidden text-body-sm font-medium text-text-muted">Taxa:</span>
                     <span className="text-body-lg font-bold text-graphite">{formatCurrencyBRL(zone.delivery_fee)}</span>
                   </div>
                   <div className="flex items-center justify-between md:col-span-2 md:justify-center">
-                    <span className="md:hidden text-xs font-medium text-text-muted">Tempo:</span>
-                    <span className="text-sm text-graphite">
+                    <span className="md:hidden text-body-sm font-medium text-text-muted">Tempo:</span>
+                    <span className="text-body-md text-graphite">
                       {hasEstimate ? `${zone.estimated_time_min_minutes}–${zone.estimated_time_max_minutes} min` : "—"}
                     </span>
                   </div>
                   <div className="flex items-center justify-between md:col-span-2 md:justify-center">
-                    <span className="md:hidden text-xs font-medium text-text-muted">Pedido mínimo:</span>
-                    <span className="text-sm text-graphite">
+                    <span className="md:hidden text-body-sm font-medium text-text-muted">Pedido mínimo:</span>
+                    <span className="text-body-md text-graphite">
                       {zone.minimum_order_value !== null ? formatCurrencyBRL(zone.minimum_order_value) : "Global"}
                     </span>
                   </div>
                   <div className="flex items-center justify-between gap-3 md:col-span-1 md:justify-center">
-                    <span className="md:hidden text-xs font-medium text-text-muted">Status:</span>
+                    <span className="md:hidden text-body-sm font-medium text-text-muted">Status:</span>
                     <button
                       type="button"
                       role="switch"
@@ -191,7 +191,7 @@ export function DeliveryZonesManager({ initialZones }: { initialZones: DeliveryZ
 
       <Modal open={deleting !== null} onClose={() => setDeleting(null)} title="Excluir zona de entrega?">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">
+          <p className="text-body-md text-text-muted">
             Tem certeza que deseja excluir a zona <span className="font-semibold text-graphite">{deleting?.neighborhood}</span>?
             Pedidos desse bairro passam a usar a taxa global.
           </p>
@@ -204,7 +204,7 @@ export function DeliveryZonesManager({ initialZones }: { initialZones: DeliveryZ
               type="button"
               onClick={handleConfirmDelete}
               disabled={isPending}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-label-lg text-white transition-all duration-150 hover:bg-red/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isPending && pendingId === deleting?.id && (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

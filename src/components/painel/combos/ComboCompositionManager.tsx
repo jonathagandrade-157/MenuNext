@@ -102,10 +102,10 @@ export function ComboCompositionManager({
 
   return (
     <div className="space-y-3">
-      <span className="block text-sm font-semibold text-graphite">Composição do combo</span>
+      <span className="block text-label-lg text-graphite">Composição do combo</span>
 
       {sorted.length === 0 ? (
-        <p className="text-xs text-text-muted">Nenhum produto neste combo.</p>
+        <p className="text-body-sm text-text-muted">Nenhum produto neste combo.</p>
       ) : (
         <div className="space-y-2">
           {sorted.map((item, index) => {
@@ -113,9 +113,9 @@ export function ComboCompositionManager({
             return (
               <div key={item.id} className="flex items-center justify-between gap-2 rounded-lg border border-border p-2.5">
                 <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-bold text-graphite">{item.product.name}</p>
+                  <p className="truncate text-body-md font-bold text-graphite">{item.product.name}</p>
                   <div className="flex items-center gap-1.5">
-                    <p className="text-xs text-text-muted">{formatCurrencyBRL(item.product.price)}</p>
+                    <p className="text-body-sm text-text-muted">{formatCurrencyBRL(item.product.price)}</p>
                     {!item.product.is_available && <Badge tone="warning">⚠️ Produto indisponível</Badge>}
                   </div>
                 </div>
@@ -172,7 +172,7 @@ export function ComboCompositionManager({
           <select
             value={pickedProductId}
             onChange={(e) => setPickedProductId(e.target.value)}
-            className="h-9 flex-1 rounded-lg border border-border bg-surface px-2.5 text-label-md text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            className="h-9 flex-1 rounded-xl border border-border bg-surface px-2.5 text-label-md text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
           >
             <option value="">Selecione um produto...</option>
             {availableProducts.map((product) => (
@@ -187,15 +187,15 @@ export function ComboCompositionManager({
             max={99}
             value={pickedQuantity}
             onChange={(e) => setPickedQuantity(e.target.value)}
-            className="h-9 w-16 rounded-lg border border-border bg-surface px-2 text-center text-label-md text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            className="h-9 w-16 rounded-xl border border-border bg-surface px-2 text-center text-label-md text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
           />
           <button
             type="button"
             disabled={!pickedProductId || isPending}
             onClick={handleAdd}
-            className="inline-flex h-9 shrink-0 items-center gap-1 rounded-lg border border-border px-3 text-label-md text-graphite hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-9 shrink-0 items-center gap-1 rounded-xl border border-border px-3 text-label-md text-graphite hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <span className="text-sm leading-none">+</span>
+            <span className="text-body-md leading-none">+</span>
             Adicionar produto
           </button>
         </div>

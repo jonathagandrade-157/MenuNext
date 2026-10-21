@@ -20,7 +20,7 @@ export default function PainelError({ reset }: { error: Error & { digest?: strin
           Erro inesperado
         </span>
         <h1 className="mt-3 text-headline-md text-graphite">Algo não funcionou como esperado</h1>
-        <p className="mx-auto mt-2 max-w-xs text-sm text-text-muted">
+        <p className="mx-auto mt-2 max-w-xs text-body-md text-text-muted">
           Ocorreu um problema ao processar sua solicitação. Tente novamente ou volte ao painel.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">

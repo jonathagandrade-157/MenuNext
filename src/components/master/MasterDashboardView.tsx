@@ -28,7 +28,7 @@ function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) 
   return (
     <div>
       <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">{title}</h2>
-      <p className="mt-1 text-sm text-text-muted">{subtitle}</p>
+      <p className="mt-1 text-body-md text-text-muted">{subtitle}</p>
     </div>
   );
 }
@@ -114,7 +114,7 @@ export function MasterDashboardView({
         <Card className="space-y-4 p-6">
           <SectionTitle title="Receita recorrente por plano" subtitle="Assinaturas em dia, agrupadas por plano." />
           {mrr.rows.length === 0 ? (
-            <p className="rounded-xl bg-surface-subdued p-4 text-sm text-text-muted">
+            <p className="rounded-xl bg-surface-subdued p-4 text-body-md text-text-muted">
               Nenhum plano cadastrado ainda.{" "}
               <Link href="/master/assinaturas" className="font-semibold text-primary hover:underline">
                 Criar planos
@@ -134,19 +134,19 @@ export function MasterDashboardView({
               )}
               <ul className="space-y-2">
                 {mrr.rows.map((row, index) => (
-                  <li key={row.plan_id} className="flex items-center justify-between gap-3 rounded-xl bg-surface-subdued px-4 py-3 text-sm">
+                  <li key={row.plan_id} className="flex items-center justify-between gap-3 rounded-xl bg-surface-subdued px-4 py-3 text-body-md">
                     <span className="flex min-w-0 items-center gap-3">
                       <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${PLAN_COLORS[index % PLAN_COLORS.length]}`} aria-hidden="true" />
                       <span className="min-w-0">
                         <span className="block truncate font-bold text-graphite">{row.name}</span>
-                        <span className="block text-xs text-text-muted">
+                        <span className="block text-body-sm text-text-muted">
                           {formatCurrencyBRL(row.price)}/mês · {row.subscribers} {row.subscribers === 1 ? "assinante" : "assinantes"}
                         </span>
                       </span>
                     </span>
                     <span className="shrink-0 text-right">
                       <span className="block font-bold text-graphite">{formatCurrencyBRL(row.revenue)}</span>
-                      <span className="block text-xs text-text-muted">{row.share === null ? "—" : `${formatPercent(row.share)} da receita`}</span>
+                      <span className="block text-body-sm text-text-muted">{row.share === null ? "—" : `${formatPercent(row.share)} da receita`}</span>
                     </span>
                   </li>
                 ))}
@@ -162,7 +162,7 @@ export function MasterDashboardView({
           <ul className="space-y-3">
             {funnel.map((step) => (
               <li key={step.id}>
-                <div className="mb-1 flex items-center justify-between text-sm">
+                <div className="mb-1 flex items-center justify-between text-body-md">
                   <span className="font-semibold text-graphite">{step.label}</span>
                   <span className="text-text-muted">
                     {step.count.toLocaleString("pt-BR")}
@@ -181,14 +181,14 @@ export function MasterDashboardView({
           <SectionTitle title="Pedidos na plataforma" subtitle="Volume de todos os restaurantes." />
           <div>
             <p className="text-headline-lg text-graphite">{stats.orders_today.toLocaleString("pt-BR")}</p>
-            <p className="mt-1 text-xs text-text-muted">
+            <p className="mt-1 text-body-sm text-text-muted">
               pedidos hoje ·{" "}
               {ordersVariation === null
                 ? "ontem sem pedidos"
                 : `${ordersVariation >= 0 ? "+" : "−"}${formatPercent(Math.abs(ordersVariation))} vs ontem`}
             </p>
           </div>
-          <dl className="divide-y divide-border text-sm">
+          <dl className="divide-y divide-border text-body-md">
             <div className="flex justify-between py-2.5">
               <dt className="text-text-muted">Neste mês</dt>
               <dd className="font-semibold text-graphite">{stats.orders_month.toLocaleString("pt-BR")}</dd>
@@ -203,7 +203,7 @@ export function MasterDashboardView({
         <Card className="space-y-4 p-6">
           <SectionTitle title="Assinaturas atrasadas" subtitle="Lojas com pagamento em atraso (acesso bloqueado)." />
           {overdue.length === 0 ? (
-            <p className="rounded-xl bg-[#ECFDF5] p-4 text-sm font-semibold text-[#047857]">Nenhuma assinatura atrasada.</p>
+            <p className="rounded-xl bg-emerald/10 p-4 text-label-lg text-emerald">Nenhuma assinatura atrasada.</p>
           ) : (
             <>
               <ul className="space-y-2">
@@ -211,11 +211,11 @@ export function MasterDashboardView({
                   <li key={row.id}>
                     <Link
                       href={`/master/restaurantes/${row.id}`}
-                      className="flex items-center justify-between gap-3 rounded-xl bg-surface-subdued px-4 py-3 text-sm hover:bg-surface-subdued/70"
+                      className="flex items-center justify-between gap-3 rounded-xl bg-surface-subdued px-4 py-3 text-body-md hover:bg-surface-subdued/70"
                     >
                       <span className="min-w-0">
                         <span className="block truncate font-bold text-graphite">{row.name}</span>
-                        <span className="block text-xs text-text-muted">
+                        <span className="block text-body-sm text-text-muted">
                           {row.plan_name ?? "Sem plano"}
                           {row.plan_price !== null && ` · ${formatCurrencyBRL(row.plan_price)}/mês`}
                         </span>
@@ -226,7 +226,7 @@ export function MasterDashboardView({
                 ))}
               </ul>
               {overdueTotal > overdue.length && (
-                <Link href="/master/restaurantes?status=overdue" className="block text-sm font-semibold text-primary hover:underline">
+                <Link href="/master/restaurantes?status=overdue" className="block text-label-lg text-primary hover:underline">
                   Ver todas ({overdueTotal}) →
                 </Link>
               )}

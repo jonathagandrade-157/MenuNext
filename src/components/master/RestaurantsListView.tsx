@@ -18,7 +18,7 @@ import {
 } from "@/lib/masterRestaurants";
 
 const inputClass =
-  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
+  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
 
 function PlanCell({ row }: { row: MasterRestaurantRow }) {
   if (!row.plan_name) return <span className="text-text-muted">Sem plano</span>;
@@ -93,7 +93,7 @@ export function RestaurantsListView({
           <div className="flex items-center gap-2">
             <Button type="submit">Filtrar</Button>
             {hasFilters && (
-              <Link href="/master/restaurantes" className="text-sm font-semibold text-text-muted hover:text-graphite">
+              <Link href="/master/restaurantes" className="text-label-lg text-text-muted hover:text-graphite">
                 Limpar
               </Link>
             )}
@@ -111,7 +111,7 @@ export function RestaurantsListView({
       ) : (
         <>
           <Card className="hidden overflow-hidden md:block">
-            <table className="w-full text-left text-sm">
+            <table className="w-full text-left text-body-md">
               <thead className="border-b border-border bg-surface-subdued text-label-md font-bold uppercase tracking-wide text-text-muted">
                 <tr>
                   <th className="px-4 py-3">Restaurante</th>
@@ -129,7 +129,7 @@ export function RestaurantsListView({
                       <Link href={`/master/restaurantes/${row.id}`} className="font-bold text-graphite hover:text-primary">
                         {row.name}
                       </Link>
-                      <p className="text-xs text-text-muted">/{row.slug}</p>
+                      <p className="text-body-sm text-text-muted">/{row.slug}</p>
                     </td>
                     <td className="px-4 py-3">
                       <RestaurantBadges row={row} />
@@ -152,13 +152,13 @@ export function RestaurantsListView({
                 <Card className="space-y-2 p-4">
                   <div>
                     <p className="font-bold text-graphite">{row.name}</p>
-                    <p className="text-xs text-text-muted">/{row.slug}</p>
+                    <p className="text-body-sm text-text-muted">/{row.slug}</p>
                   </div>
                   <RestaurantBadges row={row} />
-                  <p className="text-sm">
+                  <p className="text-body-md">
                     <PlanCell row={row} />
                   </p>
-                  <p className="text-xs text-text-muted">
+                  <p className="text-body-sm text-text-muted">
                     {row.orders_total.toLocaleString("pt-BR")} pedidos · desde {formatDateBR(row.created_at)}
                   </p>
                 </Card>
@@ -171,20 +171,20 @@ export function RestaurantsListView({
               {params.page > 1 ? (
                 <Link
                   href={buildListHref({ ...params, page: params.page - 1 })}
-                  className="text-sm font-semibold text-graphite hover:text-primary"
+                  className="text-label-lg text-graphite hover:text-primary"
                 >
                   ← Anterior
                 </Link>
               ) : (
                 <span />
               )}
-              <span className="text-xs font-medium text-text-muted">
+              <span className="text-body-sm font-medium text-text-muted">
                 Página {params.page} de {totalPages}
               </span>
               {params.page < totalPages ? (
                 <Link
                   href={buildListHref({ ...params, page: params.page + 1 })}
-                  className="text-sm font-semibold text-graphite hover:text-primary"
+                  className="text-label-lg text-graphite hover:text-primary"
                 >
                   Próxima →
                 </Link>

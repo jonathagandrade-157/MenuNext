@@ -120,7 +120,7 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
           </p>
         </div>
         <Button onClick={() => setCreateOpen(true)} className="self-start sm:self-auto">
-          <span className="text-lg leading-none">+</span>
+          <span className="text-headline-sm leading-none">+</span>
           Novo combo
         </Button>
       </div>
@@ -170,7 +170,7 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
                 ))}
               </div>
             </div>
-            <p className="shrink-0 text-xs font-medium text-text-muted">
+            <p className="shrink-0 text-body-sm font-medium text-text-muted">
               <span className="font-bold text-graphite">{combos.length}</span> combos cadastrados
             </p>
           </Card>
@@ -178,7 +178,7 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
           {rowError && <ErrorState message={rowError} />}
 
           {visible.length === 0 ? (
-            <p className="px-5 py-8 text-center text-sm text-text-muted">
+            <p className="px-5 py-8 text-center text-body-md text-text-muted">
               Nenhum combo encontrado para essa busca/filtro.
             </p>
           ) : (
@@ -204,9 +204,9 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
                           <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-border bg-surface-subdued text-label-md font-bold text-graphite">
                             {position}º
                           </span>
-                          <h3 className="truncate text-sm font-bold text-graphite">{combo.name}</h3>
+                          <h3 className="truncate text-body-md font-bold text-graphite">{combo.name}</h3>
                         </div>
-                        {combo.description && <p className="mt-1 truncate text-xs text-text-muted">{combo.description}</p>}
+                        {combo.description && <p className="mt-1 truncate text-body-sm text-text-muted">{combo.description}</p>}
                       </div>
                       <Badge tone={combo.is_available ? "success" : "neutral"} pulse={combo.is_available}>
                         {combo.is_available ? "Disponível" : "Indisponível"}
@@ -304,7 +304,7 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
 
       <Modal open={deletingCombo !== null} onClose={() => setDeletingId(null)} title="Excluir combo?">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">
+          <p className="text-body-md text-text-muted">
             Tem certeza que deseja excluir <span className="font-semibold text-graphite">{deletingCombo?.name}</span>?
             Os produtos do cardápio não serão afetados. Essa ação não poderá ser desfeita.
           </p>
@@ -317,7 +317,7 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
               type="button"
               onClick={handleConfirmDelete}
               disabled={isPending}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-label-lg text-white transition-all duration-150 hover:bg-red/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isPending && pendingId === deletingCombo?.id && (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

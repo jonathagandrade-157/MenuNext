@@ -74,13 +74,13 @@ export function ShareStoreModal({
     <Modal open={open} onClose={onClose} title="Compartilhe sua loja">
       <div className="space-y-5">
         <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-subdued px-3 py-2.5">
-          <p className="min-w-0 flex-1 truncate text-sm font-medium text-graphite">{storeUrl}</p>
+          <p className="min-w-0 flex-1 truncate text-body-md font-medium text-graphite">{storeUrl}</p>
           <CopyButton value={storeUrl} />
         </div>
 
         <div className="flex flex-col items-center gap-3 rounded-xl border border-border bg-surface-subdued p-5">
           {qrCodeFailed ? (
-            <p className="py-8 text-center text-xs text-text-muted">Não foi possível gerar o QR Code agora.</p>
+            <p className="py-8 text-center text-body-sm text-text-muted">Não foi possível gerar o QR Code agora.</p>
           ) : qrCodeDataUrl ? (
             // eslint-disable-next-line @next/next/no-img-element -- data URL local, sem otimização de imagem remota a fazer
             <img src={qrCodeDataUrl} alt={`QR Code para abrir ${storeName}`} className="h-40 w-40 rounded-lg" />
@@ -103,7 +103,7 @@ export function ShareStoreModal({
             href={whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-emerald px-5 text-sm font-semibold text-white transition-all hover:opacity-90"
+            className="inline-flex h-11 flex-1 items-center justify-center gap-2 rounded-xl bg-emerald px-5 text-label-lg text-white transition-all hover:opacity-90"
           >
             Compartilhar no WhatsApp
           </a>

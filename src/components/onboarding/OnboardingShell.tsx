@@ -30,15 +30,15 @@ export function OnboardingShell({
     <div className="min-h-screen bg-surface">
       <header className="border-b border-border bg-surface-card">
         <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-6">
-          <Link href="/" className="text-base font-extrabold text-graphite">
+          <Link href="/" className="text-body-lg font-extrabold text-graphite">
             Menu<span className="text-primary">Next</span>
           </Link>
           <div className="flex items-center gap-4">
-            <span className="text-xs font-semibold text-text-muted">Etapa {step} de 7</span>
+            <span className="text-body-sm font-semibold text-text-muted">Etapa {step} de 7</span>
             {/* O onboarding nunca é uma barreira: o lojista pode entrar no
                 painel a qualquer momento e completar a configuração depois,
                 pelo checklist. */}
-            <Link href="/painel" className="text-xs font-semibold text-primary hover:underline">
+            <Link href="/painel" className="text-body-sm font-semibold text-primary hover:underline">
               Ir para o painel
             </Link>
           </div>
@@ -49,11 +49,11 @@ export function OnboardingShell({
         {successMessage && <SuccessMessage message={successMessage} />}
 
         <div className="mb-8">
-          <div className="mb-2 text-xs font-semibold text-text-muted">{percent}% concluído</div>
+          <div className="mb-2 text-body-sm font-semibold text-text-muted">{percent}% concluído</div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-surface-subdued">
             <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${percent}%` }} />
           </div>
-          <ol className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold text-text-muted">
+          <ol className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-body-sm font-semibold text-text-muted">
             {STEP_LABELS.map((label, i) => {
               const stepNumber = i + 1;
               const isActive = stepNumber === step;
@@ -78,8 +78,8 @@ export function OnboardingShell({
         </div>
 
         <div className="rounded-2xl border border-border bg-surface-card p-8 shadow-[var(--shadow-card)]">
-          <h1 className="text-xl font-extrabold text-graphite">{title}</h1>
-          <p className="mt-1 text-sm text-text-muted">{description}</p>
+          <h1 className="text-headline-md font-extrabold text-graphite">{title}</h1>
+          <p className="mt-1 text-body-md text-text-muted">{description}</p>
           <div className="mt-6">{children}</div>
         </div>
       </div>
@@ -88,16 +88,16 @@ export function OnboardingShell({
 }
 
 export function FieldLabel({ children }: { children: React.ReactNode }) {
-  return <span className="mb-1.5 block text-sm font-semibold text-graphite">{children}</span>;
+  return <span className="mb-1.5 block text-label-lg text-graphite">{children}</span>;
 }
 
 export const inputClass =
-  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
+  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
 
 export function ErrorMessage({ message }: { message?: string }) {
   if (!message) return null;
   return (
-    <div className="rounded-lg border border-[#FEF2F2] bg-[#FEF2F2] px-3 py-2 text-sm font-medium text-red">
+    <div className="rounded-lg border border-red/20 bg-red/10 px-3 py-2 text-body-md font-medium text-red">
       {message}
     </div>
   );
@@ -106,7 +106,7 @@ export function ErrorMessage({ message }: { message?: string }) {
 export function SuccessMessage({ message }: { message?: string }) {
   if (!message) return null;
   return (
-    <div className="mb-6 rounded-lg border border-[#ECFDF5] bg-[#ECFDF5] px-4 py-3 text-sm font-medium text-emerald">
+    <div className="mb-6 rounded-lg border border-emerald/20 bg-emerald/10 px-4 py-3 text-body-md font-medium text-emerald">
       {message}
     </div>
   );
@@ -132,14 +132,14 @@ export function StepNavigation({
   return (
     <div className="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-4">
-        <Link href={backHref} className="text-sm font-semibold text-text-muted hover:text-graphite">
+        <Link href={backHref} className="text-label-lg text-text-muted hover:text-graphite">
           ← Voltar
         </Link>
         <button
           type="submit"
           formAction={skipAction}
           formNoValidate
-          className="text-sm font-semibold text-text-muted hover:text-graphite"
+          className="text-label-lg text-text-muted hover:text-graphite"
         >
           Pular por enquanto
         </button>

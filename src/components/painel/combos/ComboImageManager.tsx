@@ -31,13 +31,13 @@ export function ComboImageManager({ comboId, imageUrl }: { comboId: string; imag
 
   return (
     <div className="space-y-2">
-      <span className="block text-sm font-semibold text-graphite">Imagem</span>
+      <span className="block text-label-lg text-graphite">Imagem</span>
       <div className="flex items-center gap-3">
         {imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={imageUrl} alt="Imagem do combo" className="h-16 w-16 rounded-lg object-cover" />
         ) : (
-          <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-surface-subdued text-xs text-text-muted">
+          <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-surface-subdued text-body-sm text-text-muted">
             Sem foto
           </div>
         )}

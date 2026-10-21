@@ -9,9 +9,9 @@ import { Card } from "@/components/ui/Card";
 import type { Restaurant } from "@/lib/tenant";
 
 const inputClass =
-  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
+  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
 
-const fieldLabelClass = "mb-1.5 block text-sm font-semibold text-graphite";
+const fieldLabelClass = "mb-1.5 block text-label-lg text-graphite";
 
 function SaveButton() {
   const { pending } = useFormStatus();
@@ -34,7 +34,7 @@ export function ContactInfoForm({ restaurant }: { restaurant: Restaurant }) {
   return (
     <Card className="p-6">
       <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Contato e divulgação</h2>
-      <p className="mt-1 text-sm text-text-muted">
+      <p className="mt-1 text-body-md text-text-muted">
         WhatsApp e bio aparecem na sua loja pública. O e-mail é só para uso interno.
       </p>
 
@@ -60,7 +60,7 @@ export function ContactInfoForm({ restaurant }: { restaurant: Restaurant }) {
               placeholder="contato@seurestaurante.com"
               className={inputClass}
             />
-            <p className="mt-1 text-xs text-text-muted">Para recebimento de relatórios e faturamento — não aparece na loja pública.</p>
+            <p className="mt-1 text-body-sm text-text-muted">Para recebimento de relatórios e faturamento — não aparece na loja pública.</p>
           </div>
         </div>
 
@@ -74,7 +74,7 @@ export function ContactInfoForm({ restaurant }: { restaurant: Restaurant }) {
             placeholder="Hambúrgueres artesanais grelhados no fogo, entregues com agilidade."
             className={`${inputClass} h-auto resize-none py-2.5`}
           />
-          <p className="mt-1 text-xs text-text-muted">Aparece no topo do seu cardápio público, no lugar de &ldquo;Cardápio digital&rdquo;.</p>
+          <p className="mt-1 text-body-sm text-text-muted">Aparece no topo do seu cardápio público, no lugar de &ldquo;Cardápio digital&rdquo;.</p>
         </div>
 
         {state.status === "error" && <p className="text-label-md text-red">{state.message}</p>}

@@ -47,7 +47,7 @@ export function StoreStatusBar({
           <Badge tone={isActive ? "success" : "neutral"} pulse={isActive}>
             {isActive ? "Loja Aberta" : "Loja Pausada"}
           </Badge>
-          <p className="text-sm text-text-muted">
+          <p className="text-body-md text-text-muted">
             {isActive ? "Recebendo pedidos normalmente" : "Cardápio visível, novos pedidos bloqueados"}
           </p>
         </div>
@@ -58,8 +58,8 @@ export function StoreStatusBar({
           disabled={isPending}
           className={
             isActive
-              ? "h-9 rounded-lg border border-red/30 px-4 text-sm font-bold text-red transition-all hover:bg-red/5 disabled:cursor-not-allowed disabled:opacity-50"
-              : "h-9 rounded-lg bg-primary px-4 text-sm font-bold text-white transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
+              ? "h-9 rounded-lg border border-red/30 px-4 text-body-md font-bold text-red transition-all hover:bg-red/5 disabled:cursor-not-allowed disabled:opacity-50"
+              : "h-9 rounded-lg bg-primary px-4 text-body-md font-bold text-white transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
           }
         >
           {isPending ? "Atualizando..." : isActive ? "Pausar pedidos" : "Reabrir loja"}
@@ -68,16 +68,16 @@ export function StoreStatusBar({
       </div>
 
       {error && (
-        <div className="rounded-lg border border-[#FEF2F2] bg-[#FEF2F2] px-3 py-2 text-sm font-medium text-red">{error}</div>
+        <div className="rounded-lg border border-red/20 bg-red/10 px-3 py-2 text-body-md font-medium text-red">{error}</div>
       )}
 
       {unavailableProductCount > 0 && (
-        <div className="flex items-center justify-between gap-3 rounded-xl border border-[#FFFBEB] bg-[#FFFBEB] px-4 py-2.5 text-sm">
-          <p className="font-medium text-[#B45309]">
+        <div className="flex items-center justify-between gap-3 rounded-xl border border-amber/30 bg-amber/10 px-4 py-2.5 text-body-md">
+          <p className="font-medium text-amber-strong">
             {unavailableProductCount} produto{unavailableProductCount > 1 ? "s" : ""} marcado
             {unavailableProductCount > 1 ? "s" : ""} como indisponíve{unavailableProductCount > 1 ? "is" : "l"} no cardápio
           </p>
-          <Link href="/painel/produtos" className="shrink-0 font-bold text-[#B45309] hover:underline">
+          <Link href="/painel/produtos" className="shrink-0 font-bold text-amber-strong hover:underline">
             Ajustar
           </Link>
         </div>
