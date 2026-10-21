@@ -7,7 +7,7 @@ export default async function AparenciaPage() {
   const { supabase, restaurant } = await requireOwnerPage();
 
   return (
-    <div className="mx-auto max-w-3xl space-y-6 px-6 py-8">
+    <div className="mx-auto max-w-5xl space-y-6 px-6 py-8">
       <div>
         <h1 className="text-headline-lg text-graphite">Aparência</h1>
         <p className="mt-0.5 text-body-md text-text-muted">
@@ -16,6 +16,7 @@ export default async function AparenciaPage() {
       </div>
 
       <AparenciaClient
+        storeName={restaurant.name}
         logoUrl={restaurant.logo_path ? getPublicAssetUrl(supabase, restaurant.logo_path) : null}
         coverUrl={restaurant.cover_path ? getPublicAssetUrl(supabase, restaurant.cover_path) : null}
         themePrimaryColor={restaurant.theme_primary_color}
