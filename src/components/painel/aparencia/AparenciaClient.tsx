@@ -3,8 +3,9 @@
 import { useActionState, useEffect, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { CircleCheck, RotateCcw, TriangleAlert } from "lucide-react";
-import { saveThemeColorAction, uploadCoverAction, uploadLogoAction } from "@/lib/actions/aparencia";
-import { initialAparenciaState, initialThemeColorState } from "@/lib/form-state";
+import { saveBannerAction, saveThemeColorAction, uploadCoverAction, uploadLogoAction } from "@/lib/actions/aparencia";
+import { initialAparenciaState, initialBannerState, initialThemeColorState } from "@/lib/form-state";
+import { BANNER_MESSAGE_MAX } from "@/lib/banner";
 import { buttonContrast, dominantColors, isHexColor } from "@/lib/colorContrast";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -165,6 +166,67 @@ function ThemeColorCard({
   );
 }
 
+function BannerCard({
+  enabled,
+  message,
+  onEnabledChange,
+  onMessageChange,
+}: {
+  enabled: boolean;
+  message: string;
+  onEnabledChange: (value: boolean) => void;
+  onMessageChange: (value: string) => void;
+}) {
+  const [state, formAction] = useActionState(saveBannerAction, initialBannerState);
+
+  return (
+    <Card className="p-5 sm:col-span-2">
+      <h2 className="text-body-lg font-bold text-graphite">Banner promocional</h2>
+      <p className="mt-0.5 text-body-sm text-text-muted">
+        Um aviso curto no topo da sua loja (por exemplo, uma promoção do dia). Aparece para todos os clientes.
+      </p>
+
+      <form action={formAction} className="mt-4 space-y-3">
+        <label className="flex cursor-pointer items-center gap-3">
+          <input
+            type="checkbox"
+            name="banner_enabled"
+            checked={enabled}
+            onChange={(e) => onEnabledChange(e.target.checked)}
+            className="peer sr-only"
+          />
+          <span
+            aria-hidden
+            className="relative h-6 w-11 shrink-0 rounded-full bg-border transition-colors peer-checked:bg-emerald peer-focus-visible:ring-[3px] peer-focus-visible:ring-primary/30 after:absolute after:left-0.5 after:top-0.5 after:h-5 after:w-5 after:rounded-full after:bg-white after:shadow after:transition-transform peer-checked:after:translate-x-5"
+          />
+          <span className="text-label-lg text-graphite">{enabled ? "Banner ligado" : "Banner desligado"}</span>
+        </label>
+
+        <div>
+          <textarea
+            name="banner_message"
+            value={message}
+            onChange={(e) => onMessageChange(e.target.value)}
+            rows={2}
+            maxLength={BANNER_MESSAGE_MAX}
+            placeholder="Ex.: Terça do Burger: 20% off em todos os combos"
+            aria-label="Texto do banner"
+            className="w-full rounded-xl border border-border bg-surface-card px-3 py-2.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          />
+          <p className="mt-1 text-right text-body-sm text-text-muted">
+            {message.length}/{BANNER_MESSAGE_MAX}
+          </p>
+        </div>
+
+        {state.status === "error" && <p className="text-label-md text-red">{state.message}</p>}
+        {state.status === "success" && <p className="text-label-md text-emerald">Banner salvo!</p>}
+
+        <SubmitButton label="Salvar banner" />
+      </form>
+    </Card>
+  );
+}
+
 function ImageUploadCard({
   title,
   description,
@@ -237,11 +299,14 @@ function StorePreview({
   logoUrl,
   coverUrl,
   color,
+  bannerMessage,
 }: {
   storeName: string;
   logoUrl: string | null;
   coverUrl: string | null;
   color: string;
+  /** Texto do banner ligado (null = sem banner). */
+  bannerMessage: string | null;
 }) {
   const safeColor = isHexColor(color) ? color : DEFAULT_PRIMARY_COLOR;
   const themeStyle = {
@@ -272,6 +337,9 @@ function StorePreview({
             )}
           </div>
           <p className="mt-2 text-body-lg font-bold text-graphite">{storeName}</p>
+          {bannerMessage && (
+            <p className="mt-2 rounded-xl bg-graphite px-2.5 py-2 text-label-md text-white">{bannerMessage}</p>
+          )}
           <div className="mt-3 flex gap-1.5">
             <span className="rounded-lg bg-primary px-3 py-1 text-label-md text-white">Categoria</span>
             <span className="rounded-lg border border-border px-3 py-1 text-label-md text-graphite">Outra</span>
@@ -293,15 +361,19 @@ function StorePreview({
 
 export function AparenciaClient({
   storeName,
+  banner,
   logoUrl,
   coverUrl,
   themePrimaryColor,
 }: {
   storeName: string;
+  banner: { isEnabled: boolean; message: string } | null;
   logoUrl: string | null;
   coverUrl: string | null;
   themePrimaryColor: string | null;
 }) {
+  const [bannerEnabled, setBannerEnabled] = useState(banner?.isEnabled ?? false);
+  const [bannerText, setBannerText] = useState(banner?.message ?? "");
   const [color, setColor] = useState(themePrimaryColor ?? DEFAULT_PRIMARY_COLOR);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
   const [coverPreview, setCoverPreview] = useState<string | null>(null);
@@ -331,10 +403,22 @@ export function AparenciaClient({
           onPreviewChange={setCoverPreview}
         />
         <ThemeColorCard color={color} onColorChange={setColor} logoSrc={shownLogo} />
+        <BannerCard
+          enabled={bannerEnabled}
+          message={bannerText}
+          onEnabledChange={setBannerEnabled}
+          onMessageChange={setBannerText}
+        />
       </div>
 
       <div className="lg:sticky lg:top-6">
-        <StorePreview storeName={storeName} logoUrl={shownLogo} coverUrl={shownCover} color={color} />
+        <StorePreview
+          storeName={storeName}
+          logoUrl={shownLogo}
+          coverUrl={shownCover}
+          color={color}
+          bannerMessage={bannerEnabled && bannerText.trim() ? bannerText.trim() : null}
+        />
       </div>
     </div>
   );

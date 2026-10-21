@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Search } from "lucide-react";
-import type { PublicCategoryWithProducts, PublicCombo } from "@/lib/store";
+import type { PublicCategoryWithProducts, PublicCombo, PublicProduct } from "@/lib/store";
 import { StoreComboCard } from "./StoreComboCard";
 import { StoreProductCard } from "./StoreProductCard";
 
@@ -13,10 +13,13 @@ export function StoreCatalog({
   slug,
   categories,
   combos,
+  featured,
 }: {
   slug: string;
   categories: PublicCategoryWithProducts[];
   combos: PublicCombo[];
+  /** Produtos marcados como destaque pelo dono (já filtrados e limitados). */
+  featured: PublicProduct[];
 }) {
   const [query, setQuery] = useState("");
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -46,9 +49,16 @@ export function StoreCatalog({
     [categories, term]
   );
 
+  // Destaques só aparecem sem busca ativa: com busca, o resultado já é o que a pessoa quer ver.
+  const showFeatured = featured.length > 0 && !term;
+
   const sectionIds = useMemo(
-    () => [...(visibleCombos.length > 0 ? ["combos"] : []), ...visibleCategories.map((c) => `categoria-${c.id}`)],
-    [visibleCombos.length, visibleCategories]
+    () => [
+      ...(showFeatured ? ["destaques"] : []),
+      ...(visibleCombos.length > 0 ? ["combos"] : []),
+      ...visibleCategories.map((c) => `categoria-${c.id}`),
+    ],
+    [showFeatured, visibleCombos.length, visibleCategories]
   );
 
   // Destaca o atalho da seção que está na faixa de leitura da tela.
@@ -91,6 +101,11 @@ export function StoreCatalog({
           aria-label="Categorias do cardápio"
           className="sticky top-0 z-30 mt-3 flex items-center gap-2 overflow-x-auto border-y border-border bg-surface-card/95 px-3.5 py-2.5 backdrop-blur-md [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
+          {showFeatured && (
+            <a href="#destaques" className={chipClass("destaques")}>
+              Destaques
+            </a>
+          )}
           {visibleCombos.length > 0 && (
             <a href="#combos" className={chipClass("combos")}>
               Combos
@@ -106,6 +121,25 @@ export function StoreCatalog({
 
       {sectionIds.length === 0 && (
         <p className="px-6 py-16 text-center text-body-md text-text-muted">Nada encontrado para &ldquo;{query.trim()}&rdquo;.</p>
+      )}
+
+      {showFeatured && (
+        <section id="destaques" className="scroll-mt-14 px-3.5 py-4">
+          <h2 className="mb-3 text-headline-sm text-graphite">Destaques</h2>
+          <div className="grid gap-3 md:grid-cols-2">
+            {featured.map((product) => (
+              <StoreProductCard
+                key={product.id}
+                href={`/loja/${slug}/produto/${product.id}`}
+                name={product.name}
+                description={product.description}
+                price={product.price}
+                imageUrl={product.imageUrl}
+                isAvailable={product.is_available}
+              />
+            ))}
+          </div>
+        </section>
       )}
 
       {visibleCombos.length > 0 && (

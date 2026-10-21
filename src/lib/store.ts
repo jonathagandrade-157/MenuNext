@@ -337,3 +337,14 @@ export function computeStoreOpenState(
 export function formatCurrencyBRL(value: number): string {
   return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
+
+/** Banner da loja: só devolve quando está ligado e tem texto (a RLS já limita a lojas publicadas). */
+export async function getPublicBanner(supabase: SupabaseClient, restaurantId: string): Promise<{ message: string } | null> {
+  const { data, error } = await supabase
+    .from("restaurant_banners")
+    .select("is_enabled, message")
+    .eq("restaurant_id", restaurantId)
+    .maybeSingle();
+  if (error || !data || !data.is_enabled || !data.message) return null;
+  return { message: data.message as string };
+}

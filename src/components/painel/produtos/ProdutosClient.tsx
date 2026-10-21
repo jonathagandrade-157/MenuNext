@@ -2,12 +2,18 @@
 
 import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
-import { ChevronDown, ChevronUp, CircleCheck, CirclePause, ImageIcon, Package, Pencil, Plus, Search, Tags, Trash2 } from "lucide-react";
+import { ChevronDown, ChevronUp, CircleCheck, CirclePause, ImageIcon, Package, Pencil, Plus, Search, Star, Tags, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { EmptyState, ErrorState } from "@/components/ui/States";
 import { Modal } from "@/components/ui/Modal";
-import { deleteProductAction, moveProductAction, toggleProductAvailableAction, updateProductAction } from "@/lib/actions/products";
+import {
+  deleteProductAction,
+  moveProductAction,
+  toggleProductAvailableAction,
+  toggleProductFeaturedAction,
+  updateProductAction,
+} from "@/lib/actions/products";
 import { formatCurrencyBRL } from "@/lib/products";
 import type { AddonGroup, Category, Product, ProductAddonGroupWithGroup, ProductImage } from "@/lib/tenant";
 import { ProductAddonGroupsManager } from "./ProductAddonGroupsManager";
@@ -109,6 +115,16 @@ export function ProdutosClient({
       const result = await toggleProductAvailableAction(product.id, !product.is_available);
       setPendingId(null);
       if (!result.ok) setRowError(result.error ?? "Não foi possível atualizar.");
+    });
+  }
+
+  function handleFeatured(product: ProductUI) {
+    setRowError(null);
+    setPendingId(product.id);
+    startTransition(async () => {
+      const result = await toggleProductFeaturedAction(product.id, !product.is_featured);
+      setPendingId(null);
+      if (!result.ok) setRowError(result.error ?? "Não foi possível atualizar o destaque.");
     });
   }
 
@@ -347,6 +363,17 @@ export function ProdutosClient({
 
                       {canEdit && (
                         <div className="flex items-center justify-end gap-1.5 border-t border-border pt-2 md:col-span-2 md:border-t-0 md:pt-0">
+                          <button
+                            type="button"
+                            title={product.is_featured ? "Remover dos destaques da loja" : "Destacar na loja"}
+                            aria-label={product.is_featured ? `Remover ${product.name} dos destaques` : `Destacar ${product.name} na loja`}
+                            aria-pressed={product.is_featured}
+                            disabled={isRowPending}
+                            onClick={() => handleFeatured(product)}
+                            className="rounded-lg p-1.5 text-text-muted hover:bg-amber/10 hover:text-amber-strong disabled:cursor-not-allowed disabled:opacity-30"
+                          >
+                            <Star className={`h-4 w-4 ${product.is_featured ? "fill-amber text-amber" : ""}`} aria-hidden />
+                          </button>
                           <button
                             type="button"
                             title="Mover para cima"
