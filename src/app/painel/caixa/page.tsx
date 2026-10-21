@@ -23,8 +23,8 @@ export default async function CaixaPage() {
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-6 py-8">
       <div>
-        <h1 className="text-2xl font-black tracking-tight text-graphite">Frente de Caixa</h1>
-        <p className="mt-0.5 text-sm font-medium text-text-muted">
+        <h1 className="text-headline-lg text-graphite">Frente de Caixa</h1>
+        <p className="mt-0.5 text-body-md text-text-muted">
           Registre vendas de balcão e telefone. O pedido entra direto no Kanban/KDS, igual aos pedidos online.
         </p>
       </div>

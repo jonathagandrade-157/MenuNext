@@ -75,8 +75,8 @@ export function MasterMetricsView({ metrics, period }: { metrics: MasterMetrics;
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-graphite">Métricas da plataforma</h1>
-          <p className="mt-0.5 text-sm font-medium text-text-muted">Crescimento, ativação, receita e retenção do MenuNext.</p>
+          <h1 className="text-headline-lg text-graphite">Métricas da plataforma</h1>
+          <p className="mt-0.5 text-body-md text-text-muted">Crescimento, ativação, receita e retenção do MenuNext.</p>
         </div>
         <nav className="flex gap-1 rounded-xl bg-surface-subdued p-1" aria-label="Período">
           {METRIC_PERIODS.map((days) => (

@@ -37,8 +37,8 @@ export default async function ConfiguracoesPage() {
   return (
     <div className="mx-auto max-w-3xl space-y-6 px-6 py-8">
       <div>
-        <h1 className="text-2xl font-black tracking-tight text-graphite">Configurações gerais</h1>
-        <p className="mt-0.5 text-sm font-medium text-text-muted">Status da loja, contato, bio e link público de divulgação.</p>
+        <h1 className="text-headline-lg text-graphite">Configurações gerais</h1>
+        <p className="mt-0.5 text-body-md text-text-muted">Status da loja, contato, bio e link público de divulgação.</p>
       </div>
 
       {canToggleStatus ? (

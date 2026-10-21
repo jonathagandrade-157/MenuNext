@@ -129,8 +129,8 @@ export function UsuariosClient({
 
       <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-graphite">Usuários e permissões</h1>
-          <p className="mt-0.5 text-sm font-medium text-text-muted">
+          <h1 className="text-headline-lg text-graphite">Usuários e permissões</h1>
+          <p className="mt-0.5 text-body-md text-text-muted">
             Gerencie quem tem acesso ao painel do seu restaurante.
           </p>
         </div>

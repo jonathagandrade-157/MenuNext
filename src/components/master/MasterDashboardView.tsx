@@ -74,8 +74,8 @@ export function MasterDashboardView({
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6">
       <div>
-        <h1 className="text-2xl font-black tracking-tight text-graphite">Visão geral</h1>
-        <p className="mt-0.5 text-sm font-medium text-text-muted">Acompanhe a operação e o crescimento do MenuNext em nível global.</p>
+        <h1 className="text-headline-lg text-graphite">Visão geral</h1>
+        <p className="mt-0.5 text-body-md text-text-muted">Acompanhe a operação e o crescimento do MenuNext em nível global.</p>
       </div>
 
       <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">

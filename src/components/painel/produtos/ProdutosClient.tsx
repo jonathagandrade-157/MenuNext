@@ -149,7 +149,7 @@ export function ProdutosClient({
 
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <h1 className="text-display text-graphite">Produtos</h1>
+          <h1 className="text-headline-lg text-graphite">Produtos</h1>
           <p className="mt-0.5 text-body-md text-text-muted">
             {canEdit
               ? "Gerencie os itens disponíveis no cardápio da sua loja em tempo real."

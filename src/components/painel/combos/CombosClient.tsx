@@ -129,8 +129,8 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
 
       <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 sm:flex-row sm:items-center">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-graphite">Combos</h1>
-          <p className="mt-0.5 text-sm font-medium text-text-muted">
+          <h1 className="text-headline-lg text-graphite">Combos</h1>
+          <p className="mt-0.5 text-body-md text-text-muted">
             Combinações de produtos existentes com preço próprio, definido por você.
           </p>
         </div>

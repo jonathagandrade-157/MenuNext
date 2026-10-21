@@ -59,8 +59,8 @@ export function RestaurantsListView({
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6">
       <div>
-        <h1 className="text-2xl font-black tracking-tight text-graphite">Restaurantes</h1>
-        <p className="mt-0.5 text-sm font-medium text-text-muted">
+        <h1 className="text-headline-lg text-graphite">Restaurantes</h1>
+        <p className="mt-0.5 text-body-md text-text-muted">
           {total === 1 ? "1 restaurante" : `${total} restaurantes`}
           {hasFilters ? " encontrados com os filtros atuais." : " cadastrados na plataforma."}
         </p>
