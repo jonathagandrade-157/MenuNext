@@ -4,6 +4,9 @@ import { PanelTopbar } from "@/components/layout/PanelTopbar";
 import { SubscriptionGate } from "@/components/painel/SubscriptionGate";
 import { getPublicAssetUrl } from "@/lib/storage/assets";
 import { getAuthedUser, getMyAccessState, getMyRestaurant, getMyMembership } from "@/lib/tenant";
+import { TermsGate } from "@/components/legal/TermsGate";
+import { LEGAL_LAST_UPDATED } from "@/lib/legal";
+import { needsTermsAcceptance } from "@/lib/termsAcceptance";
 
 // ownerOnly (JON-10, P1-02): STAFF (convidado via JON-27) só vê o operacional
 // do dia a dia e, no cardápio, Produtos e Adicionais SOMENTE para ligar/desligar
@@ -67,6 +70,9 @@ export default async function PainelLayout({ children }: { children: React.React
   // completa a loja no próprio ritmo. Ver reestruturação do onboarding.
   const { supabase, user } = await getAuthedUser();
   if (!user) redirect("/cadastro");
+
+  // Termos/Política atualizados (ou nunca aceitos nesta conta): reaceite antes de seguir.
+  if (needsTermsAcceptance(user.user_metadata, LEGAL_LAST_UPDATED)) return <TermsGate />;
 
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) redirect("/onboarding/passo-1");
