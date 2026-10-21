@@ -1,3 +1,4 @@
+import { Check } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
 import { getPublicOrder, getPublicRestaurantBySlug, formatCurrencyBRL } from "@/lib/store";
@@ -37,16 +38,24 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/pedido/[o
 
   return (
     <div className="pb-10">
-      <div className="flex flex-col items-center gap-2 bg-emerald/10 px-3.5 py-8 text-center">
-        <span className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald text-2xl text-white">✓</span>
-        <h1 className="text-lg font-extrabold text-graphite">Pedido recebido!</h1>
-        <p className="text-sm text-text-muted">Pedido #{order.order_number} em {order.restaurant_name}</p>
+      <div className="flex flex-col items-center gap-2 bg-emerald/10 px-3.5 py-8 text-center md:py-10">
+        <span className="flex h-14 w-14 items-center justify-center rounded-full bg-emerald/20 text-emerald">
+          <Check className="h-8 w-8" aria-hidden />
+        </span>
+        <h1 className="text-headline-md text-graphite md:text-display">Pedido recebido com sucesso!</h1>
+        <p className="max-w-md text-body-md text-text-muted">
+          Seu pedido foi enviado direto para a cozinha de <span className="font-semibold text-graphite">{order.restaurant_name}</span>.
+        </p>
+        <p className="mt-1 text-text-muted">
+          <span className="text-label-sm uppercase">Pedido</span>{" "}
+          <span className="text-headline-md text-primary">#{order.order_number}</span>
+        </p>
         <OrderStatusBadgeLive publicId={order.public_id} initialStatus={order.status as OrderStatus} />
       </div>
 
-      <div className="space-y-4 px-3.5 py-4">
-        <section className="space-y-2 rounded-2xl border border-border bg-surface-card p-3.5">
-          <h2 className="text-sm font-extrabold text-graphite">Itens do pedido</h2>
+      <div className="mx-auto grid max-w-5xl items-start gap-4 px-3.5 py-4 lg:grid-cols-2 lg:px-6">
+        <section className="space-y-2 rounded-2xl border border-border bg-surface-card p-4 shadow-card">
+          <h2 className="text-body-lg font-bold text-graphite">Itens do pedido</h2>
           <div className="space-y-2">
             {order.items.map((item, index) => (
               <div key={index} className="text-sm">
@@ -80,15 +89,15 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/pedido/[o
                 <span className="font-semibold text-graphite">{formatCurrencyBRL(order.delivery_fee)}</span>
               </div>
             )}
-            <div className="flex justify-between text-base font-extrabold text-graphite">
+            <div className="flex items-baseline justify-between text-headline-sm text-graphite">
               <span>Total</span>
               <span>{formatCurrencyBRL(order.total)}</span>
             </div>
           </div>
         </section>
 
-        <section className="space-y-1.5 rounded-2xl border border-border bg-surface-card p-3.5">
-          <h2 className="text-sm font-extrabold text-graphite">{FULFILLMENT_LABEL[order.fulfillment_type]}</h2>
+        <section className="space-y-1.5 rounded-2xl border border-border bg-surface-card p-4 shadow-card">
+          <h2 className="text-body-lg font-bold text-graphite">{FULFILLMENT_LABEL[order.fulfillment_type]}</h2>
           {order.fulfillment_type === "delivery" ? (
             <p className="text-sm text-text-muted">
               {order.delivery_street}, {order.delivery_number}
@@ -108,8 +117,8 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/pedido/[o
           )}
         </section>
 
-        <section className="space-y-2 rounded-2xl border border-border bg-surface-card p-3.5">
-          <h2 className="text-sm font-extrabold text-graphite">Pagamento</h2>
+        <section className="space-y-2 rounded-2xl border border-border bg-surface-card p-4 shadow-card">
+          <h2 className="text-body-lg font-bold text-graphite">Pagamento</h2>
           <p className="text-sm text-text-muted">{PAYMENT_METHOD_LABELS[order.payment_method]}</p>
           {order.payment_method === "cash" && order.change_for !== null && (
             <p className="text-sm text-text-muted">Troco para {formatCurrencyBRL(order.change_for)}</p>
@@ -123,18 +132,18 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/pedido/[o
         </section>
 
         {order.observation && (
-          <section className="space-y-1 rounded-2xl border border-border bg-surface-card p-3.5">
-            <h2 className="text-sm font-extrabold text-graphite">Observação</h2>
+          <section className="space-y-1 rounded-2xl border border-border bg-surface-card p-4 shadow-card">
+            <h2 className="text-body-lg font-bold text-graphite">Observação</h2>
             <p className="text-sm text-text-muted">{order.observation}</p>
           </section>
         )}
 
-        <div className="flex flex-col gap-2 pt-2">
+        <div className="flex flex-col gap-2 pt-2 lg:col-span-2 lg:mx-auto lg:w-full lg:max-w-md">
           <Link
             href={`/loja/${slug}/pedido/${order.public_id}/rastreamento`}
-            className="flex h-11 w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-white"
+            className="flex h-12 w-full items-center justify-center rounded-xl bg-primary text-label-lg text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] hover:bg-primary-container"
           >
-            Acompanhar pedido
+            Acompanhar pedido em tempo real
           </Link>
           <Link
             href={`/loja/${slug}`}
