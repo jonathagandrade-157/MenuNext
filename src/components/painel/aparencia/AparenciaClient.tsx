@@ -38,8 +38,8 @@ function ThemeColorCard({ themePrimaryColor }: { themePrimaryColor: string | nul
           />
         </div>
 
-        {state.status === "error" && <p className="text-xs font-semibold text-red">{state.message}</p>}
-        {state.status === "success" && <p className="text-xs font-semibold text-emerald">Salvo com sucesso!</p>}
+        {state.status === "error" && <p className="text-label-md text-red">{state.message}</p>}
+        {state.status === "success" && <p className="text-label-md text-emerald">Salvo com sucesso!</p>}
 
         <SubmitButton label="Salvar cor" />
       </form>
@@ -109,8 +109,8 @@ function ImageUploadCard({
           className="block w-full text-sm text-text-muted file:mr-3 file:rounded-lg file:border-0 file:bg-primary/10 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-primary hover:file:bg-primary/20"
         />
 
-        {state.status === "error" && <p className="text-xs font-semibold text-red">{state.message}</p>}
-        {state.status === "success" && <p className="text-xs font-semibold text-emerald">Salvo com sucesso!</p>}
+        {state.status === "error" && <p className="text-label-md text-red">{state.message}</p>}
+        {state.status === "success" && <p className="text-label-md text-emerald">Salvo com sucesso!</p>}
 
         <SubmitButton label="Salvar" />
       </form>

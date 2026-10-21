@@ -30,7 +30,7 @@ function Avatar({ label, tone }: { label: string; tone: "owner" | "staff" | "inv
         ? "bg-blue/15 text-blue"
         : "bg-surface-subdued text-text-muted";
   return (
-    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-bold ${toneClasses}`}>
+    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-label-md font-bold ${toneClasses}`}>
       {initialsOf(label)}
     </div>
   );
@@ -143,15 +143,15 @@ export function UsuariosClient({
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
         <Card className="p-4">
           <p className="text-xs font-medium text-text-muted">Total de usuários</p>
-          <p className="mt-1 text-2xl font-black text-graphite">{members.length}</p>
+          <p className="mt-1 text-headline-lg text-graphite">{members.length}</p>
         </Card>
         <Card className="p-4">
           <p className="text-xs font-medium text-text-muted">Colaboradores</p>
-          <p className="mt-1 text-2xl font-black text-graphite">{staffCount}</p>
+          <p className="mt-1 text-headline-lg text-graphite">{staffCount}</p>
         </Card>
         <Card className="p-4">
           <p className="text-xs font-medium text-text-muted">Convites pendentes</p>
-          <p className="mt-1 text-2xl font-black text-graphite">{pendingInvites.length}</p>
+          <p className="mt-1 text-headline-lg text-graphite">{pendingInvites.length}</p>
         </Card>
       </div>
 
@@ -198,7 +198,7 @@ export function UsuariosClient({
                       setRemoveError(null);
                       setRemoving(member);
                     }}
-                    className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
+                    className="rounded-lg px-2.5 py-1.5 text-label-md text-red hover:bg-red/10"
                   >
                     Remover
                   </button>
@@ -249,7 +249,7 @@ export function UsuariosClient({
                       type="button"
                       disabled={isPending && pendingId === invite.id}
                       onClick={() => handleResend(invite)}
-                      className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
+                      className="rounded-lg px-2.5 py-1.5 text-label-md text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
                     >
                       Reenviar
                     </button>
@@ -259,7 +259,7 @@ export function UsuariosClient({
                         setRevokeError(null);
                         setRevoking(invite);
                       }}
-                      className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
+                      className="rounded-lg px-2.5 py-1.5 text-label-md text-red hover:bg-red/10"
                     >
                       Revogar
                     </button>

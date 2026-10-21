@@ -70,7 +70,7 @@ export function DeliveryZonesManager({ initialZones }: { initialZones: DeliveryZ
     <Card className="space-y-4 p-6">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Zonas de entrega por bairro</h2>
+          <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Zonas de entrega por bairro</h2>
           <p className="mt-1 text-sm text-text-muted">
             Defina taxa, tempo e pedido mínimo específicos por bairro. Bairros sem zona cadastrada usam a configuração
             global acima.
@@ -91,7 +91,7 @@ export function DeliveryZonesManager({ initialZones }: { initialZones: DeliveryZ
         />
       ) : (
         <div className="overflow-hidden rounded-xl border border-border">
-          <div className="hidden grid-cols-12 gap-4 border-b border-border bg-surface-subdued/70 px-4 py-2.5 text-[11px] font-bold uppercase tracking-wide text-text-muted md:grid">
+          <div className="hidden grid-cols-12 gap-4 border-b border-border bg-surface-subdued/70 px-4 py-2.5 text-label-sm uppercase text-text-muted md:grid">
             <div className="col-span-3">Bairro</div>
             <div className="col-span-2 text-center">Taxa</div>
             <div className="col-span-2 text-center">Tempo</div>
@@ -114,7 +114,7 @@ export function DeliveryZonesManager({ initialZones }: { initialZones: DeliveryZ
                   </div>
                   <div className="flex items-center justify-between md:col-span-2 md:justify-center">
                     <span className="md:hidden text-xs font-medium text-text-muted">Taxa:</span>
-                    <span className="text-sm font-extrabold text-graphite">{formatCurrencyBRL(zone.delivery_fee)}</span>
+                    <span className="text-body-lg font-bold text-graphite">{formatCurrencyBRL(zone.delivery_fee)}</span>
                   </div>
                   <div className="flex items-center justify-between md:col-span-2 md:justify-center">
                     <span className="md:hidden text-xs font-medium text-text-muted">Tempo:</span>
@@ -152,7 +152,7 @@ export function DeliveryZonesManager({ initialZones }: { initialZones: DeliveryZ
                     <button
                       type="button"
                       onClick={() => setEditing(zone)}
-                      className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
+                      className="rounded-lg px-2.5 py-1.5 text-label-md text-graphite hover:bg-primary/10 hover:text-primary"
                     >
                       Editar
                     </button>
@@ -162,7 +162,7 @@ export function DeliveryZonesManager({ initialZones }: { initialZones: DeliveryZ
                         setDeleteError(null);
                         setDeleting(zone);
                       }}
-                      className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
+                      className="rounded-lg px-2.5 py-1.5 text-label-md text-red hover:bg-red/10"
                     >
                       Excluir
                     </button>

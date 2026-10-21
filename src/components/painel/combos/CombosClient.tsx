@@ -201,7 +201,7 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
                       )}
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-border bg-surface-subdued text-xs font-bold text-graphite">
+                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-border bg-surface-subdued text-label-md font-bold text-graphite">
                             {position}º
                           </span>
                           <h3 className="truncate text-sm font-bold text-graphite">{combo.name}</h3>
@@ -217,7 +217,7 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
                       <Badge tone="neutral">
                         {combo.combo_items.length} produto{combo.combo_items.length === 1 ? "" : "s"}
                       </Badge>
-                      <span className="text-sm font-extrabold text-graphite">{formatCurrencyBRL(combo.price)}</span>
+                      <span className="text-body-lg font-bold text-graphite">{formatCurrencyBRL(combo.price)}</span>
                       {hasUnavailableProduct && (
                         <Badge tone="warning">⚠️ Produto indisponível na composição</Badge>
                       )}
@@ -246,7 +246,7 @@ export function CombosClient({ initialCombos, products }: { initialCombos: Combo
                         type="button"
                         disabled={isRowPending}
                         onClick={() => handleToggle(combo)}
-                        className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
+                        className="rounded-lg px-2.5 py-1.5 text-label-md text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
                       >
                         {combo.is_available ? "Desativar" : "Ativar"}
                       </button>

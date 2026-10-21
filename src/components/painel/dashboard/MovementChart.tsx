@@ -39,7 +39,7 @@ export function MovementChart({ points }: { points: HourlyMovementPoint[] }) {
     <Card className="p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-sm font-extrabold text-graphite">Movimento de hoje</h2>
+          <h2 className="text-body-lg font-bold text-graphite">Movimento de hoje</h2>
           <p className="text-xs text-text-muted">Pedidos e faturamento ao longo do dia</p>
         </div>
         <div className="flex gap-1 rounded-lg bg-surface-subdued p-1">
@@ -48,7 +48,7 @@ export function MovementChart({ points }: { points: HourlyMovementPoint[] }) {
               key={value}
               type="button"
               onClick={() => setMetric(value)}
-              className={`rounded-md px-3 py-1 text-xs font-bold transition-colors ${
+              className={`rounded-md px-3 py-1 text-label-md font-bold transition-colors ${
                 metric === value ? "bg-white text-graphite shadow-sm" : "text-text-muted"
               }`}
             >

@@ -38,7 +38,7 @@ function StatTile({ label, value }: { label: string; value: string | number }) {
   return (
     <Card className="p-4">
       <p className="text-xs font-medium text-text-muted">{label}</p>
-      <p className="mt-1 text-xl font-black text-graphite">{value}</p>
+      <p className="mt-1 text-headline-md text-graphite">{value}</p>
     </Card>
   );
 }
@@ -77,7 +77,7 @@ function NotesSection({
 
   return (
     <div className="mt-3 border-t border-border pt-3">
-      <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-text-muted">
+      <p className="mb-1.5 text-label-md uppercase tracking-wide text-text-muted">
         Observações internas <span className="font-normal normal-case">(visível apenas para a equipe)</span>
       </p>
       {notes.length > 0 && (
@@ -212,7 +212,7 @@ export function ClientesView({
                 key={t.id}
                 type="button"
                 onClick={() => setTab(t.id)}
-                className={`shrink-0 rounded-md px-2.5 py-1.5 text-xs font-bold transition-colors ${
+                className={`shrink-0 rounded-md px-2.5 py-1.5 text-label-md font-bold transition-colors ${
                   tab === t.id ? "bg-primary text-white" : "text-text-muted hover:bg-surface-subdued"
                 }`}
               >
@@ -233,7 +233,7 @@ export function ClientesView({
       <div className="overflow-x-auto rounded-xl border border-border bg-surface-card">
         <table className="w-full min-w-[760px] text-sm">
           <thead>
-            <tr className="border-b border-border text-left text-xs font-semibold uppercase tracking-wide text-text-muted">
+            <tr className="border-b border-border text-left text-label-md uppercase tracking-wide text-text-muted">
               <th className="px-3.5 py-2.5">Cliente</th>
               <th className="px-3.5 py-2.5">Telefone</th>
               <th className="px-3.5 py-2.5 text-right">Pedidos</th>
@@ -274,13 +274,13 @@ export function ClientesView({
                             href={`https://wa.me/55${customer.phone}`}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex h-8 items-center rounded-lg bg-emerald px-3 text-xs font-semibold text-white hover:opacity-90"
+                            className="inline-flex h-8 items-center rounded-lg bg-emerald px-3 text-label-md text-white hover:opacity-90"
                           >
                             WhatsApp
                           </a>
                           <a
                             href={`tel:+55${customer.phone}`}
-                            className="inline-flex h-8 items-center rounded-lg border border-border bg-surface-card px-3 text-xs font-semibold text-graphite hover:bg-surface-subdued"
+                            className="inline-flex h-8 items-center rounded-lg border border-border bg-surface-card px-3 text-label-md text-graphite hover:bg-surface-subdued"
                           >
                             Ligar
                           </a>
@@ -288,7 +288,7 @@ export function ClientesView({
 
                         {customer.addresses.length > 0 && (
                           <div className="mb-3">
-                            <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Endereços usados</p>
+                            <p className="text-label-md uppercase tracking-wide text-text-muted">Endereços usados</p>
                             {customer.addresses.map((address) => (
                               <p key={address} className="text-sm text-graphite">
                                 {address}
@@ -296,7 +296,7 @@ export function ClientesView({
                             ))}
                           </div>
                         )}
-                        <p className="mb-1.5 text-xs font-semibold uppercase tracking-wide text-text-muted">
+                        <p className="mb-1.5 text-label-md uppercase tracking-wide text-text-muted">
                           Histórico de pedidos
                         </p>
                         <div className="space-y-1.5">

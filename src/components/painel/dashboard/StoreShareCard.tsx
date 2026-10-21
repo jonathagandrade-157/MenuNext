@@ -32,7 +32,7 @@ export function StoreShareCard({
     <Card className="p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">
+          <p className="text-label-md uppercase tracking-wide text-text-muted">
             {hasAnyOrder ? "Sua loja" : "🎯 Receba seu primeiro pedido"}
           </p>
           <p className="mt-1 text-sm text-text-muted">

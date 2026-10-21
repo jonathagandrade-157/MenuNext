@@ -29,7 +29,7 @@ function StatTile({ label, value }: { label: string; value: string | number }) {
   return (
     <Card className="p-4">
       <p className="text-xs font-medium text-text-muted">{label}</p>
-      <p className="mt-1 text-xl font-black text-graphite">{value}</p>
+      <p className="mt-1 text-headline-md text-graphite">{value}</p>
     </Card>
   );
 }
@@ -66,7 +66,7 @@ function PixQrCodePreview({ pixKey, holderName, city }: { pixKey: string; holder
       ) : (
         <div className="h-40 w-40 animate-pulse rounded-lg bg-surface-card" />
       )}
-      <p className="text-center text-xs font-semibold text-text-muted">Cliente escaneia pelo app do banco para pagamento imediato</p>
+      <p className="text-center text-label-md text-text-muted">Cliente escaneia pelo app do banco para pagamento imediato</p>
       <div className="flex w-full items-center gap-2 rounded-lg border border-border bg-surface-card px-3 py-2">
         <p className="min-w-0 flex-1 truncate text-xs text-graphite">{brCode}</p>
         <CopyButton value={brCode} label="Copiar código" />
@@ -123,7 +123,7 @@ export function PagamentosForm({ restaurant }: { restaurant: Restaurant }) {
                     {(Object.entries(PIX_KEY_TYPE_LABEL) as [PixKeyType, string][]).map(([value, label]) => (
                       <label
                         key={value}
-                        className={`flex cursor-pointer items-center justify-center rounded-lg border px-2 py-2 text-xs font-semibold ${
+                        className={`flex cursor-pointer items-center justify-center rounded-lg border px-2 py-2 text-label-md ${
                           pixKeyType === value ? "border-primary bg-primary/5 text-primary" : "border-border text-text-muted"
                         }`}
                       >
@@ -184,7 +184,7 @@ export function PagamentosForm({ restaurant }: { restaurant: Restaurant }) {
                 </div>
 
                 <div className="rounded-lg border border-border bg-surface-subdued/60 px-3.5 py-2.5">
-                  <p className="text-xs font-semibold text-graphite">Modo de confirmação: manual</p>
+                  <p className="text-label-md text-graphite">Modo de confirmação: manual</p>
                   <p className="mt-0.5 text-xs text-text-muted">
                     Você confere o Pix no extrato/app do banco e avança o pedido para &ldquo;Em preparação&rdquo; no Kanban — o MenuNext ainda não confirma pagamentos automaticamente.
                   </p>

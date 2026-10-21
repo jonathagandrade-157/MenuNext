@@ -157,7 +157,7 @@ export function ManageAddonsModal({
                           type="button"
                           disabled={isRowPending}
                           onClick={() => handleToggle(addon)}
-                          className="rounded-lg px-2 py-1 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
+                          className="rounded-lg px-2 py-1 text-label-md text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
                         >
                           {addon.is_available ? "Desativar" : "Ativar"}
                         </button>
@@ -166,7 +166,7 @@ export function ManageAddonsModal({
                             <button
                               type="button"
                               onClick={() => setEditing(addon)}
-                              className="rounded-lg px-2 py-1 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
+                              className="rounded-lg px-2 py-1 text-label-md text-graphite hover:bg-primary/10 hover:text-primary"
                             >
                               Editar
                             </button>
@@ -176,7 +176,7 @@ export function ManageAddonsModal({
                                 setDeleteError(null);
                                 setDeleting(addon);
                               }}
-                              className="rounded-lg px-2 py-1 text-xs font-semibold text-red hover:bg-red/10"
+                              className="rounded-lg px-2 py-1 text-label-md text-red hover:bg-red/10"
                             >
                               Excluir
                             </button>

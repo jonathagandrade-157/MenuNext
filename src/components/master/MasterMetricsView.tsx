@@ -39,7 +39,7 @@ function plural(count: number, singular: string, pluralForm: string): string {
 function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div>
-      <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">{title}</h2>
+      <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">{title}</h2>
       <p className="mt-1 text-sm text-text-muted">{subtitle}</p>
     </div>
   );
@@ -48,8 +48,8 @@ function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) 
 function MiniStat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="rounded-xl bg-surface-subdued p-4">
-      <p className="text-[11px] font-bold uppercase tracking-wide text-text-muted">{label}</p>
-      <p className="mt-2 text-xl font-black text-graphite">{value}</p>
+      <p className="text-label-sm uppercase text-text-muted">{label}</p>
+      <p className="mt-2 text-headline-md text-graphite">{value}</p>
       {hint && <p className="mt-1 text-xs text-text-muted">{hint}</p>}
     </div>
   );
@@ -272,7 +272,7 @@ export function MasterMetricsView({ metrics, period }: { metrics: MasterMetrics;
         ) : (
           <>
             <table className="hidden w-full text-left text-sm md:table">
-              <thead className="border-b border-border text-xs font-bold uppercase tracking-wide text-text-muted">
+              <thead className="border-b border-border text-label-md font-bold uppercase tracking-wide text-text-muted">
                 <tr>
                   <th className="py-2 pr-4">Restaurante</th>
                   <th className="px-4 py-2 text-right">Pedidos</th>

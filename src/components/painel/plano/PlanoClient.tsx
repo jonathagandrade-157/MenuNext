@@ -85,7 +85,7 @@ export function PlanoClient({
       <Card className="flex items-center justify-between gap-3 p-5">
         <div>
           <p className="text-xs font-medium text-text-muted">Plano atual</p>
-          <p className="mt-1 text-lg font-black text-graphite">{currentPlan ? currentPlan.name : "Nenhum plano assinado"}</p>
+          <p className="mt-1 text-headline-sm text-graphite">{currentPlan ? currentPlan.name : "Nenhum plano assinado"}</p>
         </div>
         <Badge tone={status.tone}>{status.label}</Badge>
       </Card>
@@ -139,10 +139,10 @@ export function PlanoClient({
           return (
             <Card key={plan.id} className="flex flex-col gap-3 p-5">
               <div>
-                <h3 className="text-base font-extrabold text-graphite">{plan.name}</h3>
+                <h3 className="text-body-lg font-bold text-graphite">{plan.name}</h3>
                 {plan.description && <p className="mt-1 text-xs text-text-muted">{plan.description}</p>}
               </div>
-              <p className="text-2xl font-black text-graphite">
+              <p className="text-headline-lg text-graphite">
                 {formatCurrencyBRL(plan.price)}
                 <span className="text-sm font-medium text-text-muted">/mês</span>
               </p>

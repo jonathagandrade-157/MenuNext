@@ -14,7 +14,7 @@ export function RecentOrdersCard({ orders }: { orders: RecentOrder[] }) {
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-base font-extrabold text-graphite">Pedidos recentes</h2>
+        <h2 className="text-body-lg font-bold text-graphite">Pedidos recentes</h2>
         <LinkButton href="/painel/pedidos" variant="ghost" size="sm">
           Ver todos os pedidos
         </LinkButton>

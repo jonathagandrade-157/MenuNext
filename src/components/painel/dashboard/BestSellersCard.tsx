@@ -11,7 +11,7 @@ import type { BestSellerProduct } from "@/lib/bestsellers";
 export function BestSellersCard({ products }: { products: BestSellerProduct[] }) {
   return (
     <Card className="p-6">
-      <h2 className="text-base font-extrabold text-graphite">Produtos mais vendidos</h2>
+      <h2 className="text-body-lg font-bold text-graphite">Produtos mais vendidos</h2>
 
       {products.length === 0 ? (
         <p className="py-10 text-center text-sm text-text-muted">
@@ -22,7 +22,7 @@ export function BestSellersCard({ products }: { products: BestSellerProduct[] })
           {products.map((product, index) => (
             <li key={product.productKey} className="flex items-center justify-between gap-3 py-3">
               <div className="flex min-w-0 items-center gap-3">
-                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-surface-subdued text-xs font-bold text-text-muted">
+                <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-surface-subdued text-label-md font-bold text-text-muted">
                   {index + 1}
                 </span>
                 <div className="min-w-0">

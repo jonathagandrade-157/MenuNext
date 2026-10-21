@@ -131,7 +131,7 @@ export function ComboCompositionManager({
                       handleQuantityChange(item.id, value);
                     }
                   }}
-                  className="h-8 w-14 rounded-lg border border-border bg-surface px-2 text-center text-xs font-semibold text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+                  className="h-8 w-14 rounded-lg border border-border bg-surface px-2 text-center text-label-md text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
                 />
                 <div className="flex items-center gap-0.5">
                   <button
@@ -156,7 +156,7 @@ export function ComboCompositionManager({
                     type="button"
                     disabled={isRowPending}
                     onClick={() => handleRemove(item.id)}
-                    className="rounded-lg px-2 py-1 text-xs font-semibold text-red hover:bg-red/10 disabled:cursor-not-allowed disabled:opacity-50"
+                    className="rounded-lg px-2 py-1 text-label-md text-red hover:bg-red/10 disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     Remover
                   </button>
@@ -172,7 +172,7 @@ export function ComboCompositionManager({
           <select
             value={pickedProductId}
             onChange={(e) => setPickedProductId(e.target.value)}
-            className="h-9 flex-1 rounded-lg border border-border bg-surface px-2.5 text-xs font-semibold text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            className="h-9 flex-1 rounded-lg border border-border bg-surface px-2.5 text-label-md text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
           >
             <option value="">Selecione um produto...</option>
             {availableProducts.map((product) => (
@@ -187,13 +187,13 @@ export function ComboCompositionManager({
             max={99}
             value={pickedQuantity}
             onChange={(e) => setPickedQuantity(e.target.value)}
-            className="h-9 w-16 rounded-lg border border-border bg-surface px-2 text-center text-xs font-semibold text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            className="h-9 w-16 rounded-lg border border-border bg-surface px-2 text-center text-label-md text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
           />
           <button
             type="button"
             disabled={!pickedProductId || isPending}
             onClick={handleAdd}
-            className="inline-flex h-9 shrink-0 items-center gap-1 rounded-lg border border-border px-3 text-xs font-semibold text-graphite hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-9 shrink-0 items-center gap-1 rounded-lg border border-border px-3 text-label-md text-graphite hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span className="text-sm leading-none">+</span>
             Adicionar produto

@@ -79,7 +79,7 @@ export function DeliveryConfigForm({
       </Card>
 
       <Card className="space-y-5 p-6">
-        <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Taxa e área de entrega</h2>
+        <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Taxa e área de entrega</h2>
 
         <div>
           <span className={fieldLabelClass}>Como calcular a taxa de entrega</span>
@@ -189,7 +189,7 @@ export function DeliveryConfigForm({
       </Card>
 
       <Card className="space-y-5 p-6">
-        <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Tempo estimado de entrega</h2>
+        <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Tempo estimado de entrega</h2>
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <span className={fieldLabelClass}>De (minutos)</span>
@@ -220,7 +220,7 @@ export function DeliveryConfigForm({
       </Card>
 
       <Card className="space-y-2 p-6">
-        <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Dias e horários que aceitam delivery</h2>
+        <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Dias e horários que aceitam delivery</h2>
         <p className="text-sm text-graphite">{openDaysSummary(businessHours)}</p>
         <Link href="/painel/horarios" className="inline-block text-sm font-semibold text-primary hover:underline">
           Editar horários de funcionamento →

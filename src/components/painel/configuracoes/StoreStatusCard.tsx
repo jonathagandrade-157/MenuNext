@@ -36,7 +36,7 @@ export function StoreStatusCard({ initialStatus }: { initialStatus: "active" | "
     <Card className="space-y-4 p-6">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Status da loja</h2>
+          <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Status da loja</h2>
           <p className="mt-1 text-sm text-text-muted">
             {isActive
               ? "Sua loja está aberta e recebendo novos pedidos normalmente."

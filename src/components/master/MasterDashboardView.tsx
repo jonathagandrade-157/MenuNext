@@ -27,7 +27,7 @@ function plural(count: number, singular: string, pluralForm: string): string {
 function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div>
-      <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">{title}</h2>
+      <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">{title}</h2>
       <p className="mt-1 text-sm text-text-muted">{subtitle}</p>
     </div>
   );
@@ -122,7 +122,7 @@ export function MasterDashboardView({
             </p>
           ) : (
             <>
-              <p className="text-2xl font-black text-graphite">{formatCurrencyBRL(mrr.total)}</p>
+              <p className="text-headline-lg text-graphite">{formatCurrencyBRL(mrr.total)}</p>
               {mrr.total > 0 && (
                 <div className="flex h-2.5 w-full overflow-hidden rounded-full bg-surface-subdued">
                   {mrr.rows.map((row, index) =>
@@ -180,7 +180,7 @@ export function MasterDashboardView({
         <Card className="space-y-4 p-6">
           <SectionTitle title="Pedidos na plataforma" subtitle="Volume de todos os restaurantes." />
           <div>
-            <p className="text-3xl font-black text-graphite">{stats.orders_today.toLocaleString("pt-BR")}</p>
+            <p className="text-headline-lg text-graphite">{stats.orders_today.toLocaleString("pt-BR")}</p>
             <p className="mt-1 text-xs text-text-muted">
               pedidos hoje ·{" "}
               {ordersVariation === null

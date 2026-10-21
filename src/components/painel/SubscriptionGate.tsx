@@ -29,10 +29,10 @@ export function SubscriptionGate({
     const copy = ACCESS_STATE_COPY[accessState];
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-surface px-6 text-center">
-        <span className="rounded-full bg-red/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-red">
+        <span className="rounded-full bg-red/10 px-3 py-1 text-label-md font-bold uppercase tracking-wide text-red">
           {copy.badge}
         </span>
-        <h1 className="text-xl font-black text-graphite">O acesso ao painel está bloqueado</h1>
+        <h1 className="text-headline-md text-graphite">O acesso ao painel está bloqueado</h1>
         <p className="max-w-sm text-sm text-text-muted">
           {isOwner ? copy.message : "O acesso da loja está bloqueado. Fale com o responsável pela loja para regularizar."}
         </p>

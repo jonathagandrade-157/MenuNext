@@ -45,7 +45,7 @@ export default async function ConfiguracoesPage() {
         <StoreStatusCard initialStatus={restaurant.status === "paused" ? "paused" : "active"} />
       ) : (
         <Card className="p-6">
-          <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Status da loja</h2>
+          <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Status da loja</h2>
           <p className="mt-1 text-sm text-text-muted">
             Finalize o cadastro da sua loja para poder pausar ou reabrir o recebimento de pedidos por aqui.
           </p>
@@ -53,7 +53,7 @@ export default async function ConfiguracoesPage() {
       )}
 
       <Card className="p-6">
-        <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Nome e endereço</h2>
+        <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Nome e endereço</h2>
         <p className="mt-1 text-sm text-text-muted">
           Nome do restaurante, URL da loja e endereço completo ficam em Informações do restaurante.
         </p>

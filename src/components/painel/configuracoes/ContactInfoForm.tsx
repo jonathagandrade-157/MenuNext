@@ -33,7 +33,7 @@ export function ContactInfoForm({ restaurant }: { restaurant: Restaurant }) {
 
   return (
     <Card className="p-6">
-      <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Contato e divulgação</h2>
+      <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Contato e divulgação</h2>
       <p className="mt-1 text-sm text-text-muted">
         WhatsApp e bio aparecem na sua loja pública. O e-mail é só para uso interno.
       </p>
@@ -77,8 +77,8 @@ export function ContactInfoForm({ restaurant }: { restaurant: Restaurant }) {
           <p className="mt-1 text-xs text-text-muted">Aparece no topo do seu cardápio público, no lugar de &ldquo;Cardápio digital&rdquo;.</p>
         </div>
 
-        {state.status === "error" && <p className="text-xs font-semibold text-red">{state.message}</p>}
-        {state.status === "success" && <p className="text-xs font-semibold text-emerald">Salvo com sucesso!</p>}
+        {state.status === "error" && <p className="text-label-md text-red">{state.message}</p>}
+        {state.status === "success" && <p className="text-label-md text-emerald">Salvo com sucesso!</p>}
 
         <SaveButton />
       </form>
