@@ -36,7 +36,7 @@ const STEPS = [
     title: "Monte seu cardápio",
     description:
       "Adicione categorias com fotos reais, grupos de adicionais, combos promocionais, tamanhos e observações detalhadas com total autonomia.",
-    note: "Importação simples e intuitiva",
+    note: "Passo a passo, sem complicação",
   },
   {
     number: "03",
@@ -55,7 +55,7 @@ const MODULES = [
   { title: "Cupons & Campanhas", description: "Crie cupons de primeira compra, porcentagem ou desconto fixo para reativar clientes inativos." },
   { title: "Base de Clientes Própria", description: "Nome, telefone, histórico de compras e pratos favoritos de cada cliente que já comprou de você." },
   { title: "Horários de Funcionamento", description: "Abertura e fechamento por turnos, ou botão de pausa de emergência com um clique." },
-  { title: "Personalização de Marca", description: "Logotipo, paleta de cores institucional, banner promocional e domínio próprio." },
+  { title: "Personalização de Marca", description: "Logotipo, imagem de capa, cor da marca e texto de apresentação da sua loja." },
 ];
 
 const MENUNEXT_ADVANTAGES = [
@@ -67,61 +67,24 @@ const MENUNEXT_ADVANTAGES = [
 ];
 
 const MARKETPLACE_DISADVANTAGES = [
-  { title: "Comissões abusivas de 12% a 27%", description: "uma fatia pesada que corrói o seu lucro." },
+  { title: "Comissão sobre cada pedido", description: "uma parte do valor de cada venda fica com a plataforma." },
   { title: "O cliente pertence à plataforma", description: "você não tem acesso ao telefone direto do comprador." },
   { title: "Concorrentes patrocinados", description: "restaurantes vizinhos pagam para aparecer no seu perfil." },
   { title: "Guerra constante por descontos", description: "desvalorização do seu produto para figurar no topo." },
   { title: "Repasses atrasados", description: "fluxos demorados que prejudicam seu capital de giro." },
 ];
 
-const PLANS = [
-  {
-    name: "Plano Start",
-    tagline: "Início",
-    description: "Perfeito para pequenos negócios, marmitarias e quem está começando a digitalizar as vendas.",
-    price: "R$ 39,90",
-    cta: "Começar no Start",
-    highlighted: false,
-    features: [
-      "Até 100 pedidos por mês",
-      "Cardápio digital ilimitado",
-      "Recebimento de Pix direto",
-      "Link personalizado para redes sociais",
-      "Suporte via WhatsApp",
-    ],
-  },
-  {
-    name: "Plano Pro",
-    tagline: "Recomendado",
-    description: "O pacote completo para hamburguerias, pizzarias e cozinhas com delivery ativo diário.",
-    price: "R$ 69,90",
-    cta: "Experimentar 30 dias grátis",
-    highlighted: true,
-    features: [
-      "Pedidos ilimitados (0% comissão)",
-      "Taxas de entrega personalizadas por bairro",
-      "Painel Kanban sonoro em tempo real",
-      "Cupons de desconto e combos promocionais",
-      "Impressão automática de comandas de cozinha",
-      "QR Codes de mesa e balcão prontos para imprimir",
-      "Suporte prioritário via WhatsApp",
-    ],
-  },
-  {
-    name: "Plano Plus",
-    tagline: "Escala",
-    description: "Para restaurantes com múltiplos atendentes, alto volume de expedição e dark kitchens.",
-    price: "R$ 119,90",
-    cta: "Assinar o Plus",
-    highlighted: false,
-    features: [
-      "Tudo o que está incluído no Pro",
-      "Múltiplos usuários e perfis de atendentes",
-      "Relatórios avançados e exportação contábil",
-      "Domínio próprio configurado",
-      "Gerente de conta VIP dedicado",
-    ],
-  },
+/** Só o que o produto entrega hoje. Valores dos planos não aparecem aqui: são
+ * apresentados no painel antes da contratação (e só existem depois de cadastrados). */
+const INCLUDED_FEATURES = [
+  "Cardápio digital com fotos, categorias, adicionais e combos",
+  "Pedidos em tempo real, com alerta sonoro e painel Kanban",
+  "Delivery com taxa por distância ou por zona, e retirada no balcão",
+  "Pix direto na sua chave, dinheiro e cartão na entrega",
+  "Cupons de desconto e base de clientes com histórico",
+  "Horários de funcionamento e pausa de emergência com um clique",
+  "Equipe com permissões diferentes para proprietário e atendentes",
+  "Comanda para impressão e loja com a sua marca",
 ];
 
 const FAQ_ITEMS = [
@@ -205,7 +168,7 @@ export default function FanpagePage() {
               <div className="mb-4 flex items-center justify-between">
                 <div>
                   <p className="text-sm font-semibold text-graphite">Next Burger • Delivery</p>
-                  <p className="text-xs text-text-muted">Painel Operacional</p>
+                  <p className="text-xs text-text-muted">Painel Operacional · exemplo ilustrativo</p>
                 </div>
                 <Badge tone="success" pulse>
                   Loja Aberta
@@ -330,45 +293,28 @@ export default function FanpagePage() {
         </section>
 
         <section id="planos" className="border-y border-border bg-surface-card">
-          <div className="mx-auto max-w-[1440px] px-6 py-20">
-            <div className="mx-auto max-w-2xl text-center">
-              <h2 className="text-3xl font-extrabold text-graphite">Escolha o plano que combina com seu restaurante.</h2>
+          <div className="mx-auto max-w-3xl px-6 py-20">
+            <div className="text-center">
+              <h2 className="text-3xl font-extrabold text-graphite">Comece com 30 dias grátis.</h2>
               <p className="mt-3 text-text-muted">
-                Sem taxas ocultas, sem fidelidade e com 30 dias grátis para testar na prática.
+                Sem cartão de crédito no cadastro e sem comissão sobre os seus pedidos. Os valores dos planos são
+                apresentados no painel antes de você contratar.
               </p>
             </div>
-            <div className="mt-12 grid gap-6 md:grid-cols-3">
-              {PLANS.map((plan) => (
-                <Card
-                  key={plan.name}
-                  className={`relative flex flex-col p-6 ${plan.highlighted ? "border-primary shadow-[0_8px_20px_-4px_rgba(171,47,0,0.25)]" : ""}`}
-                >
-                  {plan.highlighted && (
-                    <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-primary px-3 py-1 text-xs font-bold text-white">
-                      MAIS ESCOLHIDO
-                    </span>
-                  )}
-                  <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">{plan.tagline}</p>
-                  <h3 className="mt-1 text-xl font-extrabold text-graphite">{plan.name}</h3>
-                  <p className="mt-2 text-sm text-text-muted">{plan.description}</p>
-                  <p className="mt-4">
-                    <span className="text-3xl font-extrabold text-graphite">{plan.price}</span>
-                    <span className="text-sm text-text-muted">/mês</span>
-                  </p>
-                  <ul className="mt-5 flex-1 space-y-2.5">
-                    {plan.features.map((feature) => (
-                      <li key={feature} className="flex gap-2 text-sm text-text-muted">
-                        <CheckCircleIcon className="mt-0.5 h-4 w-4 shrink-0 text-emerald" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                  <LinkButton href="/cadastro" variant={plan.highlighted ? "primary" : "secondary"} className="mt-6 w-full">
-                    {plan.cta}
-                  </LinkButton>
-                </Card>
-              ))}
-            </div>
+            <Card className="mt-10 border-primary p-6 shadow-[0_8px_20px_-4px_rgba(171,47,0,0.25)]">
+              <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Tudo isso no teste grátis</p>
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                {INCLUDED_FEATURES.map((feature) => (
+                  <li key={feature} className="flex gap-2 text-sm text-text-muted">
+                    <CheckCircleIcon className="mt-0.5 h-4 w-4 shrink-0 text-emerald" />
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+              <LinkButton href="/cadastro" className="mt-6 w-full">
+                Criar minha loja grátis
+              </LinkButton>
+            </Card>
           </div>
         </section>
 
