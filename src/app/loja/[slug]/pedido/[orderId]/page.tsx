@@ -7,6 +7,7 @@ import type { OrderStatus } from "@/lib/orders";
 import { CopyButton } from "@/components/loja/CopyButton";
 import { OrderStatusBadgeLive } from "@/components/loja/OrderStatusBadge";
 import { StoreNotFound } from "@/components/loja/StoreNotFound";
+import { discountLabel } from "@/lib/promotions";
 
 const FULFILLMENT_LABEL: Record<string, string> = { delivery: "Entrega", pickup: "Retirada", counter: "Balcão" };
 
@@ -79,7 +80,7 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/pedido/[o
             </div>
             {order.discount_amount > 0 && (
               <div className="flex justify-between text-emerald">
-                <span>Cupom ({order.coupon_code})</span>
+                <span>{discountLabel(order)}</span>
                 <span className="font-semibold">-{formatCurrencyBRL(order.discount_amount)}</span>
               </div>
             )}

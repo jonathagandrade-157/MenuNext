@@ -6,6 +6,7 @@ import { Drawer } from "@/components/ui/Drawer";
 import { StatusBadge } from "@/components/ui/Badge";
 import { FULFILLMENT_TYPE_LABELS, PAYMENT_METHOD_LABELS } from "@/lib/checkout";
 import { buildOrderTicketHtml } from "@/lib/orderTicket";
+import { discountLabel } from "@/lib/promotions";
 import {
   CANCEL_REASONS,
   ORDER_STATUS_ACTION_LABEL,
@@ -279,7 +280,7 @@ export function OrderDetailModal({
             </div>
             {order.discount_amount > 0 && (
               <div className="flex justify-between text-emerald">
-                <span>Cupom ({order.coupon_code})</span>
+                <span>{discountLabel(order)}</span>
                 <span className="font-semibold">-{formatCurrencyBRL(order.discount_amount)}</span>
               </div>
             )}

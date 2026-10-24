@@ -131,10 +131,11 @@ Feito e em produção, grupos A e B:
 - Onboarding: copiar horário para todos os dias (passo 5) e nome da primeira categoria (passo 7).
 - Master: card de restaurantes recentes no dashboard.
 
-Falta nos grupos A e B: reestruturar visualmente Caixa, Marketing (só cupons), Informações/Configurações num único card, Ajuda (guias), master (Assinaturas, Métricas, Detalhes) e as demais telas do onboarding. Grupo C aguarda decisão.
+Falta nos grupos A e B: reestruturar visualmente Caixa, Informações/Configurações num único card, Ajuda (guias), master (Assinaturas, Métricas, Detalhes) e as demais telas do onboarding. Grupo C aguarda decisão.
 
 ### Grupo C (21/10/2026)
 
 - **Banner promocional e produtos em destaque:** feito e em produção (migration `featured_products_and_banner`).
 - **Registro de auditoria:** feito e em produção (migration `audit_log`): tela Auditoria do master com paginação e filtro por loja, "Atividade recente" em Usuários e "Atividade recente da loja" no detalhe do restaurante no master. Registra só ações de pessoas em tabelas de configuração, só nomes de campos alterados, nunca valores.
-- Falta: sessões de caixa e promoções automáticas.
+- **Abrir e fechar o caixa (24/10/2026):** feito e em produção (migration `cash_sessions`). Barra de caixa aberto/fechado, fechamento com dinheiro contado e diferença (sobrou/faltou), histórico só para o dono, venda de balcão bloqueada com o caixa fechado. Frente de Caixa com chips de categoria, miniaturas, troco com valores rápidos e atalhos F2/F9.
+- **Promoções automáticas v1 (24/10/2026):** feito (migration `automatic_promotions`). Desconto em % ou R$ com pedido mínimo, período, dias da semana e janela de horário (fuso de São Paulo). Não acumula com cupom: vale o maior desconto (empate fica com o cupom; o cupom só gasta um uso se vencer). Prévia no checkout e na Frente de Caixa; o servidor (`create_order`) recalcula. Fora da v1: desconto por item/categoria, "leve mais" e combo com preço especial. Promoções ainda não entram no registro de auditoria.

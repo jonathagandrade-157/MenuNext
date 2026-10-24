@@ -271,6 +271,8 @@ function orderFixture(overrides: Partial<Order> & { status: OrderStatus }): Orde
     delivery_fee: 0,
     coupon_id: null,
     coupon_code: null,
+    promotion_id: null,
+    promotion_name: null,
     discount_amount: 0,
     total: 10,
     confirmed_at: null,

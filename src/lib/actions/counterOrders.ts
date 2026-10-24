@@ -8,6 +8,7 @@ import { getPublicProductDetail, type PublicProductDetail } from "@/lib/store";
 import { getPublicAssetUrl } from "@/lib/storage/assets";
 import { friendlyOrderError } from "@/lib/orderErrors";
 import { getCurrentCashSession } from "@/lib/cash";
+import type { PromotionPreview } from "@/lib/actions/promotionPreview";
 import type { CreateOrderItemPayload } from "@/lib/checkout";
 
 export type CounterOrderInput = {
@@ -100,6 +101,24 @@ export async function getCounterProductDetailAction(productId: string): Promise<
   if (!product) return { ok: false, error: "Produto não encontrado." };
 
   return { ok: true, product };
+}
+
+/** Prévia da promoção automática no PDV: a loja vem do membro logado (nunca do cliente). Falha vira "sem promoção". */
+export async function previewCounterPromotionAction(subtotal: number): Promise<PromotionPreview> {
+  if (!Number.isFinite(subtotal) || subtotal < 0) return null;
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/cadastro");
+
+  const restaurant = await getMyRestaurant(supabase);
+  if (!restaurant) return null;
+
+  const { data, error } = await supabase.rpc("preview_promotion", { p_slug: restaurant.slug, p_subtotal: subtotal });
+  if (error) return null;
+  const row = data?.[0];
+  return row ? { name: String(row.name), discountAmount: Number(row.discount_amount) } : null;
 }
 
 export type ValidateCounterCouponResult =

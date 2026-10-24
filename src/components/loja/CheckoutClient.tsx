@@ -7,6 +7,8 @@ import { useBag } from "@/contexts/BagContext";
 import { submitOrderAction } from "@/lib/actions/orders";
 import { getDeliveryQuoteAction } from "@/lib/actions/delivery-quote";
 import { validateCouponAction } from "@/lib/actions/couponValidate";
+import { previewPromotionAction, type PromotionPreview } from "@/lib/actions/promotionPreview";
+import { pickBestDiscount } from "@/lib/promotions";
 import { formatCepInput, isCompleteCep, lookupCep } from "@/lib/cep";
 import {
   PAYMENT_METHOD_LABELS,
@@ -116,6 +118,10 @@ export function CheckoutClient({
   const [couponError, setCouponError] = useState<string | null>(null);
   const [couponValidating, setCouponValidating] = useState(false);
 
+  // Promoção automática: prévia do desconto que entra sozinho (preview_promotion, só leitura). Não acumula
+  // com cupom — vale o maior, igual a create_order, que recalcula tudo ao criar o pedido.
+  const [promotion, setPromotion] = useState<PromotionPreview>(null);
+
   // Frete por distância (Fase 4.1.1): só entra em jogo quando a loja
   // configurou raio máximo e/ou método "por km" — no caso comum (taxa fixa
   // sem raio) nada aqui é chamado, o comportamento continua idêntico ao de
@@ -220,9 +226,23 @@ export function CheckoutClient({
   }, [items.length, redirecting, router, slug]);
 
   const effectiveDeliveryFee = needsDeliveryQuote ? quote?.fee ?? null : (deliveryFee ?? 0);
-  const discountAmount = couponApplied?.discountAmount ?? 0;
+  const appliedDiscount = pickBestDiscount(
+    couponApplied?.discountAmount ?? 0,
+    promotion ? { name: promotion.name, amount: promotion.discountAmount } : null
+  );
+  const discountAmount = appliedDiscount.amount;
   const total = totalPrice - discountAmount + (effectiveDeliveryFee ?? 0);
   const changeForValue = changeForInput.trim() ? parseMoneyInput(changeForInput) : null;
+
+  useEffect(() => {
+    let cancelled = false;
+    void previewPromotionAction(slug, totalPrice).then((result) => {
+      if (!cancelled) setPromotion(result);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [slug, totalPrice]);
 
   async function handleApplyCoupon() {
     const code = couponInput.trim();
@@ -524,7 +544,11 @@ export function CheckoutClient({
             <div className="flex items-center justify-between gap-2 rounded-xl border border-emerald/30 bg-emerald/10 px-3.5 py-2.5">
               <div>
                 <p className="text-sm font-bold text-graphite">{couponApplied.code}</p>
-                <p className="text-xs font-semibold text-emerald">-{formatCurrencyBRL(couponApplied.discountAmount)} aplicado</p>
+                <p className="text-xs font-semibold text-emerald">
+                  {appliedDiscount.kind === "promotion"
+                    ? `A promoção ${appliedDiscount.name} tem desconto maior e será aplicada no lugar do cupom`
+                    : `-${formatCurrencyBRL(couponApplied.discountAmount)} aplicado`}
+                </p>
               </div>
               <button type="button" onClick={handleRemoveCoupon} className="text-xs font-semibold text-red hover:underline">
                 Remover
@@ -552,6 +576,11 @@ export function CheckoutClient({
             </div>
           )}
           {couponError && <p className="text-xs font-semibold text-red">{couponError}</p>}
+          {!couponApplied && promotion && (
+            <p className="rounded-xl bg-emerald/10 px-3.5 py-2 text-xs font-semibold text-emerald">
+              Promoção {promotion.name} aplicada: -{formatCurrencyBRL(promotion.discountAmount)}. Um cupom só substitui se o desconto for maior.
+            </p>
+          )}
         </section>
 
       </div>
@@ -576,7 +605,7 @@ export function CheckoutClient({
             </div>
             {discountAmount > 0 && (
               <div className="flex justify-between text-emerald">
-                <span>Cupom ({couponApplied?.code})</span>
+                <span>{appliedDiscount.kind === "promotion" ? `Promoção ${appliedDiscount.name}` : `Cupom (${couponApplied?.code})`}</span>
                 <span className="font-semibold">-{formatCurrencyBRL(discountAmount)}</span>
               </div>
             )}
