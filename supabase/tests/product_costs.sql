@@ -15,7 +15,7 @@ declare
   u_owner_b uuid := gen_random_uuid();
   u_stranger uuid := gen_random_uuid();
   r_a uuid; r_b uuid; cat_a uuid; cat_b uuid; prod_b uuid; prod_new uuid;
-  n bigint; err text; c numeric; legacy numeric;
+  n bigint; err text; c numeric;
   fails text[] := '{}'; total int := 0;
 begin
   insert into auth.users (id, email, raw_user_meta_data) values
@@ -66,9 +66,10 @@ begin
   select cost into c from public.product_costs where product_id = prod_new;
   total := total + 1;
   if c is distinct from 12.50 then fails := fails || format('custo nao gravado em product_costs (veio %s)', coalesce(c::text, 'null')); end if;
-  select cost into legacy from public.products where id = prod_new;
   total := total + 1;
-  if legacy is not null then fails := fails || 'products.cost ainda esta sendo escrito'::text; end if;
+  if exists (select 1 from information_schema.columns where table_schema = 'public' and table_name = 'products' and column_name = 'cost') then
+    fails := fails || 'a coluna antiga products.cost ainda existe'::text;
+  end if;
 
   -- sem custo: nenhuma linha
   perform set_config('request.jwt.claims', json_build_object('sub', u_owner_a, 'role', 'authenticated')::text, true);
