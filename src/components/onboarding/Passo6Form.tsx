@@ -3,7 +3,8 @@
 import { useActionState, useState } from "react";
 import { savePasso6Action, skipOnboardingStepAction } from "@/lib/actions/onboarding";
 import { initialStepState } from "@/lib/form-state";
-import { FieldLabel, inputClass, ErrorMessage, StepNavigation } from "@/components/onboarding/OnboardingShell";
+import { Banknote, CreditCard, QrCode } from "lucide-react";
+import { ChoiceCard, FieldLabel, inputClass, ErrorMessage, StepNavigation } from "@/components/onboarding/OnboardingShell";
 import type { Restaurant } from "@/lib/tenant";
 
 const skipStep6 = skipOnboardingStepAction.bind(null, 6);
@@ -14,51 +15,43 @@ export function Passo6Form({ restaurant }: { restaurant: Restaurant }) {
 
   return (
     <form action={formAction} className="space-y-4">
-      <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-        <input
-          type="checkbox"
-          name="payment_pix"
-          checked={pixEnabled}
-          onChange={(e) => setPixEnabled(e.target.checked)}
-          className="mt-0.5 h-5 w-5 accent-primary"
-        />
-        <span className="flex-1">
-          <span className="block text-label-lg text-graphite">Pix</span>
-          <span className="block text-body-md text-text-muted">O cliente paga direto na sua chave Pix.</span>
-          {pixEnabled && (
-            <div className="mt-3">
-              <FieldLabel>Chave Pix do restaurante *</FieldLabel>
-              <input
-                name="payment_pix_key"
-                type="text"
-                defaultValue={restaurant.payment_pix_key ?? ""}
-                placeholder="CPF, CNPJ, e-mail, telefone ou chave aleatória"
-                className={inputClass}
-              />
-            </div>
-          )}
-        </span>
-      </label>
+      <ChoiceCard
+        icon={<QrCode className="h-5 w-5" aria-hidden />}
+        title="Pix"
+        description="O cliente paga direto na sua chave Pix."
+        name="payment_pix"
+        checked={pixEnabled}
+        onChange={(e) => setPixEnabled(e.target.checked)}
+      >
+        {pixEnabled && (
+          <span className="mt-3 block">
+            <FieldLabel>Chave Pix do restaurante *</FieldLabel>
+            <input
+              name="payment_pix_key"
+              type="text"
+              defaultValue={restaurant.payment_pix_key ?? ""}
+              placeholder="CPF, CNPJ, e-mail, telefone ou chave aleatória"
+              className={inputClass}
+            />
+          </span>
+        )}
+      </ChoiceCard>
 
-      <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-        <input
-          type="checkbox"
-          name="payment_cash"
-          defaultChecked={restaurant.payment_cash}
-          className="mt-0.5 h-5 w-5 accent-primary"
-        />
-        <span className="block text-label-lg text-graphite">Dinheiro</span>
-      </label>
+      <ChoiceCard
+        icon={<Banknote className="h-5 w-5" aria-hidden />}
+        title="Dinheiro"
+        description="O cliente paga em espécie na entrega ou na retirada."
+        name="payment_cash"
+        defaultChecked={restaurant.payment_cash}
+      />
 
-      <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-        <input
-          type="checkbox"
-          name="payment_card"
-          defaultChecked={restaurant.payment_card}
-          className="mt-0.5 h-5 w-5 accent-primary"
-        />
-        <span className="block text-label-lg text-graphite">Maquininha / cartão na entrega ou retirada</span>
-      </label>
+      <ChoiceCard
+        icon={<CreditCard className="h-5 w-5" aria-hidden />}
+        title="Maquininha / cartão"
+        description="Cartão na entrega ou retirada, com a sua maquininha."
+        name="payment_card"
+        defaultChecked={restaurant.payment_card}
+      />
 
       <ErrorMessage message={state.status === "error" ? state.message : undefined} />
 

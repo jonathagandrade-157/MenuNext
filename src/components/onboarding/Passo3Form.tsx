@@ -3,7 +3,8 @@
 import { useActionState } from "react";
 import { savePasso3Action, skipOnboardingStepAction } from "@/lib/actions/onboarding";
 import { initialStepState } from "@/lib/form-state";
-import { ErrorMessage, StepNavigation } from "@/components/onboarding/OnboardingShell";
+import { Bike, Store } from "lucide-react";
+import { ChoiceCard, ErrorMessage, StepNavigation } from "@/components/onboarding/OnboardingShell";
 import type { Restaurant } from "@/lib/tenant";
 
 const skipStep3 = skipOnboardingStepAction.bind(null, 3);
@@ -13,31 +14,23 @@ export function Passo3Form({ restaurant }: { restaurant: Restaurant }) {
 
   return (
     <form action={formAction} className="space-y-4">
-      <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-        <input
-          type="checkbox"
-          name="service_delivery"
-          defaultChecked={restaurant.service_delivery}
-          className="mt-0.5 h-5 w-5 accent-primary"
-        />
-        <span>
-          <span className="block text-label-lg text-graphite">Delivery</span>
-          <span className="block text-body-md text-text-muted">Você entrega os pedidos no endereço do cliente.</span>
-        </span>
-      </label>
+      <ChoiceCard
+        icon={<Bike className="h-5 w-5" aria-hidden />}
+        title="Delivery"
+        description="Você entrega os pedidos no endereço do cliente."
+        name="service_delivery"
+        defaultChecked={restaurant.service_delivery}
+      />
 
-      <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
-        <input
-          type="checkbox"
-          name="service_pickup"
-          defaultChecked={restaurant.service_pickup}
-          className="mt-0.5 h-5 w-5 accent-primary"
-        />
-        <span>
-          <span className="block text-label-lg text-graphite">Retirada no local</span>
-          <span className="block text-body-md text-text-muted">O cliente retira o pedido no balcão do restaurante.</span>
-        </span>
-      </label>
+      <ChoiceCard
+        icon={<Store className="h-5 w-5" aria-hidden />}
+        title="Retirada no local"
+        description="O cliente retira o pedido no balcão do restaurante."
+        name="service_pickup"
+        defaultChecked={restaurant.service_pickup}
+      />
+
+      <p className="text-body-sm text-text-muted">Marque uma ou as duas. Você pode mudar isso depois, no painel.</p>
 
       <ErrorMessage message={state.status === "error" ? state.message : undefined} />
 

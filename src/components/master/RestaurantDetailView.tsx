@@ -114,7 +114,7 @@ export function RestaurantDetailView({
           <Card className="space-y-4 p-6">
             <div>
               <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Assinatura</h2>
-              <p className="mt-1 text-body-md text-text-muted">Situação do plano do MenuNext. A cobrança é feita pelo Asaas.</p>
+              <p className="mt-1 text-body-md text-text-muted">Situação do plano do MenuNext. A cobrança é feita pelo provedor configurado (Asaas ou Mercado Pago).</p>
             </div>
             <div className="grid gap-3 sm:grid-cols-3">
               <div className="rounded-xl bg-surface-subdued p-4">
