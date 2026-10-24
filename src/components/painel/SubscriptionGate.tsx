@@ -17,12 +17,10 @@ const PLANO_PATH = "/painel/plano";
 export function SubscriptionGate({
   accessState,
   isOwner,
-  sidebarAndTopbar,
   children,
 }: {
   accessState: AccessState | null;
   isOwner: boolean;
-  sidebarAndTopbar: React.ReactNode;
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
@@ -31,17 +29,17 @@ export function SubscriptionGate({
     const copy = ACCESS_STATE_COPY[accessState];
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-surface px-6 text-center">
-        <span className="rounded-full bg-red/10 px-3 py-1 text-xs font-bold uppercase tracking-wide text-red">
+        <span className="rounded-full bg-red/10 px-3 py-1 text-label-md font-bold uppercase tracking-wide text-red">
           {copy.badge}
         </span>
-        <h1 className="text-xl font-black text-graphite">O acesso ao painel está bloqueado</h1>
-        <p className="max-w-sm text-sm text-text-muted">
+        <h1 className="text-headline-md text-graphite">O acesso ao painel está bloqueado</h1>
+        <p className="max-w-sm text-body-md text-text-muted">
           {isOwner ? copy.message : "O acesso da loja está bloqueado. Fale com o responsável pela loja para regularizar."}
         </p>
         {isOwner && (
           <Link
             href={PLANO_PATH}
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-sm font-bold text-white hover:bg-primary-container"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-primary px-5 text-body-md font-bold text-white hover:bg-primary-container"
           >
             Ver planos e assinatura
           </Link>
@@ -50,10 +48,5 @@ export function SubscriptionGate({
     );
   }
 
-  return (
-    <>
-      {sidebarAndTopbar}
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

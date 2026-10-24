@@ -18,8 +18,8 @@ export default async function MarketingPage() {
   return (
     <div className="mx-auto max-w-5xl space-y-6 px-6 py-8">
       <div>
-        <h1 className="text-2xl font-black tracking-tight text-graphite">Marketing</h1>
-        <p className="mt-0.5 text-sm font-medium text-text-muted">
+        <h1 className="text-headline-lg text-graphite">Marketing</h1>
+        <p className="mt-0.5 text-body-md text-text-muted">
           Crie cupons de desconto para seus clientes usarem no checkout da sua loja.
         </p>
       </div>

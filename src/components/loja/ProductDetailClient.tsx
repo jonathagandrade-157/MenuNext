@@ -130,8 +130,10 @@ export function ProductDetailClient({
         <span className="truncate text-sm font-bold text-graphite">{product.name}</span>
       </div>
 
+      <div className="lg:grid lg:grid-cols-[minmax(0,440px)_minmax(0,1fr)] lg:items-start lg:gap-8 lg:p-6">
+      <div>
       <div
-        className="aspect-square w-full overflow-hidden bg-surface-subdued"
+        className="aspect-square w-full overflow-hidden bg-surface-subdued lg:rounded-2xl"
         onTouchStart={hasGallery ? handleTouchStart : undefined}
         onTouchEnd={hasGallery ? handleTouchEnd : undefined}
       >
@@ -177,11 +179,12 @@ export function ProductDetailClient({
           </div>
         </>
       )}
+      </div>
 
-      <div className="space-y-4 px-3.5 py-4">
+      <div className="space-y-4 px-3.5 py-4 lg:px-0 lg:py-0">
         <div>
           <div className="flex items-start justify-between gap-2">
-            <h1 className="text-lg font-extrabold text-graphite">{product.name}</h1>
+            <h1 className="text-headline-md text-graphite">{product.name}</h1>
             {!product.is_available && (
               <span className="shrink-0 rounded-full bg-red/10 px-2.5 py-1 text-[11px] font-bold text-red">
                 Indisponível
@@ -252,15 +255,16 @@ export function ProductDetailClient({
           </div>
         </div>
       </div>
+      </div>
 
       <div className="fixed inset-x-0 bottom-0 z-30 flex justify-center border-t border-border bg-surface-card px-3.5 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
-        <div className="w-full max-w-[420px] space-y-2">
+        <div className="w-full max-w-3xl space-y-2 lg:max-w-5xl">
           {submitError && <p className="text-center text-xs font-semibold text-red">{submitError}</p>}
           <button
             type="button"
             disabled={!canSubmit}
             onClick={handleAddToBag}
-            className="flex h-12 w-full items-center justify-between rounded-xl bg-primary px-4 text-sm font-bold text-white shadow-[0_8px_20px_-4px_rgba(249,87,33,0.35)] transition-all hover:bg-[#ff5436] disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex h-12 w-full items-center justify-between rounded-xl bg-primary md:ml-auto md:w-96 px-4 text-sm font-bold text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
           >
             <span>Adicionar à sacola</span>
             <span>{formatCurrencyBRL(subtotal)}</span>

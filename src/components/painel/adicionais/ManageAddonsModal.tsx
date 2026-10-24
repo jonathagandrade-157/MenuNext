@@ -94,12 +94,12 @@ export function ManageAddonsModal({
         {group && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <p className="text-xs font-medium text-text-muted">
+              <p className="text-body-sm font-medium text-text-muted">
                 {sorted.length} adicional{sorted.length === 1 ? "" : "is"} neste grupo
               </p>
               {canEdit && (
                 <Button size="sm" onClick={() => setCreateOpen(true)}>
-                  <span className="text-base leading-none">+</span>
+                  <span className="text-body-lg leading-none">+</span>
                   Adicionar adicional
                 </Button>
               )}
@@ -122,8 +122,8 @@ export function ManageAddonsModal({
                       className="flex items-center justify-between gap-3 rounded-lg border border-border p-3"
                     >
                       <div className="min-w-0 flex-1">
-                        <p className="truncate text-sm font-bold text-graphite">{addon.name}</p>
-                        <p className="text-xs text-text-muted">
+                        <p className="truncate text-body-md font-bold text-graphite">{addon.name}</p>
+                        <p className="text-body-sm text-text-muted">
                           {addon.price > 0 ? `+ ${formatCurrencyBRL(addon.price)}` : "Sem custo adicional"}
                         </p>
                       </div>
@@ -157,7 +157,7 @@ export function ManageAddonsModal({
                           type="button"
                           disabled={isRowPending}
                           onClick={() => handleToggle(addon)}
-                          className="rounded-lg px-2 py-1 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
+                          className="rounded-lg px-2 py-1 text-label-md text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
                         >
                           {addon.is_available ? "Desativar" : "Ativar"}
                         </button>
@@ -166,7 +166,7 @@ export function ManageAddonsModal({
                             <button
                               type="button"
                               onClick={() => setEditing(addon)}
-                              className="rounded-lg px-2 py-1 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary"
+                              className="rounded-lg px-2 py-1 text-label-md text-graphite hover:bg-primary/10 hover:text-primary"
                             >
                               Editar
                             </button>
@@ -176,7 +176,7 @@ export function ManageAddonsModal({
                                 setDeleteError(null);
                                 setDeleting(addon);
                               }}
-                              className="rounded-lg px-2 py-1 text-xs font-semibold text-red hover:bg-red/10"
+                              className="rounded-lg px-2 py-1 text-label-md text-red hover:bg-red/10"
                             >
                               Excluir
                             </button>
@@ -217,7 +217,7 @@ export function ManageAddonsModal({
 
       <Modal open={deleting !== null} onClose={() => setDeleting(null)} title="Excluir adicional?">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">
+          <p className="text-body-md text-text-muted">
             Tem certeza que deseja excluir <span className="font-semibold text-graphite">{deleting?.name}</span>? Essa
             ação não poderá ser desfeita.
           </p>
@@ -230,7 +230,7 @@ export function ManageAddonsModal({
               type="button"
               onClick={handleConfirmDelete}
               disabled={isPending}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-label-lg text-white transition-all duration-150 hover:bg-red/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isPending && pendingId === deleting?.id && (
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />

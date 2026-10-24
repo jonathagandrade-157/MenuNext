@@ -30,14 +30,17 @@ export function MovementChart({ points }: { points: HourlyMovementPoint[] }) {
   const linePath = coords.map((c, i) => `${i === 0 ? "M" : "L"} ${c.x.toFixed(1)} ${c.y.toFixed(1)}`).join(" ");
   const areaPath = `${linePath} L ${coords[coords.length - 1]?.x ?? PADDING} ${HEIGHT - PADDING} L ${PADDING} ${HEIGHT - PADDING} Z`;
 
-  const peakIndex = values.indexOf(maxValue);
+  // Pico real (0 quando não há movimento). Não usar maxValue aqui: ele tem
+  // piso 1 só para a escala do gráfico e apontaria para um índice inexistente.
+  const peakValue = Math.max(0, ...values);
+  const peakIndex = values.indexOf(peakValue);
 
   return (
     <Card className="p-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-sm font-extrabold text-graphite">Movimento de hoje</h2>
-          <p className="text-xs text-text-muted">Pedidos e faturamento ao longo do dia</p>
+          <h2 className="text-body-lg font-bold text-graphite">Movimento de hoje</h2>
+          <p className="text-body-sm text-text-muted">Pedidos e faturamento ao longo do dia</p>
         </div>
         <div className="flex gap-1 rounded-lg bg-surface-subdued p-1">
           {(["orders", "revenue"] as const).map((value) => (
@@ -45,7 +48,7 @@ export function MovementChart({ points }: { points: HourlyMovementPoint[] }) {
               key={value}
               type="button"
               onClick={() => setMetric(value)}
-              className={`rounded-md px-3 py-1 text-xs font-bold transition-colors ${
+              className={`rounded-md px-3 py-1 text-label-md font-bold transition-colors ${
                 metric === value ? "bg-white text-graphite shadow-sm" : "text-text-muted"
               }`}
             >
@@ -56,13 +59,13 @@ export function MovementChart({ points }: { points: HourlyMovementPoint[] }) {
       </div>
 
       {values.every((v) => v === 0) ? (
-        <p className="py-10 text-center text-sm text-text-muted">Nenhum pedido hoje ainda.</p>
+        <p className="py-10 text-center text-body-md text-text-muted">Nenhum pedido hoje ainda.</p>
       ) : (
         <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="mt-4 w-full" role="img" aria-label="Gráfico de movimento por hora">
-          <path d={areaPath} fill="var(--color-primary, #f95721)" opacity={0.08} />
-          <path d={linePath} fill="none" stroke="var(--color-primary, #f95721)" strokeWidth={2} />
+          <path d={areaPath} fill="var(--color-primary, #ab2f00)" opacity={0.08} />
+          <path d={linePath} fill="none" stroke="var(--color-primary, #ab2f00)" strokeWidth={2} />
           {coords.map((c, i) => (
-            <circle key={i} cx={c.x} cy={c.y} r={i === peakIndex ? 4 : 2} fill="var(--color-primary, #f95721)" />
+            <circle key={i} cx={c.x} cy={c.y} r={i === peakIndex ? 4 : 2} fill="var(--color-primary, #ab2f00)" />
           ))}
         </svg>
       )}
@@ -72,10 +75,10 @@ export function MovementChart({ points }: { points: HourlyMovementPoint[] }) {
         {points.length > 1 && <span>{String(points[points.length - 1].hour).padStart(2, "0")}h</span>}
       </div>
 
-      {maxValue > 0 && (
-        <p className="mt-2 text-xs font-medium text-text-muted">
+      {peakValue > 0 && (
+        <p className="mt-2 text-body-sm font-medium text-text-muted">
           Pico às {String(points[peakIndex]?.hour ?? 0).padStart(2, "0")}h —{" "}
-          {metric === "orders" ? `${values[peakIndex]} pedidos` : formatCurrencyBRL(values[peakIndex])}
+          {metric === "orders" ? `${peakValue} ${peakValue === 1 ? "pedido" : "pedidos"}` : formatCurrencyBRL(peakValue)}
         </p>
       )}
     </Card>

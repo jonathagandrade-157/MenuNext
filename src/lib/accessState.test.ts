@@ -2,10 +2,11 @@ import { describe, expect, it } from "vitest";
 import { ACCESS_STATE_COPY, parseAccessState } from "./accessState";
 
 describe("parseAccessState", () => {
-  it("reconhece os três motivos de bloqueio", () => {
+  it("reconhece os quatro motivos de bloqueio", () => {
     expect(parseAccessState("overdue")).toBe("overdue");
     expect(parseAccessState("cancelled")).toBe("cancelled");
     expect(parseAccessState("trial_expired")).toBe("trial_expired");
+    expect(parseAccessState("blocked")).toBe("blocked");
   });
 
   it("null, vazio e valores desconhecidos significam liberado (o banco reforça o bloqueio real)", () => {

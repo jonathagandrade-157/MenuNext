@@ -8,9 +8,9 @@ import { initialDeliveryZoneState, type DeliveryZoneActionState } from "@/lib/fo
 import type { DeliveryZone } from "@/lib/tenant";
 
 const inputClass =
-  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
+  "h-11 w-full rounded-xl border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
 
-const fieldLabelClass = "mb-1.5 block text-sm font-semibold text-graphite";
+const fieldLabelClass = "mb-1.5 block text-body-lg font-bold text-graphite";
 
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();

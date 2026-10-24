@@ -43,11 +43,11 @@ export function OrderTrackingProgress({
               {!isLast && <span className={`h-8 w-0.5 ${isDone ? "bg-primary" : "bg-border"}`} />}
             </div>
             <div className={`pb-8 ${isLast ? "pb-0" : ""}`}>
-              <p className={`text-sm font-bold ${isDone || isCurrent ? "text-graphite" : "text-text-muted"}`}>
+              <p className={`text-label-lg ${isDone || isCurrent ? "text-graphite" : "text-text-muted"}`}>
                 {ORDER_STATUS_LABEL[step]}
               </p>
               {isCurrent && !isTerminalOrderStatus(status, fulfillmentType) && (
-                <p className="text-xs text-text-muted">Em andamento agora</p>
+                <p className="text-body-sm text-primary">Em andamento agora</p>
               )}
               {isCurrent && isTerminalOrderStatus(status, fulfillmentType) && (
                 <p className="text-xs font-semibold text-emerald">Concluído</p>

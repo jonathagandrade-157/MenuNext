@@ -10,6 +10,7 @@ import { validateProductDescription, validateProductName, validateProductPrice }
 import { uploadProductImage } from "@/lib/storage/assets";
 import { buildGeocodableAddress, needsRestaurantLocation } from "@/lib/delivery";
 import { geocodeAddress, isGeocodingConfigured } from "@/lib/geocoding";
+import { validateCategoryName } from "@/lib/categories";
 
 export type { StepActionState };
 
@@ -361,6 +362,8 @@ export async function savePasso7Action(_prev: StepActionState, formData: FormDat
   const description = String(formData.get("description") ?? "").trim();
   const priceRaw = String(formData.get("price") ?? "").replace(",", ".");
   const categoryIdInput = String(formData.get("categoryId") ?? "").trim();
+  // Sem categoria ainda: a pessoa pode dar o nome da primeira; vazio mantém o padrão "Cardápio".
+  const newCategoryName = String(formData.get("newCategoryName") ?? "").trim() || "Cardápio";
   const imageFile = formData.get("image");
 
   const nameValidation = validateProductName(name);
@@ -369,6 +372,10 @@ export async function savePasso7Action(_prev: StepActionState, formData: FormDat
   if (!descriptionValidation.ok) return { status: "error", message: descriptionValidation.error };
   const priceValidation = validateProductPrice(priceRaw);
   if (!priceValidation.ok) return { status: "error", message: priceValidation.error };
+  if (!categoryIdInput) {
+    const categoryNameValidation = validateCategoryName(newCategoryName);
+    if (!categoryNameValidation.ok) return { status: "error", message: categoryNameValidation.error };
+  }
 
   let categoryId = categoryIdInput;
   if (!categoryId) {
@@ -384,9 +391,9 @@ export async function savePasso7Action(_prev: StepActionState, formData: FormDat
 
     const { data: defaultCategory, error: categoryError } = await supabase.rpc("create_category", {
       p_restaurant_id: restaurant.id,
-      p_name: "Cardápio",
+      p_name: newCategoryName,
     });
-    if (categoryError) return { status: "error", message: "Não foi possível criar a categoria padrão. Tente novamente." };
+    if (categoryError) return { status: "error", message: "Não foi possível criar a categoria. Tente novamente." };
     categoryId = (defaultCategory as { id: string }).id;
   }
 

@@ -97,6 +97,7 @@ describe("subscriptionBadge — loja bloqueada nunca aparece como 'Em dia'", () 
 
   it("trial expirado tem prioridade, mesmo com status 'active' (sem plano)", () => {
     expect(subscriptionBadge("active", "trial_expired")).toEqual({ label: "Teste encerrado", tone: "danger" });
+    expect(subscriptionBadge("active", "blocked")).toEqual({ label: "Acesso bloqueado", tone: "danger" });
   });
 });
 

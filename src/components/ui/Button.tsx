@@ -6,16 +6,16 @@ type Size = "sm" | "md" | "lg";
 
 const variantClasses: Record<Variant, string> = {
   primary:
-    "bg-primary text-white hover:bg-[#ff5436] active:scale-[0.98] shadow-[0_8px_20px_-4px_rgba(249,87,33,0.35)]",
+    "bg-primary text-white hover:bg-primary-container active:scale-[0.98] shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)]",
   secondary:
     "bg-surface-card text-graphite border border-border hover:border-slate-300 hover:bg-surface",
   ghost: "bg-transparent text-text-muted hover:text-graphite hover:bg-surface-subdued",
 };
 
 const sizeClasses: Record<Size, string> = {
-  sm: "h-9 px-3 text-sm rounded-lg",
-  md: "h-11 px-5 text-sm rounded-xl",
-  lg: "h-12 px-6 text-base rounded-xl",
+  sm: "h-9 px-3 text-label-md rounded-xl",
+  md: "h-11 px-5 text-label-lg rounded-xl",
+  lg: "h-12 px-6 text-body-lg rounded-xl",
 };
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {

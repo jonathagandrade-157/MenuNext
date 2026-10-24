@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { BellRing, ChefHat, PackageCheck, Bike, Search, Volume2, VolumeX, type LucideIcon } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { advanceOrderStatusAction, cancelOrderAction } from "@/lib/actions/orders";
 import {
@@ -18,6 +19,15 @@ import { OrderCard } from "./OrderCard";
 import { OrderDetailModal } from "./OrderDetailModal";
 
 const TERMINAL_STATUSES = new Set(["delivered", "picked_up", "cancelled"]);
+
+/** Cor e ícone de cada etapa (borda do cartão, ponto, contador e métrica do topo). */
+const COLUMN_STYLE: Record<string, { accent: string; dot: string; pill: string; text: string; tint: string; icon: LucideIcon }> = {
+  novos: { accent: "border-l-primary", dot: "bg-primary", pill: "bg-primary text-white", text: "text-primary", tint: "bg-primary/10 text-primary", icon: BellRing },
+  preparando: { accent: "border-l-amber", dot: "bg-amber", pill: "bg-amber text-white", text: "text-amber", tint: "bg-amber/10 text-amber", icon: ChefHat },
+  prontos: { accent: "border-l-emerald", dot: "bg-emerald", pill: "bg-emerald text-white", text: "text-emerald", tint: "bg-emerald/10 text-emerald", icon: PackageCheck },
+  saiu_para_entrega: { accent: "border-l-blue", dot: "bg-blue", pill: "bg-blue text-white", text: "text-blue", tint: "bg-blue/10 text-blue", icon: Bike },
+  entregues: { accent: "border-l-slate-300", dot: "bg-slate-300", pill: "bg-slate-300 text-graphite", text: "text-text-muted", tint: "bg-surface-subdued text-text-muted", icon: PackageCheck },
+};
 const NEW_ORDER_HIGHLIGHT_MS = 6000;
 
 /**
@@ -36,6 +46,7 @@ export function KanbanBoard({
   channelPrefix = "kanban",
   showElapsedTime = false,
   targetPrepMinutes = null,
+  storeName = null,
 }: {
   restaurantId: string;
   initialOrders: OrderWithItems[];
@@ -53,6 +64,8 @@ export function KanbanBoard({
    * quando showElapsedTime está ativo — vem de
    * computeDashboardMetrics.averagePrepMinutes, nunca um valor novo. */
   targetPrepMinutes?: number | null;
+  /** Nome da loja na comanda impressa. */
+  storeName?: string | null;
 }) {
   const [orders, setOrders] = useState<OrderWithItems[]>(initialOrders);
   const [newOrderIds, setNewOrderIds] = useState<Set<string>>(new Set());
@@ -188,30 +201,59 @@ export function KanbanBoard({
     ? orders.filter((o) => `${o.order_number}`.includes(query) || o.customer_name.toLowerCase().includes(query))
     : orders;
 
+  const countByColumn = (columnId: string) => orders.filter((o) => getKanbanColumnForStatus(o.status) === columnId).length;
+
   return (
     <div className="flex h-full flex-col">
+      <div className="grid grid-cols-2 gap-3 px-4 pt-3 sm:grid-cols-4">
+        {columns
+          .filter((column) => column.id !== "entregues")
+          .map((column) => {
+            const style = COLUMN_STYLE[column.id];
+            const Icon = style.icon;
+            return (
+              <div key={column.id} className="flex items-center justify-between rounded-xl bg-surface-card p-3 shadow-card">
+                <div>
+                  <p className="text-label-sm text-text-muted">{column.title}</p>
+                  <p className={`text-headline-lg ${countByColumn(column.id) > 0 ? style.text : "text-graphite"}`}>
+                    {countByColumn(column.id)}
+                  </p>
+                </div>
+                <span className={`flex h-9 w-9 items-center justify-center rounded-lg ${style.tint}`}>
+                  <Icon className="h-5 w-5" aria-hidden />
+                </span>
+              </div>
+            );
+          })}
+      </div>
+
       <div className="flex items-center gap-3 px-4 pt-3">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Buscar por pedido (#1048) ou cliente..."
-          className="h-9 w-full max-w-sm rounded-lg border border-border bg-surface-card px-3 text-xs text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-        />
+        <div className="relative w-full max-w-sm">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" aria-hidden />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar por pedido (#1048) ou cliente..."
+            className="h-10 w-full rounded-xl border border-border bg-surface-card pl-9 pr-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          />
+        </div>
         <button
           type="button"
           onClick={() => setSoundEnabled((v) => !v)}
           title={soundEnabled ? "Som de novo pedido ativado" : "Som de novo pedido desativado"}
-          className={`flex h-9 shrink-0 items-center gap-1.5 rounded-lg border px-3 text-xs font-semibold transition-colors ${
-            soundEnabled ? "border-border text-graphite hover:bg-surface-subdued" : "border-border bg-surface-subdued text-text-muted"
+          aria-pressed={soundEnabled}
+          className={`flex h-10 shrink-0 items-center gap-1.5 rounded-xl px-3 text-label-md transition-colors ${
+            soundEnabled ? "bg-surface-card text-graphite shadow-card hover:bg-surface-subdued" : "bg-surface-subdued text-text-muted"
           }`}
         >
-          {soundEnabled ? "🔊 Som ativado" : "🔇 Som desativado"}
+          {soundEnabled ? <Volume2 className="h-4 w-4" aria-hidden /> : <VolumeX className="h-4 w-4" aria-hidden />}
+          {soundEnabled ? "Som ativado" : "Som desativado"}
         </button>
       </div>
 
       {errorMessage && (
-        <div className="mx-4 mt-3 rounded-lg border border-red/20 bg-red/10 px-3.5 py-2 text-xs font-semibold text-red">
+        <div className="mx-4 mt-3 rounded-lg border border-red/20 bg-red/10 px-3.5 py-2 text-label-md text-red">
           {errorMessage}
         </div>
       )}
@@ -219,17 +261,21 @@ export function KanbanBoard({
       <div className="flex flex-1 gap-4 overflow-x-auto p-4">
         {columns.map((column) => {
           const columnOrders = visibleOrders.filter((o) => getKanbanColumnForStatus(o.status) === column.id);
+          const style = COLUMN_STYLE[column.id];
           return (
-            <div key={column.id} className="flex w-72 shrink-0 flex-col rounded-xl bg-surface-subdued">
-              <div className="flex items-center justify-between px-3.5 py-3">
-                <h2 className="text-sm font-extrabold text-graphite">{column.title}</h2>
-                <span className="rounded-full bg-surface-card px-2 py-0.5 text-xs font-bold text-text-muted">
+            <div key={column.id} className="flex w-72 shrink-0 flex-col rounded-2xl bg-surface-subdued p-2">
+              <div className="flex items-center justify-between px-2 py-2">
+                <div className="flex items-center gap-2">
+                  <span className={`h-2.5 w-2.5 rounded-full ${style.dot} ${column.id === "novos" && columnOrders.length > 0 ? "animate-pulse" : ""}`} aria-hidden />
+                  <h2 className="text-body-lg font-bold uppercase tracking-tight text-graphite">{column.title}</h2>
+                </div>
+                <span className={`rounded-full px-2 py-0.5 text-label-sm ${columnOrders.length > 0 ? style.pill : "bg-surface-card text-text-muted"}`}>
                   {columnOrders.length}
                 </span>
               </div>
-              <div className="flex-1 space-y-2.5 overflow-y-auto px-2.5 pb-3">
+              <div className="flex-1 space-y-2.5 overflow-y-auto px-0.5 pb-2">
                 {columnOrders.length === 0 && (
-                  <p className="px-1 py-6 text-center text-xs text-text-muted">Nenhum pedido</p>
+                  <p className="px-1 py-6 text-center text-body-sm text-text-muted">Nenhum pedido</p>
                 )}
                 {columnOrders.map((order) => {
                   const elapsedMinutes = showElapsedTime && now ? getElapsedMinutesSince(order, now) : undefined;
@@ -245,6 +291,7 @@ export function KanbanBoard({
                       onAdvance={() => handleAdvance(order)}
                       elapsedMinutes={elapsedMinutes}
                       isOverdue={isOverdue}
+                      accentClass={style.accent}
                     />
                   );
                 })}
@@ -256,6 +303,7 @@ export function KanbanBoard({
 
       <OrderDetailModal
         order={selectedOrder}
+        storeName={storeName}
         isAdvancing={advancingId === selectedOrder?.id}
         isCancelling={cancellingId === selectedOrder?.id}
         onClose={() => setSelectedOrderId(null)}

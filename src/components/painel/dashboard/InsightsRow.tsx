@@ -6,12 +6,12 @@ export function InsightsRow({ insights }: { insights: DashboardInsight[] }) {
 
   return (
     <div>
-      <h2 className="mb-2 text-sm font-extrabold text-graphite">Hoje no seu restaurante</h2>
+      <h2 className="mb-2 text-body-lg font-bold text-graphite">Hoje no seu restaurante</h2>
       <div className="grid gap-3 sm:grid-cols-3">
         {insights.map((insight) => (
           <Card key={insight.label} className="p-4">
-            <p className="text-[11px] font-bold uppercase tracking-wide text-primary">{insight.label}</p>
-            <p className="mt-1 text-sm font-semibold text-graphite">{insight.value}</p>
+            <p className="text-label-sm uppercase text-primary">{insight.label}</p>
+            <p className="mt-1 text-label-lg text-graphite">{insight.value}</p>
           </Card>
         ))}
       </div>

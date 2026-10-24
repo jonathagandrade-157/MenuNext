@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, useTransition } from "react";
+import { Mail, Search, UserCog, Users, type LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
@@ -10,6 +11,8 @@ import { CopyLinkButton } from "@/components/onboarding/CopyLinkButton";
 import { removeMemberAction, resendInviteAction, revokeInviteAction } from "@/lib/actions/invites";
 import type { RestaurantInvite, RestaurantMember } from "@/lib/tenant";
 import { InviteFormFields } from "./InviteFormFields";
+import { AuditList } from "@/components/audit/AuditList";
+import type { AuditEntry } from "@/lib/audit";
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "numeric" });
@@ -30,7 +33,7 @@ function Avatar({ label, tone }: { label: string; tone: "owner" | "staff" | "inv
         ? "bg-blue/15 text-blue"
         : "bg-surface-subdued text-text-muted";
   return (
-    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-xs font-bold ${toneClasses}`}>
+    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-label-md font-bold ${toneClasses}`}>
       {initialsOf(label)}
     </div>
   );
@@ -47,10 +50,13 @@ export function UsuariosClient({
   members,
   invites,
   currentUserId,
+  activity,
 }: {
   members: RestaurantMember[];
   invites: RestaurantInvite[];
   currentUserId: string;
+  /** Atividade recente da loja (registro de auditoria), do mais novo para o mais antigo. */
+  activity: AuditEntry[];
 }) {
   const [inviteOpen, setInviteOpen] = useState(false);
   const [revoking, setRevoking] = useState<RestaurantInvite | null>(null);
@@ -61,6 +67,7 @@ export function UsuariosClient({
   const [resendError, setResendError] = useState<string | null>(null);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
+  const [view, setView] = useState<"todos" | "equipe" | "convites">("todos");
   const [isPending, startTransition] = useTransition();
 
   const pendingInvites = invites.filter((invite) => invite.status === "pending");
@@ -121,70 +128,99 @@ export function UsuariosClient({
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-6 py-8">
-      <nav className="flex items-center gap-2 text-xs font-medium text-text-muted">
+      <nav className="flex items-center gap-2 text-label-md text-text-muted">
         <span>Painel</span>
         <span>/</span>
-        <span className="font-bold text-graphite">Usuários</span>
+        <span className="text-graphite">Usuários</span>
       </nav>
 
-      <div className="flex flex-col justify-between gap-4 border-b border-border pb-4 sm:flex-row sm:items-center">
+      <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-graphite">Usuários e permissões</h1>
-          <p className="mt-0.5 text-sm font-medium text-text-muted">
+          <h1 className="text-headline-lg text-graphite">Usuários e permissões</h1>
+          <p className="mt-0.5 text-body-md text-text-muted">
             Gerencie quem tem acesso ao painel do seu restaurante.
           </p>
         </div>
         <Button onClick={() => setInviteOpen(true)} className="self-start sm:self-auto">
-          <span className="text-lg leading-none">+</span>
+          <span className="text-headline-sm leading-none">+</span>
           Convidar membro
         </Button>
       </div>
 
       <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
-        <Card className="p-4">
-          <p className="text-xs font-medium text-text-muted">Total de usuários</p>
-          <p className="mt-1 text-2xl font-black text-graphite">{members.length}</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs font-medium text-text-muted">Colaboradores</p>
-          <p className="mt-1 text-2xl font-black text-graphite">{staffCount}</p>
-        </Card>
-        <Card className="p-4">
-          <p className="text-xs font-medium text-text-muted">Convites pendentes</p>
-          <p className="mt-1 text-2xl font-black text-graphite">{pendingInvites.length}</p>
-        </Card>
+        {(
+          [
+            { label: "Total de usuários", value: members.length, icon: Users, tint: "bg-primary/10 text-primary" },
+            { label: "Colaboradores", value: staffCount, icon: UserCog, tint: "bg-blue/10 text-blue" },
+            { label: "Convites pendentes", value: pendingInvites.length, icon: Mail, tint: "bg-amber/10 text-amber-strong" },
+          ] as { label: string; value: number; icon: LucideIcon; tint: string }[]
+        ).map(({ label, value, icon: Icon, tint }) => (
+          <Card key={label} className="flex items-center gap-3 p-4">
+            <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${tint}`}>
+              <Icon className="h-5 w-5" aria-hidden />
+            </span>
+            <div className="min-w-0">
+              <p className="truncate text-label-sm uppercase text-text-muted">{label}</p>
+              <p className="text-headline-lg text-graphite">{value}</p>
+            </div>
+          </Card>
+        ))}
       </div>
 
-      <Card className="p-3.5">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Buscar por nome, e-mail ou telefone..."
-          className="h-9 w-full max-w-md rounded-lg border border-border bg-surface px-3 text-xs text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-        />
+      <Card className="flex flex-col gap-3 p-3.5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-center gap-1 overflow-x-auto rounded-xl bg-surface-subdued p-1">
+          {(
+            [
+              ["todos", "Todos"],
+              ["equipe", `Equipe (${members.length})`],
+              ["convites", `Convites (${pendingInvites.length})`],
+            ] as const
+          ).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setView(id)}
+              className={`shrink-0 rounded-lg px-3 py-1.5 text-label-md transition-colors ${
+                view === id ? "bg-surface-card text-graphite shadow-card" : "text-text-muted hover:text-graphite"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+        <div className="relative w-full sm:max-w-md">
+          <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" aria-hidden />
+          <input
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar por nome, e-mail ou telefone..."
+            className="h-10 w-full rounded-xl border border-border bg-surface pl-9 pr-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          />
+        </div>
       </Card>
 
       {removeError && <ErrorState message={removeError} />}
 
+      {view !== "convites" && (
       <Card className="overflow-hidden p-0">
         <div className="border-b border-border bg-surface-subdued/70 px-5 py-3">
-          <h2 className="text-sm font-bold text-graphite">Equipe ({filteredMembers.length})</h2>
+          <h2 className="text-body-md font-bold text-graphite">Equipe ({filteredMembers.length})</h2>
         </div>
         <div className="divide-y divide-border">
           {filteredMembers.map((member) => (
-            <div key={member.id} className="flex items-center justify-between gap-3 px-5 py-3.5">
+            <div key={member.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-5">
               <div className="flex min-w-0 items-center gap-3">
                 <Avatar label={member.name || member.email} tone={member.role === "OWNER" ? "owner" : "staff"} />
                 <div className="min-w-0">
-                  <p className="truncate text-sm font-bold text-graphite">
+                  <p className="truncate text-body-md font-bold text-graphite">
                     {member.name || member.email}
                     {member.user_id === currentUserId && (
-                      <span className="ml-2 text-xs font-medium text-text-muted">(Você)</span>
+                      <span className="ml-2 text-body-sm font-medium text-text-muted">(Você)</span>
                     )}
                   </p>
-                  <p className="truncate text-xs text-text-muted">{member.email}</p>
-                  {member.phone && <p className="truncate text-xs text-text-muted">{member.phone}</p>}
+                  <p className="truncate text-body-sm text-text-muted">{member.email}</p>
+                  {member.phone && <p className="truncate text-body-sm text-text-muted">{member.phone}</p>}
                 </div>
               </div>
               <div className="flex shrink-0 items-center gap-2">
@@ -198,7 +234,7 @@ export function UsuariosClient({
                       setRemoveError(null);
                       setRemoving(member);
                     }}
-                    className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
+                    className="rounded-lg px-2.5 py-1.5 text-label-md text-red hover:bg-red/10"
                   >
                     Remover
                   </button>
@@ -213,10 +249,12 @@ export function UsuariosClient({
           )}
         </div>
       </Card>
+      )}
 
+      {view !== "equipe" && (
       <Card className="overflow-hidden p-0">
         <div className="border-b border-border bg-surface-subdued/70 px-5 py-3">
-          <h2 className="text-sm font-bold text-graphite">Convites pendentes ({filteredPendingInvites.length})</h2>
+          <h2 className="text-body-md font-bold text-graphite">Convites pendentes ({filteredPendingInvites.length})</h2>
         </div>
 
           {(revokeError || resendError) && (
@@ -235,12 +273,12 @@ export function UsuariosClient({
           ) : (
             <div className="divide-y divide-border">
               {filteredPendingInvites.map((invite) => (
-                <div key={invite.id} className="flex items-center justify-between gap-3 px-5 py-3.5">
+                <div key={invite.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-5">
                   <div className="flex min-w-0 items-center gap-3">
                     <Avatar label={invite.email} tone="invite" />
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-bold text-graphite">{invite.email}</p>
-                      <p className="text-xs text-text-muted">Enviado em {formatDate(invite.created_at)}</p>
+                      <p className="truncate text-body-md font-bold text-graphite">{invite.email}</p>
+                      <p className="text-body-sm text-text-muted">Enviado em {formatDate(invite.created_at)}</p>
                     </div>
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
@@ -249,7 +287,7 @@ export function UsuariosClient({
                       type="button"
                       disabled={isPending && pendingId === invite.id}
                       onClick={() => handleResend(invite)}
-                      className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
+                      className="rounded-lg px-2.5 py-1.5 text-label-md text-graphite hover:bg-primary/10 hover:text-primary disabled:opacity-50"
                     >
                       Reenviar
                     </button>
@@ -259,7 +297,7 @@ export function UsuariosClient({
                         setRevokeError(null);
                         setRevoking(invite);
                       }}
-                      className="rounded-lg px-2.5 py-1.5 text-xs font-semibold text-red hover:bg-red/10"
+                      className="rounded-lg px-2.5 py-1.5 text-label-md text-red hover:bg-red/10"
                     >
                       Revogar
                     </button>
@@ -272,16 +310,16 @@ export function UsuariosClient({
           {historyInvites.length > 0 && (
             <>
               <div className="border-y border-border bg-surface-subdued/70 px-5 py-3">
-                <h2 className="text-sm font-bold text-graphite">Histórico</h2>
+                <h2 className="text-body-md font-bold text-graphite">Histórico</h2>
               </div>
               <div className="divide-y divide-border">
                 {historyInvites.map((invite) => (
-                  <div key={invite.id} className="flex items-center justify-between gap-3 px-5 py-3.5 opacity-70">
+                  <div key={invite.id} className="flex flex-wrap items-center justify-between gap-3 px-4 py-3.5 sm:px-5 opacity-70">
                     <div className="flex min-w-0 items-center gap-3">
                       <Avatar label={invite.email} tone="invite" />
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-bold text-graphite">{invite.email}</p>
-                        <p className="text-xs text-text-muted">Enviado em {formatDate(invite.created_at)}</p>
+                        <p className="truncate text-body-md font-bold text-graphite">{invite.email}</p>
+                        <p className="text-body-sm text-text-muted">Enviado em {formatDate(invite.created_at)}</p>
                       </div>
                     </div>
                     {inviteStatusBadge(invite)}
@@ -291,6 +329,17 @@ export function UsuariosClient({
             </>
           )}
       </Card>
+      )}
+
+      <Card className="space-y-2 p-6">
+        <div>
+          <h2 className="text-body-lg font-bold text-graphite">Atividade recente</h2>
+          <p className="text-body-sm text-text-muted">
+            Alterações feitas por você e pela equipe no cardápio, nas configurações e nos convites.
+          </p>
+        </div>
+        <AuditList entries={activity} emptyText="Ainda não há atividade registrada." />
+      </Card>
 
       <Modal open={inviteOpen} onClose={() => setInviteOpen(false)} title="Convidar membro">
         <InviteFormFields onDone={() => setInviteOpen(false)} />
@@ -298,7 +347,7 @@ export function UsuariosClient({
 
       <Modal open={revoking !== null} onClose={() => setRevoking(null)} title="Revogar convite?">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">
+          <p className="text-body-md text-text-muted">
             O link enviado para <span className="font-semibold text-graphite">{revoking?.email}</span> deixará de
             funcionar. Você pode convidar essa pessoa novamente depois.
           </p>
@@ -310,7 +359,7 @@ export function UsuariosClient({
               type="button"
               onClick={handleConfirmRevoke}
               disabled={isPending}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-label-lg text-white transition-all duration-150 hover:bg-red/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isPending && <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}
               Revogar
@@ -321,7 +370,7 @@ export function UsuariosClient({
 
       <Modal open={removing !== null} onClose={() => setRemoving(null)} title="Remover da equipe?">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">
+          <p className="text-body-md text-text-muted">
             <span className="font-semibold text-graphite">{removing?.name || removing?.email}</span> perderá o
             acesso ao painel imediatamente. Você pode convidar essa pessoa novamente depois, se precisar.
           </p>
@@ -333,7 +382,7 @@ export function UsuariosClient({
               type="button"
               onClick={handleConfirmRemove}
               disabled={isPending}
-              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-sm font-semibold text-white transition-all duration-150 hover:bg-[#dc2626] disabled:cursor-not-allowed disabled:opacity-50"
+              className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-red px-5 text-label-lg text-white transition-all duration-150 hover:bg-red/90 disabled:cursor-not-allowed disabled:opacity-50"
             >
               {isPending && <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />}
               Remover
@@ -344,9 +393,9 @@ export function UsuariosClient({
 
       <Modal open={resendUrl !== null} onClose={() => setResendUrl(null)} title="Convite reenviado">
         <div className="space-y-4">
-          <p className="text-sm text-text-muted">Novo link gerado (o anterior parou de funcionar). Copie e compartilhe:</p>
+          <p className="text-body-md text-text-muted">Novo link gerado (o anterior parou de funcionar). Copie e compartilhe:</p>
           <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-subdued px-3 py-2.5">
-            <p className="min-w-0 flex-1 truncate text-sm font-medium text-graphite">{resendUrl}</p>
+            <p className="min-w-0 flex-1 truncate text-body-md font-medium text-graphite">{resendUrl}</p>
           </div>
           <div className="flex justify-end gap-2">
             {resendUrl && <CopyLinkButton url={resendUrl} />}

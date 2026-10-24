@@ -2,9 +2,9 @@
  * está bloqueado. Vem da função do banco `_restaurant_access_state`
  * (null = liberado) — a regra vive no banco para valer igual no painel, na
  * loja pública e no `create_order`. */
-export type AccessState = "overdue" | "cancelled" | "trial_expired";
+export type AccessState = "overdue" | "cancelled" | "trial_expired" | "blocked";
 
-const ACCESS_STATES: readonly AccessState[] = ["overdue", "cancelled", "trial_expired"];
+const ACCESS_STATES: readonly AccessState[] = ["overdue", "cancelled", "trial_expired", "blocked"];
 
 /** Valor desconhecido vira null (liberado) em vez de bloquear por engano:
  * o bloqueio real sempre é reforçado no banco (create_order). */
@@ -24,5 +24,9 @@ export const ACCESS_STATE_COPY: Record<AccessState, { badge: string; message: st
   trial_expired: {
     badge: "Teste encerrado",
     message: "Seu período de teste de 30 dias terminou. Assine um plano para voltar a usar o painel e a loja pública.",
+  },
+  blocked: {
+    badge: "Acesso bloqueado",
+    message: "O acesso desta loja foi bloqueado pela administração da plataforma. Entre em contato com o suporte.",
   },
 };

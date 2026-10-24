@@ -11,10 +11,10 @@ import type { EstimatedMargin } from "@/lib/dashboard";
 export function MarginCard({ margin }: { margin: EstimatedMargin | null }) {
   return (
     <Card className="p-5">
-      <h2 className="text-sm font-extrabold text-graphite">Margem estimada</h2>
+      <h2 className="text-body-lg font-bold text-graphite">Margem estimada</h2>
 
       {margin === null ? (
-        <p className="mt-3 text-sm text-text-muted">
+        <p className="mt-3 text-body-md text-text-muted">
           Cadastre o custo dos produtos vendidos hoje em{" "}
           <a href="/painel/produtos" className="font-semibold text-primary hover:underline">
             Produtos
@@ -23,8 +23,8 @@ export function MarginCard({ margin }: { margin: EstimatedMargin | null }) {
         </p>
       ) : (
         <>
-          <p className="mt-2 text-2xl font-black text-graphite">{margin.marginPercent.toFixed(1)}%</p>
-          <p className="mt-1 text-xs text-text-muted">
+          <p className="mt-2 text-headline-lg text-graphite">{margin.marginPercent.toFixed(1)}%</p>
+          <p className="mt-1 text-body-sm text-text-muted">
             Faturamento com custo: {formatCurrencyBRL(margin.revenue)} • Custo: {formatCurrencyBRL(margin.cost)}
           </p>
           <p className="mt-2 text-[11px] text-text-muted">Estimativa com base no custo cadastrado atual dos produtos.</p>

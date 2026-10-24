@@ -11,12 +11,19 @@
  */
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import {
+  SQUARE_LOGO_SIZE,
+  SQUARE_PRODUCT_SIZE,
+  toCompressedWebp,
+  toSquareWebp,
+} from "./processImage";
 
 export const RESTAURANT_ASSETS_BUCKET = "restaurant-assets";
 
 export const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB — não aumentar sem necessidade real.
 
-export const MAX_PRODUCT_IMAGES = 5;
+import { MAX_PRODUCT_IMAGES } from "./constants";
+export { MAX_PRODUCT_IMAGES };
 
 export const ALLOWED_IMAGE_MIME_TYPES = ["image/jpeg", "image/png", "image/webp"] as const;
 export type AllowedImageMimeType = (typeof ALLOWED_IMAGE_MIME_TYPES)[number];
@@ -76,8 +83,8 @@ export type ImageValidationResult =
 
 /**
  * Valida um arquivo de imagem antes do upload: tamanho, MIME declarado E
- * conteúdo real (magic bytes). Não converte/otimiza nada — isso fica para
- * uma etapa futura (ver decisão sobre WebP no relatório da Fase 1.5).
+ * conteúdo real (magic bytes). A conversão (WebP, recorte 1:1) é feita depois, em
+ * processImage.ts, antes do upload.
  */
 export async function validateImageFile(file: File): Promise<ImageValidationResult> {
   if (file.size <= 0) {
@@ -140,7 +147,7 @@ export function comboImagePath(restaurantId: string, comboId: string, extension:
 
 export type UploadResult = { ok: true; path: string } | { ok: false; error: string };
 
-async function uploadToBucket(supabase: SupabaseClient, path: string, file: File, contentType: string): Promise<UploadResult> {
+async function uploadToBucket(supabase: SupabaseClient, path: string, file: File | Uint8Array, contentType: string): Promise<UploadResult> {
   const { error } = await supabase.storage.from(RESTAURANT_ASSETS_BUCKET).upload(path, file, {
     contentType,
     upsert: true,
@@ -160,8 +167,11 @@ export async function uploadRestaurantLogo(supabase: SupabaseClient, restaurantI
   const validation = await validateImageFile(file);
   if (!validation.ok) return validation;
 
-  const path = restaurantLogoPath(restaurantId, validation.extension);
-  const uploaded = await uploadToBucket(supabase, path, file, validation.mimeType);
+  const image = await toSquareWebp(file, { maxSide: SQUARE_LOGO_SIZE });
+  if (!image.ok) return image;
+
+  const path = restaurantLogoPath(restaurantId, image.extension);
+  const uploaded = await uploadToBucket(supabase, path, image.bytes, image.mimeType);
   if (!uploaded.ok) return uploaded;
 
   const { error } = await supabase.from("restaurants").update({ logo_path: path }).eq("id", restaurantId);
@@ -176,8 +186,11 @@ export async function uploadRestaurantCover(supabase: SupabaseClient, restaurant
   const validation = await validateImageFile(file);
   if (!validation.ok) return validation;
 
-  const path = restaurantCoverPath(restaurantId, validation.extension);
-  const uploaded = await uploadToBucket(supabase, path, file, validation.mimeType);
+  const image = await toCompressedWebp(file);
+  if (!image.ok) return image;
+
+  const path = restaurantCoverPath(restaurantId, image.extension);
+  const uploaded = await uploadToBucket(supabase, path, image.bytes, image.mimeType);
   if (!uploaded.ok) return uploaded;
 
   const { error } = await supabase.from("restaurants").update({ cover_path: path }).eq("id", restaurantId);
@@ -197,16 +210,32 @@ export async function uploadProductImage(
   const validation = await validateImageFile(file);
   if (!validation.ok) return validation;
 
-  const path = productImagePath(restaurantId, productId, displayOrder, validation.extension);
-  const uploaded = await uploadToBucket(supabase, path, file, validation.mimeType);
+  // Toda foto de produto vira WebP quadrado (1:1) de até 800 px.
+  const image = await toSquareWebp(file, { maxSide: SQUARE_PRODUCT_SIZE });
+  if (!image.ok) return image;
+
+  const path = productImagePath(restaurantId, productId, displayOrder, image.extension);
+  const uploaded = await uploadToBucket(supabase, path, image.bytes, image.mimeType);
   if (!uploaded.ok) return uploaded;
 
-  const { error } = await supabase
+  // Sem upsert/onConflict de propósito: a unique (product_id, display_order)
+  // é DEFERRABLE (a reordenação troca display_order de duas linhas) e o
+  // Postgres recusa ON CONFLICT em constraint deferrable (55000). Por isso:
+  // atualiza a linha daquela posição se existir, senão insere.
+  const { data: existing, error: lookupError } = await supabase
     .from("product_images")
-    .upsert(
-      { restaurant_id: restaurantId, product_id: productId, storage_path: path, display_order: displayOrder },
-      { onConflict: "product_id,display_order" }
-    );
+    .select("id")
+    .eq("product_id", productId)
+    .eq("display_order", displayOrder)
+    .maybeSingle();
+
+  const { error } = lookupError
+    ? { error: lookupError }
+    : existing
+      ? await supabase.from("product_images").update({ storage_path: path }).eq("id", existing.id)
+      : await supabase
+          .from("product_images")
+          .insert({ restaurant_id: restaurantId, product_id: productId, storage_path: path, display_order: displayOrder });
   if (error) {
     await supabase.storage.from(RESTAURANT_ASSETS_BUCKET).remove([path]);
     return { ok: false, error: "Não foi possível salvar a imagem do produto. Tente novamente." };
@@ -229,8 +258,11 @@ export async function uploadComboImage(
   const validation = await validateImageFile(file);
   if (!validation.ok) return validation;
 
-  const path = comboImagePath(restaurantId, comboId, validation.extension);
-  const uploaded = await uploadToBucket(supabase, path, file, validation.mimeType);
+  const image = await toSquareWebp(file, { maxSide: SQUARE_PRODUCT_SIZE });
+  if (!image.ok) return image;
+
+  const path = comboImagePath(restaurantId, comboId, image.extension);
+  const uploaded = await uploadToBucket(supabase, path, image.bytes, image.mimeType);
   if (!uploaded.ok) return uploaded;
 
   const { error } = await supabase.from("combos").update({ image_path: path }).eq("id", comboId);

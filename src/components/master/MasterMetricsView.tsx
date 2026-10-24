@@ -39,8 +39,8 @@ function plural(count: number, singular: string, pluralForm: string): string {
 function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div>
-      <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">{title}</h2>
-      <p className="mt-1 text-sm text-text-muted">{subtitle}</p>
+      <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">{title}</h2>
+      <p className="mt-1 text-body-md text-text-muted">{subtitle}</p>
     </div>
   );
 }
@@ -48,9 +48,9 @@ function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) 
 function MiniStat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="rounded-xl bg-surface-subdued p-4">
-      <p className="text-[11px] font-bold uppercase tracking-wide text-text-muted">{label}</p>
-      <p className="mt-2 text-xl font-black text-graphite">{value}</p>
-      {hint && <p className="mt-1 text-xs text-text-muted">{hint}</p>}
+      <p className="text-label-sm uppercase text-text-muted">{label}</p>
+      <p className="mt-2 text-headline-md text-graphite">{value}</p>
+      {hint && <p className="mt-1 text-body-sm text-text-muted">{hint}</p>}
     </div>
   );
 }
@@ -75,8 +75,8 @@ export function MasterMetricsView({ metrics, period }: { metrics: MasterMetrics;
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-8 sm:px-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <h1 className="text-2xl font-black tracking-tight text-graphite">Métricas da plataforma</h1>
-          <p className="mt-0.5 text-sm font-medium text-text-muted">Crescimento, ativação, receita e retenção do MenuNext.</p>
+          <h1 className="text-headline-lg text-graphite">Métricas da plataforma</h1>
+          <p className="mt-0.5 text-body-md text-text-muted">Crescimento, ativação, receita e retenção do MenuNext.</p>
         </div>
         <nav className="flex gap-1 rounded-xl bg-surface-subdued p-1" aria-label="Período">
           {METRIC_PERIODS.map((days) => (
@@ -84,7 +84,7 @@ export function MasterMetricsView({ metrics, period }: { metrics: MasterMetrics;
               key={days}
               href={days === 30 ? "/master/metricas" : `/master/metricas?dias=${days}`}
               aria-current={days === period ? "page" : undefined}
-              className={`rounded-lg px-3 py-1.5 text-sm font-semibold ${
+              className={`rounded-lg px-3 py-1.5 text-label-lg ${
                 days === period ? "bg-surface-card text-graphite shadow-sm" : "text-text-muted hover:text-graphite"
               }`}
             >
@@ -169,14 +169,14 @@ export function MasterMetricsView({ metrics, period }: { metrics: MasterMetrics;
               hint={operatingRate === null ? "Sem restaurantes ativos" : `${formatPercent(operatingRate)} dos ativos`}
             />
           </div>
-          <p className="rounded-xl bg-surface-subdued px-4 py-3 text-xs text-text-muted">
+          <p className="rounded-xl bg-surface-subdued px-4 py-3 text-body-sm text-text-muted">
             Volume transacionado diretamente pelos restaurantes com seus clientes. Não é faturamento do MenuNext.
           </p>
         </Card>
 
         <Card className="space-y-4 p-6">
           <SectionTitle title="Balanço do período" subtitle={`O que aconteceu nos últimos ${period} dias.`} />
-          <dl className="divide-y divide-border text-sm">
+          <dl className="divide-y divide-border text-body-md">
             <div className="flex justify-between py-3">
               <dt className="text-text-muted">Novos cadastros</dt>
               <dd className="font-bold text-graphite">{formatInt(metrics.new_restaurants)}</dd>
@@ -202,7 +202,7 @@ export function MasterMetricsView({ metrics, period }: { metrics: MasterMetrics;
           <ul className="space-y-3">
             {funnel.map((step) => (
               <li key={step.id}>
-                <div className="mb-1 flex items-center justify-between text-sm">
+                <div className="mb-1 flex items-center justify-between text-body-md">
                   <span className="font-semibold text-graphite">{step.label}</span>
                   <span className="text-text-muted">
                     {formatInt(step.count)}
@@ -226,7 +226,7 @@ export function MasterMetricsView({ metrics, period }: { metrics: MasterMetrics;
             <MiniStat label="Expiraram sem assinar" value={formatInt(metrics.trial.expired_unsubscribed)} hint="loja bloqueada" />
           </div>
           {metrics.trial.expiring_7d > 0 && (
-            <p className="rounded-xl bg-[#FFFBEB] px-4 py-3 text-sm font-semibold text-[#B45309]">
+            <p className="rounded-xl bg-amber/10 px-4 py-3 text-label-lg text-amber-strong">
               {metrics.trial.expiring_7d} {plural(metrics.trial.expiring_7d, "trial termina", "trials terminam")} nos próximos 7 dias.
             </p>
           )}
@@ -236,7 +236,7 @@ export function MasterMetricsView({ metrics, period }: { metrics: MasterMetrics;
       <Card className="space-y-4 p-6">
         <SectionTitle title="Distribuição por plano" subtitle="Assinantes em dia por plano e receita de cada um." />
         {mrr.rows.length === 0 ? (
-          <p className="rounded-xl bg-surface-subdued p-4 text-sm text-text-muted">
+          <p className="rounded-xl bg-surface-subdued p-4 text-body-md text-text-muted">
             Nenhum plano cadastrado ainda.{" "}
             <Link href="/master/assinaturas" className="font-semibold text-primary hover:underline">
               Criar planos
@@ -245,19 +245,19 @@ export function MasterMetricsView({ metrics, period }: { metrics: MasterMetrics;
         ) : (
           <ul className="space-y-2">
             {mrr.rows.map((row, index) => (
-              <li key={row.plan_id} className="flex items-center justify-between gap-3 rounded-xl bg-surface-subdued px-4 py-3 text-sm">
+              <li key={row.plan_id} className="flex items-center justify-between gap-3 rounded-xl bg-surface-subdued px-4 py-3 text-body-md">
                 <span className="flex min-w-0 items-center gap-3">
                   <span className={`h-2.5 w-2.5 shrink-0 rounded-full ${PLAN_COLORS[index % PLAN_COLORS.length]}`} aria-hidden="true" />
                   <span className="min-w-0">
                     <span className="block truncate font-bold text-graphite">{row.name}</span>
-                    <span className="block text-xs text-text-muted">
+                    <span className="block text-body-sm text-text-muted">
                       {formatCurrencyBRL(row.price)}/mês · {row.subscribers} {plural(row.subscribers, "assinante", "assinantes")}
                     </span>
                   </span>
                 </span>
                 <span className="shrink-0 text-right">
                   <span className="block font-bold text-graphite">{formatCurrencyBRL(row.revenue)}</span>
-                  <span className="block text-xs text-text-muted">{row.share === null ? "—" : `${formatPercent(row.share)} da receita`}</span>
+                  <span className="block text-body-sm text-text-muted">{row.share === null ? "—" : `${formatPercent(row.share)} da receita`}</span>
                 </span>
               </li>
             ))}
@@ -268,11 +268,11 @@ export function MasterMetricsView({ metrics, period }: { metrics: MasterMetrics;
       <Card className="space-y-4 p-6">
         <SectionTitle title="Restaurantes em destaque" subtitle={`Maior volume de pedidos nos últimos ${period} dias.`} />
         {metrics.top_restaurants.length === 0 ? (
-          <p className="rounded-xl bg-surface-subdued p-4 text-sm text-text-muted">Nenhum pedido no período.</p>
+          <p className="rounded-xl bg-surface-subdued p-4 text-body-md text-text-muted">Nenhum pedido no período.</p>
         ) : (
           <>
-            <table className="hidden w-full text-left text-sm md:table">
-              <thead className="border-b border-border text-xs font-bold uppercase tracking-wide text-text-muted">
+            <table className="hidden w-full text-left text-body-md md:table">
+              <thead className="border-b border-border text-label-md font-bold uppercase tracking-wide text-text-muted">
                 <tr>
                   <th className="py-2 pr-4">Restaurante</th>
                   <th className="px-4 py-2 text-right">Pedidos</th>
@@ -288,7 +288,7 @@ export function MasterMetricsView({ metrics, period }: { metrics: MasterMetrics;
                       <Link href={`/master/restaurantes/${row.id}`} className="font-bold text-graphite hover:text-primary">
                         {row.name}
                       </Link>
-                      <p className="text-xs text-text-muted">/{row.slug}</p>
+                      <p className="text-body-sm text-text-muted">/{row.slug}</p>
                     </td>
                     <td className="px-4 py-3 text-right font-semibold text-graphite">{formatInt(row.orders)}</td>
                     <td className="px-4 py-3 text-right font-semibold text-graphite">{formatCurrencyBRL(row.gmv)}</td>
@@ -303,10 +303,10 @@ export function MasterMetricsView({ metrics, period }: { metrics: MasterMetrics;
                 <li key={row.id}>
                   <Link
                     href={`/master/restaurantes/${row.id}`}
-                    className="block rounded-xl bg-surface-subdued px-4 py-3 text-sm"
+                    className="block rounded-xl bg-surface-subdued px-4 py-3 text-body-md"
                   >
                     <span className="block font-bold text-graphite">{row.name}</span>
-                    <span className="block text-xs text-text-muted">
+                    <span className="block text-body-sm text-text-muted">
                       {formatInt(row.orders)} {plural(row.orders, "pedido", "pedidos")} · {formatCurrencyBRL(row.gmv)} · {row.plan_name ?? "Sem plano"}
                     </span>
                   </Link>

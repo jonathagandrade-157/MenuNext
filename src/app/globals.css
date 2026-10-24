@@ -1,24 +1,27 @@
 @import "tailwindcss";
 
 /*
- * MenuNext — Design System oficial (fonte da verdade: especificação do produto).
- * Diverge de propósito da paleta gerada automaticamente no DESIGN.md exportado
- * do Stitch (tons de roxo/vermelho "Modern Gastronomy"): a especificação oficial
- * tem prioridade sobre o material exportado (ver relatório da Sprint 0).
+ * MenuNext — tokens alinhados ao export do Stitch (design-reference/stitch,
+ * tailwind.config das telas e DESIGN.md "Modern Gastronomy B2B SaaS").
+ * Os nomes dos tokens do app foram mantidos; só os valores vêm do Stitch:
+ * primary = primary, primary-container = hover, graphite = on-surface,
+ * emerald = tertiary, surface = surface, text-muted = on-surface-variant.
  */
 :root {
-  --color-primary: #f95721;
-  --color-graphite: #121826;
-  --color-emerald: #10b981;
+  --color-primary: #ab2f00;
+  --color-primary-container: #d53e02;
+  --color-graphite: #151b29;
+  --color-emerald: #006947;
   --color-amber: #f59e0b;
+  --color-amber-strong: #b45309;
   --color-red: #ef4444;
   --color-blue: #3b82f6;
 
-  --color-surface: #f8fafc;
+  --color-surface: #faf8ff;
   --color-surface-card: #ffffff;
-  --color-surface-subdued: #f1f5f9;
-  --color-border: #e2e8f0;
-  --color-text-muted: #64748b;
+  --color-surface-subdued: #f1f3ff;
+  --color-border: #e2e8fc;
+  --color-text-muted: #5b4139;
 
   --font-plus-jakarta-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
 }
@@ -27,9 +30,11 @@
   --font-sans: var(--font-plus-jakarta-sans);
 
   --color-primary: var(--color-primary);
+  --color-primary-container: var(--color-primary-container);
   --color-graphite: var(--color-graphite);
   --color-emerald: var(--color-emerald);
   --color-amber: var(--color-amber);
+  --color-amber-strong: var(--color-amber-strong);
   --color-red: var(--color-red);
   --color-blue: var(--color-blue);
 
@@ -39,11 +44,73 @@
   --color-border: var(--color-border);
   --color-text-muted: var(--color-text-muted);
 
-  --shadow-card: 0 1px 3px 0 rgb(18 24 38 / 0.05);
-  --shadow-modal: 0 20px 25px -5px rgb(18 24 38 / 0.1), 0 10px 10px -5px rgb(18 24 38 / 0.04);
+  /* Escala tipográfica do Stitch (tailwind.config das telas): text-label-sm … text-display */
+  --text-label-sm: 11px;
+  --text-label-sm--line-height: 14px;
+  --text-label-sm--letter-spacing: 0.04em;
+  --text-label-sm--font-weight: 700;
+  --text-label-md: 12px;
+  --text-label-md--line-height: 16px;
+  --text-label-md--letter-spacing: 0.02em;
+  --text-label-md--font-weight: 600;
+  --text-label-lg: 14px;
+  --text-label-lg--line-height: 20px;
+  --text-label-lg--letter-spacing: 0.01em;
+  --text-label-lg--font-weight: 600;
+  --text-body-sm: 12px;
+  --text-body-sm--line-height: 18px;
+  --text-body-sm--letter-spacing: 0.005em;
+  --text-body-sm--font-weight: 400;
+  --text-body-md: 14px;
+  --text-body-md--line-height: 20px;
+  --text-body-md--letter-spacing: 0em;
+  --text-body-md--font-weight: 400;
+  --text-body-lg: 16px;
+  --text-body-lg--line-height: 24px;
+  --text-body-lg--letter-spacing: -0.005em;
+  --text-body-lg--font-weight: 400;
+  --text-headline-sm: 18px;
+  --text-headline-sm--line-height: 26px;
+  --text-headline-sm--letter-spacing: -0.01em;
+  --text-headline-sm--font-weight: 600;
+  --text-headline-md: 22px;
+  --text-headline-md--line-height: 30px;
+  --text-headline-md--letter-spacing: -0.015em;
+  --text-headline-md--font-weight: 600;
+  --text-headline-lg: 28px;
+  --text-headline-lg--line-height: 36px;
+  --text-headline-lg--letter-spacing: -0.02em;
+  --text-headline-lg--font-weight: 700;
+  --text-headline-xl: 36px;
+  --text-headline-xl--line-height: 44px;
+  --text-headline-xl--letter-spacing: -0.025em;
+  --text-headline-xl--font-weight: 700;
+  --text-display: 48px;
+  --text-display--line-height: 56px;
+  --text-display--letter-spacing: -0.03em;
+  --text-display--font-weight: 800;
+
+  --shadow-card: 0 1px 3px 0 rgb(21 27 41 / 0.05);
+  --shadow-modal: 0 20px 25px -5px rgb(21 27 41 / 0.1), 0 10px 10px -5px rgb(21 27 41 / 0.04);
 }
 
 body {
   background: var(--color-surface);
   color: var(--color-graphite);
+}
+
+/* Gaveta lateral (components/ui/Drawer): entra da direita; sem movimento para quem prefere menos animação. */
+@keyframes drawer-in {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [role="dialog"] {
+    animation: none !important;
+  }
 }

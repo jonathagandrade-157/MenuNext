@@ -14,14 +14,14 @@ export function RecentOrdersCard({ orders }: { orders: RecentOrder[] }) {
   return (
     <Card className="p-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-base font-extrabold text-graphite">Pedidos recentes</h2>
+        <h2 className="text-body-lg font-bold text-graphite">Pedidos recentes</h2>
         <LinkButton href="/painel/pedidos" variant="ghost" size="sm">
           Ver todos os pedidos
         </LinkButton>
       </div>
 
       {orders.length === 0 ? (
-        <p className="py-10 text-center text-sm text-text-muted">Nenhum pedido recebido ainda.</p>
+        <p className="py-10 text-center text-body-md text-text-muted">Nenhum pedido recebido ainda.</p>
       ) : (
         <ul className="mt-3 divide-y divide-border">
           {orders.map((order) => (
@@ -31,14 +31,14 @@ export function RecentOrdersCard({ orders }: { orders: RecentOrder[] }) {
                 className="flex items-center justify-between gap-3 py-3 hover:bg-surface-subdued"
               >
                 <div className="min-w-0">
-                  <p className="text-sm font-bold text-graphite">
+                  <p className="text-body-md font-bold text-graphite">
                     #{order.order_number} · {order.customer_name}
                   </p>
-                  <p className="text-xs text-text-muted">{formatOrderTime(order.created_at)}</p>
+                  <p className="text-body-sm text-text-muted">{formatOrderTime(order.created_at)}</p>
                 </div>
                 <div className="flex shrink-0 items-center gap-3">
                   <StatusBadge status={order.status} />
-                  <p className="w-20 text-right text-sm font-bold text-graphite">{formatCurrencyBRL(order.total)}</p>
+                  <p className="w-20 text-right text-body-md font-bold text-graphite">{formatCurrencyBRL(order.total)}</p>
                 </div>
               </Link>
             </li>

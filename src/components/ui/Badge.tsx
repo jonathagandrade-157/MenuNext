@@ -1,10 +1,10 @@
 type StatusTone = "success" | "warning" | "danger" | "info" | "neutral";
 
 const toneClasses: Record<StatusTone, string> = {
-  success: "bg-[#ECFDF5] text-[#059669]",
-  warning: "bg-[#FFFBEB] text-[#B45309]",
-  danger: "bg-[#FEF2F2] text-[#DC2626]",
-  info: "bg-[#EFF6FF] text-blue",
+  success: "bg-emerald/10 text-emerald",
+  warning: "bg-amber/10 text-amber-strong",
+  danger: "bg-red/10 text-red",
+  info: "bg-blue/10 text-blue",
   neutral: "bg-surface-subdued text-text-muted",
 };
 
@@ -18,7 +18,7 @@ type BadgeProps = {
 export function Badge({ tone = "neutral", pulse, children, className = "" }: BadgeProps) {
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold ${toneClasses[tone]} ${className}`}
+      className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-label-md ${toneClasses[tone]} ${className}`}
     >
       {pulse && <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" />}
       {children}

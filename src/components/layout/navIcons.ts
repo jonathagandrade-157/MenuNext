@@ -1,0 +1,60 @@
+import {
+  Bike,
+  Calculator,
+  ChartColumn,
+  ChefHat,
+  CircleHelp,
+  CirclePlus,
+  Clock,
+  CreditCard,
+  Crown,
+  Layers,
+  LayoutDashboard,
+  Lightbulb,
+  LifeBuoy,
+  Megaphone,
+  Package,
+  Palette,
+  Receipt,
+  ScrollText,
+  Settings,
+  Store,
+  Tags,
+  UserCog,
+  Users,
+  Wallet,
+  type LucideIcon,
+} from "lucide-react";
+
+/**
+ * Ícones do menu por nome (string) — o layout é Server Component e não pode
+ * passar funções/componentes para Client Components, só dados serializáveis.
+ */
+export const NAV_ICONS = {
+  dashboard: LayoutDashboard,
+  pedidos: Receipt,
+  caixa: Calculator,
+  kds: ChefHat,
+  categorias: Tags,
+  produtos: Package,
+  adicionais: CirclePlus,
+  combos: Layers,
+  loja: Store,
+  delivery: Bike,
+  horarios: Clock,
+  pagamentos: Wallet,
+  aparencia: Palette,
+  clientes: Users,
+  marketing: Megaphone,
+  usuarios: UserCog,
+  configuracoes: Settings,
+  plano: Crown,
+  ajuda: CircleHelp,
+  insights: Lightbulb,
+  assinaturas: CreditCard,
+  metricas: ChartColumn,
+  suporte: LifeBuoy,
+  auditoria: ScrollText,
+} satisfies Record<string, LucideIcon>;
+
+export type NavIconName = keyof typeof NAV_ICONS;

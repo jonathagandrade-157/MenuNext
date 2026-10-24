@@ -46,8 +46,8 @@ export function CadastroForm({
     return (
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-extrabold text-graphite">Entrar no MenuNext</h1>
-          <p className="mt-1 text-sm text-text-muted">Acesse o painel do seu restaurante.</p>
+          <h1 className="text-headline-lg font-extrabold text-graphite">Entrar no MenuNext</h1>
+          <p className="mt-1 text-body-md text-text-muted">Acesse o painel do seu restaurante.</p>
         </div>
 
         <form action={signInFormAction} className="space-y-4">
@@ -67,7 +67,7 @@ export function CadastroForm({
           <SubmitButton label="Entrar" />
         </form>
 
-        <p className="text-center text-sm text-text-muted">
+        <p className="text-center text-body-md text-text-muted">
           Ainda não tem uma loja?{" "}
           <Link href={authLink("/cadastro")} className="font-semibold text-primary hover:underline">
             Criar minha loja grátis
@@ -80,8 +80,8 @@ export function CadastroForm({
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-graphite">Crie sua loja no MenuNext</h1>
-        <p className="mt-1 text-sm text-text-muted">
+        <h1 className="text-headline-lg font-extrabold text-graphite">Crie sua loja no MenuNext</h1>
+        <p className="mt-1 text-body-md text-text-muted">
           Comece agora e coloque seu restaurante para vender online.
         </p>
       </div>
@@ -101,7 +101,7 @@ export function CadastroForm({
         <Field label="Telefone" name="phone" type="tel" autoComplete="tel" required />
 
         <label className="block">
-          <span className="mb-1.5 block text-sm font-semibold text-graphite">CPF ou CNPJ</span>
+          <span className="mb-1.5 block text-label-lg text-graphite">CPF ou CNPJ</span>
           <input
             name="document"
             type="text"
@@ -110,9 +110,9 @@ export function CadastroForm({
             value={docInput}
             onChange={(e) => setDocInput(maskDocument(e.target.value))}
             placeholder="000.000.000-00"
-            className="h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            className="h-11 w-full rounded-xl border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
           />
-          <p className="mt-1.5 text-xs text-text-muted">
+          <p className="mt-1.5 text-body-sm text-text-muted">
             Cada CPF ou CNPJ tem direito a um único período de teste grátis no MenuNext.
           </p>
         </label>
@@ -127,21 +127,31 @@ export function CadastroForm({
           minLength={6}
         />
 
-        <label className="flex items-start gap-2 text-xs text-text-muted">
+        <label className="flex items-start gap-2 text-body-sm text-text-muted">
           <input type="checkbox" name="terms" required className="mt-0.5 h-4 w-4 rounded border-border" />
-          <span>Li e aceito os Termos de Uso e a Política de Privacidade do MenuNext.</span>
+          <span>
+            Li e aceito os{" "}
+            <Link href="/termos" target="_blank" className="font-semibold text-primary underline">
+              Termos de Uso
+            </Link>{" "}
+            e a{" "}
+            <Link href="/privacidade" target="_blank" className="font-semibold text-primary underline">
+              Política de Privacidade
+            </Link>{" "}
+            do MenuNext.
+          </span>
         </label>
 
         {signUpState.status === "error" && <ErrorMessage message={signUpState.message} />}
 
         <SubmitButton label="Começar 30 dias grátis" />
 
-        <p className="text-center text-xs text-text-muted">
+        <p className="text-center text-body-sm text-text-muted">
           30 dias grátis &bull; Sem cartão de crédito &bull; 0% de comissão por pedido
         </p>
       </form>
 
-      <p className="text-center text-sm text-text-muted">
+      <p className="text-center text-body-md text-text-muted">
         Já tem uma conta?{" "}
         <Link href={authLink("/cadastro?mode=login")} className="font-semibold text-primary hover:underline">
           Entrar
@@ -170,7 +180,7 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-sm font-semibold text-graphite">{label}</span>
+      <span className="mb-1.5 block text-label-lg text-graphite">{label}</span>
       <input
         name={name}
         type={type}
@@ -178,7 +188,7 @@ function Field({
         required={required}
         minLength={minLength}
         defaultValue={defaultValue}
-        className="h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+        className="h-11 w-full rounded-xl border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
       />
     </label>
   );
@@ -186,7 +196,7 @@ function Field({
 
 function ErrorMessage({ message }: { message?: string }) {
   return (
-    <div className="rounded-lg border border-[#FEF2F2] bg-[#FEF2F2] px-3 py-2 text-sm font-medium text-red">
+    <div className="rounded-lg border border-red/20 bg-red/10 px-3 py-2 text-body-md font-medium text-red">
       {message}
     </div>
   );

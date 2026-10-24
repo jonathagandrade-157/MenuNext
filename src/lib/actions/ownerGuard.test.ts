@@ -44,9 +44,11 @@ const OTHER_GUARDS: Record<string, string> = {
   "counterOrders.ts": "venda de balcão: STAFF registra; create_order exige membro da loja",
   "couponValidate.ts": "validação pública de cupom no checkout",
   "delivery-quote.ts": "cotação pública de entrega no checkout",
+  "legalAcceptance.ts": "reaceite dos termos: cada usuário logado grava só o próprio aceite nos metadados",
   "invites.ts": "convites: requireOwner próprio e RPCs que exigem OWNER",
   "customerNotes.ts": "notas de clientes: checagem de OWNER própria e RLS só do OWNER",
   "master.ts": "ações do Master: is_platform_admin",
+  "pendingPayment.ts": "retomar pagamento: billing_pending_subscription só devolve a assinatura pendente do OWNER da loja",
   "plans.ts": "planos: is_platform_admin",
   "subscription.ts": "assinatura: a RPC billing/start_restaurant_subscription exige OWNER",
 };

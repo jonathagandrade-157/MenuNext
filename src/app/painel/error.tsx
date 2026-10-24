@@ -16,11 +16,11 @@ export default function PainelError({ reset }: { error: Error & { digest?: strin
   return (
     <div className="flex min-h-[70vh] flex-col items-center justify-center px-6 py-16">
       <Card className="w-full max-w-md p-8 text-center">
-        <span className="inline-flex rounded-full bg-red/10 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-red">
+        <span className="inline-flex rounded-full bg-red/10 px-3 py-1 text-label-md uppercase tracking-wide text-red">
           Erro inesperado
         </span>
-        <h1 className="mt-3 text-xl font-extrabold text-graphite">Algo não funcionou como esperado</h1>
-        <p className="mx-auto mt-2 max-w-xs text-sm text-text-muted">
+        <h1 className="mt-3 text-headline-md text-graphite">Algo não funcionou como esperado</h1>
+        <p className="mx-auto mt-2 max-w-xs text-body-md text-text-muted">
           Ocorreu um problema ao processar sua solicitação. Tente novamente ou volte ao painel.
         </p>
         <div className="mt-6 flex flex-wrap justify-center gap-3">

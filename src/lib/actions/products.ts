@@ -191,6 +191,28 @@ export async function toggleProductAvailableAction(
 }
 
 // ---------------------------------------------------------------------------
+// Destaque na loja — só o OWNER (o banco também recusa: guard_owner_only_writes).
+// ---------------------------------------------------------------------------
+export async function toggleProductFeaturedAction(
+  productId: string,
+  nextFeatured: boolean
+): Promise<{ ok: boolean; error?: string }> {
+  const { supabase } = await requireOwnerAction();
+
+  const { data, error } = await supabase
+    .from("products")
+    .update({ is_featured: nextFeatured })
+    .eq("id", productId)
+    .select("id");
+
+  if (error) return { ok: false, error: "Não foi possível atualizar o destaque. Tente novamente." };
+  if (!data || data.length === 0) return { ok: false, error: "Produto não encontrado." };
+
+  revalidatePath(PRODUCTS_PATH);
+  return { ok: true };
+}
+
+// ---------------------------------------------------------------------------
 // Reordenar produto dentro da própria categoria.
 // ---------------------------------------------------------------------------
 export async function moveProductAction(

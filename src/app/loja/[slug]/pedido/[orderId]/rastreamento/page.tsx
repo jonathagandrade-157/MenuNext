@@ -38,19 +38,22 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/pedido/[o
         >
           ←
         </Link>
-        <span className="text-sm font-bold text-graphite">Pedido #{order.order_number}</span>
+        <span className="text-headline-sm text-graphite">Pedido #{order.order_number}</span>
       </div>
 
-      <div className="px-4 py-6">
-        <p className="mb-6 text-sm text-text-muted">
+      <div className="mx-auto max-w-xl px-4 py-6">
+        <h1 className="mb-1 text-headline-md text-graphite">Acompanhe seu pedido</h1>
+        <p className="mb-5 text-body-md text-text-muted">
           Acompanhe abaixo o andamento do seu pedido em {order.restaurant_name}. A tela atualiza sozinha conforme o
           restaurante avança o preparo.
         </p>
-        <OrderTrackingProgress
-          publicId={order.public_id}
-          initialStatus={order.status as OrderStatus}
-          fulfillmentType={order.fulfillment_type}
-        />
+        <div className="rounded-2xl border border-border bg-surface-card p-5 shadow-card">
+          <OrderTrackingProgress
+            publicId={order.public_id}
+            initialStatus={order.status as OrderStatus}
+            fulfillmentType={order.fulfillment_type}
+          />
+        </div>
       </div>
     </div>
   );

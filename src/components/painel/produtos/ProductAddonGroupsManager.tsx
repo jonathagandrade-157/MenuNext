@@ -64,10 +64,10 @@ export function ProductAddonGroupsManager({
 
   return (
     <div className="space-y-3">
-      <span className="block text-sm font-semibold text-graphite">Adicionais</span>
+      <span className="block text-label-lg text-graphite">Adicionais</span>
 
       {sortedAssociations.length === 0 ? (
-        <p className="text-xs text-text-muted">Nenhum grupo de adicionais associado a este produto.</p>
+        <p className="text-body-sm text-text-muted">Nenhum grupo de adicionais associado a este produto.</p>
       ) : (
         <div className="flex flex-wrap gap-2">
           {sortedAssociations.map((association) => {
@@ -75,7 +75,7 @@ export function ProductAddonGroupsManager({
             return (
               <span
                 key={association.id}
-                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-subdued px-3 py-1 text-xs font-semibold text-graphite"
+                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-subdued px-3 py-1 text-label-md text-graphite"
               >
                 {association.addon_group.name}
                 <button
@@ -98,7 +98,7 @@ export function ProductAddonGroupsManager({
           <select
             value={selectedGroupId}
             onChange={(e) => setSelectedGroupId(e.target.value)}
-            className="h-9 flex-1 rounded-lg border border-border bg-surface px-2.5 text-xs font-semibold text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+            className="h-9 flex-1 rounded-xl border border-border bg-surface px-2.5 text-label-md text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
           >
             <option value="">Selecione um grupo...</option>
             {availableGroups.map((group) => (
@@ -111,9 +111,9 @@ export function ProductAddonGroupsManager({
             type="button"
             disabled={!selectedGroupId || isPending}
             onClick={handleAdd}
-            className="inline-flex h-9 shrink-0 items-center gap-1 rounded-lg border border-border px-3 text-xs font-semibold text-graphite hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-9 shrink-0 items-center gap-1 rounded-xl border border-border px-3 text-label-md text-graphite hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-50"
           >
-            <span className="text-sm leading-none">+</span>
+            <span className="text-body-md leading-none">+</span>
             Adicionar grupo
           </button>
         </div>

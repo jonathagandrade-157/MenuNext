@@ -20,6 +20,7 @@ export const SUBSCRIPTION_STATUS_BADGE: Record<SubscriptionStatus, { label: stri
  * senão a tela mostraria "Em dia" para uma loja bloqueada. */
 export function subscriptionBadge(status: SubscriptionStatus, accessState: AccessState | null): { label: string; tone: Tone } {
   if (accessState === "trial_expired") return { label: ACCESS_STATE_COPY.trial_expired.badge, tone: "danger" };
+  if (accessState === "blocked") return { label: ACCESS_STATE_COPY.blocked.badge, tone: "danger" };
   return SUBSCRIPTION_STATUS_BADGE[status];
 }
 

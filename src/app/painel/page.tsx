@@ -93,10 +93,10 @@ export default async function PainelDashboardPage() {
   const revenueComparison = computeYesterdayComparison(metrics.revenueToday, yesterday.revenue);
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 px-6 py-10">
+    <div className="space-y-6 px-6 py-6">
       <div>
-        <h1 className="text-2xl font-extrabold text-graphite">Olá, bem-vindo ao {restaurant.name}</h1>
-        <p className="mt-1 text-sm text-text-muted">Aqui está o resumo real da operação de hoje.</p>
+        <h1 className="text-headline-lg font-extrabold text-graphite">Olá, bem-vindo ao {restaurant.name}</h1>
+        <p className="mt-1 text-body-md text-text-muted">Aqui está o resumo real da operação de hoje.</p>
       </div>
 
       <StoreStatusBar
@@ -116,46 +116,46 @@ export default async function PainelDashboardPage() {
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Faturamento hoje</p>
-          <p className="mt-1 text-2xl font-extrabold text-graphite">{formatCurrencyBRL(metrics.revenueToday)}</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Faturamento hoje</p>
+          <p className="mt-1 text-headline-lg font-extrabold text-graphite">{formatCurrencyBRL(metrics.revenueToday)}</p>
           {revenueComparison !== null && (
-            <p className={`mt-1 text-xs font-bold ${revenueComparison >= 0 ? "text-emerald" : "text-red"}`}>
+            <p className={`mt-1 text-label-md font-bold ${revenueComparison >= 0 ? "text-emerald" : "text-red"}`}>
               {revenueComparison >= 0 ? "↑" : "↓"} {Math.abs(revenueComparison).toFixed(1)}% vs. ontem
             </p>
           )}
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Pedidos hoje</p>
-          <p className="mt-1 text-2xl font-extrabold text-graphite">{metrics.ordersToday}</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Pedidos hoje</p>
+          <p className="mt-1 text-headline-lg font-extrabold text-graphite">{metrics.ordersToday}</p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Ticket médio</p>
-          <p className="mt-1 text-2xl font-extrabold text-graphite">{formatCurrencyBRL(metrics.averageTicketToday)}</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Ticket médio</p>
+          <p className="mt-1 text-headline-lg font-extrabold text-graphite">{formatCurrencyBRL(metrics.averageTicketToday)}</p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Clientes hoje</p>
-          <p className="mt-1 text-2xl font-extrabold text-graphite">{customersToday.attended}</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Clientes hoje</p>
+          <p className="mt-1 text-headline-lg font-extrabold text-graphite">{customersToday.attended}</p>
         </Card>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Entregues hoje</p>
-          <p className="mt-1 text-2xl font-extrabold text-emerald">{metrics.deliveredToday}</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Entregues hoje</p>
+          <p className="mt-1 text-headline-lg font-extrabold text-emerald">{metrics.deliveredToday}</p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Cancelados hoje</p>
-          <p className="mt-1 text-2xl font-extrabold text-red">{metrics.cancelledToday}</p>
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Cancelados hoje</p>
+          <p className="mt-1 text-headline-lg font-extrabold text-red">{metrics.cancelledToday}</p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Tempo médio de preparo</p>
-          <p className="mt-1 text-2xl font-extrabold text-graphite">
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Tempo médio de preparo</p>
+          <p className="mt-1 text-headline-lg font-extrabold text-graphite">
             {metrics.averagePrepMinutes !== null ? `${Math.round(metrics.averagePrepMinutes)} min` : "—"}
           </p>
         </Card>
         <Card className="p-5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-text-muted">Tempo médio até entrega</p>
-          <p className="mt-1 text-2xl font-extrabold text-graphite">
+          <p className="text-label-md uppercase tracking-wide text-text-muted">Tempo médio até entrega</p>
+          <p className="mt-1 text-headline-lg font-extrabold text-graphite">
             {metrics.averageDeliveryMinutes !== null ? `${Math.round(metrics.averageDeliveryMinutes)} min` : "—"}
           </p>
         </Card>

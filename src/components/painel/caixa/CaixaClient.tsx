@@ -246,17 +246,17 @@ export function CaixaClient({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar produto..."
-          className="h-11 w-full rounded-xl border border-border bg-surface-card px-3.5 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          className="h-11 w-full rounded-xl border border-border bg-surface-card px-3.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
         />
 
         {filteredCategories.length === 0 ? (
-          <p className="rounded-xl border border-border bg-surface-subdued/60 px-4 py-6 text-center text-sm text-text-muted">
+          <p className="rounded-xl border border-border bg-surface-subdued/60 px-4 py-6 text-center text-body-md text-text-muted">
             Nenhum produto encontrado.
           </p>
         ) : (
           filteredCategories.map((category) => (
             <div key={category.id}>
-              <h2 className="mb-2 text-sm font-extrabold text-graphite">{category.name}</h2>
+              <h2 className="mb-2 text-body-lg font-bold text-graphite">{category.name}</h2>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-4">
                 {category.products.map((product) => (
                   <button
@@ -266,8 +266,8 @@ export function CaixaClient({
                     onClick={() => openProductPicker(product.id)}
                     className="flex flex-col items-start gap-1 rounded-xl border border-border bg-surface-card p-3 text-left transition-colors hover:border-primary hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-40"
                   >
-                    <span className="text-sm font-bold text-graphite">{product.name}</span>
-                    <span className="text-xs font-semibold text-primary">{formatCurrencyBRL(product.price)}</span>
+                    <span className="text-body-md font-bold text-graphite">{product.name}</span>
+                    <span className="text-label-md text-primary">{formatCurrencyBRL(product.price)}</span>
                     {!product.is_available && <span className="text-[11px] font-semibold text-red">Indisponível</span>}
                   </button>
                 ))}
@@ -279,30 +279,30 @@ export function CaixaClient({
 
       <div className="space-y-4 rounded-2xl border border-border bg-surface-card p-4">
         {lastOrderNumber !== null && (
-          <div className="rounded-xl border border-emerald/30 bg-emerald/10 px-3.5 py-2.5 text-sm font-semibold text-emerald">
+          <div className="rounded-xl border border-emerald/30 bg-emerald/10 px-3.5 py-2.5 text-label-lg text-emerald">
             Venda #{lastOrderNumber} registrada! Pode continuar com a próxima.
           </div>
         )}
 
         <div>
-          <h2 className="text-sm font-extrabold text-graphite">Venda atual</h2>
+          <h2 className="text-body-lg font-bold text-graphite">Venda atual</h2>
           {cart.length === 0 ? (
-            <p className="mt-2 text-sm text-text-muted">Toque num produto à esquerda para adicionar.</p>
+            <p className="mt-2 text-body-md text-text-muted">Toque num produto à esquerda para adicionar.</p>
           ) : (
             <div className="mt-2 space-y-2">
               {cart.map((item) => (
-                <div key={item.key} className="flex items-start justify-between gap-2 border-b border-border pb-2 text-sm">
+                <div key={item.key} className="flex items-start justify-between gap-2 border-b border-border pb-2 text-body-md">
                   <div className="min-w-0">
                     <p className="truncate font-semibold text-graphite">
                       {item.quantity}x {item.name}
                     </p>
                     {item.selectedAddons.length > 0 && (
-                      <p className="truncate text-xs text-text-muted">{item.selectedAddons.map((a) => a.name).join(", ")}</p>
+                      <p className="truncate text-body-sm text-text-muted">{item.selectedAddons.map((a) => a.name).join(", ")}</p>
                     )}
                   </div>
                   <div className="flex shrink-0 items-center gap-2">
                     <span className="font-semibold text-graphite">{formatCurrencyBRL(item.subtotal)}</span>
-                    <button type="button" onClick={() => handleRemoveCartItem(item.key)} className="text-xs font-semibold text-red hover:underline">
+                    <button type="button" onClick={() => handleRemoveCartItem(item.key)} className="text-label-md text-red hover:underline">
                       Remover
                     </button>
                   </div>
@@ -319,27 +319,27 @@ export function CaixaClient({
                 value={customerName}
                 onChange={(e) => setCustomerName(e.target.value)}
                 placeholder="Nome do cliente (opcional)"
-                className="h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+                className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
               />
               <input
                 value={customerPhone}
                 onChange={(e) => setCustomerPhone(e.target.value)}
                 placeholder="Telefone (opcional)"
                 inputMode="tel"
-                className="h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+                className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
               />
             </div>
 
             {availablePaymentMethods.length > 0 && (
               <div className="space-y-2">
-                <span className="block text-xs font-bold text-graphite">Pagamento</span>
+                <span className="block text-label-md font-bold text-graphite">Pagamento</span>
                 <div className="flex flex-wrap gap-2">
                   {availablePaymentMethods.map((method) => (
                     <button
                       key={method}
                       type="button"
                       onClick={() => setPaymentMethod(method)}
-                      className={`rounded-lg border px-3 py-2 text-xs font-bold transition-colors ${
+                      className={`rounded-lg border px-3 py-2 text-label-md font-bold transition-colors ${
                         paymentMethod === method ? "border-primary bg-primary/10 text-primary" : "border-border text-graphite hover:bg-surface-subdued"
                       }`}
                     >
@@ -353,20 +353,20 @@ export function CaixaClient({
                     onChange={(e) => setChangeForInput(e.target.value)}
                     placeholder="Troco para (opcional)"
                     inputMode="decimal"
-                    className="h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+                    className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
                   />
                 )}
               </div>
             )}
 
             <div className="space-y-1.5">
-              <span className="block text-xs font-bold text-graphite">Cupom de desconto</span>
+              <span className="block text-label-md font-bold text-graphite">Cupom de desconto</span>
               {couponApplied ? (
                 <div className="flex items-center justify-between gap-2 rounded-lg border border-emerald/30 bg-emerald/10 px-3 py-2">
-                  <span className="text-xs font-bold text-graphite">
+                  <span className="text-label-md font-bold text-graphite">
                     {couponApplied.code} (-{formatCurrencyBRL(couponApplied.discountAmount)})
                   </span>
-                  <button type="button" onClick={handleRemoveCoupon} className="text-xs font-semibold text-red hover:underline">
+                  <button type="button" onClick={handleRemoveCoupon} className="text-label-md text-red hover:underline">
                     Remover
                   </button>
                 </div>
@@ -379,19 +379,19 @@ export function CaixaClient({
                       setCouponError(null);
                     }}
                     placeholder="Código"
-                    className="h-10 flex-1 rounded-lg border border-border bg-surface px-3 text-sm uppercase text-graphite placeholder:text-slate-400 placeholder:normal-case focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+                    className="h-10 flex-1 rounded-xl border border-border bg-surface px-3 text-body-md uppercase text-graphite placeholder:text-slate-400 placeholder:normal-case focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
                   />
                   <button
                     type="button"
                     disabled={!couponInput.trim() || couponValidating}
                     onClick={handleApplyCoupon}
-                    className="shrink-0 rounded-lg border border-border px-3 text-xs font-bold text-graphite hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-50"
+                    className="shrink-0 rounded-lg border border-border px-3 text-label-md font-bold text-graphite hover:bg-surface-subdued disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     {couponValidating ? "..." : "Aplicar"}
                   </button>
                 </div>
               )}
-              {couponError && <p className="text-xs font-semibold text-red">{couponError}</p>}
+              {couponError && <p className="text-label-md text-red">{couponError}</p>}
             </div>
 
             <textarea
@@ -399,10 +399,10 @@ export function CaixaClient({
               onChange={(e) => setObservation(e.target.value)}
               rows={2}
               placeholder="Observação da venda (opcional)"
-              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              className="w-full rounded-lg border border-border bg-surface px-3 py-2 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
 
-            <div className="space-y-1 border-t border-border pt-2 text-sm">
+            <div className="space-y-1 border-t border-border pt-2 text-body-md">
               <div className="flex justify-between text-text-muted">
                 <span>Subtotal</span>
                 <span className="font-semibold text-graphite">{formatCurrencyBRL(subtotal)}</span>
@@ -413,7 +413,7 @@ export function CaixaClient({
                   <span className="font-semibold">-{formatCurrencyBRL(discountAmount)}</span>
                 </div>
               )}
-              <div className="flex justify-between text-base font-extrabold text-graphite">
+              <div className="flex justify-between text-body-lg font-bold text-graphite">
                 <span>Total</span>
                 <span>{formatCurrencyBRL(total)}</span>
               </div>
@@ -429,12 +429,12 @@ export function CaixaClient({
       </div>
 
       <Modal open={pickerOpen} onClose={closeProductPicker} title={pickedProduct?.name ?? "Adicionar item"}>
-        {pickingLoading && <p className="text-sm text-text-muted">Carregando...</p>}
+        {pickingLoading && <p className="text-body-md text-text-muted">Carregando...</p>}
         {pickingError && !pickedProduct && <ErrorState message={pickingError} />}
         {pickedProduct && (
           <div className="space-y-4">
-            {pickedProduct.description && <p className="text-sm text-text-muted">{pickedProduct.description}</p>}
-            <p className="text-lg font-black text-graphite">{formatCurrencyBRL(pickedProduct.price)}</p>
+            {pickedProduct.description && <p className="text-body-md text-text-muted">{pickedProduct.description}</p>}
+            <p className="text-headline-sm text-graphite">{formatCurrencyBRL(pickedProduct.price)}</p>
 
             {pickedProduct.addonGroups.length > 0 && (
               <div className="space-y-4">
@@ -453,11 +453,11 @@ export function CaixaClient({
               value={itemObservation}
               onChange={(e) => setItemObservation(e.target.value)}
               placeholder="Observação do item (opcional)"
-              className="h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+              className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
             />
 
             <div className="flex items-center justify-between">
-              <span className="text-sm font-bold text-graphite">Quantidade</span>
+              <span className="text-body-md font-bold text-graphite">Quantidade</span>
               <div className="flex items-center gap-3 rounded-xl border border-border p-1">
                 <button
                   type="button"
@@ -467,7 +467,7 @@ export function CaixaClient({
                 >
                   −
                 </button>
-                <span className="w-6 text-center text-sm font-bold text-graphite">{itemQuantity}</span>
+                <span className="w-6 text-center text-body-md font-bold text-graphite">{itemQuantity}</span>
                 <button
                   type="button"
                   onClick={() => setItemQuantity((q) => q + 1)}

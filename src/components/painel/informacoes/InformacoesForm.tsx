@@ -10,9 +10,9 @@ import { Button } from "@/components/ui/Button";
 import type { Restaurant } from "@/lib/tenant";
 
 const inputClass =
-  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
+  "h-11 w-full rounded-lg border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15";
 
-const fieldLabelClass = "mb-1.5 block text-sm font-semibold text-graphite";
+const fieldLabelClass = "mb-1.5 block text-label-lg text-graphite";
 
 function normalizePreview(input: string) {
   return input
@@ -69,7 +69,7 @@ export function InformacoesForm({ restaurant }: { restaurant: Restaurant }) {
   return (
     <form action={formAction} className="space-y-6">
       <Card className="space-y-5 p-6">
-        <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Restaurante</h2>
+        <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Restaurante</h2>
 
         <div>
           <span className={fieldLabelClass}>Nome do restaurante *</span>
@@ -79,7 +79,7 @@ export function InformacoesForm({ restaurant }: { restaurant: Restaurant }) {
         <div>
           <span className={fieldLabelClass}>Endereço da sua loja online *</span>
           <div className="flex items-center rounded-lg border border-border bg-surface-card focus-within:border-primary focus-within:ring-[3px] focus-within:ring-primary/15">
-            <span className="pl-3 text-sm text-text-muted">menunext.com.br/</span>
+            <span className="pl-3 text-body-md text-text-muted">menunext.com.br/</span>
             <input
               name="slug"
               type="text"
@@ -87,23 +87,23 @@ export function InformacoesForm({ restaurant }: { restaurant: Restaurant }) {
               minLength={3}
               value={slug}
               onChange={(e) => handleSlugChange(e.target.value)}
-              className="h-11 flex-1 rounded-r-lg bg-transparent px-1 text-sm text-graphite focus:outline-none"
+              className="h-11 flex-1 rounded-r-lg bg-transparent px-1 text-body-md text-graphite focus:outline-none"
             />
           </div>
-          {slugStatus === "current" && <p className="mt-1.5 text-xs text-text-muted">Esta é a URL atual da sua loja.</p>}
-          {slugStatus === "checking" && <p className="mt-1.5 text-xs text-text-muted">Verificando disponibilidade...</p>}
+          {slugStatus === "current" && <p className="mt-1.5 text-body-sm text-text-muted">Esta é a URL atual da sua loja.</p>}
+          {slugStatus === "checking" && <p className="mt-1.5 text-body-sm text-text-muted">Verificando disponibilidade...</p>}
           {slugStatus === "available" && (
-            <p className="mt-1.5 text-xs font-semibold text-emerald">✓ Endereço disponível para uso imediato!</p>
+            <p className="mt-1.5 text-label-md text-emerald">✓ Endereço disponível para uso imediato!</p>
           )}
-          {slugStatus === "taken" && <p className="mt-1.5 text-xs font-semibold text-red">Esse endereço já está em uso.</p>}
+          {slugStatus === "taken" && <p className="mt-1.5 text-label-md text-red">Esse endereço já está em uso.</p>}
           {slugStatus === "idle" && (
-            <p className="mt-1.5 text-xs text-text-muted">Use apenas letras minúsculas, números e hífens.</p>
+            <p className="mt-1.5 text-body-sm text-text-muted">Use apenas letras minúsculas, números e hífens.</p>
           )}
         </div>
       </Card>
 
       <Card className="space-y-5 p-6">
-        <h2 className="text-sm font-extrabold uppercase tracking-wide text-text-muted">Endereço</h2>
+        <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Endereço</h2>
 
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
@@ -152,12 +152,12 @@ export function InformacoesForm({ restaurant }: { restaurant: Restaurant }) {
       </Card>
 
       {state.status === "error" && (
-        <div className="rounded-lg border border-[#FEF2F2] bg-[#FEF2F2] px-3 py-2 text-sm font-medium text-red">
+        <div className="rounded-lg border border-red/20 bg-red/10 px-3 py-2 text-body-md font-medium text-red">
           {state.message}
         </div>
       )}
       {state.status === "success" && (
-        <div className="rounded-lg border border-[#ECFDF5] bg-[#ECFDF5] px-3 py-2 text-sm font-medium text-emerald">
+        <div className="rounded-lg border border-emerald/20 bg-emerald/10 px-3 py-2 text-body-md font-medium text-emerald">
           Informações salvas com sucesso.
         </div>
       )}

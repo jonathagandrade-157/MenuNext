@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useId } from "react";
+import { X } from "lucide-react";
 
 export function Modal({
   open,
@@ -13,6 +14,8 @@ export function Modal({
   title: string;
   children: React.ReactNode;
 }) {
+  const titleId = useId();
+
   useEffect(() => {
     if (!open) return;
     function handleKeyDown(e: KeyboardEvent) {
@@ -32,16 +35,24 @@ export function Modal({
         onClick={onClose}
         className="absolute inset-0 bg-graphite/40"
       />
-      <div className="relative w-full max-w-md rounded-xl border border-border bg-surface-card p-6 shadow-[var(--shadow-modal)]">
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-bold text-graphite">{title}</h2>
+      {/* max-h + overflow: em telas baixas (celular na horizontal, teclado aberto) o conteúdo rola em vez de cortar. */}
+      <div
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        className="relative max-h-[90vh] w-full max-w-md overflow-y-auto rounded-2xl border border-border bg-surface-card p-5 shadow-[var(--shadow-modal)] sm:p-6"
+      >
+        <div className="mb-4 flex items-center justify-between gap-3">
+          <h2 id={titleId} className="text-headline-sm text-graphite">
+            {title}
+          </h2>
           <button
             type="button"
             onClick={onClose}
             aria-label="Fechar"
-            className="rounded-lg p-1 text-text-muted hover:bg-surface-subdued hover:text-graphite"
+            className="rounded-lg p-1.5 text-text-muted hover:bg-surface-subdued hover:text-graphite"
           >
-            ✕
+            <X className="h-4 w-4" aria-hidden />
           </button>
         </div>
         {children}

@@ -21,8 +21,8 @@ export function Passo3Form({ restaurant }: { restaurant: Restaurant }) {
           className="mt-0.5 h-5 w-5 accent-primary"
         />
         <span>
-          <span className="block text-sm font-semibold text-graphite">Delivery</span>
-          <span className="block text-sm text-text-muted">Você entrega os pedidos no endereço do cliente.</span>
+          <span className="block text-label-lg text-graphite">Delivery</span>
+          <span className="block text-body-md text-text-muted">Você entrega os pedidos no endereço do cliente.</span>
         </span>
       </label>
 
@@ -34,8 +34,8 @@ export function Passo3Form({ restaurant }: { restaurant: Restaurant }) {
           className="mt-0.5 h-5 w-5 accent-primary"
         />
         <span>
-          <span className="block text-sm font-semibold text-graphite">Retirada no local</span>
-          <span className="block text-sm text-text-muted">O cliente retira o pedido no balcão do restaurante.</span>
+          <span className="block text-label-lg text-graphite">Retirada no local</span>
+          <span className="block text-body-md text-text-muted">O cliente retira o pedido no balcão do restaurante.</span>
         </span>
       </label>
 

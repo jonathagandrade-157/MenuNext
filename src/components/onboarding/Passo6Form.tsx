@@ -23,8 +23,8 @@ export function Passo6Form({ restaurant }: { restaurant: Restaurant }) {
           className="mt-0.5 h-5 w-5 accent-primary"
         />
         <span className="flex-1">
-          <span className="block text-sm font-semibold text-graphite">Pix</span>
-          <span className="block text-sm text-text-muted">O cliente paga direto na sua chave Pix.</span>
+          <span className="block text-label-lg text-graphite">Pix</span>
+          <span className="block text-body-md text-text-muted">O cliente paga direto na sua chave Pix.</span>
           {pixEnabled && (
             <div className="mt-3">
               <FieldLabel>Chave Pix do restaurante *</FieldLabel>
@@ -47,7 +47,7 @@ export function Passo6Form({ restaurant }: { restaurant: Restaurant }) {
           defaultChecked={restaurant.payment_cash}
           className="mt-0.5 h-5 w-5 accent-primary"
         />
-        <span className="block text-sm font-semibold text-graphite">Dinheiro</span>
+        <span className="block text-label-lg text-graphite">Dinheiro</span>
       </label>
 
       <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border p-4 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
@@ -57,7 +57,7 @@ export function Passo6Form({ restaurant }: { restaurant: Restaurant }) {
           defaultChecked={restaurant.payment_card}
           className="mt-0.5 h-5 w-5 accent-primary"
         />
-        <span className="block text-sm font-semibold text-graphite">Maquininha / cartão na entrega ou retirada</span>
+        <span className="block text-label-lg text-graphite">Maquininha / cartão na entrega ou retirada</span>
       </label>
 
       <ErrorMessage message={state.status === "error" ? state.message : undefined} />

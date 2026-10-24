@@ -31,18 +31,18 @@ export function ComboImageManager({ comboId, imageUrl }: { comboId: string; imag
 
   return (
     <div className="space-y-2">
-      <span className="block text-sm font-semibold text-graphite">Imagem</span>
+      <span className="block text-label-lg text-graphite">Imagem</span>
       <div className="flex items-center gap-3">
         {imageUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={imageUrl} alt="Imagem do combo" className="h-16 w-16 rounded-lg object-cover" />
         ) : (
-          <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-surface-subdued text-xs text-text-muted">
+          <div className="flex h-16 w-16 items-center justify-center rounded-lg bg-surface-subdued text-body-sm text-text-muted">
             Sem foto
           </div>
         )}
         <div className="flex flex-col gap-1.5">
-          <label className="cursor-pointer text-xs font-semibold text-primary hover:underline">
+          <label className="cursor-pointer text-label-md text-primary hover:underline">
             {imageUrl ? "Substituir" : "Selecionar imagem"}
             <input
               ref={fileInputRef}
@@ -58,7 +58,7 @@ export function ComboImageManager({ comboId, imageUrl }: { comboId: string; imag
               type="button"
               disabled={isPending}
               onClick={handleRemove}
-              className="text-left text-xs font-semibold text-red hover:underline disabled:cursor-not-allowed disabled:opacity-50"
+              className="text-left text-label-md text-red hover:underline disabled:cursor-not-allowed disabled:opacity-50"
             >
               Remover
             </button>

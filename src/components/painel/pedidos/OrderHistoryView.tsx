@@ -131,7 +131,7 @@ export function OrderHistoryView({
             key={t.id}
             type="button"
             onClick={() => setTab(t.id)}
-            className={`rounded-full px-3 py-1.5 text-xs font-bold transition-colors ${
+            className={`rounded-full px-3 py-1.5 text-label-md font-bold transition-colors ${
               tab === t.id ? "bg-primary text-white" : "bg-surface-subdued text-text-muted hover:text-graphite"
             }`}
           >
@@ -145,12 +145,12 @@ export function OrderHistoryView({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar por cliente, telefone ou número do pedido"
-          className="h-9 min-w-[240px] flex-1 rounded-lg border border-border bg-surface-card px-3 text-sm text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          className="h-9 min-w-[240px] flex-1 rounded-xl border border-border bg-surface-card px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
         />
         <select
           value={period}
           onChange={(e) => setPeriod(e.target.value as PeriodFilter)}
-          className="h-9 rounded-lg border border-border bg-surface-card px-2.5 text-sm text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          className="h-9 rounded-xl border border-border bg-surface-card px-2.5 text-body-md text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
         >
           {(Object.keys(PERIOD_LABELS) as PeriodFilter[]).map((key) => (
             <option key={key} value={key}>
@@ -161,19 +161,19 @@ export function OrderHistoryView({
       </div>
 
       {errorMessage && (
-        <div className="mx-4 mt-3 rounded-lg border border-red/20 bg-red/10 px-3.5 py-2 text-xs font-semibold text-red">
+        <div className="mx-4 mt-3 rounded-lg border border-red/20 bg-red/10 px-3.5 py-2 text-label-md text-red">
           {errorMessage}
         </div>
       )}
 
       <div className="flex-1 overflow-y-auto px-4 py-3">
         {filteredOrders.length === 0 ? (
-          <p className="py-12 text-center text-sm text-text-muted">Nenhum pedido encontrado com esses filtros.</p>
+          <p className="py-12 text-center text-body-md text-text-muted">Nenhum pedido encontrado com esses filtros.</p>
         ) : (
           <div className="overflow-x-auto rounded-xl border border-border bg-surface-card">
-            <table className="w-full min-w-[720px] text-sm">
+            <table className="w-full min-w-[720px] text-body-md">
               <thead>
-                <tr className="border-b border-border text-left text-xs font-semibold uppercase tracking-wide text-text-muted">
+                <tr className="border-b border-border text-left text-label-md uppercase tracking-wide text-text-muted">
                   <th className="px-3.5 py-2.5">Pedido</th>
                   <th className="px-3.5 py-2.5">Cliente</th>
                   <th className="px-3.5 py-2.5">Data</th>

@@ -3,7 +3,8 @@
 import { revalidatePath } from "next/cache";
 import { requireOwnerAction } from "@/lib/tenant";
 import { uploadRestaurantCover, uploadRestaurantLogo } from "@/lib/storage/assets";
-import type { AparenciaActionState, ThemeColorActionState } from "@/lib/form-state";
+import type { AparenciaActionState, BannerActionState, ThemeColorActionState } from "@/lib/form-state";
+import { validateBanner } from "@/lib/banner";
 
 const HEX_COLOR_PATTERN = /^#[0-9a-fA-F]{6}$/;
 
@@ -58,11 +59,31 @@ export async function saveThemeColorAction(_prev: ThemeColorActionState, formDat
   const color = raw === "" ? null : raw;
 
   if (color !== null && !HEX_COLOR_PATTERN.test(color)) {
-    return { status: "error", message: "Informe uma cor válida (ex.: #F95721)." };
+    return { status: "error", message: "Informe uma cor válida (ex.: #AB2F00)." };
   }
 
   const { error } = await supabase.from("restaurants").update({ theme_primary_color: color }).eq("id", restaurant.id);
   if (error) return { status: "error", message: "Não foi possível salvar. Tente novamente." };
+
+  revalidatePath(APARENCIA_PATH);
+  return { status: "success" };
+}
+
+/**
+ * Banner promocional da loja pública (restaurant_banners): texto curto e liga/desliga.
+ * Só o OWNER (política de RLS própria). Upsert: a linha da loja nasce na primeira gravação.
+ */
+export async function saveBannerAction(_prev: BannerActionState, formData: FormData): Promise<BannerActionState> {
+  const { supabase, restaurant } = await requireOwnerAction();
+
+  const enabled = formData.get("banner_enabled") === "on";
+  const validation = validateBanner(String(formData.get("banner_message") ?? ""), enabled);
+  if (!validation.ok) return { status: "error", message: validation.error };
+
+  const { error } = await supabase
+    .from("restaurant_banners")
+    .upsert({ restaurant_id: restaurant.id, is_enabled: enabled, message: validation.message }, { onConflict: "restaurant_id" });
+  if (error) return { status: "error", message: "Não foi possível salvar o banner. Tente novamente." };
 
   revalidatePath(APARENCIA_PATH);
   return { status: "success" };
