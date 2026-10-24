@@ -376,17 +376,27 @@ export type ProductWithImages = Product & { product_images: ProductImage[] };
  * cadastro básico do produto importa (ex.: seletor de produtos ao montar a
  * composição de um combo). */
 export async function getProducts(supabase: SupabaseClient, restaurantId: string): Promise<Product[]> {
-  const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .eq("restaurant_id", restaurantId)
-    .order("display_order");
+  const [{ data, error }, costs] = await Promise.all([
+    supabase.from("products").select("*").eq("restaurant_id", restaurantId).order("display_order"),
+    getProductCosts(supabase, restaurantId),
+  ]);
   if (error) throw error;
   return (data ?? []).map((row) => ({
     ...row,
     price: Number(row.price),
-    cost: row.cost === null ? null : Number(row.cost),
+    cost: costs.get(row.id) ?? null,
   })) as Product[];
+}
+
+/**
+ * Custo dos produtos (tabela product_costs, só membros da loja leem — a política de
+ * leitura pública de `products` não alcança esta tabela). Quem não é membro, ou qualquer
+ * falha, recebe um mapa vazio: o custo é um apoio (margem), nunca bloqueia a tela.
+ */
+export async function getProductCosts(supabase: SupabaseClient, restaurantId: string): Promise<Map<string, number>> {
+  const { data, error } = await supabase.from("product_costs").select("product_id, cost").eq("restaurant_id", restaurantId);
+  if (error || !data) return new Map();
+  return new Map(data.map((row) => [row.product_id as string, Number(row.cost)]));
 }
 
 /**
@@ -400,16 +410,15 @@ export async function getProductsWithImages(
   supabase: SupabaseClient,
   restaurantId: string
 ): Promise<ProductWithImages[]> {
-  const { data, error } = await supabase
-    .from("products")
-    .select("*, product_images(*)")
-    .eq("restaurant_id", restaurantId)
-    .order("display_order");
+  const [{ data, error }, costs] = await Promise.all([
+    supabase.from("products").select("*, product_images(*)").eq("restaurant_id", restaurantId).order("display_order"),
+    getProductCosts(supabase, restaurantId),
+  ]);
   if (error) throw error;
   return (data ?? []).map((row) => ({
     ...row,
     price: Number(row.price),
-    cost: row.cost === null ? null : Number(row.cost),
+    cost: costs.get(row.id) ?? null,
     product_images: (row.product_images ?? []) as ProductImage[],
   })) as ProductWithImages[];
 }
@@ -542,10 +551,11 @@ export async function getCombosWithItems(supabase: SupabaseClient, restaurantId:
   return (data ?? []).map((row) => ({
     ...row,
     price: Number(row.price),
-    combo_items: ((row.combo_items ?? []) as (ComboItem & { product: Product & { price: string; cost: string | null } })[])
+    combo_items: ((row.combo_items ?? []) as (ComboItem & { product: Product & { price: string } })[])
       .map((item) => ({
         ...item,
-        product: { ...item.product, price: Number(item.product.price), cost: item.product.cost === null ? null : Number(item.product.cost) },
+        // O custo não é carregado aqui: combos só precisam de nome e preço do produto.
+        product: { ...item.product, price: Number(item.product.price), cost: null },
       }))
       .sort((a, b) => a.display_order - b.display_order),
   })) as ComboWithItems[];

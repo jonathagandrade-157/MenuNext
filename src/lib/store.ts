@@ -106,7 +106,8 @@ export async function getPublicCategoriesWithProducts(
         return {
           ...product,
           price: Number(product.price),
-          cost: product.cost === null ? null : Number(product.cost),
+          // A loja pública nunca expõe custo (ele vive em product_costs, só para membros).
+          cost: null,
           imageUrl: cover ? getImageUrl(cover.storage_path) : null,
         } as PublicProduct;
       });
@@ -139,10 +140,10 @@ export async function getPublicCombosWithItems(
     ...combo,
     price: Number(combo.price),
     imageUrl: combo.image_path ? getImageUrl(combo.image_path) : null,
-    combo_items: ((combo.combo_items ?? []) as (ComboItem & { product: Product & { price: string; cost: string | null } })[])
+    combo_items: ((combo.combo_items ?? []) as (ComboItem & { product: Product & { price: string } })[])
       .map((item) => ({
         ...item,
-        product: { ...item.product, price: Number(item.product.price), cost: item.product.cost === null ? null : Number(item.product.cost) },
+        product: { ...item.product, price: Number(item.product.price), cost: null },
       }))
       .sort((a, b) => a.display_order - b.display_order),
   })) as PublicCombo[];
@@ -211,7 +212,7 @@ export async function getPublicProductDetail(
   return {
     ...product,
     price: Number(product.price),
-    cost: product.cost === null ? null : Number(product.cost),
+    cost: null,
     images,
     addonGroups,
   } as PublicProductDetail;
