@@ -41,6 +41,7 @@ const OWNER_ONLY: Record<string, { exempt: string[] }> = {
 const OTHER_GUARDS: Record<string, string> = {
   "auth.ts": "login, cadastro e saída (sem loja)",
   "orders.ts": "operação de pedidos: STAFF avança e cancela; a RPC exige membro da loja do pedido",
+  "cashSession.ts": "abrir/fechar caixa: STAFF opera; as RPCs cash_open/cash_close derivam a loja do usuário e exigem membro",
   "counterOrders.ts": "venda de balcão: STAFF registra; create_order exige membro da loja",
   "couponValidate.ts": "validação pública de cupom no checkout",
   "delivery-quote.ts": "cotação pública de entrega no checkout",
