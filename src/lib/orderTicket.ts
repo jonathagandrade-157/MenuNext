@@ -7,6 +7,7 @@
  */
 import { FULFILLMENT_TYPE_LABELS, PAYMENT_METHOD_LABELS } from "./checkout";
 import type { OrderWithItems } from "./orders";
+import { discountLabel } from "./promotions";
 
 export function escapeHtml(value: string): string {
   return value
@@ -55,7 +56,7 @@ export function buildOrderTicketHtml(order: OrderWithItems, storeName: string | 
 
   const discount =
     order.discount_amount > 0
-      ? `<div class="row"><span>Cupom${order.coupon_code ? ` (${e(order.coupon_code)})` : ""}</span><span>-${e(brl(order.discount_amount))}</span></div>`
+      ? `<div class="row"><span>${e(discountLabel(order))}</span><span>-${e(brl(order.discount_amount))}</span></div>`
       : "";
   const fee =
     order.fulfillment_type === "delivery" ? `<div class="row"><span>Entrega</span><span>${e(brl(order.delivery_fee))}</span></div>` : "";

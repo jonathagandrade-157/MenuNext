@@ -25,6 +25,8 @@ const order = (extra: Partial<OrderWithItems> = {}): OrderWithItems => ({
   delivery_fee: 5,
   coupon_id: null,
   coupon_code: null,
+  promotion_id: null,
+  promotion_name: null,
   discount_amount: 0,
   total: 49.9,
   status: "received",
@@ -111,6 +113,9 @@ describe("buildOrderTicketHtml", () => {
   it("mostra cupom só quando há desconto e omite observação ausente", () => {
     const withCoupon = buildOrderTicketHtml(order({ coupon_code: "BEMVINDO", discount_amount: 5 }));
     expect(withCoupon).toContain("Cupom (BEMVINDO)");
+    const withPromotion = buildOrderTicketHtml(order({ promotion_id: "p1", promotion_name: "Happy hour", discount_amount: 8 }));
+    expect(withPromotion).toContain("Promoção Happy hour");
+    expect(withPromotion).not.toContain("Cupom");
     const plain = buildOrderTicketHtml(order({ observation: null }));
     expect(plain).not.toContain("Cupom");
     expect(plain).not.toContain("Observação");

@@ -26,8 +26,11 @@ import { formatCurrencyBRL, type PublicCategoryWithProducts, type PublicProductD
 import {
   createCounterOrderAction,
   getCounterProductDetailAction,
+  previewCounterPromotionAction,
   validateCounterCouponAction,
 } from "@/lib/actions/counterOrders";
+import type { PromotionPreview } from "@/lib/actions/promotionPreview";
+import { pickBestDiscount } from "@/lib/promotions";
 import { StoreAddonGroupSelector } from "@/components/loja/StoreAddonGroupSelector";
 
 /**
@@ -91,6 +94,9 @@ export function CaixaClient({
   const [couponError, setCouponError] = useState<string | null>(null);
   const [couponValidating, setCouponValidating] = useState(false);
 
+  // Promoção automática: prévia (só leitura). Não acumula com cupom — vale o maior, como em create_order.
+  const [promotion, setPromotion] = useState<PromotionPreview>(null);
+
   const [idempotencyKey, setIdempotencyKey] = useState(() => generateIdempotencyKey());
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
@@ -108,7 +114,11 @@ export function CaixaClient({
   }, [categories, search, activeCategory]);
 
   const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
-  const discountAmount = couponApplied?.discountAmount ?? 0;
+  const appliedDiscount = pickBestDiscount(
+    couponApplied?.discountAmount ?? 0,
+    promotion ? { name: promotion.name, amount: promotion.discountAmount } : null
+  );
+  const discountAmount = appliedDiscount.amount;
   const total = subtotal - discountAmount;
   const changeForValue = changeForInput.trim() ? parseMoneyInput(changeForInput) : null;
   const changeForValidation = validateChangeFor(paymentMethod === "cash" ? changeForValue : null, total);
@@ -256,6 +266,16 @@ export function CaixaClient({
     setLastOrderNumber(result.orderNumber);
     resetSale();
   }
+
+  useEffect(() => {
+    let cancelled = false;
+    void previewCounterPromotionAction(subtotal).then((result) => {
+      if (!cancelled) setPromotion(result);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [subtotal]);
 
   // Atalhos de balcão: F2 foca a busca, F9 finaliza a venda.
   useEffect(() => {
@@ -468,6 +488,7 @@ export function CaixaClient({
                 <div className="flex items-center justify-between gap-2 rounded-lg border border-emerald/30 bg-emerald/10 px-3 py-2">
                   <span className="text-label-md font-bold text-graphite">
                     {couponApplied.code} (-{formatCurrencyBRL(couponApplied.discountAmount)})
+                    {appliedDiscount.kind === "promotion" && " · a promoção é maior e vale no lugar"}
                   </span>
                   <button type="button" onClick={handleRemoveCoupon} className="text-label-md text-red hover:underline">
                     Remover
@@ -512,7 +533,7 @@ export function CaixaClient({
               </div>
               {discountAmount > 0 && (
                 <div className="flex justify-between text-emerald">
-                  <span>Cupom</span>
+                  <span>{appliedDiscount.kind === "promotion" ? `Promoção ${appliedDiscount.name}` : "Cupom"}</span>
                   <span className="font-semibold">-{formatCurrencyBRL(discountAmount)}</span>
                 </div>
               )}

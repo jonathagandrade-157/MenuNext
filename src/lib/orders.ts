@@ -164,6 +164,8 @@ export type Order = {
   delivery_fee: number;
   coupon_id: string | null;
   coupon_code: string | null;
+  promotion_id: string | null;
+  promotion_name: string | null;
   discount_amount: number;
   total: number;
   status: OrderStatus;

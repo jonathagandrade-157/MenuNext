@@ -95,6 +95,10 @@ export const initialBannerState: BannerActionState = { status: "idle" };
 export type CouponActionState = { status: "idle" | "success" | "error"; message?: string };
 export const initialCouponState: CouponActionState = { status: "idle" };
 
+// Promoções automáticas (/painel/marketing).
+export type PromotionActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialPromotionState: PromotionActionState = { status: "idle" };
+
 // Planos de assinatura (/master/assinaturas) e configurações de billing —
 // mesmo formato de CategoryActionState/ProductActionState.
 export type PlanActionState = { status: "idle" | "success" | "error"; message?: string };

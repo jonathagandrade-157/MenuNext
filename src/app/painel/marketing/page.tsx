@@ -1,28 +1,30 @@
 import { getCoupons, requireOwnerPage } from "@/lib/tenant";
+import { getPromotions } from "@/lib/promotions";
 import { CouponsManager } from "@/components/painel/marketing/CouponsManager";
+import { PromotionsManager } from "@/components/painel/marketing/PromotionsManager";
 
 // Restrita ao OWNER (JON-10): mesmo padrão de
 // Delivery/Aparência/Horários/Pagamentos/Configurações/Usuários.
 //
-// Área "Marketing" do redesign (referência Stitch) — do mockup completo
-// (Promoções automáticas + Cupons + Destaques da Loja), esta entrega
-// implementa só Cupons de Desconto, por decisão tomada com o usuário: o
-// motor de promoções automáticas (5 mecânicas, janelas de horário,
-// segmentação por item, disparo de WhatsApp) e os Destaques ficam de fora,
-// sem schema/decisão de produto ainda — ver migration add_coupons.sql.
+// Área "Marketing": promoções automáticas (desconto que entra sozinho no pedido) e cupons de desconto
+// (código digitado pelo cliente). Os dois não acumulam — o pedido leva o maior desconto, decidido em
+// create_order. Destaques da loja ficam na tela de Produtos (estrela) e o banner em Aparência.
 export default async function MarketingPage() {
   const { supabase, restaurant } = await requireOwnerPage();
 
-  const coupons = await getCoupons(supabase, restaurant.id);
+  const [coupons, promotions] = await Promise.all([getCoupons(supabase, restaurant.id), getPromotions(supabase, restaurant.id)]);
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 px-6 py-8">
+    <div className="mx-auto max-w-5xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
       <div>
         <h1 className="text-headline-lg text-graphite">Marketing</h1>
         <p className="mt-0.5 text-body-md text-text-muted">
-          Crie cupons de desconto para seus clientes usarem no checkout da sua loja.
+          Promoções automáticas e cupons de desconto para atrair e fidelizar clientes. Quando as duas coisas valem no mesmo pedido,
+          o cliente leva só o maior desconto.
         </p>
       </div>
+
+      <PromotionsManager initialPromotions={promotions} />
 
       <CouponsManager initialCoupons={coupons} />
     </div>
