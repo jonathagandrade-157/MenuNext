@@ -66,7 +66,7 @@ export function Passo1Form({ suggestedName = "" }: { suggestedName?: string }) {
       <div>
         <FieldLabel>Endereço da sua loja online *</FieldLabel>
         <div className="flex items-center rounded-lg border border-border bg-surface-card focus-within:border-primary focus-within:ring-[3px] focus-within:ring-primary/15">
-          <span className="pl-3 text-body-md text-text-muted">menunext.com.br/</span>
+          <span className="pl-3 text-body-md text-text-muted">/loja/</span>
           <input
             name="slug"
             type="text"

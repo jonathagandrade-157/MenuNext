@@ -29,7 +29,7 @@ export function OnboardingShell({
   return (
     <div className="min-h-screen bg-surface">
       <header className="border-b border-border bg-surface-card">
-        <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-6">
+        <div className="mx-auto flex h-16 max-w-3xl items-center justify-between px-4 sm:px-6">
           <Link href="/" className="text-body-lg font-extrabold text-graphite">
             Menu<span className="text-primary">Next</span>
           </Link>
@@ -45,15 +45,32 @@ export function OnboardingShell({
         </div>
       </header>
 
-      <div className="mx-auto max-w-3xl px-6 py-10">
+      <div className="mx-auto max-w-3xl px-4 py-6 sm:px-6 sm:py-10">
         {successMessage && <SuccessMessage message={successMessage} />}
 
         <div className="mb-8">
-          <div className="mb-2 text-body-sm font-semibold text-text-muted">{percent}% concluído</div>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-surface-subdued">
-            <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${percent}%` }} />
+          <div className="mb-2 flex items-baseline justify-between gap-3 text-body-sm font-semibold text-text-muted">
+            <span>
+              Etapa {step}: <span className="text-graphite">{STEP_LABELS[step - 1]}</span>
+            </span>
+            <span>{percent}% concluído</span>
           </div>
-          <ol className="mt-4 flex flex-wrap gap-x-4 gap-y-2 text-body-sm font-semibold text-text-muted">
+          <div
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={7}
+            aria-valuenow={step}
+            aria-label={`Etapa ${step} de 7`}
+            className="grid grid-cols-7 gap-1.5"
+          >
+            {STEP_LABELS.map((label, i) => (
+              <span
+                key={label}
+                className={`h-2 rounded-full transition-colors ${i + 1 < step ? "bg-emerald" : i + 1 === step ? "bg-primary" : "bg-surface-subdued"}`}
+              />
+            ))}
+          </div>
+          <ol className="mt-4 hidden flex-wrap gap-x-4 gap-y-2 text-body-sm font-semibold text-text-muted sm:flex">
             {STEP_LABELS.map((label, i) => {
               const stepNumber = i + 1;
               const isActive = stepNumber === step;
@@ -61,6 +78,7 @@ export function OnboardingShell({
               return (
                 <li
                   key={label}
+                  aria-current={isActive ? "step" : undefined}
                   className={`flex items-center gap-1.5 ${isActive ? "text-primary" : isDone ? "text-emerald" : ""}`}
                 >
                   <span
@@ -77,7 +95,7 @@ export function OnboardingShell({
           </ol>
         </div>
 
-        <div className="rounded-2xl border border-border bg-surface-card p-8 shadow-[var(--shadow-card)]">
+        <div className="rounded-2xl border border-border bg-surface-card p-5 shadow-[var(--shadow-card)] sm:p-8">
           <h1 className="text-headline-md font-extrabold text-graphite">{title}</h1>
           <p className="mt-1 text-body-md text-text-muted">{description}</p>
           <div className="mt-6">{children}</div>
@@ -146,5 +164,36 @@ export function StepNavigation({
       </div>
       <SubmitButton label={submitLabel} />
     </div>
+  );
+}
+
+/**
+ * Cartão de escolha (checkbox) dos passos 3 e 6: ícone + título + descrição, com o estado marcado
+ * visível por borda e fundo. O checkbox continua sendo um <input> normal dentro do <label>
+ * (mesmos `name`/`defaultChecked`/`checked` de antes), então o envio do formulário não muda.
+ */
+export function ChoiceCard({
+  icon,
+  title,
+  description,
+  children,
+  ...checkbox
+}: {
+  icon: React.ReactNode;
+  title: string;
+  description?: string;
+  children?: React.ReactNode;
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "type" | "className" | "title">) {
+  return (
+    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-border p-4 transition-colors hover:bg-surface-subdued/50 has-[:checked]:border-primary has-[:checked]:bg-primary/5">
+      {/* o checkbox é o PRIMEIRO controle do <label> (clicar no cartão o marca, mesmo com um campo de texto dentro); order-last o põe à direita */}
+      <input type="checkbox" className="order-last mt-1 h-5 w-5 shrink-0 accent-primary" {...checkbox} />
+      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">{icon}</span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-label-lg text-graphite">{title}</span>
+        {description && <span className="block text-body-md text-text-muted">{description}</span>}
+        {children}
+      </span>
+    </label>
   );
 }

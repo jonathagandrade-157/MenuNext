@@ -133,6 +133,14 @@ Feito e em produção, grupos A e B:
 
 Falta nos grupos A e B: reestruturar visualmente Caixa, Informações/Configurações num único card, Ajuda (guias), master (Assinaturas, Métricas, Detalhes) e as demais telas do onboarding. Grupo C aguarda decisão.
 
+### Telas restantes (24/10/2026)
+
+- **Informações + Configurações:** viraram uma tela só, "Configurações da loja", com navegação por seções (Status, Nome e endereço, Contato, Divulgação, Conta). `/painel/informacoes` redireciona para lá e o item saiu do menu.
+- **Ajuda:** guias com ícones (inclui caixa, promoções e equipe), FAQ em acordeão acessível, busca que abre as respostas e conteúdo atualizado.
+- **Master:** Assinaturas ganhou receita recorrente, assinantes em dia, planos ativos e assinantes por plano; Detalhe do restaurante com o texto de cobrança correto (Asaas ou Mercado Pago). Métricas já estava no padrão.
+- **Onboarding:** barra de progresso por etapas e espaçamentos para celular; cartões de escolha com ícone (atendimento e pagamentos); dicas na etapa de delivery. "Loja pronta" agora mostra o link real da loja (`/loja/slug`, antes era um endereço que não abria), o status real e as etapas puladas com atalho para concluir no painel.
+- O prefixo `menunext.com.br/` nos campos de endereço da loja virou `/loja/`, que é a rota real.
+
 ### Grupo C (21/10/2026)
 
 - **Banner promocional e produtos em destaque:** feito e em produção (migration `featured_products_and_banner`).

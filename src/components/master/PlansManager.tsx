@@ -13,7 +13,14 @@ import { PlanFormFields } from "./PlanFormFields";
 /** CRUD de planos (área "Assinaturas" do Master) — nome/preço são dados
  * reais cadastrados aqui pelo próprio MenuNext, nunca valores de exemplo.
  * Mesmo padrão visual de CouponsManager/DeliveryZonesManager. */
-export function PlansManager({ initialPlans }: { initialPlans: Plan[] }) {
+export function PlansManager({
+  initialPlans,
+  subscribersByPlan = {},
+}: {
+  initialPlans: Plan[];
+  /** plan_id -> assinantes em dia (master_metrics); ausente = não mostra a contagem */
+  subscribersByPlan?: Record<string, number>;
+}) {
   const [plans, setPlans] = useState(initialPlans);
   const [syncedInitial, setSyncedInitial] = useState(initialPlans);
   if (initialPlans !== syncedInitial) {
@@ -55,8 +62,8 @@ export function PlansManager({ initialPlans }: { initialPlans: Plan[] }) {
   }
 
   return (
-    <Card className="space-y-4 p-6">
-      <div className="flex items-center justify-between gap-3">
+    <Card className="space-y-4 p-4 sm:p-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-body-lg font-bold uppercase tracking-wide text-text-muted">Planos</h2>
           <p className="mt-1 text-body-md text-text-muted">Os lojistas veem e assinam estes planos em /painel/plano.</p>
@@ -91,6 +98,11 @@ export function PlansManager({ initialPlans }: { initialPlans: Plan[] }) {
                   <div className="md:col-span-4">
                     <span className="text-body-md font-bold text-graphite">{plan.name}</span>
                     {plan.description && <p className="truncate text-body-sm text-text-muted">{plan.description}</p>}
+                    {plan.id in subscribersByPlan && (
+                      <p className="text-body-sm font-semibold text-emerald">
+                        {subscribersByPlan[plan.id]} {subscribersByPlan[plan.id] === 1 ? "assinante" : "assinantes"}
+                      </p>
+                    )}
                   </div>
                   <div className="flex items-center justify-between md:col-span-3 md:justify-center">
                     <span className="md:hidden text-body-sm font-medium text-text-muted">Preço:</span>

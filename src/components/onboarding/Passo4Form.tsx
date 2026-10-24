@@ -36,6 +36,7 @@ export function Passo4Form({ restaurant }: { restaurant: Restaurant }) {
           required
           className={inputClass}
         />
+        <p className="mt-1.5 text-body-sm text-text-muted">Valor fixo cobrado em toda entrega. Depois você pode criar taxas por bairro ou por km em Delivery.</p>
       </div>
 
       <div>
@@ -49,6 +50,7 @@ export function Passo4Form({ restaurant }: { restaurant: Restaurant }) {
           required
           className={inputClass}
         />
+        <p className="mt-1.5 text-body-sm text-text-muted">Distância máxima que você atende a partir do endereço do restaurante.</p>
       </div>
 
       <ErrorMessage message={state.status === "error" ? state.message : undefined} />

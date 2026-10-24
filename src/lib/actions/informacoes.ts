@@ -86,6 +86,7 @@ export async function saveInformacoesAction(
   }
 
   revalidatePath(INFORMACOES_PATH);
+  revalidatePath("/painel/configuracoes");
   revalidatePath("/painel");
   return { status: "success" };
 }

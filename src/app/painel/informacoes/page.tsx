@@ -1,24 +1,8 @@
-import { requireOwnerPage } from "@/lib/tenant";
-import { InformacoesForm } from "@/components/painel/informacoes/InformacoesForm";
+import { redirect } from "next/navigation";
 
-// Separação onboarding/painel: nome, URL e endereço do restaurante eram
-// editáveis só pelos Passos 1 e 2 do onboarding. Esta é a tela própria do
-// painel para isso — nunca redireciona para /onboarding.
-// Restrita ao OWNER (JON-10): fora do escopo operacional/cardápio liberado
-// para STAFF.
-export default async function InformacoesPage() {
-  const { restaurant } = await requireOwnerPage();
-
-  return (
-    <div className="mx-auto max-w-3xl space-y-6 px-6 py-8">
-      <div>
-        <h1 className="text-headline-lg text-graphite">Informações</h1>
-        <p className="mt-0.5 text-body-md text-text-muted">
-          Nome, endereço digital e localização do seu restaurante.
-        </p>
-      </div>
-
-      <InformacoesForm restaurant={restaurant} />
-    </div>
-  );
+// Nome, URL e endereço do restaurante agora são editados dentro de Configurações da loja
+// (mesmo formulário, InformacoesForm). Esta rota continua existindo para não quebrar links
+// antigos nem o checklist de primeiros passos.
+export default function InformacoesPage() {
+  redirect("/painel/configuracoes#nome-e-endereco");
 }
