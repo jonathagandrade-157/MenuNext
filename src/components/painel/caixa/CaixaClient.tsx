@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { Image as ImageIcon, Search } from "lucide-react";
 import { Modal } from "@/components/ui/Modal";
 import { Button } from "@/components/ui/Button";
 import { ErrorState } from "@/components/ui/States";
@@ -19,6 +20,7 @@ import {
   validateChangeFor,
   type PaymentMethod,
 } from "@/lib/checkout";
+import { changeToGiveBack } from "@/lib/cash";
 import { parseMoneyInput } from "@/lib/products";
 import { formatCurrencyBRL, type PublicCategoryWithProducts, type PublicProductDetail } from "@/lib/store";
 import {
@@ -46,11 +48,14 @@ export function CaixaClient({
   paymentPix,
   paymentCash,
   paymentCard,
+  cashOpen,
 }: {
   categories: PublicCategoryWithProducts[];
   paymentPix: boolean;
   paymentCash: boolean;
   paymentCard: boolean;
+  /** Caixa aberto? Fechado bloqueia a venda aqui e na Server Action (createCounterOrderAction). */
+  cashOpen: boolean;
 }) {
   const availablePaymentMethods = useMemo<PaymentMethod[]>(() => {
     const list: PaymentMethod[] = [];
@@ -61,6 +66,8 @@ export function CaixaClient({
   }, [paymentPix, paymentCash, paymentCard]);
 
   const [search, setSearch] = useState("");
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
   const [cart, setCart] = useState<BagItem[]>([]);
 
   // Modal de adicionar item (produto + adicionais + quantidade)
@@ -91,20 +98,28 @@ export function CaixaClient({
 
   const filteredCategories = useMemo(() => {
     const term = search.trim().toLowerCase();
-    if (!term) return categories;
     return categories
-      .map((category) => ({ ...category, products: category.products.filter((p) => p.name.toLowerCase().includes(term)) }))
+      .filter((category) => !activeCategory || category.id === activeCategory)
+      .map((category) => ({
+        ...category,
+        products: term ? category.products.filter((p) => p.name.toLowerCase().includes(term)) : category.products,
+      }))
       .filter((category) => category.products.length > 0);
-  }, [categories, search]);
+  }, [categories, search, activeCategory]);
 
   const subtotal = cart.reduce((sum, item) => sum + item.subtotal, 0);
   const discountAmount = couponApplied?.discountAmount ?? 0;
   const total = subtotal - discountAmount;
   const changeForValue = changeForInput.trim() ? parseMoneyInput(changeForInput) : null;
   const changeForValidation = validateChangeFor(paymentMethod === "cash" ? changeForValue : null, total);
+  const changeDue = paymentMethod === "cash" && changeForValidation.ok ? changeToGiveBack(changeForValue, total) : null;
 
   const canSubmit =
-    cart.length > 0 && paymentMethod !== null && !submitting && (paymentMethod !== "cash" || changeForInput.trim() === "" || changeForValidation.ok);
+    cashOpen &&
+    cart.length > 0 &&
+    paymentMethod !== null &&
+    !submitting &&
+    (paymentMethod !== "cash" || changeForInput.trim() === "" || changeForValidation.ok);
 
   async function openProductPicker(productId: string) {
     setPickerOpen(true);
@@ -209,6 +224,10 @@ export function CaixaClient({
 
   async function handleSubmit() {
     setSubmitError(null);
+    if (!cashOpen) {
+      setSubmitError("Abra o caixa antes de registrar vendas.");
+      return;
+    }
     if (!paymentMethod || cart.length === 0) return;
 
     if (paymentMethod === "cash" && changeForInput.trim() && !changeForValidation.ok) {
@@ -238,16 +257,66 @@ export function CaixaClient({
     resetSale();
   }
 
+  // Atalhos de balcão: F2 foca a busca, F9 finaliza a venda.
+  useEffect(() => {
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "F2") {
+        e.preventDefault();
+        searchRef.current?.focus();
+      } else if (e.key === "F9" && canSubmit) {
+        e.preventDefault();
+        void handleSubmit();
+      }
+    }
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  });
+
   return (
-    <div className="grid grid-cols-1 gap-6 xl:grid-cols-[1fr_380px]">
-      <div className="space-y-4">
-        <input
-          type="text"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Buscar produto..."
-          className="h-11 w-full rounded-xl border border-border bg-surface-card px-3.5 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-        />
+    // inert = nada aqui recebe clique, foco ou leitor de tela enquanto o caixa está fechado.
+    <div
+      inert={!cashOpen}
+      aria-disabled={!cashOpen}
+      className={`grid grid-cols-1 gap-6 xl:grid-cols-[1fr_380px] ${cashOpen ? "" : "select-none opacity-50"}`}
+    >
+      <div className="min-w-0 space-y-4">
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-text-muted" aria-hidden />
+          <input
+            ref={searchRef}
+            type="text"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Buscar produto..."
+            aria-label="Buscar produto"
+            className="h-11 w-full rounded-xl border border-border bg-surface-card pl-10 pr-14 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+          />
+          <kbd className="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded-md border border-border bg-surface-subdued px-1.5 py-0.5 text-[11px] font-semibold text-text-muted sm:block">
+            F2
+          </kbd>
+        </div>
+
+        {categories.length > 1 && (
+          <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1" role="tablist" aria-label="Categorias">
+            {[{ id: null as string | null, name: "Todos" }, ...categories.map((c) => ({ id: c.id as string | null, name: c.name }))].map((chip) => {
+              const active = activeCategory === chip.id;
+              return (
+                <button
+                  key={chip.id ?? "all"}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setActiveCategory(chip.id)}
+                  className={`shrink-0 rounded-full border px-3.5 py-1.5 text-label-md font-bold transition-colors ${
+                    active ? "border-primary bg-primary text-white" : "border-border bg-surface-card text-graphite hover:bg-surface-subdued"
+                  }`}
+                >
+                  {chip.name}
+                </button>
+              );
+            })}
+          </div>
+        )}
 
         {filteredCategories.length === 0 ? (
           <p className="rounded-xl border border-border bg-surface-subdued/60 px-4 py-6 text-center text-body-md text-text-muted">
@@ -264,9 +333,17 @@ export function CaixaClient({
                     type="button"
                     disabled={!product.is_available}
                     onClick={() => openProductPicker(product.id)}
-                    className="flex flex-col items-start gap-1 rounded-xl border border-border bg-surface-card p-3 text-left transition-colors hover:border-primary hover:bg-primary/5 disabled:cursor-not-allowed disabled:opacity-40"
+                    className="flex flex-col items-stretch gap-2 rounded-xl border border-border bg-surface-card p-2.5 text-left transition-colors hover:border-primary hover:bg-primary/5 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
                   >
-                    <span className="text-body-md font-bold text-graphite">{product.name}</span>
+                    <span className="flex h-20 items-center justify-center overflow-hidden rounded-lg bg-surface-subdued text-text-muted">
+                      {product.imageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={product.imageUrl} alt="" className="h-full w-full object-cover" />
+                      ) : (
+                        <ImageIcon className="h-6 w-6" aria-hidden />
+                      )}
+                    </span>
+                    <span className="line-clamp-2 text-body-md font-bold text-graphite">{product.name}</span>
                     <span className="text-label-md text-primary">{formatCurrencyBRL(product.price)}</span>
                     {!product.is_available && <span className="text-[11px] font-semibold text-red">Indisponível</span>}
                   </button>
@@ -277,7 +354,7 @@ export function CaixaClient({
         )}
       </div>
 
-      <div className="space-y-4 rounded-2xl border border-border bg-surface-card p-4">
+      <div className="space-y-4 self-start rounded-2xl border border-border bg-surface-card p-4 xl:sticky xl:top-4">
         {lastOrderNumber !== null && (
           <div className="rounded-xl border border-emerald/30 bg-emerald/10 px-3.5 py-2.5 text-label-lg text-emerald">
             Venda #{lastOrderNumber} registrada! Pode continuar com a próxima.
@@ -348,13 +425,39 @@ export function CaixaClient({
                   ))}
                 </div>
                 {paymentMethod === "cash" && (
-                  <input
-                    value={changeForInput}
-                    onChange={(e) => setChangeForInput(e.target.value)}
-                    placeholder="Troco para (opcional)"
-                    inputMode="decimal"
-                    className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
-                  />
+                  <div className="space-y-2">
+                    <input
+                      value={changeForInput}
+                      onChange={(e) => setChangeForInput(e.target.value)}
+                      placeholder="Cliente pagou com (opcional)"
+                      aria-label="Valor recebido em dinheiro"
+                      inputMode="decimal"
+                      className="h-10 w-full rounded-xl border border-border bg-surface px-3 text-body-md text-graphite placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+                    />
+                    <div className="flex flex-wrap gap-1.5">
+                      {[
+                        { label: "Exato", value: total },
+                        ...[20, 50, 100, 200].filter((v) => v > total).map((v) => ({ label: formatCurrencyBRL(v), value: v })),
+                      ].map((quick) => (
+                        <button
+                          key={quick.label}
+                          type="button"
+                          onClick={() => setChangeForInput((Math.round(quick.value * 100) / 100).toFixed(2).replace(".", ","))}
+                          className="rounded-lg border border-border px-2.5 py-1 text-label-md font-bold text-graphite hover:bg-surface-subdued"
+                        >
+                          {quick.label}
+                        </button>
+                      ))}
+                    </div>
+                    {changeDue !== null && changeForInput.trim() !== "" && (
+                      <p className="rounded-lg bg-emerald/10 px-3 py-2 text-label-lg font-bold text-emerald">
+                        Troco a devolver: {formatCurrencyBRL(changeDue)}
+                      </p>
+                    )}
+                    {changeForInput.trim() !== "" && !changeForValidation.ok && (
+                      <p className="text-label-md text-red">{changeForValidation.error}</p>
+                    )}
+                  </div>
                 )}
               </div>
             )}
@@ -421,8 +524,9 @@ export function CaixaClient({
 
             {submitError && <ErrorState message={submitError} />}
 
-            <Button onClick={handleSubmit} disabled={!canSubmit} loading={submitting} className="w-full">
+            <Button onClick={handleSubmit} disabled={!canSubmit} loading={submitting} size="lg" className="w-full">
               {submitting ? "Registrando..." : `Finalizar venda · ${formatCurrencyBRL(total)}`}
+              {!submitting && <kbd className="hidden rounded-md bg-white/20 px-1.5 py-0.5 text-[11px] font-semibold sm:inline">F9</kbd>}
             </Button>
           </>
         )}

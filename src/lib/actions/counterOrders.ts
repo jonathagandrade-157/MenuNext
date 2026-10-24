@@ -7,6 +7,7 @@ import { getMyRestaurant } from "@/lib/tenant";
 import { getPublicProductDetail, type PublicProductDetail } from "@/lib/store";
 import { getPublicAssetUrl } from "@/lib/storage/assets";
 import { friendlyOrderError } from "@/lib/orderErrors";
+import { getCurrentCashSession } from "@/lib/cash";
 import type { CreateOrderItemPayload } from "@/lib/checkout";
 
 export type CounterOrderInput = {
@@ -41,6 +42,15 @@ export async function createCounterOrderAction(input: CounterOrderInput): Promis
 
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) redirect("/onboarding/passo-1");
+
+  // A venda de balcão só vale com o caixa aberto: a tela já bloqueia, mas a Server Action é chamável sem a tela.
+  let cashSession;
+  try {
+    cashSession = await getCurrentCashSession(supabase);
+  } catch {
+    return { status: "error", message: "Não foi possível verificar o caixa agora. Tente novamente." };
+  }
+  if (!cashSession) return { status: "error", message: "Abra o caixa antes de registrar vendas." };
 
   const { data, error } = await supabase.rpc("create_order", {
     p_slug: restaurant.slug,
