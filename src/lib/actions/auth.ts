@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/server";
 import { isValidDocument, normalizeDocument } from "@/lib/document";
 import type { AuthActionState } from "@/lib/form-state";
 import { LEGAL_LAST_UPDATED } from "@/lib/legal";
+import { PASSWORD_MIN_LENGTH, validatePassword } from "@/lib/password";
 
 function friendlyAuthError(message: string): string {
   const normalized = message.toLowerCase();
@@ -27,7 +28,7 @@ function friendlyAuthError(message: string): string {
     return "É obrigatório informar um CPF ou CNPJ válido para criar sua conta.";
   }
   if (normalized.includes("password should be at least") || normalized.includes("password")) {
-    return "A senha deve ter pelo menos 6 caracteres.";
+    return `A senha não foi aceita. Use pelo menos ${PASSWORD_MIN_LENGTH} caracteres, misturando letras e números.`;
   }
   if (normalized.includes("invalid login credentials")) {
     return "E-mail ou senha incorretos.";
@@ -69,8 +70,9 @@ export async function signUpAction(
   if (!isValidDocument(document)) {
     return { status: "error", message: "Informe um CPF ou CNPJ válido." };
   }
-  if (password.length < 6) {
-    return { status: "error", message: "A senha deve ter pelo menos 6 caracteres." };
+  const passwordCheck = validatePassword(password, { email, name });
+  if (!passwordCheck.ok) {
+    return { status: "error", message: passwordCheck.error };
   }
   if (password !== confirmPassword) {
     return { status: "error", message: "As senhas não coincidem." };

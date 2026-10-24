@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/Button";
 import { signInAction, signUpAction } from "@/lib/actions/auth";
 import { initialAuthState } from "@/lib/form-state";
 import { maskDocument } from "@/lib/document";
+import { PASSWORD_MIN_LENGTH } from "@/lib/password";
 
 function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
@@ -117,14 +118,15 @@ export function CadastroForm({
           </p>
         </label>
 
-        <Field label="Senha" name="password" type="password" autoComplete="new-password" required minLength={6} />
+        <Field label="Senha" name="password" type="password" autoComplete="new-password" required minLength={PASSWORD_MIN_LENGTH} />
+        <p className="-mt-2 text-body-sm text-text-muted">Mínimo de {PASSWORD_MIN_LENGTH} caracteres, com letras e números.</p>
         <Field
           label="Confirmar senha"
           name="confirmPassword"
           type="password"
           autoComplete="new-password"
           required
-          minLength={6}
+          minLength={PASSWORD_MIN_LENGTH}
         />
 
         <label className="flex items-start gap-2 text-body-sm text-text-muted">
