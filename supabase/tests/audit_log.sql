@@ -35,7 +35,7 @@ begin
     (r_a, u_owner_a, 'OWNER'), (r_a, u_staff_a, 'STAFF'), (r_b, u_owner_b, 'OWNER');
   insert into public.categories (restaurant_id, name, display_order) values (r_a, 'cat-a', 1) returning id into cat_a;
   insert into public.categories (restaurant_id, name, display_order) values (r_b, 'cat-b', 1) returning id into cat_b;
-  insert into public.products (restaurant_id, name, price, cost, category_id, display_order) values (r_a, 'prod-a', 10, 2.5, cat_a, 1) returning id into prod_a;
+  insert into public.products (restaurant_id, name, price, category_id, display_order) values (r_a, 'prod-a', 10, cat_a, 1) returning id into prod_a;
   insert into public.products (restaurant_id, name, price, category_id, display_order) values (r_a, 'prod-a2', 12, cat_a, 2) returning id into prod_a2;
   insert into public.products (restaurant_id, name, price, category_id, display_order) values (r_b, 'prod-b', 10, cat_b, 1) returning id into prod_b;
 
@@ -68,15 +68,15 @@ begin
   -- ---------- 2) OWNER A altera produto: autor, papel e nomes de colunas (sem valores) ----------
   perform set_config('request.jwt.claims', json_build_object('sub', u_owner_a, 'role', 'authenticated')::text, true);
   set local role authenticated;
-  update public.products set price = 11, cost = 3.33 where id = prod_a;
+  update public.products set price = 11, description = 'texto-sigiloso-123' where id = prod_a;
   reset role;
   total := total + 1;
   select count(*), max(summary), max(actor_role) into n, s, role_seen from public.audit_log where restaurant_id = r_a and entity = 'products' and action = 'update';
   if n <> 1 then fails := fails || format('alteracao de produto deveria gerar 1 registro (n=%s)', n); end if;
   total := total + 1;
-  if s is null or s not like 'Produto "prod-a" alterado (%cost%price%)' then fails := fails || format('resumo inesperado: %s', coalesce(s, 'null')); end if;
+  if s is null or s not like 'Produto "prod-a" alterado (%description%price%)' then fails := fails || format('resumo inesperado: %s', coalesce(s, 'null')); end if;
   total := total + 1;
-  if s like '%3.33%' or s like '%11%' then fails := fails || 'resumo vazou valor de coluna'::text; end if;
+  if s like '%texto-sigiloso-123%' or s like '%11%' then fails := fails || 'resumo vazou valor de coluna'::text; end if;
   total := total + 1;
   if role_seen is distinct from 'OWNER' then fails := fails || format('papel do autor deveria ser OWNER (veio %s)', coalesce(role_seen, 'null')); end if;
   total := total + 1;

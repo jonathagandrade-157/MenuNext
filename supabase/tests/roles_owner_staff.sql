@@ -89,8 +89,8 @@ begin
   insert into public.categories (restaurant_id, name, display_order) values (r_a, 'cat-a2', 9002) returning id into cat_a2;
   insert into public.categories (restaurant_id, name, display_order) values (r_a, 'cat-del', 9003) returning id into cat_del;
   insert into public.categories (restaurant_id, name, display_order) values (r_b, 'cat-b', 9001) returning id into cat_b;
-  insert into public.products (restaurant_id, name, description, price, cost, category_id, display_order)
-    values (r_a, 'prod-a', 'desc-a', 10, 2.5, cat_a, 9001) returning id into prod_a;
+  insert into public.products (restaurant_id, name, description, price, category_id, display_order)
+    values (r_a, 'prod-a', 'desc-a', 10, cat_a, 9001) returning id into prod_a;
   insert into public.products (restaurant_id, name, price, category_id, display_order) values (r_a, 'prod-a2', 12, cat_a, 9002) returning id into prod_a2;
   insert into public.products (restaurant_id, name, price, category_id, display_order) values (r_a, 'prod-del', 8, cat_a, 9003) returning id into prod_del;
   insert into public.products (restaurant_id, name, price, category_id, display_order) values (r_b, 'prod-b', 10, cat_b, 9001) returning id into prod_b;
@@ -245,13 +245,11 @@ begin
    (1,'staff_a','deny',dml_needle,'STAFF NAO apaga produto',              format('delete from public.products where id = %L', prod_del)),
    (1,'staff_a','deny','owner_required','STAFF NAO renomeia produto',     format($s$ update public.products set name = 'hack' where id = %L $s$, prod_a)),
    (1,'staff_a','deny','owner_required','STAFF NAO altera preco',         format('update public.products set price = 0.01 where id = %L', prod_a)),
-   (1,'staff_a','deny','owner_required','STAFF NAO altera custo',         format('update public.products set cost = 0 where id = %L', prod_a)),
    (1,'staff_a','deny','owner_required','STAFF NAO altera descricao',     format($s$ update public.products set description = 'hack' where id = %L $s$, prod_a)),
    (1,'staff_a','deny','owner_required','STAFF NAO muda categoria do produto', format('update public.products set category_id = %L where id = %L', cat_a2, prod_a)),
    (1,'staff_a','deny','owner_required','STAFF NAO reordena produto',     format('update public.products set display_order = 1 where id = %L', prod_a)),
    (1,'staff_a','deny','owner_required','STAFF NAO altera is_available JUNTO com o nome', format($s$ update public.products set is_available = false, name = 'hack' where id = %L $s$, prod_a)),
    (1,'staff_a','deny','owner_required','STAFF NAO altera is_available JUNTO com o preco', format('update public.products set is_available = false, price = 0.01 where id = %L', prod_a)),
-   (1,'staff_a','deny','owner_required','STAFF NAO altera is_available JUNTO com o custo', format('update public.products set is_available = false, cost = 0 where id = %L', prod_a)),
    (1,'staff_a','deny','owner_required','STAFF NAO move produto para a loja B (com is_available)', format('update public.products set is_available = false, restaurant_id = %L, category_id = %L where id = %L', r_b, cat_b, prod_a)),
    (1,'staff_a','deny',dml_needle,'STAFF NAO cria adicional',             format($s$ insert into public.addons (restaurant_id, addon_group_id, name, price, display_order) values (%L, %L, 'hack', 0, 1) $s$, r_a, grp_a)),
    (1,'staff_a','deny',dml_needle,'STAFF NAO apaga adicional',            format('delete from public.addons where id = %L', add_del)),
@@ -328,8 +326,8 @@ begin
     format($v$ (select payment_pix_key = 'pix-original@roles.test' and payment_pix = true and status = 'active'
                        and delivery_fee = 5 and name = 'Loja A' and bio = 'bio-original' and logo_path is null
                 from public.restaurants where id = %L) $v$, r_a)),
-   (1,'sys','check','apos os ataques: produto e adicional intactos (nome, preco, custo, disponibilidade, loja)','select 1',
-    format($v$ (select name = 'prod-a' and price = 10 and cost = 2.5 and is_available and description = 'desc-a'
+   (1,'sys','check','apos os ataques: produto e adicional intactos (nome, preco, disponibilidade, loja)','select 1',
+    format($v$ (select name = 'prod-a' and price = 10 and is_available and description = 'desc-a'
                        and category_id = %L and restaurant_id = %L and display_order = 9001
                 from public.products where id = %L)
              and (select name = 'add-a' and price = 2 and is_available and addon_group_id = %L from public.addons where id = %L) $v$,
@@ -369,7 +367,7 @@ begin
   insert into _cases (phase, persona, expect, label, stmt, verify) values
    (2,'staff_a','allow','CONTROLE: STAFF desliga a disponibilidade do produto',
     format('update public.products set is_available = false where id = %L', prod_a),
-    format($v$ (select not is_available and name = 'prod-a' and price = 10 and cost = 2.5 and description = 'desc-a'
+    format($v$ (select not is_available and name = 'prod-a' and price = 10 and description = 'desc-a'
                        and category_id = %L and display_order = 9001 and updated_at > '2020-01-01'::timestamptz
                 from public.products where id = %L) $v$, cat_a, prod_a)),
    (2,'staff_a','allow','CONTROLE: STAFF religa a disponibilidade do produto',
