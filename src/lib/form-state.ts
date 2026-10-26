@@ -11,6 +11,10 @@ export type AuthActionState = {
 };
 export const initialAuthState: AuthActionState = { status: "idle" };
 
+// Recuperação de senha: o pedido do link termina em "success" (a tela troca o formulário por um aviso).
+export type PasswordResetActionState = { status: "idle" | "success" | "error"; message?: string };
+export const initialPasswordResetState: PasswordResetActionState = { status: "idle" };
+
 // Diferente de StepActionState: aqui precisamos distinguir "sucesso" do
 // estado inicial "idle" (o formulário fica na mesma página, num modal, em
 // vez de navegar para o próximo passo — não dá pra usar "voltou pra idle"

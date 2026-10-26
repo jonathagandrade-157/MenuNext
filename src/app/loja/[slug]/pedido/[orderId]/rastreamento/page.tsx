@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { getPublicOrder, getPublicRestaurantBySlug } from "@/lib/store";
+import { getPublicOrder } from "@/lib/store";
+import { getCachedPublicRestaurant } from "@/lib/storeRestaurant";
 import type { OrderStatus } from "@/lib/orders";
 import { OrderTrackingProgress } from "@/components/loja/OrderTrackingProgress";
 import { StoreNotFound } from "@/components/loja/StoreNotFound";
@@ -9,7 +10,7 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/pedido/[o
   const { slug, orderId } = await params;
   const supabase = await createClient();
 
-  const restaurant = await getPublicRestaurantBySlug(supabase, slug);
+  const restaurant = await getCachedPublicRestaurant(slug);
   if (!restaurant) return <StoreNotFound />;
 
   const order = await getPublicOrder(supabase, slug, orderId);

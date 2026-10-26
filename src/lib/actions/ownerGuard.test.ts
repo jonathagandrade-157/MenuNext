@@ -50,6 +50,7 @@ const OTHER_GUARDS: Record<string, string> = {
   "invites.ts": "convites: requireOwner próprio e RPCs que exigem OWNER",
   "customerNotes.ts": "notas de clientes: checagem de OWNER própria e RLS só do OWNER",
   "master.ts": "ações do Master: is_platform_admin",
+  "passwordReset.ts": "recuperação de senha: pedir o link é público (resposta igual exista a conta ou não); trocar a senha exige a sessão do link e o cookie de redefinição",
   "promotionPreview.ts": "prévia pública da promoção no checkout: preview_promotion só lê e não revela nada além do desconto",
   "pendingPayment.ts": "retomar pagamento: billing_pending_subscription só devolve a assinatura pendente do OWNER da loja",
   "plans.ts": "planos: is_platform_admin",
