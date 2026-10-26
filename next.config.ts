@@ -1,7 +1,24 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs/config";
 
+// Cabeçalhos de segurança em todas as páginas. Só os que não arriscam quebrar a loja: impedir que o
+// painel/loja sejam embutidos em outro site (clickjacking), que o navegador "adivinhe" tipos de arquivo,
+// vazar URL completa para terceiros e pedir câmera/microfone/localização/pagamento do navegador (o app não usa).
+// Content-Security-Policy fica para depois: exige mapear scripts do Next, Supabase, Sentry e gateways.
+// (HSTS já é enviado pela Vercel.)
+const SECURITY_HEADERS = [
+  { key: "X-Content-Type-Options", value: "nosniff" },
+  { key: "X-Frame-Options", value: "DENY" },
+  { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+  { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=(), payment=()" },
+];
+
 const nextConfig: NextConfig = {
+  // não anuncia o framework em cada resposta
+  poweredByHeader: false,
+  async headers() {
+    return [{ source: "/:path*", headers: SECURITY_HEADERS }];
+  },
   experimental: {
     serverActions: {
       // Padrão do Next.js é 1 MB — insuficiente para createProductAction,
