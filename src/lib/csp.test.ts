@@ -9,7 +9,9 @@ describe("buildContentSecurityPolicy", () => {
     expect(directive("frame-ancestors")).toBe("frame-ancestors 'none'");
     expect(directive("object-src")).toBe("object-src 'none'");
     expect(directive("base-uri")).toBe("base-uri 'self'");
-    expect(directive("form-action")).toBe("form-action 'self'");
+    // form-action fica de fora de propósito: protege pouco e o navegador o aplica também aos redirecionamentos
+    // de formulário (risco com a ida ao pagamento).
+    expect(directive("form-action")).toBe("");
     expect(directive("default-src")).toBe("default-src 'self'");
   });
 
