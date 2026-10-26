@@ -1,8 +1,9 @@
 /**
- * Content-Security-Policy do MenuNext. Entra em modo SÓ RELATÓRIO (Content-Security-Policy-Report-Only):
- * o navegador NÃO bloqueia nada, apenas avisa /api/csp-report quando algo fugiria da política. Depois de
- * alguns dias sem violações legítimas, a mesma política passa a valer de verdade (trocar o nome do cabeçalho
- * em next.config.ts) e, em seguida, os 'unsafe-inline' dão lugar a nonce.
+ * Content-Security-Policy do MenuNext. Em PRODUÇÃO vale de verdade (Content-Security-Policy); em desenvolvimento
+ * fica só em relatório (o recarregamento ao vivo do Next usa conexões que a política bloquearia). Em qualquer
+ * modo, o navegador avisa /api/csp-report quando algo viola a política: se uma tela legítima quebrar, a linha
+ * "[csp]" no log da Vercel mostra exatamente qual origem faltou. Próximo endurecimento: trocar os
+ * 'unsafe-inline' por nonce.
  *
  * Origens usadas pelo navegador: o próprio site; Supabase (API, Realtime e imagens do Storage); ViaCEP
  * (busca de endereço no checkout); Sentry (envio de erros). Pagamento (Asaas/Mercado Pago) e WhatsApp são
@@ -46,7 +47,6 @@ export function buildContentSecurityPolicy(options: { supabaseUrl?: string; isDe
     "media-src": ["'self'", "data:", "blob:", ...supabaseHttp],
     "object-src": ["'none'"],
     "base-uri": ["'self'"],
-    "form-action": ["'self'"],
     "frame-ancestors": ["'none'"],
   };
 
