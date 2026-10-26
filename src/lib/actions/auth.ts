@@ -6,6 +6,7 @@ import { isValidDocument, normalizeDocument } from "@/lib/document";
 import type { AuthActionState } from "@/lib/form-state";
 import { LEGAL_LAST_UPDATED } from "@/lib/legal";
 import { PASSWORD_MIN_LENGTH, validatePassword } from "@/lib/password";
+import { safeNextPath } from "@/lib/safeRedirect";
 
 function friendlyAuthError(message: string): string {
   const normalized = message.toLowerCase();
@@ -42,12 +43,11 @@ function friendlyAuthError(message: string): string {
   return "Não foi possível concluir a operação. Tente novamente em instantes.";
 }
 
-/** Só redireciona para um "next" vindo de formData se apontar para uma
- * rota de aceite de convite conhecida (JON-27) — nunca para uma URL
- * arbitrária vinda de input do usuário (evita open redirect). */
-function safeInviteRedirect(formData: FormData): string | null {
-  const next = String(formData.get("next") ?? "");
-  return /^\/convite\/[^/]+$/.test(next) ? next : null;
+/** Só redireciona para um "next" vindo de formData se for um destino conhecido e interno (ver
+ * lib/safeRedirect.ts) — nunca para uma URL arbitrária vinda de input do usuário (open redirect).
+ * No login vale o convite OU a página protegida que o usuário tentou abrir; no cadastro novo só o convite. */
+function safeNext(formData: FormData, allowPanel: boolean): string | null {
+  return safeNextPath(formData.get("next"), { allowPanel });
 }
 
 export async function signUpAction(
@@ -128,7 +128,7 @@ export async function signUpAction(
     };
   }
 
-  redirect(safeInviteRedirect(formData) ?? "/onboarding/passo-1?welcome=1");
+  redirect(safeNext(formData, false) ?? "/onboarding/passo-1?welcome=1");
 }
 
 export async function signInAction(
@@ -149,7 +149,7 @@ export async function signInAction(
     return { status: "error", message: friendlyAuthError(error.message) };
   }
 
-  redirect(safeInviteRedirect(formData) ?? "/painel");
+  redirect(safeNext(formData, true) ?? "/painel");
 }
 
 export async function signOutAction() {
