@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CadastroForm } from "@/components/cadastro/CadastroForm";
 import { CheckCircleIcon } from "@/components/ui/icons";
 import { getAuthedUser, resolvePostAuthPath } from "@/lib/tenant";
+import { safeNextPath } from "@/lib/safeRedirect";
 
 const BENEFITS = [
   "Pix direto no seu banco, sem taxa por pedido",
@@ -13,17 +14,16 @@ const BENEFITS = [
 export default async function CadastroPage(props: PageProps<"/cadastro">) {
   const searchParams = await props.searchParams;
   const mode = searchParams.mode === "login" ? "login" : "signup";
-  const next = typeof searchParams.next === "string" ? searchParams.next : undefined;
+  // Só um destino conhecido e interno (convite ou página do painel) vira "next"; qualquer outra coisa é descartada.
+  const next = safeNextPath(searchParams.next, { allowPanel: true }) ?? undefined;
   const defaultEmail = typeof searchParams.email === "string" ? searchParams.email : undefined;
   // Convite (JON-27): link "Criar conta"/"Entrar" a partir de /convite/[token]
   // carrega ?next=/convite/token — se a pessoa já tem sessão (ex.: abriu o
   // link de convite logada em outra aba), pula direto para lá em vez do
   // destino padrão pós-login.
-  const isInviteNext = next !== undefined && /^\/convite\/[^/]+$/.test(next);
-
   const { supabase, user } = await getAuthedUser();
   if (user) {
-    redirect(isInviteNext ? next : await resolvePostAuthPath(supabase));
+    redirect(next ?? (await resolvePostAuthPath(supabase)));
   }
 
   return (

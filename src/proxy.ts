@@ -42,8 +42,11 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   if (isProtectedPath(request.nextUrl.pathname) && !user) {
+    // Quem tenta abrir uma página protegida sem sessão já tem conta: cai direto no "Entrar" e, depois do
+    // login, volta para a página pedida (validada em lib/safeRedirect.ts; destino inválido é ignorado).
     const redirectUrl = new URL("/cadastro", request.url);
-    redirectUrl.searchParams.set("redirectTo", request.nextUrl.pathname);
+    redirectUrl.searchParams.set("mode", "login");
+    redirectUrl.searchParams.set("next", request.nextUrl.pathname + request.nextUrl.search);
     return NextResponse.redirect(redirectUrl);
   }
 
