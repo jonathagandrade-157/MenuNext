@@ -2,8 +2,12 @@
  * Content-Security-Policy do MenuNext. Em PRODUÇÃO vale de verdade (Content-Security-Policy); em desenvolvimento
  * fica só em relatório (o recarregamento ao vivo do Next usa conexões que a política bloquearia). Em qualquer
  * modo, o navegador avisa /api/csp-report quando algo viola a política: se uma tela legítima quebrar, a linha
- * "[csp]" no log da Vercel mostra exatamente qual origem faltou. Próximo endurecimento: trocar os
- * 'unsafe-inline' por nonce.
+ * "[csp]" no log da Vercel mostra exatamente qual origem faltou.
+ *
+ * SCRIPTS: em produção só executa script com o nonce desta requisição (gerado no proxy, a cada página) ou
+ * carregado por um script que o tenha ('strict-dynamic'); XSS que injete <script> ou onclick="" não roda.
+ * ESTILOS seguem 'unsafe-inline' de propósito: o React usa style="" (barras de progresso etc.) e um nonce de
+ * estilo bloquearia esses atributos; o risco de XSS por CSS é bem menor que por script.
  *
  * Origens usadas pelo navegador: o próprio site; Supabase (API, Realtime e imagens do Storage); ViaCEP
  * (busca de endereço no checkout); Sentry (envio de erros). Pagamento (Asaas/Mercado Pago) e WhatsApp são
@@ -21,15 +25,24 @@ function hostOf(url: string | undefined): string | null {
   }
 }
 
-export function buildContentSecurityPolicy(options: { supabaseUrl?: string; isDev?: boolean } = {}): string {
+/** Nonce imprevisível e único por requisição (base64 de um UUID aleatório: 122 bits). */
+export function generateNonce(): string {
+  return btoa(crypto.randomUUID());
+}
+
+export function buildContentSecurityPolicy(options: { supabaseUrl?: string; isDev?: boolean; nonce?: string } = {}): string {
   const supabaseHost = hostOf(options.supabaseUrl);
   const supabaseHttp = supabaseHost ? [`https://${supabaseHost}`] : ["https://*.supabase.co"];
   const supabaseWs = supabaseHost ? [`wss://${supabaseHost}`] : ["wss://*.supabase.co"];
 
   const directives: Record<string, string[]> = {
     "default-src": ["'self'"],
-    // Next.js injeta scripts inline para hidratar a página; nonce virá numa etapa posterior.
-    "script-src": ["'self'", "'unsafe-inline'", ...(options.isDev ? ["'unsafe-eval'"] : [])],
+    // Com nonce (produção): só script marcado com o nonce. Sem nonce (desenvolvimento): 'unsafe-inline'.
+    "script-src": [
+      "'self'",
+      ...(options.nonce ? [`'nonce-${options.nonce}'`, "'strict-dynamic'"] : ["'unsafe-inline'"]),
+      ...(options.isDev ? ["'unsafe-eval'"] : []),
+    ],
     "style-src": ["'self'", "'unsafe-inline'"],
     "img-src": ["'self'", "data:", "blob:", ...supabaseHttp],
     "font-src": ["'self'", "data:"],
