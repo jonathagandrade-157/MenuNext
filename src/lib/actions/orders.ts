@@ -6,6 +6,7 @@ import type { CreateOrderItemPayload } from "@/lib/checkout";
 import type { Order } from "@/lib/orders";
 import { friendlyOrderError } from "@/lib/orderErrors";
 import { resolveDeliveryDistanceForOrder } from "@/lib/actions/delivery-quote";
+import { checkIpRateLimit, tooManyAttemptsMessage } from "@/lib/rateLimit";
 
 export type SubmitOrderDeliveryInput = {
   zip: string;
@@ -44,6 +45,10 @@ export type SubmitOrderResult =
  * mostrar ao cliente, nunca confia em nada calculado no navegador.
  */
 export async function submitOrderAction(input: SubmitOrderInput): Promise<SubmitOrderResult> {
+  // Freia pedidos falsos em massa: 20 pedidos / 10 min por IP (cliente real faz 1 ou 2).
+  const limit = await checkIpRateLimit("pedido:ip", { limit: 20, windowSeconds: 600 });
+  if (!limit.allowed) return { status: "error", message: tooManyAttemptsMessage(limit.retryAfterSeconds) };
+
   const supabase = await createClient();
 
   // Frete por distância (Fase 4.1.1): a distância é calculada aqui, no

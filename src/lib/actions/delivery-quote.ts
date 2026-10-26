@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getPublicRestaurantBySlug } from "@/lib/store";
 import { buildGeocodableAddress, computeDeliveryQuote, haversineDistanceKm, needsRestaurantLocation } from "@/lib/delivery";
 import { geocodeAddress } from "@/lib/geocoding";
+import { checkIpRateLimit, tooManyAttemptsMessage } from "@/lib/rateLimit";
 
 export type DeliveryAddressInputForQuote = {
   street: string;
@@ -75,6 +76,10 @@ export async function getDeliveryQuoteAction(
   slug: string,
   address: DeliveryAddressInputForQuote
 ): Promise<DeliveryQuoteActionResult> {
+  // Cada cálculo por distância gera uma chamada paga de geocodificação: 30 por minuto por IP.
+  const limit = await checkIpRateLimit("frete:ip", { limit: 30, windowSeconds: 60 });
+  if (!limit.allowed) return { status: "error", message: tooManyAttemptsMessage(limit.retryAfterSeconds) };
+
   const supabase = await createClient();
   const restaurant = await getPublicRestaurantBySlug(supabase, slug);
   if (!restaurant) return { status: "error", message: "Esta loja não está disponível no momento." };

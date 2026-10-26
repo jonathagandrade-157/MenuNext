@@ -1,6 +1,7 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { checkIpRateLimit, tooManyAttemptsMessage } from "@/lib/rateLimit";
 
 export type ValidateCouponResult =
   | { status: "success"; code: string; discountType: "percent" | "fixed"; discountValue: number; discountAmount: number }
@@ -24,6 +25,10 @@ function friendlyCouponValidationError(message: string): string {
  * decide de fato se o cupom é aplicado.
  */
 export async function validateCouponAction(slug: string, code: string, subtotal: number): Promise<ValidateCouponResult> {
+  // Evita adivinhar códigos de cupom por tentativa e erro: 20 por minuto por IP.
+  const limit = await checkIpRateLimit("cupom:ip", { limit: 20, windowSeconds: 60 });
+  if (!limit.allowed) return { status: "error", message: tooManyAttemptsMessage(limit.retryAfterSeconds) };
+
   const supabase = await createClient();
 
   const { data, error } = await supabase.rpc("validate_coupon", { p_slug: slug, p_code: code, p_subtotal: subtotal });
