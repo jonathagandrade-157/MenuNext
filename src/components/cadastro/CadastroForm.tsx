@@ -9,7 +9,7 @@ import { initialAuthState } from "@/lib/form-state";
 import { maskDocument } from "@/lib/document";
 import { PASSWORD_MIN_LENGTH } from "@/lib/password";
 
-function SubmitButton({ label }: { label: string }) {
+export function SubmitButton({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
     <Button type="submit" size="lg" className="w-full" loading={pending} disabled={pending}>
@@ -62,6 +62,11 @@ export function CadastroForm({
             defaultValue={defaultEmail}
           />
           <Field label="Senha" name="password" type="password" autoComplete="current-password" required />
+          <div className="-mt-2 text-right">
+            <Link href="/recuperar-senha" className="text-body-sm font-semibold text-primary hover:underline">
+              Esqueci minha senha
+            </Link>
+          </div>
 
           {signInState.status === "error" && <ErrorMessage message={signInState.message} />}
 
@@ -163,7 +168,7 @@ export function CadastroForm({
   );
 }
 
-function Field({
+export function Field({
   label,
   name,
   type,
@@ -196,7 +201,7 @@ function Field({
   );
 }
 
-function ErrorMessage({ message }: { message?: string }) {
+export function ErrorMessage({ message }: { message?: string }) {
   return (
     <div className="rounded-lg border border-red/20 bg-red/10 px-3 py-2 text-body-md font-medium text-red">
       {message}

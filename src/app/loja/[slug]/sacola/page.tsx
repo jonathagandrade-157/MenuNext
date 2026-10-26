@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
-import { computeStoreOpenState, getPublicBusinessHours, getPublicRestaurantBySlug } from "@/lib/store";
+import { computeStoreOpenState, getPublicBusinessHours } from "@/lib/store";
+import { getCachedPublicRestaurant } from "@/lib/storeRestaurant";
 import { SacolaClient } from "@/components/loja/SacolaClient";
 import { StoreNotFound } from "@/components/loja/StoreNotFound";
 
@@ -7,7 +8,7 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/sacola">)
   const { slug } = await params;
   const supabase = await createClient();
 
-  const restaurant = await getPublicRestaurantBySlug(supabase, slug);
+  const restaurant = await getCachedPublicRestaurant(slug);
   if (!restaurant) return <StoreNotFound />;
 
   const businessHours = await getPublicBusinessHours(supabase, restaurant.id);

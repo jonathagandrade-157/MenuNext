@@ -1,7 +1,8 @@
 import { Check } from "lucide-react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { getPublicOrder, getPublicRestaurantBySlug, formatCurrencyBRL } from "@/lib/store";
+import { getPublicOrder, formatCurrencyBRL } from "@/lib/store";
+import { getCachedPublicRestaurant } from "@/lib/storeRestaurant";
 import { PAYMENT_METHOD_LABELS } from "@/lib/checkout";
 import type { OrderStatus } from "@/lib/orders";
 import { CopyButton } from "@/components/loja/CopyButton";
@@ -15,7 +16,7 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/pedido/[o
   const { slug, orderId } = await params;
   const supabase = await createClient();
 
-  const restaurant = await getPublicRestaurantBySlug(supabase, slug);
+  const restaurant = await getCachedPublicRestaurant(slug);
   if (!restaurant) return <StoreNotFound />;
 
   // `orderId` na URL é o public_id (UUID não sequencial) — get_public_order

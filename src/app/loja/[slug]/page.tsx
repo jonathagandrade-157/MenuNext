@@ -7,8 +7,8 @@ import {
   getPublicBusinessHours,
   getPublicCategoriesWithProducts,
   getPublicCombosWithItems,
-  getPublicRestaurantBySlug,
 } from "@/lib/store";
+import { getCachedPublicRestaurant } from "@/lib/storeRestaurant";
 import { StoreBagAside } from "@/components/loja/StoreBagAside";
 import { StoreBagBar } from "@/components/loja/StoreBagBar";
 import { StoreBottomNav } from "@/components/loja/StoreBottomNav";
@@ -24,7 +24,7 @@ export default async function LojaPublicaPage({ params }: PageProps<"/loja/[slug
   const { slug } = await params;
   const supabase = await createClient();
 
-  const restaurant = await getPublicRestaurantBySlug(supabase, slug);
+  const restaurant = await getCachedPublicRestaurant(slug);
   if (!restaurant) return <StoreNotFound />;
 
   // Assinatura do lojista atrasada/cancelada (decisão tomada com o

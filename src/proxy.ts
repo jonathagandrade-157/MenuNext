@@ -25,6 +25,15 @@ export async function proxy(request: NextRequest) {
   const csp = buildContentSecurityPolicy({ supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL, isDev: !isProd, nonce });
   const cspHeaderName = isProd ? "Content-Security-Policy" : "Content-Security-Policy-Report-Only";
 
+  // Rede de segurança do e-mail de redefinição de senha: se o endereço de retorno não estiver na lista permitida do
+  // Supabase, ele devolve a pessoa para a raiz do site com ?code=. Em vez de uma landing que ignora o código,
+  // encaminha para a rota que o troca por uma sessão.
+  if (request.nextUrl.pathname === "/" && request.nextUrl.searchParams.has("code")) {
+    const confirmUrl = new URL("/auth/confirmar", request.url);
+    confirmUrl.searchParams.set("code", request.nextUrl.searchParams.get("code") ?? "");
+    return NextResponse.redirect(confirmUrl);
+  }
+
   // Sempre parte dos cabeçalhos ATUAIS da requisição (inclui cookies que o Supabase acabou de renovar).
   const nextResponse = () => {
     const requestHeaders = new Headers(request.headers);
