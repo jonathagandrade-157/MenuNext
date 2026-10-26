@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
+import { buildContentSecurityPolicy, generateNonce } from "@/lib/csp";
 
 const PROTECTED_PREFIXES = ["/painel", "/onboarding", "/master"];
 
@@ -16,7 +17,24 @@ function isProtectedPath(pathname: string) {
  * mecanismo único de autorização.
  */
 export async function proxy(request: NextRequest) {
-  let response = NextResponse.next({ request });
+  // Content-Security-Policy por requisição. Produção: vale de verdade e com nonce de script (o Next lê o nonce
+  // do cabeçalho da REQUISIÇÃO e o aplica sozinho a todos os scripts da página). Desenvolvimento: só relatório,
+  // sem nonce (o recarregamento ao vivo usa conexões que a política bloquearia).
+  const isProd = process.env.NODE_ENV === "production";
+  const nonce = isProd ? generateNonce() : undefined;
+  const csp = buildContentSecurityPolicy({ supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL, isDev: !isProd, nonce });
+  const cspHeaderName = isProd ? "Content-Security-Policy" : "Content-Security-Policy-Report-Only";
+
+  // Sempre parte dos cabeçalhos ATUAIS da requisição (inclui cookies que o Supabase acabou de renovar).
+  const nextResponse = () => {
+    const requestHeaders = new Headers(request.headers);
+    if (nonce) requestHeaders.set("Content-Security-Policy", csp);
+    const next = NextResponse.next({ request: { headers: requestHeaders } });
+    next.headers.set(cspHeaderName, csp);
+    return next;
+  };
+
+  let response = nextResponse();
 
   const supabase = createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -28,7 +46,7 @@ export async function proxy(request: NextRequest) {
         },
         setAll(cookiesToSet) {
           cookiesToSet.forEach(({ name, value }) => request.cookies.set(name, value));
-          response = NextResponse.next({ request });
+          response = nextResponse();
           cookiesToSet.forEach(({ name, value, options }) => {
             response.cookies.set(name, value, options);
           });

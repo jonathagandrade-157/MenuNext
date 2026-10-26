@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { CSP_REPORT_PATH, buildContentSecurityPolicy, summarizeCspReport } from "./csp";
+import { CSP_REPORT_PATH, buildContentSecurityPolicy, generateNonce, summarizeCspReport } from "./csp";
 
 describe("buildContentSecurityPolicy", () => {
   const csp = buildContentSecurityPolicy({ supabaseUrl: "https://abc123.supabase.co" });
@@ -36,6 +36,33 @@ describe("buildContentSecurityPolicy", () => {
 
   it("aponta as violações para o endpoint de relatório", () => {
     expect(csp.endsWith(`report-uri ${CSP_REPORT_PATH}`)).toBe(true);
+  });
+});
+
+describe("nonce de script", () => {
+  it("com nonce, script só roda marcado: sem unsafe-inline e com strict-dynamic", () => {
+    const csp = buildContentSecurityPolicy({ supabaseUrl: "https://abc123.supabase.co", nonce: "bm9uY2U=" });
+    const script = csp.split("; ").find((d) => d.startsWith("script-src ")) ?? "";
+    expect(script).toBe("script-src 'self' 'nonce-bm9uY2U=' 'strict-dynamic'");
+    expect(script).not.toContain("unsafe-inline");
+  });
+
+  it("estilo continua unsafe-inline (React usa style=\"\"), mesmo com nonce de script", () => {
+    const csp = buildContentSecurityPolicy({ nonce: "x" });
+    expect(csp).toContain("style-src 'self' 'unsafe-inline'");
+  });
+
+  it("sem nonce (desenvolvimento) volta a unsafe-inline", () => {
+    expect(buildContentSecurityPolicy({ isDev: true })).toContain("script-src 'self' 'unsafe-inline' 'unsafe-eval'");
+  });
+
+  it("generateNonce: base64 válido, imprevisível e único a cada chamada", () => {
+    const nonces = new Set(Array.from({ length: 200 }, () => generateNonce()));
+    expect(nonces.size).toBe(200);
+    for (const n of nonces) {
+      expect(n).toMatch(/^[A-Za-z0-9+/]+=*$/);
+      expect(n.length).toBeGreaterThanOrEqual(40);
+    }
   });
 });
 
