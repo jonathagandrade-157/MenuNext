@@ -12,7 +12,7 @@ const WINDOW = 600;
 
 /**
  * Limites PROVISÓRIOS de homologação (10 minutos), em um só lugar. Não são decisão comercial: ajustar com métricas reais
- * (ver MenuNext-privado/sprint1). O gatilho do banco (migration 20261027010000) tem tetos próprios, mais altos:
+ * (acompanhar com docs/operacao/metricas-antiabuso.sql). O gatilho do banco (migration 20261027010000) tem tetos próprios, mais altos:
  * 300 por loja e 15 por telefone.
  */
 export const ORDER_LIMITS = {
