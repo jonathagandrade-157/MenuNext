@@ -16,6 +16,8 @@ manifesto de integridade, retenção e verificação de frescor. Não depende de
 | `backup-db.mjs` | `pg_dump` (formato custom, **com** GRANTs) dos esquemas `public`, `auth`, `storage` → **auto-verifica o dump (`pg_restore --list`) antes de cifrar** → criptografa com a chave **pública** do dono → apaga o texto claro → grava `*.manifest.json` (SHA-256, tamanho, data) → aplica a retenção |
 | `backup-storage.mjs` | lista e baixa todos os objetos do bucket (ignora nomes perigosos, como `../`), gera `tar.gz`, criptografa, grava manifesto, aplica retenção |
 | `verify-backup.mjs` | (1) integridade pelo manifesto, sem chave privada; (2) frescor: alerta se o último backup está velho; (3) restauração: decifra, confere o conteúdo (`pg_restore --list`) e, opcionalmente, restaura em banco **local** descartável (`--clean --if-exists`: o dump recria o esquema `public`) |
+| `fingerprint.sql` | impressão estrutural (funções, políticas, RLS, GRANTs, gatilhos, índices, restrições) para comparar origem × restaurado, sem dado pessoal |
+| `mask-restored.sql` | pseudonimiza uma CÓPIA restaurada (nomes, telefones, e-mails, documentos, endereços, chaves Pix, senhas) para conferir tudo sem ver dado pessoal; recusa rodar sem confirmação explícita |
 | `lib.mjs` | funções comuns (retenção, manifesto, criptografia, recusa de destino remoto, ocultação de segredos) |
 | `github-actions.example.yml` | **exemplo** de agendamento (não está em `.github/`, portanto não roda sozinho) |
 
@@ -28,6 +30,7 @@ manifesto de integridade, retenção e verificação de frescor. Não depende de
 | `BACKUP_DIR` | pasta de saída (padrão `./backups`, ignorada pelo Git) |
 | `BACKUP_GPG_RECIPIENT` | ID/e-mail da chave **pública** do dono |
 | `BACKUP_SCHEMAS` | padrão `public,auth,storage` |
+| `BACKUP_EXCLUDE_DATA` | (opcional) tabelas cujo CONTEÚDO fica fora do dump, separadas por vírgula (a estrutura entra). Sugestão para o Supabase: `auth.sessions,auth.refresh_tokens,auth.flow_state,auth.one_time_tokens,auth.audit_log_entries` (sem valor de recuperação e sensíveis) |
 | `BACKUP_HEARTBEAT_URL` | (opcional) URL de monitor externo; recebe `/fail` quando o backup falha |
 | `PG_DUMP_CMD` | (opcional) caminho do `pg_dump` 17+ |
 
@@ -121,6 +124,7 @@ do arquivo baixado e a versão (`pg_dump --version`). O servidor do exercício t
    (o texto de um CHECK pode voltar com parênteses diferentes: compare sem parênteses).
 4. Rode as suítes SQL de segurança (`supabase/tests/*.sql`) sobre o banco restaurado.
 5. Simule a perda (apague/trunque) → detecte pela comparação → restaure → compare de novo. Meça o tempo (isto é o seu RTO).
+6. Se o banco restaurado vier de dados reais: rode `mask-restored.sql` na cópia (ver o cabeçalho do arquivo) **antes** de qualquer pessoa abrir tabelas, confira só contagens e hashes (`fingerprint.sql`) e depois apague o banco e os arquivos temporários.
 
 Achados do exercício real que mudaram os scripts: o dump agora **mantém os GRANTs** (sem eles o app restaurado perderia as permissões
 de `anon`/`authenticated`); um dump truncado passa no SHA-256 do arquivo cifrado, por isso o dump é lido por `pg_restore --list`

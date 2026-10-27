@@ -62,7 +62,7 @@ grant execute on function public.create_counter_order(text, text, text, text, js
 comment on function public.create_counter_order(text, text, text, text, jsonb, text, numeric, text, text) is
   'Venda de balcão (PDV): só membro logado da loja; repassa para create_order(counter), que valida sessão e vínculo.';
 
--- Retaguarda: no máximo 300 pedidos online por loja e 10 por telefone numa janela de 10 minutos.
+-- Retaguarda: no máximo 300 pedidos online por loja e 15 por telefone numa janela de 10 minutos (valores provisórios).
 create or replace function public.guard_online_order_flood()
 returns trigger
 language plpgsql
@@ -92,7 +92,7 @@ begin
     from public.orders o
     where o.restaurant_id = new.restaurant_id and o.fulfillment_type <> 'counter' and o.created_at >= v_since
       and regexp_replace(coalesce(o.customer_phone, ''), '\D', '', 'g') = v_digits;
-    if v_phone >= 10 then
+    if v_phone >= 15 then
       raise exception 'order_rate_limited' using errcode = '54000';
     end if;
   end if;

@@ -169,6 +169,16 @@ fs.writeFileSync(process.env.FAKE_LOG, JSON.stringify({ argv: process.argv.slice
     expect(integrity.ok).toBe(true);
   }, 60000);
 
+  it("BACKUP_EXCLUDE_DATA vira --exclude-table-data no pg_dump (e nada mais muda)", async () => {
+    const out = path.join(tmp, "dbx");
+    process.env.FAKE_LOG = path.join(tmp, "fake-logx.json");
+    await runDbBackup({ databaseUrl: "postgresql://u:p@h/db", outDir: out, recipient, gpgHome, pgDumpCmd: [process.execPath, fakePgDump], pgRestoreCmd: [process.execPath, fakePgRestore], excludeTableData: ["auth.sessions", "auth.refresh_tokens"], now: new Date("2026-10-27T06:00:00Z") });
+    const argv = JSON.parse(await fs.readFile(process.env.FAKE_LOG, "utf8")).argv;
+    expect(argv.filter((a, i) => argv[i - 1] === "--exclude-table-data")).toEqual(["auth.sessions", "auth.refresh_tokens"]);
+    expect(argv).toContain("--format=custom");
+    expect(argv).not.toContain("--no-privileges"); // os GRANTs ficam no backup
+  }, 60000);
+
   it("adulterar o arquivo é detectado pela verificação de integridade", async () => {
     const out = path.join(tmp, "db2");
     process.env.FAKE_LOG = path.join(tmp, "fake-log2.json");

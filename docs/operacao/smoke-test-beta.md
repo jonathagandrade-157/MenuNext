@@ -47,7 +47,7 @@ Loja: "Loja Smoke 1", slug `loja-smoke-1`, produto "X-Teste" R$ 30,00, categoria
 | 18 | **STAFF não pode**: editar produto/preço, cupons, equipe, pagamentos/Pix, plano, pausar a loja; abrir `/painel/produtos` etc. | redirecionado/negado, sem erro 500 | capturas |
 | 19 | **Isolamento**: com a conta de OWNER de **outra** loja de teste, tentar abrir pedido/produto da Loja Smoke 1 por URL | negado/404 | captura |
 | 20 | **Chamada direta à API** (só em ambiente de teste, com a chave pública): `POST /rest/v1/rpc/create_order` | `permission denied` (HTTP 401/403) e nenhum pedido criado | resposta |
-| 21 | **Limites**: enviar 9 pedidos seguidos do mesmo IP/loja em < 10 min | a partir do limite, mensagem "Muitas tentativas… aguarde N minutos" (não erro técnico) | capturas |
+| 21 | **Limites**: enviar 16 pedidos seguidos do mesmo IP/loja em < 10 min | a partir do limite, mensagem "Muitas tentativas… aguarde N minutos" (não erro técnico) | capturas |
 | 22 | **Loja fechada/pausada**: pausar a loja (OWNER) e tentar pedir | cliente vê indisponível; STAFF não consegue pausar | captura |
 
 ## Limpeza

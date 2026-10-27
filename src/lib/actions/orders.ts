@@ -7,7 +7,7 @@ import type { Order } from "@/lib/orders";
 import { friendlyOrderError } from "@/lib/orderErrors";
 import { resolveDeliveryDistanceForOrder } from "@/lib/actions/delivery-quote";
 import { checkIpRateLimit, getClientIp, tooManyAttemptsMessage } from "@/lib/rateLimit";
-import { buildOrderLimits, enforceLimits } from "@/lib/checkoutGuard";
+import { ORDER_LIMITS, buildOrderLimits, enforceLimits } from "@/lib/checkoutGuard";
 import { callPublicRpc } from "@/lib/publicRpc";
 import { isValidOrderShape } from "@/lib/checkoutInput";
 
@@ -58,8 +58,8 @@ export async function submitOrderAction(input: SubmitOrderInput): Promise<Submit
     return { status: "error", message: "Não foi possível finalizar o pedido. Revise os dados e tente novamente." };
   }
 
-  // Freia pedidos falsos em massa: 20 pedidos / 10 min por IP (cliente real faz 1 ou 2).
-  const limit = await checkIpRateLimit("pedido:ip", { limit: 20, windowSeconds: 600 });
+  // Freia pedidos falsos em massa por IP (cliente real faz 1 ou 2; limites em ORDER_LIMITS).
+  const limit = await checkIpRateLimit("pedido:ip", ORDER_LIMITS.ip);
   if (!limit.allowed) return { status: "error", message: tooManyAttemptsMessage(limit.retryAfterSeconds) };
 
   // Limites por loja, por IP + loja e por telefone (o por IP acima já passou). create_order só é executável pelo

@@ -8,7 +8,8 @@ vi.mock("@/lib/rateLimit", async (importOriginal) => ({
   checkRateLimit: h.check,
 }));
 
-import { buildCouponLimits, buildOrderLimits, enforceLimits, normalizeStoreSlug, phoneDigits } from "./checkoutGuard";
+import { hashIdentifier } from "./rateLimit";
+import { ORDER_LIMITS, buildCouponLimits, buildOrderLimits, enforceLimits, normalizeStoreSlug, phoneDigits } from "./checkoutGuard";
 
 describe("normalizeStoreSlug", () => {
   it("aceita slug comum e ignora caixa e espaços", () => {
@@ -26,7 +27,8 @@ describe("buildOrderLimits", () => {
   it("monta limites por loja+IP, por loja e por telefone", () => {
     const specs = buildOrderLimits({ slug: "loja-a", ip: "203.0.113.7", phone: "(11) 99999-0001" });
     expect(specs.map((s) => s.scope)).toEqual(["pedido:loja-ip", "pedido:loja", "pedido:fone"]);
-    expect(specs[0].identifier).toBe("loja-a:203.0.113.7");
+    expect(specs[0].identifier).toBe(`loja-a:${hashIdentifier("203.0.113.7")}`);
+    expect(specs[0].identifier).not.toContain("203.0.113.7"); // IP nunca em texto no balde
     expect(specs[1].identifier).toBe("loja-a");
   });
 
@@ -50,13 +52,22 @@ describe("buildOrderLimits", () => {
     expect(buildOrderLimits({ slug: "loja-a", ip: "1.1.1.1", phone: "123" }).map((s) => s.scope)).toEqual(["pedido:loja-ip", "pedido:loja"]);
   });
 
-  it("os limites são finitos e menores que o gatilho de retaguarda do banco (300 por loja, 10 por telefone)", () => {
+  it("limites provisórios de homologação: IP 30, IP+loja 15, telefone 8, loja 120 (10 min)", () => {
+    expect(ORDER_LIMITS).toEqual({
+      ip: { limit: 30, windowSeconds: 600 },
+      storeIp: { limit: 15, windowSeconds: 600 },
+      store: { limit: 120, windowSeconds: 600 },
+      phone: { limit: 8, windowSeconds: 600 },
+    });
+  });
+
+  it("os limites do app ficam abaixo da retaguarda do banco (300 por loja, 15 por telefone)", () => {
     for (const s of buildOrderLimits({ slug: "loja-a", ip: "1.1.1.1", phone: "11999990001" })) {
       expect(s.rule.limit).toBeGreaterThan(0);
     }
     const byScope = Object.fromEntries(buildOrderLimits({ slug: "loja-a", ip: "1.1.1.1", phone: "11999990001" }).map((s) => [s.scope, s.rule.limit]));
     expect(byScope["pedido:loja"]).toBeLessThan(300);
-    expect(byScope["pedido:fone"]).toBeLessThan(10);
+    expect(byScope["pedido:fone"]).toBeLessThan(15);
   });
 });
 

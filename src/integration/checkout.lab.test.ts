@@ -140,28 +140,28 @@ describe.skipIf(!enabled)("checkout público com código real contra PostgreSQL 
     expect(data?.uses_count).toBe(1);
   });
 
-  it("limite por IP + loja: do 9º pedido em diante o servidor responde 'muitas tentativas' e nada chega ao banco", async () => {
+  it("limite por IP + loja: do 16º pedido em diante o servidor responde 'muitas tentativas' e nada chega ao banco", async () => {
     h.ip.value = "203.0.113.20";
     const results = [];
-    for (let i = 0; i < 9; i++) results.push(await order({ customerPhone: `1190000${String(2000 + i)}`, idempotencyKey: `lab-ip-${i}` }));
-    expect(results.slice(0, 8).every((r) => r.status === "success")).toBe(true);
-    expect(results[8]).toEqual({ status: "error", message: expect.stringMatching(/Muitas tentativas.*minuto/i) });
-    const { count } = await admin.from("orders").select("id", { count: "exact", head: true }).eq("idempotency_key", "lab-ip-8");
+    for (let i = 0; i < 16; i++) results.push(await order({ customerPhone: `1190000${String(2000 + i)}`, idempotencyKey: `lab-ip-${i}` }));
+    expect(results.slice(0, 15).every((r) => r.status === "success")).toBe(true);
+    expect(results[15]).toEqual({ status: "error", message: expect.stringMatching(/Muitas tentativas.*minuto/i) });
+    const { count } = await admin.from("orders").select("id", { count: "exact", head: true }).eq("idempotency_key", "lab-ip-15");
     expect(count).toBe(0);
     // outro IP não é afetado
     h.ip.value = "203.0.113.21";
     expect((await order({ customerPhone: "11900003000", idempotencyKey: "lab-ip-outro" })).status).toBe("success");
   });
 
-  it("limite por telefone: o 6º pedido do mesmo telefone (formatos diferentes) é barrado, mesmo de IPs diferentes", async () => {
-    const formats = ["11 90000-4001", "(11) 90000-4001", "11900004001", "11 90000.4001", "11-90000-4001", "11 9 0000 4001"];
+  it("limite por telefone: o 9º pedido do mesmo telefone (formatos diferentes) é barrado, mesmo de IPs diferentes", async () => {
+    const formats = ["11 90000-4001", "(11) 90000-4001", "11900004001", "11 90000.4001", "11-90000-4001", "11 9 0000 4001", "(11)900004001", "11 90000 4001", "11.90000.4001"];
     const out = [];
     for (let i = 0; i < formats.length; i++) {
       h.ip.value = `203.0.113.${40 + i}`;
       out.push(await order({ customerPhone: formats[i], idempotencyKey: `lab-fone-${i}` }));
     }
-    expect(out.slice(0, 5), JSON.stringify(out)).toSatisfy((a: { status: string }[]) => a.every((r) => r.status === "success"));
-    expect(out[5]).toEqual({ status: "error", message: expect.stringMatching(/Muitas tentativas/i) });
+    expect(out.slice(0, 8), JSON.stringify(out)).toSatisfy((a: { status: string }[]) => a.every((r) => r.status === "success"));
+    expect(out[8]).toEqual({ status: "error", message: expect.stringMatching(/Muitas tentativas/i) });
   });
 
   it("limite do cupom: 20 por minuto por IP; depois, mensagem de espera", async () => {

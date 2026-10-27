@@ -9,6 +9,22 @@ import { checkRateLimit, hashIdentifier, type RateLimitRule } from "@/lib/rateLi
 export type LimitSpec = { scope: string; identifier: string; rule: RateLimitRule };
 
 const WINDOW = 600;
+
+/**
+ * Limites PROVISÓRIOS de homologação (10 minutos), em um só lugar. Não são decisão comercial: ajustar com métricas reais
+ * (ver MenuNext-privado/sprint1). O gatilho do banco (migration 20261027010000) tem tetos próprios, mais altos:
+ * 300 por loja e 15 por telefone.
+ */
+export const ORDER_LIMITS = {
+  /** por IP, em qualquer loja (aplicado em orders.ts) */
+  ip: { limit: 30, windowSeconds: WINDOW },
+  /** por IP dentro de uma loja */
+  storeIp: { limit: 15, windowSeconds: WINDOW },
+  /** por loja, de qualquer origem */
+  store: { limit: 120, windowSeconds: WINDOW },
+  /** por telefone dentro de uma loja */
+  phone: { limit: 8, windowSeconds: WINDOW },
+} as const;
 const STORE_SLUG = /^[a-z0-9][a-z0-9-]{0,59}$/;
 
 /** Só slugs com cara de slug viram baldes (evita o visitante inventar milhares de baldes). */
@@ -25,15 +41,16 @@ export function buildOrderLimits(input: { slug: string; ip: string; phone: strin
   const slug = normalizeStoreSlug(input.slug);
   if (!slug) return [];
   const specs: LimitSpec[] = [
-    { scope: "pedido:loja-ip", identifier: `${slug}:${input.ip}`, rule: { limit: 8, windowSeconds: WINDOW } },
-    { scope: "pedido:loja", identifier: slug, rule: { limit: 120, windowSeconds: WINDOW } },
+    // o IP entra no balde só como hash (dado pessoal na menor forma possível; o balde expira em 1 dia)
+    { scope: "pedido:loja-ip", identifier: `${slug}:${hashIdentifier(input.ip)}`, rule: ORDER_LIMITS.storeIp },
+    { scope: "pedido:loja", identifier: slug, rule: ORDER_LIMITS.store },
   ];
   const digits = phoneDigits(input.phone);
   if (digits.length >= 10 && digits.length <= 13) {
     specs.push({
       scope: "pedido:fone",
       identifier: `${slug}:${hashIdentifier(digits.slice(-11))}`,
-      rule: { limit: 5, windowSeconds: WINDOW },
+      rule: ORDER_LIMITS.phone,
     });
   }
   return specs;

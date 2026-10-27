@@ -11,7 +11,7 @@
 --     cupom de novo), item de outra loja recusado, loja fechada/não publicada recusada;
 --   * cupom: validar não consome; pedido recusado não consome; limite de usos respeitado;
 --   * venda de balcão só por create_counter_order e só para membro da própria loja (OWNER e STAFF);
---   * retaguarda no banco: no máximo 10 pedidos online por telefone e 300 por loja em 10 minutos, independente de
+--   * retaguarda no banco: no máximo 15 pedidos online por telefone e 300 por loja em 10 minutos, independente de
 --     quem chamou; balcão e outras lojas não são afetados; depois da janela volta a aceitar.
 
 do $$
@@ -269,20 +269,20 @@ begin
   if err not ilike '%not_authorized%' then fails := fails || format('5b: OWNER da loja B vendeu na loja A (%s)', err); end if;
 
   -- ---------- 6) retaguarda no banco: telefone ----------
-  -- o telefone 11988887777 ja tem 1 pedido (3a). Mais 9 (formatos diferentes do mesmo numero) = 10; o 11o e barrado.
+  -- o telefone 11988887777 ja tem 1 pedido (3a). Mais 14 (formatos diferentes do mesmo numero) = 15; o 16o e barrado.
   set local role service_role;
-  for i in 1..9 loop
+  for i in 1..14 loop
     perform * from public.create_order(slug_a, 'Cliente', case i % 3 when 0 then '(11) 98888-7777' when 1 then '11988887777' else '11 98888 7777' end,
       'pickup', 'cash', items_a::jsonb, 'cp-fone-' || i);
   end loop;
   begin
-    perform * from public.create_order(slug_a, 'Cliente', '(11) 9 8888-7777', 'pickup', 'cash', items_a::jsonb, 'cp-fone-11');
+    perform * from public.create_order(slug_a, 'Cliente', '(11) 9 8888-7777', 'pickup', 'cash', items_a::jsonb, 'cp-fone-16');
     err := 'ok';
   exception when others then err := sqlerrm; end;
   reset role;
   total := total + 1;
-  if err not ilike '%order_rate_limited%' then fails := fails || format('6a: 11o pedido do mesmo telefone nao foi barrado (%s)', err); end if;
-  select count(*) into n from public.orders where restaurant_id = r_a and idempotency_key = 'cp-fone-11';
+  if err not ilike '%order_rate_limited%' then fails := fails || format('6a: 16o pedido do mesmo telefone nao foi barrado (%s)', err); end if;
+  select count(*) into n from public.orders where restaurant_id = r_a and idempotency_key = 'cp-fone-16';
   total := total + 1;
   if n <> 0 then fails := fails || '6b: pedido barrado deixou linha gravada'::text; end if;
 

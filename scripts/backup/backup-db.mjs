@@ -19,7 +19,7 @@ import {
 export const DB_PREFIX = "menunext-db";
 
 export async function runDbBackup({
-  databaseUrl, outDir, recipient, schemas = ["public", "auth", "storage"], pgDumpCmd = ["pg_dump"], pgRestoreCmd = ["pg_restore"], gpgBin, gpgHome,
+  databaseUrl, outDir, recipient, schemas = ["public", "auth", "storage"], pgDumpCmd = ["pg_dump"], pgRestoreCmd = ["pg_restore"], excludeTableData = [], gpgBin, gpgHome,
   now = new Date(), retention,
 }) {
   if (!databaseUrl) throw new Error("DATABASE_URL não definida.");
@@ -30,9 +30,11 @@ export async function runDbBackup({
   try {
     const env = pgEnvFromUrl(databaseUrl);
     const schemaArgs = schemas.flatMap((s) => ["--schema", s]);
+    // tabelas cujo CONTEÚDO não entra no backup (a estrutura entra): sessões e tokens não têm valor de recuperação e são dado sensível
+    const excludeArgs = excludeTableData.flatMap((t) => ["--exclude-table-data", t]);
     // Sem --no-privileges de propósito: os GRANTs de anon/authenticated/service_role fazem parte da segurança do app e
     // precisam voltar numa restauração. Sem --no-owner o dump exigiria os mesmos donos; por isso --no-owner fica.
-    await run(pgDumpCmd, ["--format=custom", "--no-owner", "--compress=6", ...schemaArgs, "--file", plain], { env });
+    await run(pgDumpCmd, ["--format=custom", "--no-owner", "--compress=6", ...schemaArgs, ...excludeArgs, "--file", plain], { env });
     const dumpStat = await fs.stat(plain);
     if (dumpStat.size === 0) throw new Error("pg_dump gerou um arquivo vazio.");
     // Auto-verificação ANTES de criptografar: um dump truncado/corrompido passaria no SHA-256 do manifesto (o hash é do
@@ -67,6 +69,7 @@ async function main() {
       schemas: (process.env.BACKUP_SCHEMAS ?? "public,auth,storage").split(",").map((s) => s.trim()).filter(Boolean),
       pgDumpCmd: (process.env.PG_DUMP_CMD ?? "pg_dump").split(" "),
       pgRestoreCmd: (process.env.PG_RESTORE_CMD ?? "pg_restore").split(" "),
+      excludeTableData: (process.env.BACKUP_EXCLUDE_DATA ?? "").split(",").map((s) => s.trim()).filter(Boolean),
     });
     console.log(`[backup-db] ok: ${result.manifest.file} (${result.manifest.bytes} bytes, sha256 ${result.manifest.sha256.slice(0, 12)}…)`);
     if (result.pruned.remove.length) console.log(`[backup-db] retenção removeu ${result.pruned.remove.length} arquivo(s) antigo(s)`);
