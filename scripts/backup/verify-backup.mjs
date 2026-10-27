@@ -36,7 +36,7 @@ export async function verifyRestorable(dir, manifest, { gpgBin, gpgHome, passphr
       const entries = stdout.split("\n").filter((l) => l && !l.startsWith(";")).length;
       if (entries === 0) return { ok: false, reason: "dump sem nenhum objeto" };
       if (restoreUrl) {
-        await run(pgRestoreCmd, ["--no-owner", "--no-privileges", "--exit-on-error", "--dbname", restoreUrl.replace(/:\/\/[^@]*@/, "://")], { env: pgEnvFromUrl(restoreUrl) });
+        await run(pgRestoreCmd, ["--no-owner", "--clean", "--if-exists", "--exit-on-error", "--dbname", restoreUrl.replace(/:\/\/[^@]*@/, "://"), plain], { env: pgEnvFromUrl(restoreUrl) });
       }
       return { ok: true, entries, restored: Boolean(restoreUrl) };
     }

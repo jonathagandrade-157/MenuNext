@@ -117,6 +117,32 @@ describe("submitOrderAction (checkout público)", () => {
   });
 });
 
+describe("corpo forjado ou gigante (Server Action é chamável por qualquer um)", () => {
+  it("recusa 101 linhas de item, endereço gigante e chave de idempotência enorme sem gastar limite nem banco", async () => {
+    const many = Array.from({ length: 101 }, () => order.items[0]);
+    const big = "x".repeat(201);
+    for (const bad of [
+      { items: many },
+      { fulfillmentType: "delivery", delivery: { zip: "", street: big, number: "1", complement: "", neighborhood: "b", city: "c", state: "SP", reference: "" } },
+      { idempotencyKey: "k".repeat(101) },
+      { items: [{ product_id: "p1", quantity: 100, addon_ids: [] }] },
+      { items: [{ product_id: "p1", quantity: 1, addon_ids: Array.from({ length: 51 }, () => "a") }] },
+      { couponCode: "c".repeat(65) },
+    ]) {
+      const result = await submitOrderAction({ ...order, ...bad } as unknown as SubmitOrderInput);
+      expect(result.status).toBe("error");
+    }
+    expect(h.ipLimit).not.toHaveBeenCalled();
+    expect(h.publicRpc).not.toHaveBeenCalled();
+  });
+
+  it("cupom com código gigante é recusado antes dos limites", async () => {
+    const result = await validateCouponAction("loja-a", "c".repeat(65), 10);
+    expect(result.status).toBe("error");
+    expect(h.publicRpc).not.toHaveBeenCalled();
+  });
+});
+
 describe("validateCouponAction", () => {
   it("valida pelo servidor depois dos limites", async () => {
     h.publicRpc.mockResolvedValue({
@@ -145,7 +171,7 @@ describe("createCounterOrderAction (PDV, membro logado)", () => {
       paymentMethod: "cash",
       changeFor: null,
       observation: "",
-      items: [],
+      items: [{ product_id: "p1", quantity: 1, addon_ids: [], observation: "" }] as never,
       idempotencyKey: "k-counter",
       couponCode: null,
     });

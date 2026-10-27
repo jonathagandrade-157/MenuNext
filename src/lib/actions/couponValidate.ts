@@ -3,6 +3,7 @@
 import { checkIpRateLimit, tooManyAttemptsMessage } from "@/lib/rateLimit";
 import { buildCouponLimits, enforceLimits } from "@/lib/checkoutGuard";
 import { callPublicRpc } from "@/lib/publicRpc";
+import { isValidCouponRequest } from "@/lib/checkoutInput";
 
 export type ValidateCouponResult =
   | { status: "success"; code: string; discountType: "percent" | "fixed"; discountValue: number; discountAmount: number }
@@ -26,6 +27,7 @@ function friendlyCouponValidationError(message: string): string {
  * decide de fato se o cupom é aplicado.
  */
 export async function validateCouponAction(slug: string, code: string, subtotal: number): Promise<ValidateCouponResult> {
+  if (!isValidCouponRequest(slug, code, subtotal)) return { status: "error", message: "Cupom não encontrado." };
   // Evita adivinhar códigos de cupom por tentativa e erro: 20 por minuto por IP.
   const limit = await checkIpRateLimit("cupom:ip", { limit: 20, windowSeconds: 60 });
   if (!limit.allowed) return { status: "error", message: tooManyAttemptsMessage(limit.retryAfterSeconds) };

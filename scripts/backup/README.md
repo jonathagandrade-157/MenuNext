@@ -4,19 +4,18 @@ Backup **lógico e criptografado** do banco PostgreSQL (Supabase) e dos arquivos
 manifesto de integridade, retenção e verificação de frescor. Não depende de nada além de Node 20+, `gpg` e `tar`
 (mais `pg_dump`/`pg_restore` 17+ para o banco).
 
-> **Estado de validação (leia primeiro).** Os testes automatizados (`scripts/backup/backup.test.mjs`, 17 verificações)
-> exercitam o pipeline com **`gpg` e `tar` reais** e com um **`pg_dump` e um Storage simulados**. Isso prova a
-> criptografia, o manifesto, a retenção, a recusa de destinos remotos, a ausência de texto claro e de senha em
-> argumento. **Não prova** que o `pg_dump`/`pg_restore` reais funcionam contra o Supabase. Antes de depender disto:
-> faça o exercício de restauração descrito abaixo com ferramentas reais, em máquina do dono, e registre o resultado.
+> **Estado de validação (leia primeiro).**
+> - **Aprovado em laboratório, com ferramentas REAIS:** `pg_dump`/`pg_restore` 17.6, GnuPG e `tar`, sobre um PostgreSQL 17 descartável com as 63 migrations e dados sintéticos: backup, criptografia com chave protegida por frase-senha, conferência SHA-256, restauração em banco novo, comparação de **todas as tabelas (contagem e hash do conteúdo), funções, políticas, GRANTs, gatilhos, índices e restrições** com a origem (idênticos), suítes SQL de segurança passando sobre o banco restaurado, simulação de perda de dados com recuperação, dump truncado/arquivo adulterado/senha errada/banco fora do ar detectados, retenção com 30 backups reais. Roteiro e resultado do exercício: seção "Exercício de restauração".
+> - **NÃO aprovado:** (1) restauração a partir do **Supabase real** (os esquemas gerenciados `auth`/`storage` têm donos e extensões próprios; só se prova com um projeto de teste do Supabase); (2) a **API real do Supabase Storage** (o laboratório usa um servidor que só imita listar/baixar); (3) automação agendada em produção; (4) tempo de restauração com o volume real (o do laboratório tem dezenas de KB).
+> - `backup.test.mjs` (19 verificações) roda no CI/local com `pg_dump`/`pg_restore` **simulados**; só o exercício de laboratório usa as ferramentas reais.
 
 ## O que cada script faz
 
 | Script | Função |
 |---|---|
-| `backup-db.mjs` | `pg_dump` (formato custom) dos esquemas `public`, `auth`, `storage` → criptografa com a chave **pública** do dono → apaga o texto claro → grava `*.manifest.json` (SHA-256, tamanho, data) → aplica a retenção |
+| `backup-db.mjs` | `pg_dump` (formato custom, **com** GRANTs) dos esquemas `public`, `auth`, `storage` → **auto-verifica o dump (`pg_restore --list`) antes de cifrar** → criptografa com a chave **pública** do dono → apaga o texto claro → grava `*.manifest.json` (SHA-256, tamanho, data) → aplica a retenção |
 | `backup-storage.mjs` | lista e baixa todos os objetos do bucket (ignora nomes perigosos, como `../`), gera `tar.gz`, criptografa, grava manifesto, aplica retenção |
-| `verify-backup.mjs` | (1) integridade pelo manifesto, sem chave privada; (2) frescor: alerta se o último backup está velho; (3) restauração: decifra, confere o conteúdo e, opcionalmente, restaura em banco **local** descartável |
+| `verify-backup.mjs` | (1) integridade pelo manifesto, sem chave privada; (2) frescor: alerta se o último backup está velho; (3) restauração: decifra, confere o conteúdo (`pg_restore --list`) e, opcionalmente, restaura em banco **local** descartável (`--clean --if-exists`: o dump recria o esquema `public`) |
 | `lib.mjs` | funções comuns (retenção, manifesto, criptografia, recusa de destino remoto, ocultação de segredos) |
 | `github-actions.example.yml` | **exemplo** de agendamento (não está em `.github/`, portanto não roda sozinho) |
 
@@ -109,6 +108,23 @@ Limitações conhecidas da restauração lógica: **não** inclui senhas/sessõe
 `auth` entrega (testar com cuidado), não restaura funções/papéis internos do Supabase, e os objetos do Storage são
 restaurados como arquivos (reenviar ao bucket é um passo manual). Registre no exercício o que foi e o que não foi
 recuperado.
+
+## Exercício de restauração (como repetir)
+
+Pré-requisitos: PostgreSQL 17 (cliente `pg_dump`/`pg_restore` 17+), `gpg`, `tar`, Node 20+. No Windows, o pacote oficial de binários
+(`postgresql-17.x-windows-x64-binaries.zip`, página de download do PostgreSQL → EDB) traz o cliente; ele **não vem assinado**: anote o SHA-256
+do arquivo baixado e a versão (`pg_dump --version`). O servidor do exercício tem de ser **local** (o script recusa outro destino).
+
+1. Crie um banco descartável com os dados sintéticos e rode `backup-db.mjs` apontando para ele (`PG_DUMP_CMD`, `PG_RESTORE_CMD`).
+2. `verify-backup.mjs --manifest <manifesto> --decrypt --restore-url postgres://…@127.0.0.1:<porta>/restaurado`.
+3. Compare origem × restaurado: contagem e hash por tabela; `pg_get_functiondef`, políticas, GRANTs, gatilhos, índices e restrições
+   (o texto de um CHECK pode voltar com parênteses diferentes: compare sem parênteses).
+4. Rode as suítes SQL de segurança (`supabase/tests/*.sql`) sobre o banco restaurado.
+5. Simule a perda (apague/trunque) → detecte pela comparação → restaure → compare de novo. Meça o tempo (isto é o seu RTO).
+
+Achados do exercício real que mudaram os scripts: o dump agora **mantém os GRANTs** (sem eles o app restaurado perderia as permissões
+de `anon`/`authenticated`); um dump truncado passa no SHA-256 do arquivo cifrado, por isso o dump é lido por `pg_restore --list`
+**antes** de cifrar; `pg_restore` precisa de `--clean --if-exists` porque o dump recria o esquema `public`.
 
 ## Custos e decisões pendentes (do proprietário)
 

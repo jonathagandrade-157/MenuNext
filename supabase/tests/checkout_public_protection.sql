@@ -353,6 +353,18 @@ begin
   total := total + 1;
   if err <> 'false' then fails := fails || format('8b: documento ja usado deveria ser inelegivel (%s)', err); end if;
 
+  -- ---------- 9) lista fechada de funções SECURITY DEFINER executáveis pelo visitante (anon) ----------
+  -- Função nova nasce executável por todos (padrão do PostgreSQL) se alguém esquecer o REVOKE. Este teste falha quando a
+  -- lista de funções privilegiadas abertas ao visitante muda, obrigando a decisão consciente.
+  select string_agg(p.proname, ',' order by p.proname) into err
+  from pg_proc p
+  where p.pronamespace = 'public'::regnamespace and p.prokind = 'f' and p.prosecdef
+    and has_function_privilege('anon', p.oid, 'EXECUTE');
+  total := total + 1;
+  if err is distinct from 'billing_webhook_token_valid,get_public_order,get_public_restaurant_by_slug,get_restaurant_invite_by_token,is_restaurant_publicly_visible,process_asaas_webhook' then
+    fails := fails || format('9: funcoes SECURITY DEFINER abertas ao visitante mudaram: %s', err);
+  end if;
+
   -- ---------- relatório ----------
   if array_length(fails, 1) is null then
     raise exception 'RESULTADO: OK | % verificacoes', total;

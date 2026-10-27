@@ -19,7 +19,7 @@ import {
 export const DB_PREFIX = "menunext-db";
 
 export async function runDbBackup({
-  databaseUrl, outDir, recipient, schemas = ["public", "auth", "storage"], pgDumpCmd = ["pg_dump"], gpgBin, gpgHome,
+  databaseUrl, outDir, recipient, schemas = ["public", "auth", "storage"], pgDumpCmd = ["pg_dump"], pgRestoreCmd = ["pg_restore"], gpgBin, gpgHome,
   now = new Date(), retention,
 }) {
   if (!databaseUrl) throw new Error("DATABASE_URL não definida.");
@@ -30,9 +30,16 @@ export async function runDbBackup({
   try {
     const env = pgEnvFromUrl(databaseUrl);
     const schemaArgs = schemas.flatMap((s) => ["--schema", s]);
-    await run(pgDumpCmd, ["--format=custom", "--no-owner", "--no-privileges", "--compress=6", ...schemaArgs, "--file", plain], { env });
+    // Sem --no-privileges de propósito: os GRANTs de anon/authenticated/service_role fazem parte da segurança do app e
+    // precisam voltar numa restauração. Sem --no-owner o dump exigiria os mesmos donos; por isso --no-owner fica.
+    await run(pgDumpCmd, ["--format=custom", "--no-owner", "--compress=6", ...schemaArgs, "--file", plain], { env });
     const dumpStat = await fs.stat(plain);
     if (dumpStat.size === 0) throw new Error("pg_dump gerou um arquivo vazio.");
+    // Auto-verificação ANTES de criptografar: um dump truncado/corrompido passaria no SHA-256 do manifesto (o hash é do
+    // arquivo já cifrado), então o conteúdo é lido por pg_restore --list e precisa ter objetos.
+    const listing = await run(pgRestoreCmd, ["--list", plain]);
+    const entries = listing.stdout.split("\n").filter((l) => l && !l.startsWith(";")).length;
+    if (entries === 0) throw new Error("o dump gerado não contém objetos (pg_restore --list vazio).");
     await encryptFile(plain, encrypted, recipient, { gpgBin, homedir: gpgHome });
   } catch (error) {
     await removeIfExists(encrypted);
@@ -59,6 +66,7 @@ async function main() {
       recipient: process.env.BACKUP_GPG_RECIPIENT,
       schemas: (process.env.BACKUP_SCHEMAS ?? "public,auth,storage").split(",").map((s) => s.trim()).filter(Boolean),
       pgDumpCmd: (process.env.PG_DUMP_CMD ?? "pg_dump").split(" "),
+      pgRestoreCmd: (process.env.PG_RESTORE_CMD ?? "pg_restore").split(" "),
     });
     console.log(`[backup-db] ok: ${result.manifest.file} (${result.manifest.bytes} bytes, sha256 ${result.manifest.sha256.slice(0, 12)}…)`);
     if (result.pruned.remove.length) console.log(`[backup-db] retenção removeu ${result.pruned.remove.length} arquivo(s) antigo(s)`);

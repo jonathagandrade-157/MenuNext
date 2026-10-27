@@ -9,6 +9,7 @@ import { resolveDeliveryDistanceForOrder } from "@/lib/actions/delivery-quote";
 import { checkIpRateLimit, getClientIp, tooManyAttemptsMessage } from "@/lib/rateLimit";
 import { buildOrderLimits, enforceLimits } from "@/lib/checkoutGuard";
 import { callPublicRpc } from "@/lib/publicRpc";
+import { isValidOrderShape } from "@/lib/checkoutInput";
 
 export type SubmitOrderDeliveryInput = {
   zip: string;
@@ -51,6 +52,10 @@ export async function submitOrderAction(input: SubmitOrderInput): Promise<Submit
   // execução. Venda de balcão ("counter") NUNCA entra por aqui; ela tem caminho próprio, só para membros.
   if (input?.fulfillmentType !== "delivery" && input?.fulfillmentType !== "pickup") {
     return { status: "error", message: friendlyOrderError("invalid_fulfillment_type") };
+  }
+  // Formato e tamanhos máximos, antes de gastar limite ou banco (corpo forjado nunca chega ao create_order).
+  if (!isValidOrderShape(input)) {
+    return { status: "error", message: "Não foi possível finalizar o pedido. Revise os dados e tente novamente." };
   }
 
   // Freia pedidos falsos em massa: 20 pedidos / 10 min por IP (cliente real faz 1 ou 2).

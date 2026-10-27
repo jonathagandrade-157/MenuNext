@@ -112,6 +112,7 @@ describe.skipIf(!hasGpg || !hasTar)("pipeline completo (gpg + tar reais, pg_dump
   let tmp;
   let gpgHome;
   let fakePgDump;
+  let fakePgRestore;
   const recipient = "backup-teste@menunext.invalid";
 
   beforeAll(async () => {
@@ -128,6 +129,8 @@ Expire-Date: 0
 %commit
 `);
     execFileSync("gpg", ["--batch", "--homedir", await gpgPath("gpg", gpgHome), "--generate-key", await gpgPath("gpg", params)], { stdio: "pipe" });
+    fakePgRestore = path.join(tmp, "fake-pg-restore.mjs");
+    await fs.writeFile(fakePgRestore, `console.log("; Archive falso\\n1; 1259 16385 TABLE public orders postgres");`);
     fakePgDump = path.join(tmp, "fake-pg-dump.mjs");
     await fs.writeFile(
       fakePgDump,
@@ -148,7 +151,7 @@ fs.writeFileSync(process.env.FAKE_LOG, JSON.stringify({ argv: process.argv.slice
     process.env.FAKE_LOG = path.join(tmp, "fake-log.json");
     const { manifest } = await runDbBackup({
       databaseUrl: "postgresql://postgres:SENHA-SECRETA@db.exemplo.supabase.co:5432/postgres",
-      outDir: out, recipient, gpgHome, pgDumpCmd: [process.execPath, fakePgDump], now: new Date("2026-10-27T03:00:00Z"),
+      outDir: out, recipient, gpgHome, pgDumpCmd: [process.execPath, fakePgDump], pgRestoreCmd: [process.execPath, fakePgRestore], now: new Date("2026-10-27T03:00:00Z"),
     });
     const files = await fs.readdir(out);
     expect(files.some((f) => f.endsWith(".dump"))).toBe(false); // sem texto claro
@@ -170,7 +173,7 @@ fs.writeFileSync(process.env.FAKE_LOG, JSON.stringify({ argv: process.argv.slice
     const out = path.join(tmp, "db2");
     process.env.FAKE_LOG = path.join(tmp, "fake-log2.json");
     const { manifest } = await runDbBackup({
-      databaseUrl: "postgresql://u:p@h/db", outDir: out, recipient, gpgHome, pgDumpCmd: [process.execPath, fakePgDump], now: new Date("2026-10-27T04:00:00Z"),
+      databaseUrl: "postgresql://u:p@h/db", outDir: out, recipient, gpgHome, pgDumpCmd: [process.execPath, fakePgDump], pgRestoreCmd: [process.execPath, fakePgRestore], now: new Date("2026-10-27T04:00:00Z"),
     });
     const file = path.join(out, manifest.file);
     const bytes = await fs.readFile(file);
@@ -187,9 +190,9 @@ fs.writeFileSync(process.env.FAKE_LOG, JSON.stringify({ argv: process.argv.slice
     const bad = path.join(tmp, "bad-pg-dump.mjs");
     await fs.writeFile(bad, `process.stderr.write("erro: password=NAOVAZAR"); process.exit(3);`);
     await expect(
-      runDbBackup({ databaseUrl: "postgresql://u:p@h/db", outDir: out, recipient, gpgHome, pgDumpCmd: [process.execPath, bad] })
+      runDbBackup({ databaseUrl: "postgresql://u:p@h/db", outDir: out, recipient, gpgHome, pgDumpCmd: [process.execPath, bad], pgRestoreCmd: [process.execPath, fakePgRestore] })
     ).rejects.toThrow(/falhou/);
-    const err = await runDbBackup({ databaseUrl: "postgresql://u:p@h/db", outDir: out, recipient, gpgHome, pgDumpCmd: [process.execPath, bad] }).catch((e) => e);
+    const err = await runDbBackup({ databaseUrl: "postgresql://u:p@h/db", outDir: out, recipient, gpgHome, pgDumpCmd: [process.execPath, bad], pgRestoreCmd: [process.execPath, fakePgRestore] }).catch((e) => e);
     expect(String(err.message)).not.toContain("NAOVAZAR");
     expect((await fs.readdir(out)).filter((f) => !f.endsWith(".json"))).toEqual([]);
   }, 60000);

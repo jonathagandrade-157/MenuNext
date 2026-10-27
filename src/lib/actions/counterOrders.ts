@@ -9,6 +9,7 @@ import { getPublicAssetUrl } from "@/lib/storage/assets";
 import { friendlyOrderError } from "@/lib/orderErrors";
 import { getCurrentCashSession } from "@/lib/cash";
 import { callPublicRpc } from "@/lib/publicRpc";
+import { isValidItemsShape } from "@/lib/checkoutInput";
 import type { PromotionPreview } from "@/lib/actions/promotionPreview";
 import type { CreateOrderItemPayload } from "@/lib/checkout";
 
@@ -36,6 +37,9 @@ export type CounterOrderResult =
  * sessão aqui fora, a checagem real é sempre no servidor/banco.
  */
 export async function createCounterOrderAction(input: CounterOrderInput): Promise<CounterOrderResult> {
+  if (!isValidItemsShape(input?.items)) {
+    return { status: "error", message: "Não foi possível finalizar a venda. Revise os itens e tente novamente." };
+  }
   const supabase = await createClient();
   const {
     data: { user },
