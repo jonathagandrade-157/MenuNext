@@ -9,6 +9,7 @@ import {
 import { runDbBackup } from "./backup-db.mjs";
 import { listAllObjects, runStorageBackup, safeObjectPath } from "./backup-storage.mjs";
 import { verifyIntegrity, verifyRestorable } from "./verify-backup.mjs";
+import { assertStorageTarget, runStorageRestore } from "./restore-storage.mjs";
 
 // Verificações do PIPELINE dos scripts com ferramentas simuladas: um `pg_dump` falso e um Storage falso. Não provam que o
 // pg_dump/pg_restore reais funcionam contra o Supabase (essas ferramentas não existem no laboratório): ver README.
@@ -253,6 +254,86 @@ fs.writeFileSync(process.env.FAKE_LOG, JSON.stringify({ argv: process.argv.slice
     const restored = await verifyRestorable(out, result.manifest, { gpgHome });
     expect(restored).toMatchObject({ ok: true, files: 3 });
   }, 90000);
+
+  it("restore-storage: reenvia ao Storage de TESTE, confere lista e SHA-256, e detecta destino que grava errado", async () => {
+    const source = { "loja-a/logo.webp": "LOGO-A", "loja-a/produtos/p1.webp": "FOTO-1", "loja-b/capa.png": "CAPA-B" };
+    const mkApi = (corrupt) => {
+      const store = new Map();
+      const list = (prefix) => {
+        const seen = new Map();
+        for (const n of store.keys()) {
+          if (prefix && !n.startsWith(`${prefix}/`)) continue;
+          const rest = prefix ? n.slice(prefix.length + 1) : n;
+          const [first, ...tail] = rest.split("/");
+          seen.set(first, { name: first, id: tail.length ? null : "id" });
+        }
+        return [...seen.values()];
+      };
+      const fetchImpl = async (url, init) => {
+        if (url.includes("/object/list/")) return new Response(JSON.stringify(list(JSON.parse(init.body).prefix)), { status: 200 });
+        if (url.includes("/object/authenticated/")) {
+          const n = decodeURIComponent(url.split("/object/authenticated/restaurant-assets/")[1]);
+          return store.has(n) ? new Response(store.get(n), { status: 200 }) : new Response("x", { status: 404 });
+        }
+        const n = decodeURIComponent(url.split("/storage/v1/object/restaurant-assets/")[1]);
+        if (init.method === "POST") {
+          if (store.has(n) && init.headers["x-upsert"] !== "true") return new Response("Duplicate", { status: 409 });
+          store.set(n, corrupt ? Buffer.from("CORROMPIDO") : Buffer.from(init.body));
+          return new Response("{}", { status: 200 });
+        }
+        return new Response("x", { status: 404 });
+      };
+      // origem para o backup (lista/baixa) e destino para a restauração
+      const src = new Map(Object.entries(source).map(([k, v]) => [k, Buffer.from(v)]));
+      return { store, fetchImpl, src };
+    };
+    const { src } = mkApi(false);
+    const srcFetch = async (url, init) => {
+      if (url.includes("/object/list/")) {
+        const prefix = JSON.parse(init.body).prefix;
+        const seen = new Map();
+        for (const n of src.keys()) {
+          if (prefix && !n.startsWith(`${prefix}/`)) continue;
+          const rest = prefix ? n.slice(prefix.length + 1) : n;
+          const [first, ...tail] = rest.split("/");
+          seen.set(first, { name: first, id: tail.length ? null : "id" });
+        }
+        return new Response(JSON.stringify([...seen.values()]), { status: 200 });
+      }
+      const n = decodeURIComponent(url.split("/object/authenticated/restaurant-assets/")[1]);
+      return src.has(n) ? new Response(src.get(n), { status: 200 }) : new Response("x", { status: 404 });
+    };
+    const out = path.join(tmp, "storage-restore");
+    const backup = await runStorageBackup({ baseUrl: "https://x.supabase.co", key: "k", outDir: out, recipient, gpgHome, fetchImpl: srcFetch, now: new Date("2026-10-27T07:00:00Z") });
+
+    const good = mkApi(false);
+    const ok = await runStorageRestore({ dir: out, manifest: backup.manifest, baseUrl: "http://127.0.0.1:1", key: "k", gpgHome, fetchImpl: good.fetchImpl });
+    expect(ok).toMatchObject({ ok: true, expected: 3, uploaded: 3, verified: 3, missing: [] });
+    expect([...good.store.keys()].sort()).toEqual(Object.keys(source).sort());
+
+    // reenviar por cima sem --upsert: o destino recusa duplicado e o resultado NÃO é aprovado
+    const dup = await runStorageRestore({ dir: out, manifest: backup.manifest, baseUrl: "http://127.0.0.1:1", key: "k", gpgHome, fetchImpl: good.fetchImpl });
+    expect(dup.ok).toBe(false);
+    expect(dup.problems.join(" ")).toMatch(/409/);
+
+    // destino que grava conteúdo errado: o SHA-256 de conferência acusa
+    const bad = mkApi(true);
+    const wrong = await runStorageRestore({ dir: out, manifest: backup.manifest, baseUrl: "http://127.0.0.1:1", key: "k", gpgHome, fetchImpl: bad.fetchImpl });
+    expect(wrong.ok).toBe(false);
+    expect(wrong.problems.join(" ")).toMatch(/SHA-256 diferente/);
+  }, 90000);
+
+  it("restore-storage recusa destino de produção ou não confirmado ANTES de decifrar", async () => {
+    expect(assertStorageTarget("http://127.0.0.1:54321")).toEqual({ local: true });
+    expect(() => assertStorageTarget("https://abcdefghijklmnopqrst.supabase.co")).toThrow(/allow-remote-ref/);
+    expect(() => assertStorageTarget("https://abcdefghijklmnopqrst.supabase.co", { allowRemoteRef: "outroprojetooutroprojet" })).toThrow(/allow-remote-ref/);
+    expect(assertStorageTarget("https://abcdefghijklmnopqrst.supabase.co", { allowRemoteRef: "abcdefghijklmnopqrst" })).toMatchObject({ local: false });
+    expect(() => assertStorageTarget("https://abcdefghijklmnopqrst.supabase.co", { allowRemoteRef: "abcdefghijklmnopqrst", protectedRefs: ["abcdefghijklmnopqrst"] })).toThrow(/protegidos|PROTECTED/i);
+    expect(() => assertStorageTarget("https://exemplo.com")).toThrow(/Recusado/);
+    const out = path.join(tmp, "storage");
+    const m = JSON.parse(await fs.readFile(path.join(out, (await fs.readdir(out)).find((f) => f.endsWith(".manifest.json"))), "utf8"));
+    await expect(runStorageRestore({ dir: out, manifest: m, baseUrl: "https://abcdefghijklmnopqrst.supabase.co", key: "k", gpgHome, protectedRefs: ["abcdefghijklmnopqrst"], allowRemoteRef: "abcdefghijklmnopqrst" })).rejects.toThrow(/Recusado/);
+  });
 
   it("restauração recusa destino remoto ANTES de decifrar qualquer coisa", async () => {
     const out = path.join(tmp, "db");

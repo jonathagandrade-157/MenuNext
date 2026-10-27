@@ -1,5 +1,6 @@
 -- Impressão digital ESTRUTURAL do banco (somente leitura; não mostra dado pessoal): funções, políticas, RLS, GRANTs,
--- gatilhos, índices, restrições e privilégios padrão. Rode no banco de origem (produção, só leitura) e no banco restaurado:
+-- gatilhos, índices, restrições, privilégios padrão e tabelas publicadas no Realtime (o Kanban/KDS depende de public.orders
+-- estar na publicação supabase_realtime). Rode no banco de origem (produção, só leitura) e no banco restaurado:
 -- as duas colunas `impressao` precisam ser IGUAIS. Para as tabelas, compare as contagens (veja `contagens` no fim).
 --
 -- O texto de um CHECK pode voltar com parênteses diferentes depois de dump/restore; por isso as restrições são comparadas
@@ -37,6 +38,9 @@ where n.nspname in ('public', 'auth', 'storage')
 union all
 select 'privilegios_padrao', coalesce(md5(string_agg(v, '|' order by v)), '')
 from (select format('%s|%s|%s|%s', defaclrole::regrole, defaclnamespace::regnamespace, defaclobjtype, defaclacl) as v from pg_default_acl) z
+union all
+select 'publicacoes_realtime', coalesce(md5(string_agg(v, '|' order by v)), '')
+from (select format('%s|%s.%s', pubname, schemaname, tablename) as v from pg_publication_tables where schemaname in ('public', 'auth', 'storage')) z
 order by 1;
 
 -- contagem de linhas por tabela (compare com cuidado: a produção continua recebendo pedidos depois do dump)

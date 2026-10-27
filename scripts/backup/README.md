@@ -16,6 +16,8 @@ manifesto de integridade, retenção e verificação de frescor. Não depende de
 | `backup-db.mjs` | `pg_dump` (formato custom, **com** GRANTs) dos esquemas `public`, `auth`, `storage` → **auto-verifica o dump (`pg_restore --list`) antes de cifrar** → criptografa com a chave **pública** do dono → apaga o texto claro → grava `*.manifest.json` (SHA-256, tamanho, data) → aplica a retenção |
 | `backup-storage.mjs` | lista e baixa todos os objetos do bucket (ignora nomes perigosos, como `../`), gera `tar.gz`, criptografa, grava manifesto, aplica retenção |
 | `verify-backup.mjs` | (1) integridade pelo manifesto, sem chave privada; (2) frescor: alerta se o último backup está velho; (3) restauração: decifra, confere o conteúdo (`pg_restore --list`) e, opcionalmente, restaura em banco **local** descartável (`--clean --if-exists`: o dump recria o esquema `public`) |
+| `restore-storage.mjs` | reenvia os arquivos do backup do Storage para um Storage de TESTE (ou local) e confere lista + SHA-256 de cada objeto; recusa produção (`BACKUP_PROTECTED_REFS`) e exige `--allow-remote-ref <ref>` para qualquer projeto remoto |
+| `post-restore.sql` | passos obrigatórios depois do `pg_restore`: o dump filtrado por esquema NÃO leva a publicação `supabase_realtime`; sem recolocar `public.orders` nela o Kanban/KDS para de atualizar sozinho (o `verify-backup.mjs --restore-url` já roda este arquivo com `psql`) |
 | `fingerprint.sql` | impressão estrutural (funções, políticas, RLS, GRANTs, gatilhos, índices, restrições) para comparar origem × restaurado, sem dado pessoal |
 | `mask-restored.sql` | pseudonimiza uma CÓPIA restaurada (nomes, telefones, e-mails, documentos, endereços, chaves Pix, senhas) para conferir tudo sem ver dado pessoal; recusa rodar sem confirmação explícita |
 | `lib.mjs` | funções comuns (retenção, manifesto, criptografia, recusa de destino remoto, ocultação de segredos) |
@@ -126,7 +128,7 @@ do arquivo baixado e a versão (`pg_dump --version`). O servidor do exercício t
 5. Simule a perda (apague/trunque) → detecte pela comparação → restaure → compare de novo. Meça o tempo (isto é o seu RTO).
 6. Se o banco restaurado vier de dados reais: rode `mask-restored.sql` na cópia (ver o cabeçalho do arquivo) **antes** de qualquer pessoa abrir tabelas, confira só contagens e hashes (`fingerprint.sql`) e depois apague o banco e os arquivos temporários.
 
-Achados do exercício real que mudaram os scripts: o dump agora **mantém os GRANTs** (sem eles o app restaurado perderia as permissões
+Achados do exercício real que mudaram os scripts: o dump com `--schema` **não carrega a publicação do Realtime** (`post-restore.sql` a recoloca e `fingerprint.sql` confere); o dump agora **mantém os GRANTs** (sem eles o app restaurado perderia as permissões
 de `anon`/`authenticated`); um dump truncado passa no SHA-256 do arquivo cifrado, por isso o dump é lido por `pg_restore --list`
 **antes** de cifrar; `pg_restore` precisa de `--clean --if-exists` porque o dump recria o esquema `public`.
 

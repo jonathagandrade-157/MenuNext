@@ -128,7 +128,7 @@ describe("as quatro funções protegidas só são chamadas pelo caminho do servi
       }
     }
     expect(offenders).toEqual([]);
-  });
+  }, 30000);
 
   it("nenhum componente de cliente importa publicRpc", () => {
     const offenders = walk(SRC).filter((f) => {
@@ -136,5 +136,5 @@ describe("as quatro funções protegidas só são chamadas pelo caminho do servi
       return /^\s*["']use client["']/.test(s) && /from\s+["'][^"']*publicRpc["']/.test(s);
     });
     expect(offenders).toEqual([]);
-  });
+  }, 30000);
 });

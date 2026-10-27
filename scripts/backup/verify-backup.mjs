@@ -12,7 +12,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { pathToFileURL } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   MANIFEST_SUFFIX, assertDisposableTarget, checkFreshness, decryptFile, pgEnvFromUrl, readManifest, redact, removeIfExists, run,
   sha256File, verifyAgainstManifest,
@@ -25,7 +25,7 @@ export async function verifyIntegrity(dir, manifestPath) {
 }
 
 /** Decifra e confere o conteúdo. Banco: `pg_restore --list` (e restauração opcional). Storage: lista do tar e SHA de cada arquivo. */
-export async function verifyRestorable(dir, manifest, { gpgBin, gpgHome, passphraseFile, restoreUrl, pgRestoreCmd = ["pg_restore"], tarCmd = "tar" } = {}) {
+export async function verifyRestorable(dir, manifest, { gpgBin, gpgHome, passphraseFile, restoreUrl, pgRestoreCmd = ["pg_restore"], psqlCmd = ["psql"], tarCmd = "tar" } = {}) {
   if (restoreUrl) assertDisposableTarget(restoreUrl);
   const work = await fs.mkdtemp(path.join(os.tmpdir(), "menunext-restore-"));
   try {
@@ -37,6 +37,9 @@ export async function verifyRestorable(dir, manifest, { gpgBin, gpgHome, passphr
       if (entries === 0) return { ok: false, reason: "dump sem nenhum objeto" };
       if (restoreUrl) {
         await run(pgRestoreCmd, ["--no-owner", "--clean", "--if-exists", "--exit-on-error", "--dbname", restoreUrl.replace(/:\/\/[^@]*@/, "://"), plain], { env: pgEnvFromUrl(restoreUrl) });
+        // objetos que o dump filtrado por esquema não leva (publicação do Realtime): sem isto o Kanban/KDS para de atualizar
+        const postRestore = fileURLToPath(new URL("./post-restore.sql", import.meta.url));
+        await run(psqlCmd, ["-v", "ON_ERROR_STOP=1", "--quiet", "--dbname", restoreUrl.replace(/:\/\/[^@]*@/, "://"), "-f", postRestore], { env: pgEnvFromUrl(restoreUrl) });
       }
       return { ok: true, entries, restored: Boolean(restoreUrl) };
     }
