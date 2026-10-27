@@ -40,3 +40,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# relatorios confidenciais de auditoria (repositorio publico): nunca versionar
+docs/auditoria/
+MenuNext-privado/
+
+# backups e chaves (conteudo sensivel): nunca versionar
+/backups/
+*.gpg
+*.dump
+*.asc
+.gnupg/

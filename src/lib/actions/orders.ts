@@ -6,7 +6,9 @@ import type { CreateOrderItemPayload } from "@/lib/checkout";
 import type { Order } from "@/lib/orders";
 import { friendlyOrderError } from "@/lib/orderErrors";
 import { resolveDeliveryDistanceForOrder } from "@/lib/actions/delivery-quote";
-import { checkIpRateLimit, tooManyAttemptsMessage } from "@/lib/rateLimit";
+import { checkIpRateLimit, getClientIp, tooManyAttemptsMessage } from "@/lib/rateLimit";
+import { buildOrderLimits, enforceLimits } from "@/lib/checkoutGuard";
+import { callPublicRpc } from "@/lib/publicRpc";
 
 export type SubmitOrderDeliveryInput = {
   zip: string;
@@ -45,11 +47,20 @@ export type SubmitOrderResult =
  * mostrar ao cliente, nunca confia em nada calculado no navegador.
  */
 export async function submitOrderAction(input: SubmitOrderInput): Promise<SubmitOrderResult> {
+  // Server Action é chamável por qualquer um com o corpo que quiser: o tipo do TypeScript não vale em tempo de
+  // execução. Venda de balcão ("counter") NUNCA entra por aqui; ela tem caminho próprio, só para membros.
+  if (input?.fulfillmentType !== "delivery" && input?.fulfillmentType !== "pickup") {
+    return { status: "error", message: friendlyOrderError("invalid_fulfillment_type") };
+  }
+
   // Freia pedidos falsos em massa: 20 pedidos / 10 min por IP (cliente real faz 1 ou 2).
   const limit = await checkIpRateLimit("pedido:ip", { limit: 20, windowSeconds: 600 });
   if (!limit.allowed) return { status: "error", message: tooManyAttemptsMessage(limit.retryAfterSeconds) };
 
-  const supabase = await createClient();
+  // Limites por loja, por IP + loja e por telefone (o por IP acima já passou). create_order só é executável pelo
+  // servidor (migration 20261027020000): este é o ÚNICO caminho público até ela, então estes limites não se contornam.
+  const storeLimits = await enforceLimits(buildOrderLimits({ slug: input.slug, ip: await getClientIp(), phone: input.customerPhone }));
+  if (!storeLimits.allowed) return { status: "error", message: tooManyAttemptsMessage(storeLimits.retryAfterSeconds) };
 
   // Frete por distância (Fase 4.1.1): a distância é calculada aqui, no
   // servidor Next.js (geocoding server-side, nunca no navegador) — só
@@ -65,7 +76,7 @@ export async function submitOrderAction(input: SubmitOrderInput): Promise<Submit
     distanceKm = distanceResult.distanceKm;
   }
 
-  const { data, error } = await supabase.rpc("create_order", {
+  const { data, error } = await callPublicRpc<{ public_id: string; order_number: number }[]>("create_order", {
     p_slug: input.slug,
     p_customer_name: input.customerName,
     p_customer_phone: input.customerPhone,
