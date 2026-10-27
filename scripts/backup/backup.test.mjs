@@ -170,6 +170,25 @@ fs.writeFileSync(process.env.FAKE_LOG, JSON.stringify({ argv: process.argv.slice
     expect(integrity.ok).toBe(true);
   }, 60000);
 
+  it("vários destinatários: o arquivo carrega uma chave de sessão para CADA chave (perder uma não perde o backup)", async () => {
+    const second = "emergencia-teste@menunext.invalid";
+    const params2 = path.join(tmp, "key-params2.txt");
+    await fs.writeFile(params2, `%no-protection
+Key-Type: RSA
+Key-Length: 2048
+Name-Real: Emergencia
+Name-Email: ${second}
+Expire-Date: 0
+%commit
+`);
+    execFileSync("gpg", ["--batch", "--homedir", await gpgPath("gpg", gpgHome), "--generate-key", await gpgPath("gpg", params2)], { stdio: "pipe" });
+    const out = path.join(tmp, "dbmulti");
+    process.env.FAKE_LOG = path.join(tmp, "fake-logm.json");
+    const { manifest } = await runDbBackup({ databaseUrl: "postgresql://u:p@h/db", outDir: out, recipient: `${recipient}, ${second}`, gpgHome, pgDumpCmd: [process.execPath, fakePgDump], pgRestoreCmd: [process.execPath, fakePgRestore], now: new Date("2026-10-27T08:00:00Z") });
+    const packets = execFileSync("gpg", ["--batch", "--homedir", await gpgPath("gpg", gpgHome), "--list-packets", await gpgPath("gpg", path.join(out, manifest.file))], { stdio: ["ignore", "pipe", "pipe"] }).toString();
+    expect((packets.match(/pubkey enc packet/g) ?? []).length).toBe(2);
+  }, 90000);
+
   it("BACKUP_EXCLUDE_DATA vira --exclude-table-data no pg_dump (e nada mais muda)", async () => {
     const out = path.join(tmp, "dbx");
     process.env.FAKE_LOG = path.join(tmp, "fake-logx.json");

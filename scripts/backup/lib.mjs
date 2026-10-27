@@ -102,11 +102,16 @@ export function gpgArgs(homedir) {
   return ["--batch", "--yes", "--no-tty", ...(homedir ? ["--homedir", homedir] : [])];
 }
 
-/** Criptografia com a chave PÚBLICA do dono: quem executa o backup não consegue ler o que gerou. */
+/**
+ * Criptografia com a chave PÚBLICA do dono: quem executa o backup não consegue ler o que gerou. `recipient` aceita VÁRIAS
+ * chaves separadas por vírgula (ex.: a do dono e uma de emergência guardada por outra pessoa): qualquer uma decifra, então
+ * perder uma chave não perde os backups.
+ */
 export async function encryptFile(src, dest, recipient, { gpgBin = "gpg", homedir } = {}) {
-  if (!recipient) throw new Error("Informe o destinatário da criptografia (BACKUP_GPG_RECIPIENT).");
+  const recipients = String(recipient ?? "").split(",").map((r) => r.trim()).filter(Boolean);
+  if (recipients.length === 0) throw new Error("Informe o destinatário da criptografia (BACKUP_GPG_RECIPIENT).");
   const [h, o, i] = await Promise.all([gpgPath(gpgBin, homedir), gpgPath(gpgBin, dest), gpgPath(gpgBin, src)]);
-  await run(gpgBin, [...gpgArgs(h), "--trust-model", "always", "--recipient", recipient, "--output", o, "--encrypt", i]);
+  await run(gpgBin, [...gpgArgs(h), "--trust-model", "always", ...recipients.flatMap((r) => ["--recipient", r]), "--output", o, "--encrypt", i]);
 }
 
 /** Só no exercício de restauração, com a chave privada guardada fora do executor. */
