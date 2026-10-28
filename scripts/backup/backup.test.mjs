@@ -10,6 +10,7 @@ import { runDbBackup } from "./backup-db.mjs";
 import { listAllObjects, runStorageBackup, safeObjectPath } from "./backup-storage.mjs";
 import { verifyIntegrity, verifyRestorable } from "./verify-backup.mjs";
 import { assertStorageTarget, runStorageRestore } from "./restore-storage.mjs";
+import { checkConfirmation, checkCredentials, checkReadOnlySource, checkSpace, evaluateGate, expectedConfirmation } from "./gate-check.mjs";
 
 // Verificações do PIPELINE dos scripts com ferramentas simuladas: um `pg_dump` falso e um Storage falso. Não provam que o
 // pg_dump/pg_restore reais funcionam contra o Supabase (essas ferramentas não existem no laboratório): ver README.
@@ -402,5 +403,51 @@ describe("o que nunca vai para o Git", () => {
     const tracked = execFileSync("git", ["ls-files"], { cwd: new URL("../..", import.meta.url), encoding: "utf8" }).split("\n").filter(Boolean);
     const bad = tracked.filter((f) => /\.(gpg|dump|asc|pem|key)$/i.test(f) || /(^|\/)\.env(\.|$)/.test(f) && f !== ".env.example" || f.startsWith("docs/auditoria/"));
     expect(bad).toEqual([]);
+  });
+});
+
+describe("portão de autorização do primeiro backup real", () => {
+  const ok = { id: 1, label: "x", status: "OK" };
+
+  it("só libera com TODOS os itens OK; FALHA e NAO_VERIFICADO bloqueiam", () => {
+    expect(evaluateGate([ok, { ...ok, id: 2 }]).pass).toBe(true);
+    expect(evaluateGate([ok, { ...ok, id: 2, status: "FALHA" }])).toEqual({ pass: false, blocked: ["2 FALHA"] });
+    expect(evaluateGate([{ ...ok, status: "NAO_VERIFICADO" }]).pass).toBe(false);
+  });
+
+  it("a confirmação exige a frase com a data de hoje (não vale a de ontem)", () => {
+    const day = new Date("2026-10-28T12:00:00Z");
+    expect(expectedConfirmation(day)).toBe("EXPORTAR PRODUCAO 2026-10-28");
+    expect(checkConfirmation("EXPORTAR PRODUCAO 2026-10-28", day).status).toBe("OK");
+    expect(checkConfirmation("EXPORTAR PRODUCAO 2026-10-27", day).status).toBe("FALHA");
+    expect(checkConfirmation(undefined, day).status).toBe("FALHA");
+  });
+
+  it("espaço: exige no mínimo 5 GB ou 20x o tamanho estimado", () => {
+    expect(checkSpace(286 * 1024 ** 3).status).toBe("OK");
+    expect(checkSpace(1 * 1024 ** 3).status).toBe("FALHA");
+    expect(checkSpace(10 * 1024 ** 3, 1024 ** 3).status).toBe("FALHA");
+  });
+
+  it("credenciais: confere só a FORMA e nunca devolve valores", () => {
+    const good = { DATABASE_URL: "postgresql://postgres:SEGREDO@db.abcdefghijklmnopqrst.supabase.co:5432/postgres?sslmode=require", SUPABASE_URL: "https://x.supabase.co", SUPABASE_SERVICE_ROLE_KEY: "SEGREDO2" };
+    const r = checkCredentials(good);
+    expect(r.status).toBe("OK");
+    expect(JSON.stringify(r)).not.toContain("SEGREDO");
+    expect(checkCredentials({}).status).toBe("FALHA");
+    expect(checkCredentials({ ...good, DATABASE_URL: good.DATABASE_URL.replace(":5432", ":6543") }).detail).toMatch(/6543/);
+    expect(checkCredentials({ ...good, DATABASE_URL: good.DATABASE_URL.replace("?sslmode=require", "") }).detail).toMatch(/sslmode/);
+    expect(checkCredentials({ ...good, DATABASE_URL: "postgresql://postgres:x@evil.example.com:5432/postgres?sslmode=require" }).detail).toMatch(/não é Supabase/);
+  });
+
+  it("revisão estática: os scripts reais da origem não têm escrita e forçam sessão somente leitura", async () => {
+    const dir = new URL(".", import.meta.url);
+    const read = (f) => fs.readFile(new URL(f, dir), "utf8");
+    const files = { "backup-db.mjs": await read("backup-db.mjs"), "backup-storage.mjs": await read("backup-storage.mjs"), "fingerprint.sql": await read("fingerprint.sql") };
+    expect(checkReadOnlySource(files).status).toBe("OK");
+    // e detecta se alguém introduzir escrita
+    expect(checkReadOnlySource({ ...files, "backup-storage.mjs": files["backup-storage.mjs"] + '\nfetch(u, { method: "DELETE" })' }).status).toBe("FALHA");
+    expect(checkReadOnlySource({ ...files, "backup-db.mjs": files["backup-db.mjs"] + '\nconst q = "delete from orders";' }).status).toBe("FALHA");
+    expect(checkReadOnlySource({ ...files, "backup-db.mjs": files["backup-db.mjs"].replace("default_transaction_read_only=on", "x") }).status).toBe("FALHA");
   });
 });

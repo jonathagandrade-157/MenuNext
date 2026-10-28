@@ -28,7 +28,8 @@ export async function runDbBackup({
   const plain = path.join(outDir, `${DB_PREFIX}-${stamp}.dump`);
   const encrypted = `${plain}.gpg`;
   try {
-    const env = pgEnvFromUrl(databaseUrl);
+    // sessão SOMENTE LEITURA no servidor de origem (o pg_dump já abre transação read-only; isto garante também as demais conexões)
+    const env = { ...pgEnvFromUrl(databaseUrl), PGOPTIONS: "-c default_transaction_read_only=on" };
     const schemaArgs = schemas.flatMap((s) => ["--schema", s]);
     // tabelas cujo CONTEÚDO não entra no backup (a estrutura entra): sessões e tokens não têm valor de recuperação e são dado sensível
     const excludeArgs = excludeTableData.flatMap((t) => ["--exclude-table-data", t]);
