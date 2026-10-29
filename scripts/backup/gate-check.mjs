@@ -98,7 +98,15 @@ async function checkTools(env) {
     if (!r.ok) probs.push(`${name} ausente`); else notes.push(name);
   }
   const dock = await sh("docker", ["version", "--format", "{{.Server.Version}}"]);
-  if (!dock.ok || !dock.stdout.trim()) probs.push("Docker instalado mas o serviço (daemon) NÃO está em execução"); else notes.push(`docker ${dock.stdout.trim()}`);
+  if (!dock.ok || !dock.stdout.trim()) {
+    let why = "Docker instalado mas o serviço (daemon) NÃO está em execução";
+    if (process.platform === "win32") {
+      // causa mais comum no Windows 11 Home: o motor do Docker Desktop usa WSL2 e o componente WSL não está instalado
+      const w = await sh("wsl.exe", ["--status"]);
+      if (!w.ok) why += " — WSL NÃO está instalado (o Docker Desktop precisa dele neste Windows)";
+    }
+    probs.push(why);
+  } else notes.push(`docker ${dock.stdout.trim()}`);
   // no Windows o supabase é um atalho .ps1/.cmd do npm, que execFile não executa direto: passa pelo PowerShell
   const sb = process.platform === "win32" ? await sh("powershell.exe", ["-NoProfile", "-Command", "supabase --version"]) : await sh("supabase", ["--version"]);
   if (!sb.ok) probs.push("Supabase CLI ausente"); else notes.push(`supabase ${sb.stdout.trim()}`);
