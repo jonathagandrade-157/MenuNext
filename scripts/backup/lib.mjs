@@ -46,6 +46,26 @@ export function run(cmd, args, { env = {}, cwd, input } = {}) {
   });
 }
 
+/**
+ * Quebra uma linha de comando (variável de ambiente como PG_DUMP_CMD) em [programa, ...argumentos], respeitando aspas
+ * duplas. No Windows o PostgreSQL costuma ficar em "C:\Program Files\...": um split(" ") simples cortaria o caminho.
+ */
+export function splitCommand(text, fallback) {
+  const raw = String(text ?? "").trim();
+  if (!raw) return Array.isArray(fallback) ? fallback : [fallback];
+  const parts = [];
+  const re = /"([^"]*)"|(\S+)/g;
+  for (let m; (m = re.exec(raw)); ) parts.push(m[1] ?? m[2]);
+  return parts;
+}
+
+/** Ferramenta irmã na mesma pasta (psql ao lado do pg_dump); sem pasta, devolve só o nome (usa o PATH). */
+export function siblingTool(cmd, name) {
+  const bin = Array.isArray(cmd) ? cmd[0] : cmd;
+  if (!/[\\/]/.test(bin)) return [name];
+  return [path.join(path.dirname(bin), `${name}${path.extname(bin)}`)];
+}
+
 /** Tira senhas de URLs e tokens de qualquer texto que vá para log ou mensagem de erro. */
 export function redact(text) {
   return String(text)

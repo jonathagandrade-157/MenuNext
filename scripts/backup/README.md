@@ -7,7 +7,8 @@ manifesto de integridade, retenção e verificação de frescor. Não depende de
 > **Estado de validação (leia primeiro).**
 > - **Aprovado em laboratório, com ferramentas REAIS:** `pg_dump`/`pg_restore` 17.6, GnuPG e `tar`, sobre um PostgreSQL 17 descartável com as 63 migrations e dados sintéticos: backup, criptografia com chave protegida por frase-senha, conferência SHA-256, restauração em banco novo, comparação de **todas as tabelas (contagem e hash do conteúdo), funções, políticas, GRANTs, gatilhos, índices e restrições** com a origem (idênticos), suítes SQL de segurança passando sobre o banco restaurado, simulação de perda de dados com recuperação, dump truncado/arquivo adulterado/senha errada/banco fora do ar detectados, retenção com 30 backups reais. Roteiro e resultado do exercício: seção "Exercício de restauração".
 > - **NÃO aprovado:** (1) restauração a partir do **Supabase real** (os esquemas gerenciados `auth`/`storage` têm donos e extensões próprios; só se prova com um projeto de teste do Supabase); (2) a **API real do Supabase Storage** (o laboratório usa um servidor que só imita listar/baixar); (3) automação agendada em produção; (4) tempo de restauração com o volume real (o do laboratório tem dezenas de KB).
-> - `backup.test.mjs` (19 verificações) roda no CI/local com `pg_dump`/`pg_restore` **simulados**; só o exercício de laboratório usa as ferramentas reais.
+> - `backup.test.mjs` (43 verificações) roda no CI/local com `pg_dump`/`pg_restore`/`psql` **simulados**; só os exercícios de laboratório usam as ferramentas reais.
+> - **Sem Docker/WSL:** este computador não roda Docker. O `gate-check.mjs --sem-docker` aprova só o que se prova com PostgreSQL 17 **nativo**; Auth, Storage e Realtime reais continuam **NÃO VERIFICADOS** (lista no próprio relatório do portão).
 
 ## O que cada script faz
 
@@ -20,6 +21,10 @@ manifesto de integridade, retenção e verificação de frescor. Não depende de
 | `post-restore.sql` | passos obrigatórios depois do `pg_restore`: o dump filtrado por esquema NÃO leva a publicação `supabase_realtime`; sem recolocar `public.orders` nela o Kanban/KDS para de atualizar sozinho (o `verify-backup.mjs --restore-url` já roda este arquivo com `psql`) |
 | `fingerprint.sql` | impressão estrutural (funções, políticas, RLS, GRANTs, gatilhos, índices, restrições) para comparar origem × restaurado, sem dado pessoal |
 | `mask-restored.sql` | pseudonimiza uma CÓPIA restaurada (nomes, telefones, e-mails, documentos, endereços, chaves Pix, senhas) para conferir tudo sem ver dado pessoal; recusa rodar sem confirmação explícita |
+| `source-role-probe.sql` | sonda SOMENTE LEITURA que o `backup-db.mjs` roda **antes** do `pg_dump`: o papel da origem precisa ser de privilégio mínimo (sem superusuário, sem DDL, sem INSERT/UPDATE/DELETE em nenhuma tabela dos esquemas copiados); papel privilegiado só passa com `BACKUP_ACCEPT_PRIVILEGED_SOURCE=sim-aceito-pelo-dono` |
+| `create-backup-role.sql` | cria o papel `backup_ro` (leitura de tudo, nada de escrita, sessão somente leitura no servidor). **Não executado em produção**: exige autorização expressa |
+| `sync-external.mjs` | copia os `.gpg` + manifestos para o **disco externo** (confere SHA-256 antes e depois, nunca sobrescreve, recusa o mesmo volume, aplica a retenção) |
+| `sync-r2.mjs` | envio ao **Cloudflare R2** via `rclone` (`--immutable`, manifesto por último, confere o tamanho remoto). Sem `--executar` só mostra o plano. **Nunca executado contra um R2 real** |
 | `lib.mjs` | funções comuns (retenção, manifesto, criptografia, recusa de destino remoto, ocultação de segredos) |
 | `github-actions.example.yml` | **exemplo** de agendamento (não está em `.github/`, portanto não roda sozinho) |
 
@@ -27,14 +32,17 @@ manifesto de integridade, retenção e verificação de frescor. Não depende de
 
 | Variável | Uso |
 |---|---|
-| `DATABASE_URL` | conexão do banco para o `pg_dump` (de preferência um papel só de leitura) |
+| `DATABASE_URL` | conexão do banco para o `pg_dump`; o papel esperado é `backup_ro` (a sonda recusa um papel com mais privilégio) |
+| `BACKUP_ACCEPT_PRIVILEGED_SOURCE` | (exceção) `sim-aceito-pelo-dono` permite uma origem com mais privilégio que o mínimo; fica registrado no manifesto |
+| `BACKUP_EXTERNAL_DIR` | pasta do disco externo (BitLocker) usada por `sync-external.mjs` |
+| `R2_BUCKET`, `R2_PREFIX`, `RCLONE_CONFIG_R2_*` | destino R2 usado por `sync-r2.mjs` (credenciais só no ambiente do processo) |
 | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | backup do Storage (a chave de servidor só existe no executor do backup) |
 | `BACKUP_DIR` | pasta de saída (padrão `./backups`, ignorada pelo Git) |
 | `BACKUP_GPG_RECIPIENT` | ID/e-mail da chave **pública** do dono |
 | `BACKUP_SCHEMAS` | padrão `public,auth,storage` |
 | `BACKUP_EXCLUDE_DATA` | (opcional) tabelas cujo CONTEÚDO fica fora do dump, separadas por vírgula (a estrutura entra). Sugestão para o Supabase: `auth.sessions,auth.refresh_tokens,auth.flow_state,auth.one_time_tokens,auth.audit_log_entries` (sem valor de recuperação e sensíveis) |
 | `BACKUP_HEARTBEAT_URL` | (opcional) URL de monitor externo; recebe `/fail` quando o backup falha |
-| `PG_DUMP_CMD` | (opcional) caminho do `pg_dump` 17+ |
+| `PG_DUMP_CMD`, `PG_RESTORE_CMD`, `PSQL_CMD` | (opcional) caminho do `pg_dump`/`pg_restore`/`psql` 17+. No Windows use aspas se o caminho tiver espaço: `"C:\Program Files\PostgreSQL\17\bin\pg_dump.exe"`. Sem `PSQL_CMD`, o `psql` é procurado ao lado do `pg_dump` |
 
 A senha do banco é convertida em variáveis `PG*` só para o processo filho, para **não aparecer** na lista de processos.
 Mensagens de erro passam por `redact()` (senhas de URL, `Bearer`, `token=`).
