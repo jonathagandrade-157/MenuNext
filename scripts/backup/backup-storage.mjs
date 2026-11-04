@@ -111,6 +111,7 @@ async function main() {
       bucket: process.env.STORAGE_BUCKET ?? "restaurant-assets",
       outDir: path.resolve(process.env.BACKUP_DIR ?? "backups"),
       recipient: process.env.BACKUP_GPG_RECIPIENT,
+      gpgHome: process.env.BACKUP_GPG_HOME || undefined,
     });
     console.log(`[backup-storage] ok: ${result.manifest.file} (${result.files.length} objetos, ${result.skipped.length} ignorados)`);
     await heartbeat(url, true);

@@ -21,6 +21,7 @@ manifesto de integridade, retenção e verificação de frescor. Não depende de
 | `post-restore.sql` | passos obrigatórios depois do `pg_restore`: o dump filtrado por esquema NÃO leva a publicação `supabase_realtime`; sem recolocar `public.orders` nela o Kanban/KDS para de atualizar sozinho (o `verify-backup.mjs --restore-url` já roda este arquivo com `psql`) |
 | `fingerprint.sql` | impressão estrutural (funções, políticas, RLS, GRANTs, gatilhos, índices, restrições) para comparar origem × restaurado, sem dado pessoal |
 | `mask-restored.sql` | pseudonimiza uma CÓPIA restaurada (nomes, telefones, e-mails, documentos, endereços, chaves Pix, senhas) para conferir tudo sem ver dado pessoal; recusa rodar sem confirmação explícita |
+| `gpg-keys.mjs` | gera as **duas** chaves GPG (principal e emergência) num chaveiro dedicado, exporta para guarda offline e **prova a recuperação de cada chave sozinha** em chaveiro isolado e vazio (dados sintéticos, hash antes/depois); grava a evidência que o portão (item 3) lê. Nunca vê frase-senha (usa o pinentry do Windows) e nunca apaga chave |
 | `source-role-probe.sql` | sonda SOMENTE LEITURA que o `backup-db.mjs` roda **antes** do `pg_dump`: o papel da origem precisa ser de privilégio mínimo (sem superusuário, sem DDL, sem INSERT/UPDATE/DELETE em nenhuma tabela dos esquemas copiados); papel privilegiado só passa com `BACKUP_ACCEPT_PRIVILEGED_SOURCE=sim-aceito-pelo-dono` |
 | `create-backup-role.sql` | cria o papel `backup_ro` (leitura de tudo, nada de escrita, sessão somente leitura no servidor). **Não executado em produção**: exige autorização expressa |
 | `sync-external.mjs` | copia os `.gpg` + manifestos para o **disco externo** (confere SHA-256 antes e depois, nunca sobrescreve, recusa o mesmo volume, aplica a retenção) |
@@ -38,7 +39,9 @@ manifesto de integridade, retenção e verificação de frescor. Não depende de
 | `R2_BUCKET`, `R2_PREFIX`, `RCLONE_CONFIG_R2_*` | destino R2 usado por `sync-r2.mjs` (credenciais só no ambiente do processo) |
 | `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | backup do Storage (a chave de servidor só existe no executor do backup) |
 | `BACKUP_DIR` | pasta de saída (padrão `./backups`, ignorada pelo Git) |
-| `BACKUP_GPG_RECIPIENT` | ID/e-mail da chave **pública** do dono |
+| `BACKUP_GPG_RECIPIENT` | impressões digitais (ou e-mails) das chaves **públicas**, separadas por vírgula: principal e emergência |
+| `BACKUP_GPG_HOME` | chaveiro dedicado do backup (padrão do `gpg-keys.mjs`: `~/.menunext-backup-gnupg`); usado por `backup-db.mjs` e `backup-storage.mjs` |
+| `GPG_BIN_DIR` | (opcional) pasta do `gpg.exe`; no Windows o gpg do Git (pasta `usr/bin` dele) é localizado sozinho quando não está no PATH |
 | `BACKUP_SCHEMAS` | padrão `public,auth,storage` |
 | `BACKUP_EXCLUDE_DATA` | (opcional) tabelas cujo CONTEÚDO fica fora do dump, separadas por vírgula (a estrutura entra). Sugestão para o Supabase: `auth.sessions,auth.refresh_tokens,auth.flow_state,auth.one_time_tokens,auth.audit_log_entries` (sem valor de recuperação e sensíveis) |
 | `BACKUP_HEARTBEAT_URL` | (opcional) URL de monitor externo; recebe `/fail` quando o backup falha |

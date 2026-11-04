@@ -15,7 +15,12 @@ import os from "node:os";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { ACCEPT_PRIVILEGED } from "./backup-db.mjs";
-import { assertDisposableTarget, decryptFile, encryptFile, gpgPath, run, siblingTool, splitCommand } from "./lib.mjs";
+import {
+  RECOVERY_EVIDENCE_FILE, assertDisposableTarget, decryptFile, distinctRecipients, encryptFile, evaluateRecoveryEvidence, gpgPath, primaryFingerprint,
+  run, siblingTool, splitCommand,
+} from "./lib.mjs";
+
+export { distinctRecipients, primaryFingerprint };
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 export const OK = "OK", FAIL = "FALHA", UNK = "NAO_VERIFICADO";
@@ -43,6 +48,8 @@ export const UNVERIFIABLE_WITHOUT_DOCKER = [
   "Realtime real: entrega de eventos após a restauração (só a publicação SQL é conferida)",
   "Restauração sobre os esquemas gerenciados do Supabase (donos e extensões próprios)",
   "Tempo de restauração (RTO) com o volume real",
+  "Permissões do Supabase: se o papel backup_ro pode ser criado lá e se existe credencial somente leitura para o Storage",
+  "Integração real com R2/rclone (conta, bucket, token, bloqueio de retenção): só foi testada com rclone simulado",
 ];
 
 export function checkSpace(freeBytes, estimatedBytes = 200 * 1024 * 1024) {
@@ -173,17 +180,6 @@ async function checkTools(env, { semDocker = false } = {}) {
   return item(2, "Ferramentas oficiais e versões compatíveis", probs.length ? FAIL : OK, probs.length ? probs.join("; ") : notes.join(", "));
 }
 
-/** Impressão digital da chave PRINCIPAL (primeira linha `fpr:` da saída `gpg --with-colons --fingerprint`). */
-export function primaryFingerprint(colonOutput) {
-  const line = String(colonOutput).split("\n").find((l) => l.startsWith("fpr:"));
-  return line ? line.split(":")[9] : null;
-}
-
-/** Os destinatários precisam ser chaves DIFERENTES: duas vezes a mesma chave não protege contra perder a chave. */
-export function distinctRecipients(fingerprints) {
-  return fingerprints.length > 0 && fingerprints.every(Boolean) && new Set(fingerprints).size === fingerprints.length;
-}
-
 async function checkGpg(env) {
   const label = "Chave GPG de recuperação criada e testada";
   const recipients = checkRecipients(env.BACKUP_GPG_RECIPIENT);
@@ -198,8 +194,13 @@ async function checkGpg(env) {
     prints.push(primaryFingerprint(k.stdout));
   }
   if (!distinctRecipients(prints)) return item(3, label, FAIL, "os destinatários são a MESMA chave (ou a impressão digital não pôde ser lida): a segunda chave precisa ser independente");
+  // Prova principal: o teste de recuperação INDEPENDENTE (gpg-keys.mjs test) cobre cada chave destinatária, em chaveiro isolado.
+  let evidence = null;
+  try { evidence = JSON.parse(fs.readFileSync(path.join(home || path.join(os.homedir(), ".gnupg"), RECOVERY_EVIDENCE_FILE), "utf8")); } catch { /* sem evidência */ }
+  const proof = evaluateRecoveryEvidence(evidence, prints);
+  if (proof.ok) return item(3, label, OK, `${recipients.length} chaves distintas; recuperação independente de CADA chave comprovada há ${proof.ageDays} dia(s) (chaveiro isolado, hash igual)`);
   const secret = await sh("gpg", [...base, "--list-secret-keys", recipients[0]]);
-  if (!secret.ok) return item(3, label, UNK, "chave privada não está neste chaveiro: o teste de decifragem deve ser feito num chaveiro temporário com a chave importada da CÓPIA OFFLINE (BACKUP_GPG_HOME)");
+  if (!secret.ok) return item(3, label, UNK, `${proof.reason}; a chave privada não está neste chaveiro, então o teste ao vivo também não é possível`);
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), "menunext-gate-"));
   try {
     const plain = path.join(tmp, "amostra.txt"), enc = `${plain}.gpg`, dec = path.join(tmp, "saida.txt");
@@ -207,7 +208,7 @@ async function checkGpg(env) {
     await encryptFile(plain, enc, recipients.join(","), { homedir: home });
     await decryptFile(enc, dec, { homedir: home, passphraseFile: env.BACKUP_GPG_PASSPHRASE_FILE });
     const same = fs.readFileSync(dec, "utf8") === fs.readFileSync(plain, "utf8");
-    return item(3, label, same ? OK : FAIL, same ? `${recipients.length} chaves distintas; cifrar+decifrar de amostra OK` : "decifragem divergente");
+    return item(3, label, same ? UNK : FAIL, same ? `${proof.reason}; o teste ao vivo com a chave deste chaveiro funcionou, mas NÃO prova a recuperação independente de cada chave (rode gpg-keys.mjs test)` : "decifragem divergente");
   } catch (e) {
     return item(3, label, UNK, `teste de decifragem não concluído (${String(e.message).slice(0, 80)}); informe a frase-senha por BACKUP_GPG_PASSPHRASE_FILE`);
   } finally { fs.rmSync(tmp, { recursive: true, force: true }); }
@@ -254,7 +255,9 @@ async function checkLocalIsolation(env, { semDocker = false } = {}) {
     // PostgreSQL nativo: confere, só por leitura, em quais endereços a porta do banco descartável escuta
     if (port && !probs.length) {
       if (process.platform !== "win32") return item(8, label, UNK, "conferir manualmente que o PostgreSQL local escuta só em 127.0.0.1");
-      const r = await sh("powershell.exe", ["-NoProfile", "-Command", `(Get-NetTCPConnection -State Listen -LocalPort ${port} -ErrorAction SilentlyContinue).LocalAddress`]);
+      const ps = `$a = @(Get-NetTCPConnection -LocalPort ${port} -ErrorAction SilentlyContinue | ForEach-Object { $_.LocalAddress }); $b = @([System.Net.NetworkInformation.IPGlobalProperties]::GetIPGlobalProperties().GetActiveTcpListeners() | Where-Object { $_.Port -eq ${port} } | ForEach-Object { $_.Address.IPAddressToString }); ($a + $b) | Sort-Object -Unique`;
+      // duas fontes: em alguns ambientes (sandbox/antivírus) o estado do socket vem vazio em uma delas
+      const r = await sh("powershell.exe", ["-NoProfile", "-Command", ps]);
       const addrs = r.stdout.split(/\s+/).filter(Boolean);
       if (!addrs.length) return item(8, label, UNK, `nenhum servidor escutando na porta ${port}: inicie o PostgreSQL local descartável antes de conferir`);
       const v = evaluateListeners(addrs);

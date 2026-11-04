@@ -107,6 +107,7 @@ async function main() {
       databaseUrl: process.env.DATABASE_URL,
       outDir: path.resolve(process.env.BACKUP_DIR ?? "backups"),
       recipient: process.env.BACKUP_GPG_RECIPIENT,
+      gpgHome: process.env.BACKUP_GPG_HOME || undefined,
       schemas: (process.env.BACKUP_SCHEMAS ?? "public,auth,storage").split(",").map((s) => s.trim()).filter(Boolean),
       pgDumpCmd: splitCommand(process.env.PG_DUMP_CMD, "pg_dump"),
       pgRestoreCmd: splitCommand(process.env.PG_RESTORE_CMD, "pg_restore"),

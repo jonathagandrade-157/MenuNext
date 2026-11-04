@@ -1,7 +1,7 @@
 // Núcleo dos scripts de backup do MenuNext. Sem dependências externas: usa só Node, `gpg` e `tar`.
 // Nenhuma credencial é lida aqui: cada comando recebe o que precisa por parâmetro (vindo do ambiente do executor).
 import { createHash } from "node:crypto";
-import { createReadStream } from "node:fs";
+import { createReadStream, existsSync } from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { execFile } from "node:child_process";
@@ -27,8 +27,28 @@ export async function sha256File(file) {
   return hash.digest("hex");
 }
 
+const binCache = new Map();
+
+/**
+ * No Windows o gpg costuma vir com o Git ("...\\Git\\usr\\bin"), pasta que só está no PATH do Git Bash e NÃO no do PowerShell.
+ * Para "gpg" e "gpgconf" sem caminho: usa o PATH; se não achar, procura os lugares conhecidos. GPG_BIN_DIR força uma pasta.
+ */
+export function resolveBin(bin, env = process.env) {
+  if (process.platform !== "win32" || !/^(gpg|gpgconf)$/.test(bin)) return bin;
+  const key = `${bin}|${env.GPG_BIN_DIR ?? ""}`;
+  if (!binCache.has(key)) {
+    const onPath = (env.PATH ?? env.Path ?? "").split(";").filter(Boolean);
+    const known = ["C:\\Program Files\\Git\\usr\\bin", "C:\\Program Files (x86)\\Git\\usr\\bin", "C:\\Program Files (x86)\\GnuPG\\bin", "C:\\Program Files\\GnuPG\\bin"];
+    const dirs = [...(env.GPG_BIN_DIR ? [env.GPG_BIN_DIR] : []), ...onPath, ...known];
+    const dir = dirs.find((d) => existsSync(path.join(d, `${bin}.exe`)));
+    binCache.set(key, dir ? path.join(dir, `${bin}.exe`) : bin);
+  }
+  return binCache.get(key);
+}
+
 export function run(cmd, args, { env = {}, cwd, input } = {}) {
-  const [bin, ...prefix] = Array.isArray(cmd) ? cmd : [cmd];
+  const [rawBin, ...prefix] = Array.isArray(cmd) ? cmd : [cmd];
+  const bin = resolveBin(rawBin);
   return new Promise((resolve, reject) => {
     const child = execFile(
       bin,
@@ -243,4 +263,37 @@ export async function pruneDir(dir, prefix, now = new Date(), policy = {}, { dry
     }
   }
   return { keep, remove };
+}
+
+/** Impressão digital da chave PRINCIPAL (primeira linha `fpr:` da saída `gpg --with-colons --fingerprint`). */
+export function primaryFingerprint(colonOutput) {
+  const line = String(colonOutput).split("\n").find((l) => l.startsWith("fpr:"));
+  return line ? line.split(":")[9] : null;
+}
+
+/** Os destinatários precisam ser chaves DIFERENTES: duas vezes a mesma chave não protege contra perder a chave. */
+export function distinctRecipients(fingerprints) {
+  return fingerprints.length > 0 && fingerprints.every(Boolean) && new Set(fingerprints).size === fingerprints.length;
+}
+
+export const RECOVERY_EVIDENCE_FILE = "menunext-recovery-evidence.json";
+
+/**
+ * Confere o arquivo de EVIDÊNCIA gravado por `gpg-keys.mjs test` (sem segredo algum: só impressões digitais, hashes de dados
+ * sintéticos e datas). Vale só se cobrir TODAS as chaves destinatárias, cada uma recuperada sozinha em chaveiro isolado e
+ * com hash igual, e se não estiver velho. É uma prova de procedimento local (um arquivo pode ser forjado), não de criptografia.
+ */
+export function evaluateRecoveryEvidence(evidence, fingerprints, now = new Date(), maxAgeDays = 180) {
+  if (!evidence || !Array.isArray(evidence.keys)) return { ok: false, reason: "sem evidência de recuperação (rode gpg-keys.mjs test)" };
+  const created = new Date(evidence.createdAt);
+  if (Number.isNaN(created.getTime())) return { ok: false, reason: "evidência sem data válida" };
+  const ageDays = (now - created) / 86400000;
+  if (ageDays > maxAgeDays) return { ok: false, reason: `evidência com ${Math.floor(ageDays)} dias (limite ${maxAgeDays}); repita gpg-keys.mjs test` };
+  for (const fp of fingerprints) {
+    const k = evidence.keys.find((x) => x.fingerprint === fp);
+    if (!k) return { ok: false, reason: `a chave ${fp.slice(-16)} não consta na evidência de recuperação` };
+    if (!k.recovered || !k.sha256Before || k.sha256Before !== k.sha256After) return { ok: false, reason: `a recuperação com a chave ${fp.slice(-16)} não comprovou hash igual` };
+    if (!k.isolatedKeyring) return { ok: false, reason: `a recuperação com a chave ${fp.slice(-16)} não usou chaveiro isolado` };
+  }
+  return { ok: true, ageDays: Math.floor(ageDays), createdAt: evidence.createdAt };
 }

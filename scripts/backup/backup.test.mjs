@@ -6,16 +6,17 @@ import { fileURLToPath } from "node:url";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
   assertDisposableTarget, backupStamp, checkFreshness, gpgPath, heartbeat, parseStamp, pgEnvFromUrl, pruneDir, redact, selectRetention,
-  buildManifest, sha256File, siblingTool, splitCommand, writeManifest,
+  buildManifest, distinctRecipients, evaluateRecoveryEvidence, run, sha256File, siblingTool, splitCommand, writeManifest,
 } from "./lib.mjs";
 import { ACCEPT_PRIVILEGED, evaluateSourceRole, runDbBackup } from "./backup-db.mjs";
 import { listAllObjects, runStorageBackup, safeObjectPath } from "./backup-storage.mjs";
 import { verifyIntegrity, verifyRestorable } from "./verify-backup.mjs";
 import { syncExternal } from "./sync-external.mjs";
+import { KEY_ROLES, assertSafeExportDir, exportKeys, generateKey, listKeys, recoveryTest } from "./gpg-keys.mjs";
 import { missingR2Env, syncR2 } from "./sync-r2.mjs";
 import { assertStorageTarget, runStorageRestore } from "./restore-storage.mjs";
 import {
-  UNVERIFIABLE_WITHOUT_DOCKER, checkConfirmation, checkCredentials, checkReadOnlySource, checkSpace, distinctRecipients, evaluateGate, evaluateListeners, expectedConfirmation,
+  UNVERIFIABLE_WITHOUT_DOCKER, runGate, checkConfirmation, checkCredentials, checkReadOnlySource, checkSpace, evaluateGate, evaluateListeners, expectedConfirmation,
   primaryFingerprint,
 } from "./gate-check.mjs";
 
@@ -678,5 +679,104 @@ if (a[0] === "lsjson") console.log(JSON.stringify([{ Name: "x", Size: Number(pro
     expect(done.sent).toContain(name);
     expect(done.failed.some((f) => /tamanho remoto/.test(f.reason))).toBe(true); // o de Storage tem outro tamanho -> detectado
     delete process.env.FAKE_REMOTE_SIZE;
+  });
+});
+
+describe.skipIf(!hasGpg)("chaves GPG: duas chaves, recuperação independente (chaves descartáveis SEM frase-senha, só em teste)", () => {
+  let base;
+  let home;
+  beforeAll(async () => {
+    base = await fs.mkdtemp(path.join(os.tmpdir(), "menunext-gpgkeys-test-"));
+    home = path.join(base, "chaveiro");
+    for (const { uid } of KEY_ROLES) await generateKey({ home, uid, algo: "rsa2048", expire: "1y", promptForPassphrase: false });
+  }, 120000);
+  afterAll(async () => {
+    await run("gpgconf", ["--homedir", await gpgPath("gpg", home), "--kill", "gpg-agent"]).catch(() => {});
+    await fs.rm(base, { recursive: true, force: true });
+  });
+
+  it("gera duas chaves com impressões digitais DIFERENTES e o chaveiro dedicado não é o padrão", async () => {
+    const keys = await listKeys({ home });
+    expect(keys.map((k) => k.role)).toEqual(["principal", "emergencia"]);
+    expect(distinctRecipients(keys.map((k) => k.fingerprint))).toBe(true);
+    expect(keys.every((k) => k.hasSecret && /^[0-9A-F]{40}$/.test(k.fingerprint))).toBe(true);
+    expect(path.resolve(home)).not.toBe(path.join(os.homedir(), ".gnupg"));
+  }, 60000);
+
+  it("exportação recusa pastas sincronizadas ou do repositório e grava públicas, privadas, revogações e hashes", async () => {
+    const opts = { repoRoot: path.join(base, "repo"), home: path.join(base, "perfil"), env: {} };
+    for (const bad of [path.join(opts.repoRoot, "chaves"), path.join(opts.home, "Documents", "k"), path.join(opts.home, "OneDrive", "k"), path.join(opts.home, "Desktop")]) {
+      expect(() => assertSafeExportDir(bad, opts)).toThrow(/recusado/);
+    }
+    expect(() => assertSafeExportDir(path.join(base, "pen-drive"), opts)).not.toThrow();
+    const out = path.join(base, "pen-drive");
+    const r = await exportKeys({ home, outDir: out, promptForPassphrase: false, safetyOptions: opts });
+    expect(r.files.sort()).toEqual(["chave-privada-emergencia.asc", "chave-privada-principal.asc", "chave-publica-emergencia.asc", "chave-publica-principal.asc", "revogacao-emergencia.txt", "revogacao-principal.txt"]);
+    expect(await fs.readFile(path.join(out, "HASHES-SHA256.txt"), "utf8")).toMatch(/^[0-9a-f]{64} {2}chave-privada-principal\.asc/m);
+    expect(await fs.readFile(path.join(out, "chave-privada-principal.asc"), "utf8")).toContain("BEGIN PGP PRIVATE KEY BLOCK");
+    expect(await fs.readFile(path.join(out, "chave-publica-principal.asc"), "utf8")).not.toContain("PRIVATE");
+  }, 60000);
+
+  it("CADA chave recupera os dados sozinha, em chaveiro isolado e vazio, com hash igual; chaveiro vazio não abre", async () => {
+    const ev = await recoveryTest({ home, keysDir: path.join(base, "pen-drive"), promptForPassphrase: false, now: new Date("2026-11-04T12:00:00Z") });
+    expect(ev.keys).toHaveLength(2);
+    for (const k of ev.keys) {
+      expect(k.recovered).toBe(true);
+      expect(k.isolatedKeyring).toBe(true);
+      expect(k.sha256Before).toMatch(/^[0-9a-f]{64}$/);
+      expect(k.sha256After).toBe(k.sha256Before);
+    }
+    expect(ev.emptyKeyringDenied).toBe(true);
+    const saved = JSON.parse(await fs.readFile(path.join(home, "menunext-recovery-evidence.json"), "utf8"));
+    expect(JSON.stringify(saved)).not.toMatch(/PRIVATE KEY|passphrase|frase/i);
+    // a mesma evidência é aceita pelo portão para estas duas chaves, e só enquanto estiver recente
+    const prints = ev.keys.map((k) => k.fingerprint);
+    expect(evaluateRecoveryEvidence(saved, prints, new Date("2026-11-10T00:00:00Z")).ok).toBe(true);
+    expect(evaluateRecoveryEvidence(saved, prints, new Date("2027-06-10T00:00:00Z")).reason).toMatch(/dias/);
+  }, 120000);
+
+  it("portão, item 3: com a evidência de recuperação das duas chaves fica OK; sem ela (ou com a chave de emergência ausente) não", async () => {
+    const keys = await listKeys({ home });
+    const recipients = keys.map((k) => k.fingerprint).join(",");
+    const env = { ...process.env, BACKUP_GPG_HOME: home, BACKUP_GPG_RECIPIENT: recipients };
+    const item3 = async (e) => (await runGate({ env: e, semDocker: true })).find((i) => i.id === 3);
+    const ok = await item3(env);
+    expect(ok.status).toBe("OK");
+    expect(ok.detail).toMatch(/recuperação independente de CADA chave/);
+    expect((await item3({ ...env, BACKUP_GPG_RECIPIENT: keys[0].fingerprint })).status).toBe("FALHA"); // uma chave só
+    expect((await item3({ ...env, BACKUP_GPG_RECIPIENT: `${keys[0].fingerprint},${keys[0].fingerprint}` })).detail).toMatch(/MESMA chave/);
+    const evidence = path.join(home, "menunext-recovery-evidence.json");
+    const saved = await fs.readFile(evidence, "utf8");
+    try {
+      await fs.rm(evidence);
+      const without = await item3(env);
+      expect(without.status).not.toBe("OK"); // sem evidência: o teste ao vivo exige frase-senha ou passa só com chave sem proteção
+    } finally { await fs.writeFile(evidence, saved); }
+  }, 120000);
+
+  it("recuperação falha (e nenhuma evidência nova é gravada) quando a privada exportada não é a da chave", async () => {
+    const swapped = path.join(base, "trocado");
+    await fs.mkdir(swapped);
+    await fs.copyFile(path.join(base, "pen-drive", "chave-privada-principal.asc"), path.join(swapped, "chave-privada-principal.asc"));
+    await fs.copyFile(path.join(base, "pen-drive", "chave-privada-principal.asc"), path.join(swapped, "chave-privada-emergencia.asc")); // errada
+    await fs.rm(path.join(home, "menunext-recovery-evidence.json"));
+    const ev = await recoveryTest({ home, keysDir: swapped, promptForPassphrase: false });
+    expect(ev.keys.find((k) => k.role === "principal").recovered).toBe(true);
+    const emergencia = ev.keys.find((k) => k.role === "emergencia");
+    expect(emergencia.recovered).toBe(true); // a chave principal também abre o arquivo (ele foi cifrado para as duas)...
+    expect(emergencia.isolatedKeyring).toBe(false); // ...mas o chaveiro "da emergência" contém a OUTRA chave: isolamento reprovado
+    await expect(fs.access(path.join(home, "menunext-recovery-evidence.json"))).rejects.toThrow();
+  }, 120000);
+
+  it("evaluateRecoveryEvidence exige todas as chaves, hash igual, chaveiro isolado e prazo", () => {
+    const fp = ["A".repeat(40), "B".repeat(40)];
+    const k = (f, extra = {}) => ({ fingerprint: f, recovered: true, isolatedKeyring: true, sha256Before: "x", sha256After: "x", ...extra });
+    const ev = { createdAt: "2026-11-04T00:00:00Z", keys: [k(fp[0]), k(fp[1])] };
+    const now = new Date("2026-11-05T00:00:00Z");
+    expect(evaluateRecoveryEvidence(ev, fp, now).ok).toBe(true);
+    expect(evaluateRecoveryEvidence(null, fp, now).ok).toBe(false);
+    expect(evaluateRecoveryEvidence({ ...ev, keys: [k(fp[0])] }, fp, now).reason).toMatch(/não consta/);
+    expect(evaluateRecoveryEvidence({ ...ev, keys: [k(fp[0]), k(fp[1], { sha256After: "y" })] }, fp, now).reason).toMatch(/hash igual/);
+    expect(evaluateRecoveryEvidence({ ...ev, keys: [k(fp[0]), k(fp[1], { isolatedKeyring: false })] }, fp, now).reason).toMatch(/isolado/);
   });
 });
