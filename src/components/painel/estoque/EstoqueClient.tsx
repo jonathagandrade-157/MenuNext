@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { EmptyState, ErrorState } from "@/components/ui/States";
 import { Modal } from "@/components/ui/Modal";
-import { recordStockMovementAction, setStockThresholdAction } from "@/lib/actions/stock";
+import { recordStockMovementAction, setStockAutoDeductAction, setStockThresholdAction } from "@/lib/actions/stock";
 import {
   STOCK_KINDS,
   STOCK_KIND_LABELS,
   STOCK_NOTE_MAX_LENGTH,
   STOCK_STATUS_LABELS,
   summarizeStock,
-  type StockMovementKind,
+  type ManualStockKind,
   type StockMovementRow,
   type StockRow,
 } from "@/lib/stock";
@@ -38,12 +38,12 @@ function formatWhen(iso: string) {
     : date.toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
 }
 
-export function EstoqueClient({ rows, movements }: { rows: StockRow[]; movements: StockMovementRow[] }) {
+export function EstoqueClient({ rows, movements, autoDeduct }: { rows: StockRow[]; movements: StockMovementRow[]; autoDeduct: boolean | null }) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<Filter>("all");
   const [moving, setMoving] = useState<StockRow | null>(null);
   const [limiting, setLimiting] = useState<StockRow | null>(null);
-  const [kind, setKind] = useState<StockMovementKind>("entry");
+  const [kind, setKind] = useState<ManualStockKind>("entry");
   const [quantity, setQuantity] = useState("");
   const [note, setNote] = useState("");
   const [threshold, setThreshold] = useState("");
@@ -114,8 +114,28 @@ export function EstoqueClient({ rows, movements }: { rows: StockRow[]; movements
       </div>
 
       <Card className="border-amber/30 bg-amber/5 p-4 text-body-md text-graphite">
-        O estoque é um controle interno: <strong>ele não baixa sozinho com as vendas</strong> e não impede pedidos. Para
-        tirar um produto do ar, use a disponibilidade em Produtos.
+        {autoDeduct
+          ? "A baixa automática está LIGADA: cada item vendido (a partir de quando você ligou) sai do saldo e o cancelamento devolve. O estoque nunca bloqueia um pedido; a venda acima do saldo zera o produto."
+          : "O estoque é um controle interno: ele não baixa sozinho com as vendas e não impede pedidos. Para tirar um produto do ar, use a disponibilidade em Produtos."}
+        {autoDeduct !== null && (
+          <div className="mt-3">
+            <Button
+              size="sm"
+              variant="secondary"
+              disabled={isPending}
+              onClick={() => {
+                setError(null);
+                startTransition(async () => {
+                  const result = await setStockAutoDeductAction(!autoDeduct);
+                  if (!result.ok) setError(result.error);
+                });
+              }}
+            >
+              {autoDeduct ? "Desligar baixa automática" : "Ligar baixa automática"}
+            </Button>
+          </div>
+        )}
+        {error && !moving && !limiting && <div className="mt-3"><ErrorState message={error} /></div>}
       </Card>
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -250,7 +270,7 @@ export function EstoqueClient({ rows, movements }: { rows: StockRow[]; movements
           )}
           <label className="block space-y-1">
             <span className="text-label-md text-graphite">Tipo</span>
-            <select value={kind} onChange={(e) => setKind(e.target.value as StockMovementKind)} className={INPUT}>
+            <select value={kind} onChange={(e) => setKind(e.target.value as ManualStockKind)} className={INPUT}>
               {STOCK_KINDS.map((k) => (
                 <option key={k} value={k}>
                   {STOCK_KIND_LABELS[k]}

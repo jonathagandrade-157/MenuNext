@@ -6,5 +6,5 @@ export default async function EstoquePage() {
   // Estoque é do OWNER (mesmo padrão de categorias/combos): STAFF volta para /painel.
   const { supabase, restaurant } = await requireOwnerPage();
   const overview = await getStockOverview(supabase, restaurant.id);
-  return <EstoqueClient rows={overview.rows} movements={overview.movements} />;
+  return <EstoqueClient rows={overview.rows} movements={overview.movements} autoDeduct={overview.autoDeduct} />;
 }
