@@ -8,6 +8,7 @@ import {
   KANBAN_COLUMNS,
   getElapsedMinutesSince,
   getKanbanColumnForStatus,
+  getActiveOrdersForKanban,
   getOrderWithItems,
   normalizeOrderFields,
   orderTrackingChannelName,
@@ -15,6 +16,10 @@ import {
   type OrderWithItems,
 } from "@/lib/orders";
 import { playNewOrderChime } from "@/lib/sound";
+import {
+  POLL_WHILE_DISCONNECTED_MS, claimNotification, connectionFromChannelStatus, countPendingOrders, planResync, shouldResync, titleWithPending,
+  type ConnectionState,
+} from "@/lib/orderSync";
 import { OrderCard } from "./OrderCard";
 import { OrderDetailModal } from "./OrderDetailModal";
 
@@ -95,8 +100,45 @@ export function KanbanBoard({
     return () => clearInterval(interval);
   }, [showElapsedTime]);
 
+  // Notificação única por pedido (evento repetido, reconexão e resincronização nunca avisam duas vezes).
+  const notifiedRef = useRef<Set<string>>(new Set(initialOrders.map((o) => o.id)));
+  const ordersRef = useRef(orders);
+  useEffect(() => {
+    ordersRef.current = orders;
+  }, [orders]);
+  const lastResyncRef = useRef<number | null>(null);
+  const [connection, setConnection] = useState<ConnectionState>("connecting");
+
+  const highlightNew = useCallback((ids: string[]) => {
+    if (ids.length === 0) return;
+    setNewOrderIds((prev) => new Set([...prev, ...ids]));
+    if (soundEnabledRef.current) playNewOrderChime();
+    setTimeout(() => {
+      setNewOrderIds((prev) => {
+        const next = new Set(prev);
+        for (const id of ids) next.delete(id);
+        return next;
+      });
+    }, NEW_ORDER_HIGHLIGHT_MS);
+  }, []);
+
+  // A lista do banco é a verdade: após queda de conexão, volta de aba ou rede, busca de novo e avisa só o que é novo.
+  const resync = useCallback(async () => {
+    if (!shouldResync(lastResyncRef.current, Date.now())) return;
+    lastResyncRef.current = Date.now();
+    try {
+      const fetched = await getActiveOrdersForKanban(supabaseRef.current, restaurantId);
+      const plan = planResync(ordersRef.current, fetched, notifiedRef.current);
+      setOrders(plan.orders);
+      highlightNew(plan.newOrderIds);
+    } catch {
+      // Falha de rede: o estado atual da tela é mantido e a próxima tentativa (reconexão/poll) corrige.
+    }
+  }, [restaurantId, highlightNew]);
+
   useEffect(() => {
     const supabase = supabaseRef.current;
+    let connectedOnce = false;
 
     const channel = supabase
       .channel(`${channelPrefix}-orders-${restaurantId}`)
@@ -105,18 +147,22 @@ export function KanbanBoard({
         { event: "INSERT", schema: "public", table: "orders", filter: `restaurant_id=eq.${restaurantId}` },
         async (payload) => {
           const orderId = (payload.new as { id: string }).id;
-          const full = await getOrderWithItems(supabase, orderId);
-          if (!full) return;
-          setOrders((prev) => (prev.some((o) => o.id === full.id) ? prev : [...prev, full]));
-          setNewOrderIds((prev) => new Set(prev).add(full.id));
-          if (soundEnabledRef.current) playNewOrderChime();
-          setTimeout(() => {
-            setNewOrderIds((prev) => {
-              const next = new Set(prev);
-              next.delete(full.id);
-              return next;
-            });
-          }, NEW_ORDER_HIGHLIGHT_MS);
+          if (!claimNotification(notifiedRef.current, orderId)) return;
+          let full: OrderWithItems | null = null;
+          try {
+            full = await getOrderWithItems(supabase, orderId);
+          } catch {
+            full = null;
+          }
+          if (!full) {
+            // Não conseguiu ler agora: libera o aviso e deixa a ressincronização trazer o pedido.
+            notifiedRef.current.delete(orderId);
+            void resync();
+            return;
+          }
+          const loaded = full;
+          setOrders((prev) => (prev.some((o) => o.id === loaded.id) ? prev : [...prev, loaded]));
+          highlightNew([loaded.id]);
         }
       )
       .on(
@@ -132,12 +178,45 @@ export function KanbanBoard({
           });
         }
       )
-      .subscribe();
+      .subscribe((status) => {
+        setConnection(connectionFromChannelStatus(status));
+        if (status === "SUBSCRIBED") {
+          // Reconexão (não a primeira): pedidos podem ter chegado durante a queda.
+          if (connectedOnce) void resync();
+          connectedOnce = true;
+        }
+      });
 
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [restaurantId, channelPrefix]);
+  }, [restaurantId, channelPrefix, resync, highlightNew]);
+
+  // Aba em segundo plano/rede que volta: ressincroniza. Enquanto desconectado, também consulta a cada 15 s.
+  useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === "visible") void resync();
+    };
+    const onOnline = () => void resync();
+    document.addEventListener("visibilitychange", onVisible);
+    window.addEventListener("online", onOnline);
+    const poll = connection === "live" ? null : setInterval(() => void resync(), POLL_WHILE_DISCONNECTED_MS);
+    return () => {
+      document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("online", onOnline);
+      if (poll) clearInterval(poll);
+    };
+  }, [connection, resync]);
+
+  // Contador de pedidos novos no título da aba.
+  const pendingCount = countPendingOrders(orders);
+  useEffect(() => {
+    const base = document.title.replace(/^\(\d+\+?\)\s/, "");
+    document.title = titleWithPending(base, pendingCount);
+    return () => {
+      document.title = base;
+    };
+  }, [pendingCount]);
 
   const handleAdvance = useCallback(async (order: OrderWithItems) => {
     setErrorMessage(null);
@@ -250,6 +329,16 @@ export function KanbanBoard({
           {soundEnabled ? <Volume2 className="h-4 w-4" aria-hidden /> : <VolumeX className="h-4 w-4" aria-hidden />}
           {soundEnabled ? "Som ativado" : "Som desativado"}
         </button>
+        <span
+          role="status"
+          aria-live="polite"
+          className={`flex h-10 shrink-0 items-center gap-1.5 rounded-xl px-3 text-label-md ${
+            connection === "live" ? "bg-emerald/10 text-emerald" : "bg-amber/10 text-amber-strong"
+          }`}
+        >
+          <span className={`h-2 w-2 rounded-full bg-current ${connection === "live" ? "" : "animate-pulse"}`} aria-hidden />
+          {connection === "live" ? "Ao vivo" : connection === "connecting" ? "Conectando..." : "Reconectando..."}
+        </span>
       </div>
 
       {errorMessage && (
