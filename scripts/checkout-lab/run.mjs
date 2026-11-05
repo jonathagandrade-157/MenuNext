@@ -78,10 +78,12 @@ try {
   }
 
   let total = 0;
-  const candidates = ["automatic_promotions.sql", "cash_sessions.sql", "checkout_public_protection.sql", "rate_limits.sql", "roles_owner_staff.sql"];
-  const suites = candidates.filter((name) => fs.existsSync(path.join(root, "supabase/tests", name)));
+  // Todas as suites de supabase/tests rodam (isolamento entre lojas, privilegios, storage, cobranca, checkout...).
+  const suites = fs.readdirSync(path.join(root, "supabase/tests")).filter((f) => f.endsWith(".sql")).sort();
   if (suites.length === 0) throw new Error("nenhuma suite SQL encontrada");
   for (const name of suites) {
+    // tenant_isolation.sql precisa de lojas e usuarios pre-existentes (em producao ja existem); aqui sao sinteticos.
+    if (name === "tenant_isolation.sql") file(path.join(here, "seed-tenants.sql"));
     const result = spawnSync(tool("psql"), ["-X", "-v", "ON_ERROR_STOP=1", "-f", path.join(root, "supabase/tests", name)], { env, encoding: "utf8" });
     const output = `${result.stdout || ""}\n${result.stderr || ""}`;
     // Estas suites encerram por RAISE EXCEPTION para desfazer TODOS os dados sinteticos.
