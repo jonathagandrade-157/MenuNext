@@ -34,3 +34,25 @@ jobs:
       - run: npx tsc --noEmit
       - name: Smoke HTTP do build com configuracao sintetica
         run: node scripts/smoke-public.mjs
+
+  checkout-sql:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Preparar PostgreSQL 17 nativo (sem Docker)
+        run: |
+          if [ ! -x /usr/lib/postgresql/17/bin/postgres ]; then
+            sudo install -d /usr/share/postgresql-common/pgdg
+            curl --fail --silent --show-error https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /usr/share/postgresql-common/pgdg/apt.postgresql.org.asc >/dev/null
+            echo "deb [signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt noble-pgdg main" | sudo tee /etc/apt/sources.list.d/pgdg.list >/dev/null
+            sudo apt-get update -qq
+            sudo apt-get install -y -qq postgresql-17
+          fi
+      - name: Validar migrations e checkout com dados sinteticos
+        run: node scripts/checkout-lab/run.mjs

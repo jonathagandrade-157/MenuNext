@@ -8,6 +8,8 @@ import { getPublicProductDetail, type PublicProductDetail } from "@/lib/store";
 import { getPublicAssetUrl } from "@/lib/storage/assets";
 import { friendlyOrderError } from "@/lib/orderErrors";
 import { getCurrentCashSession } from "@/lib/cash";
+import { callPublicRpc } from "@/lib/publicRpc";
+import { isValidItemsShape } from "@/lib/checkoutInput";
 import type { PromotionPreview } from "@/lib/actions/promotionPreview";
 import type { CreateOrderItemPayload } from "@/lib/checkout";
 
@@ -35,6 +37,9 @@ export type CounterOrderResult =
  * sessão aqui fora, a checagem real é sempre no servidor/banco.
  */
 export async function createCounterOrderAction(input: CounterOrderInput): Promise<CounterOrderResult> {
+  if (!isValidItemsShape(input?.items)) {
+    return { status: "error", message: "Não foi possível finalizar a venda. Revise os itens e tente novamente." };
+  }
   const supabase = await createClient();
   const {
     data: { user },
@@ -53,11 +58,12 @@ export async function createCounterOrderAction(input: CounterOrderInput): Promis
   }
   if (!cashSession) return { status: "error", message: "Abra o caixa antes de registrar vendas." };
 
-  const { data, error } = await supabase.rpc("create_order", {
+  // create_order não é mais executável por usuários logados (só pelo servidor): a venda de balcão entra por
+  // create_counter_order, que continua usando a sessão do membro e repassa para create_order(counter).
+  const { data, error } = await supabase.rpc("create_counter_order", {
     p_slug: restaurant.slug,
     p_customer_name: input.customerName,
     p_customer_phone: input.customerPhone,
-    p_fulfillment_type: "counter",
     p_payment_method: input.paymentMethod,
     p_items: input.items,
     p_idempotency_key: input.idempotencyKey,
@@ -115,7 +121,11 @@ export async function previewCounterPromotionAction(subtotal: number): Promise<P
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) return null;
 
-  const { data, error } = await supabase.rpc("preview_promotion", { p_slug: restaurant.slug, p_subtotal: subtotal });
+  // A loja vem do membro logado (getMyRestaurant); a leitura em si roda pelo servidor.
+  const { data, error } = await callPublicRpc<{ name: string; discount_amount: string | number }[]>("preview_promotion", {
+    p_slug: restaurant.slug,
+    p_subtotal: subtotal,
+  });
   if (error) return null;
   const row = data?.[0];
   return row ? { name: String(row.name), discountAmount: Number(row.discount_amount) } : null;
@@ -148,7 +158,11 @@ export async function validateCounterCouponAction(code: string, subtotal: number
   const restaurant = await getMyRestaurant(supabase);
   if (!restaurant) redirect("/onboarding/passo-1");
 
-  const { data, error } = await supabase.rpc("validate_coupon", { p_slug: restaurant.slug, p_code: code, p_subtotal: subtotal });
+  const { data, error } = await callPublicRpc<{ code: string; discount_amount: string | number }[]>("validate_coupon", {
+    p_slug: restaurant.slug,
+    p_code: code,
+    p_subtotal: subtotal,
+  });
   if (error) return { status: "error", message: friendlyCouponValidationError(error.message) };
 
   const row = data?.[0];

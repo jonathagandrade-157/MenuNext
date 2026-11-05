@@ -498,29 +498,52 @@ begin
   -- FASE 5 — checkout publico, cupom e venda de balcao (nao podem quebrar)
   -- ============================================================
   insert into _cases (phase, persona, expect, label, stmt, verify) values
-   (5,'anon','allow','CHECKOUT: anon cria pedido com cupom (create_order escreve em coupons como SECURITY DEFINER)',
+   (5,'service','allow','CHECKOUT: pedido do cliente chega pelo servidor (service_role) com cupom (create_order escreve em coupons como SECURITY DEFINER)',
     format($s$ select * from public.create_order(%L, 'Cliente', '11988887777', 'pickup', 'cash', %L::jsonb, 'roles-co-1', null, null, null, null, null, null, null, null, null, null, null, 'ROLES10') $s$,
            slug_a, jsonb_build_array(jsonb_build_object('product_id', prod_a, 'quantity', 1))::text),
     format($v$ (select uses_count = 1 from public.coupons where id = %L) $v$, coupon_a)),
-   (5,'staff_a','allow','CHECKOUT: STAFF logado tambem compra na propria loja usando cupom (nao pode ser barrado pelo guarda)',
+   (5,'service','allow','CHECKOUT: funcionario comprando como cliente tambem passa pelo servidor com cupom (sem JWT de usuario o guarda nao interfere)',
     format($s$ select * from public.create_order(%L, 'Funcionario', '11977776666', 'pickup', 'cash', %L::jsonb, 'roles-co-2', null, null, null, null, null, null, null, null, null, null, null, 'ROLES10') $s$,
            slug_a, jsonb_build_array(jsonb_build_object('product_id', prod_a, 'quantity', 1))::text),
     format($v$ (select uses_count = 2 from public.coupons where id = %L) $v$, coupon_a)),
    (5,'staff_a','allow','VENDA DE BALCAO: STAFF registra venda de balcao da propria loja',
-    format($s$ select * from public.create_order(%L, 'Balcao', '11966665555', 'counter', 'cash', %L::jsonb, 'roles-co-3') $s$,
+    format($s$ select * from public.create_counter_order(%L, 'Balcao', '11966665555', 'cash', %L::jsonb, 'roles-co-3') $s$,
            slug_a, jsonb_build_array(jsonb_build_object('product_id', prod_a, 'quantity', 1))::text),
     format($v$ (select count(*) from public.orders where restaurant_id = %L and idempotency_key = 'roles-co-3') = 1 $v$, r_a)),
    (5,'owner_a','allow','VENDA DE BALCAO: OWNER registra venda de balcao',
-    format($s$ select * from public.create_order(%L, 'Balcao', '11955554444', 'counter', 'cash', %L::jsonb, 'roles-co-4') $s$,
+    format($s$ select * from public.create_counter_order(%L, 'Balcao', '11955554444', 'cash', %L::jsonb, 'roles-co-4') $s$,
            slug_a, jsonb_build_array(jsonb_build_object('product_id', prod_a, 'quantity', 1))::text), null);
   insert into _cases (phase, persona, expect, label, stmt, verify) values
    (5,'staff_a','allow','STAFF desliga a disponibilidade do produto no balcao',
     format('update public.products set is_available = false where id = %L', prod_a2),
     format($v$ (select not is_available from public.products where id = %L) $v$, prod_a2));
   insert into _cases (phase, persona, expect, needle, label, stmt) values
-   (5,'anon','deny','product_unavailable','CHECKOUT: produto desligado pelo STAFF e recusado ao cliente',
+   (5,'service','deny','product_unavailable','CHECKOUT: produto desligado pelo STAFF e recusado ao cliente',
     format($s$ select * from public.create_order(%L, 'Cliente', '11988887777', 'pickup', 'cash', %L::jsonb, 'roles-co-5') $s$,
-           slug_a, jsonb_build_array(jsonb_build_object('product_id', prod_a2, 'quantity', 1))::text));
+           slug_a, jsonb_build_array(jsonb_build_object('product_id', prod_a2, 'quantity', 1))::text)),
+   (5,'anon','deny','permission denied','CHAMADA DIRETA: anon NAO executa create_order pela API',
+    format($s$ select * from public.create_order(%L, 'Cliente', '11988887777', 'pickup', 'cash', %L::jsonb, 'roles-co-6') $s$,
+           slug_a, jsonb_build_array(jsonb_build_object('product_id', prod_a, 'quantity', 1))::text)),
+   (5,'staff_a','deny','permission denied','CHAMADA DIRETA: STAFF logado NAO executa create_order pela API (balcao so por create_counter_order)',
+    format($s$ select * from public.create_order(%L, 'Balcao', '11966665555', 'counter', 'cash', %L::jsonb, 'roles-co-7') $s$,
+           slug_a, jsonb_build_array(jsonb_build_object('product_id', prod_a, 'quantity', 1))::text)),
+   (5,'owner_a','deny','permission denied','CHAMADA DIRETA: OWNER NAO executa validate_coupon nem preview pela API',
+    $s$ select * from public.validate_coupon('x', 'ROLES10', 10) $s$),
+   (5,'anon','deny','permission denied','CHAMADA DIRETA: anon NAO executa preview_promotion pela API',
+    $s$ select * from public.preview_promotion('x', 10) $s$),
+   (5,'anon','deny','permission denied','CHAMADA DIRETA: anon NAO consulta CPF/CNPJ (is_document_eligible)',
+    $s$ select public.is_document_eligible('52998224725') $s$),
+   (5,'stranger','deny','permission denied','CHAMADA DIRETA: usuario logado qualquer NAO consulta CPF/CNPJ',
+    $s$ select public.is_document_eligible('52998224725') $s$),
+   (5,'anon','deny','permission denied','BALCAO: anon NAO executa create_counter_order',
+    format($s$ select * from public.create_counter_order(%L, 'Balcao', '11966665555', 'cash', %L::jsonb, 'roles-co-8') $s$,
+           slug_a, jsonb_build_array(jsonb_build_object('product_id', prod_a, 'quantity', 1))::text)),
+   (5,'stranger','deny','not_authorized','BALCAO: usuario sem vinculo com a loja NAO registra venda de balcao nela',
+    format($s$ select * from public.create_counter_order(%L, 'Balcao', '11966665555', 'cash', %L::jsonb, 'roles-co-9') $s$,
+           slug_a, jsonb_build_array(jsonb_build_object('product_id', prod_a, 'quantity', 1))::text)),
+   (5,'owner_b','deny','not_authorized','BALCAO: OWNER da loja B NAO registra venda de balcao na loja A',
+    format($s$ select * from public.create_counter_order(%L, 'Balcao', '11966665555', 'cash', %L::jsonb, 'roles-co-10') $s$,
+           slug_a, jsonb_build_array(jsonb_build_object('product_id', prod_a, 'quantity', 1))::text));
 
   -- ---------- execucao ----------
   for v_phase in 0..5 loop

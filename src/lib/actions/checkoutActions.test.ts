@@ -37,6 +37,7 @@ vi.mock("@/lib/storage/assets", () => ({ getPublicAssetUrl: () => "" }));
 
 import { submitOrderAction, type SubmitOrderInput } from "./orders";
 import { validateCouponAction } from "./couponValidate";
+import { createCounterOrderAction } from "./counterOrders";
 
 const order: SubmitOrderInput = {
   slug: "loja-a",
@@ -157,6 +158,26 @@ describe("validateCouponAction", () => {
     h.storeLimit.mockResolvedValue({ allowed: false, retryAfterSeconds: 30 });
     const result = await validateCouponAction("loja-a", "x", 50);
     expect(result.status).toBe("error");
+    expect(h.publicRpc).not.toHaveBeenCalled();
+  });
+});
+
+describe("createCounterOrderAction (PDV, membro logado)", () => {
+  it("usa a sessão do membro e create_counter_order, nunca o caminho do servidor", async () => {
+    h.sessionRpc.mockResolvedValue({ data: [{ public_id: "pub-9", order_number: 3 }], error: null });
+    const result = await createCounterOrderAction({
+      customerName: "",
+      customerPhone: "",
+      paymentMethod: "cash",
+      changeFor: null,
+      observation: "",
+      items: [{ product_id: "p1", quantity: 1, addon_ids: [], observation: "" }] as never,
+      idempotencyKey: "k-counter",
+      couponCode: null,
+    });
+    expect(result).toEqual({ status: "success", publicId: "pub-9", orderNumber: 3 });
+    expect(h.sessionRpc.mock.calls[0][0]).toBe("create_counter_order");
+    expect(h.sessionRpc.mock.calls[0][1]).toMatchObject({ p_slug: "loja-a", p_idempotency_key: "k-counter" });
     expect(h.publicRpc).not.toHaveBeenCalled();
   });
 });
