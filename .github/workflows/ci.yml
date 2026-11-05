@@ -32,6 +32,8 @@ jobs:
       # por isso o tsc roda depois dele.
       - run: npm run build
       - run: npx tsc --noEmit
+      - name: Smoke HTTP do build com configuracao sintetica
+        run: node scripts/smoke-public.mjs
 
   checkout-sql:
     runs-on: ubuntu-24.04
