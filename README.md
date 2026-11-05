@@ -20,12 +20,13 @@ Outros scripts: `npm run build`, `npm run lint`, `npm test`.
 
 ### Variáveis de ambiente
 
-Ver `.env.example` (todas comentadas). Só as duas do Supabase são obrigatórias:
+Ver `.env.example` (todas comentadas). Para a loja e o painel basta o par do Supabase, **mas o checkout público, a validação de cupom, a prévia de promoção e o cadastro dependem também de `SUPABASE_SERVICE_ROLE_KEY`** (ver abaixo). Obrigatórias:
 
 - `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` — projeto Supabase.
 - `GOOGLE_MAPS_GEOCODING_API_KEY` — opcional; sem ela o frete "Por KM" fica indisponível e a taxa fixa continua funcionando.
 - `ASAAS_API_KEY` e `ASAAS_ENV` (`sandbox` por padrão, ou `production`) — opcionais; sem a chave, "Assinar plano" mostra um aviso em vez de fingir sucesso. Nunca prefixar com `NEXT_PUBLIC_`.
-- `SUPABASE_SERVICE_ROLE_KEY` e `CRON_SECRET` — só para a cobrança (registro da assinatura provada na API do Asaas e reconciliação diária). Sem elas a cobrança fica desligada. Servidor apenas: nunca prefixar com `NEXT_PUBLIC_`, nunca commitar.
+- `SUPABASE_SERVICE_ROLE_KEY` — **obrigatória para o pedido online.** Depois da migration `20261027020000_revoke_public_checkout_rpcs`, `create_order`, `validate_coupon`, `preview_promotion` e `is_document_eligible` só são executáveis pelo servidor do app (é ele que aplica os limites de tentativas). **Sem esta chave o checkout público falha fechado** ("O pedido online está indisponível") e o cadastro pula a pré-checagem de CPF/CNPJ. Também serve à cobrança e ao contador de tentativas. Servidor apenas: nunca prefixar com `NEXT_PUBLIC_`, nunca commitar. Em desenvolvimento local, defina-a no `.env.local`.
+- `CRON_SECRET` — só para a reconciliação diária da cobrança. Sem ele a cobrança fica desligada.
 
 ### Cobrança (Asaas)
 
@@ -44,6 +45,10 @@ A assinatura do lojista é cobrada pelo Asaas (o pedido do cliente final continu
 **Proteção das colunas de cobrança:** `supabase/tests/restaurant_billing_columns.sql` (145 verificações) garante que nenhum usuário da API (OWNER, STAFF, outra loja ou anônimo) altera `plan_id`, `subscription_status` e demais colunas de cobrança de `restaurants`, que os fluxos legítimos continuam funcionando e que a segunda camada (trigger) barra mesmo com um `GRANT` amplo. **Rode só em banco isolado** (ele cria usuários em `auth.users`); não use contra a produção.
 
 **Cobrança de assinaturas:** `supabase/tests/billing_subscriptions.sql` (192 verificações) garante que o acesso pago só é liberado por pagamento confirmado em evento autenticado do provedor: IDs inventados, cobrança pendente, atraso, duplicidade, evento fora de ordem, chargeback, cancelamento com período pago, renovação, reconciliação, webhook inválido, tentativas de OWNER/STAFF, isolamento entre restaurantes e checkout dos clientes intocado. Mesma regra: **só em banco isolado**. Modelo e regras de manutenção em [docs/seguranca/cobranca-de-assinaturas.md](docs/seguranca/cobranca-de-assinaturas.md).
+
+**Proteção do checkout público:** `supabase/tests/checkout_public_protection.sql` (51 verificações) garante que visitante, usuário logado, OWNER e STAFF **não** executam `create_order`, `validate_coupon`, `preview_promotion` nem `is_document_eligible` direto pela API; que o caminho do servidor (service_role) continua criando pedidos com idempotência, cupom consumido uma única vez e produto de outra loja recusado; que a venda de balcão só entra por `create_counter_order` (membro da própria loja); e que a retaguarda do banco barra rajadas de pedidos online (por telefone e por loja). **Rode só em banco isolado.**
+
+**Backup e restauração:** ver [scripts/backup/README.md](scripts/backup/README.md). Roteiro de validação manual do fluxo completo: [docs/operacao/smoke-test-beta.md](docs/operacao/smoke-test-beta.md).
 
 **Laboratório SQL no CI:** `node scripts/checkout-lab/run.mjs` sobe um PostgreSQL 17 nativo descartável (só dados sintéticos, nenhuma conexão com o Supabase), aplica todas as migrations e roda as suítes de `supabase/tests`. É o job `checkout-sql` do CI. Prova SQL/RLS, **não** a plataforma Supabase hospedada. Ver [scripts/checkout-lab/README.md](scripts/checkout-lab/README.md).
 
