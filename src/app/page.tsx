@@ -51,16 +51,16 @@ const MODULES = [
   { title: "Cardápio Digital Interativo", description: "Fotos, variações de tamanhos, grupos de adicionais obrigatórios ou opcionais e combos." },
   { title: "Pedidos em Tempo Real", description: "Alerta sonoro para você nunca perder um pedido. Painel visual em Kanban para agilizar o despacho." },
   { title: "Delivery Próprio & Bairros", description: "Configure taxa fixa, cálculo por bairro atendido ou retirada no balcão sem cobrança de frete." },
-  { title: "Pix Automático & Direto", description: "Seu cliente paga com Pix Copia e Cola direto na sua chave, sem intermediários retendo recebíveis." },
-  { title: "Cupons & Campanhas", description: "Crie cupons de primeira compra, porcentagem ou desconto fixo para reativar clientes inativos." },
-  { title: "Base de Clientes Própria", description: "Nome, telefone, histórico de compras e pratos favoritos de cada cliente que já comprou de você." },
+  { title: "Pix direto na sua chave", description: "Seu cliente paga com Pix Copia e Cola na sua chave e o valor vai direto para a sua conta, sem intermediários retendo recebíveis. Você confere o recebimento no seu banco." },
+  { title: "Cupons & Campanhas", description: "Crie cupons de porcentagem ou de desconto fixo e promoções automáticas para atrair e fidelizar clientes." },
+  { title: "Base de Clientes Própria", description: "Nome, telefone e histórico de pedidos de cada cliente que já comprou de você." },
   { title: "Horários de Funcionamento", description: "Abertura e fechamento por turnos, ou botão de pausa de emergência com um clique." },
   { title: "Personalização de Marca", description: "Logotipo, imagem de capa, cor da marca e texto de apresentação da sua loja." },
 ];
 
 const MENUNEXT_ADVANTAGES = [
   { title: "Sua marca e identidade própria", description: "o cliente compra na sua página sem distrações." },
-  { title: "Base de contatos 100% sua", description: "acesso a telefones e e-mails para fazer remarketing." },
+  { title: "Base de contatos 100% sua", description: "nome e telefone de quem compra de você, para falar direto com seus clientes." },
   { title: "0% de comissão por venda", description: "o valor total do pedido fica integralmente no seu caixa." },
   { title: "Pix direto na sua conta bancária", description: "sem aguardar dias de repasse." },
   { title: "Sem concorrência na sua vitrine", description: "nenhum cupom de outros restaurantes é exibido." },
@@ -114,7 +114,7 @@ const FAQ_ITEMS = [
   {
     question: "Como funciona o pagamento por Pix?",
     answer:
-      "Você cadastra sua própria chave Pix no painel. O cliente recebe o código Copia e Cola e o valor cai direto na sua conta.",
+      "Você cadastra sua própria chave Pix no painel. O cliente recebe o código Copia e Cola e o valor cai direto na sua conta. O MenuNext não intermedeia o pagamento nem confirma o recebimento automaticamente: você confere no seu banco.",
   },
   {
     question: "Como funciona o período de teste grátis?",
@@ -188,7 +188,7 @@ export default function FanpagePage() {
               </div>
               <div className="mt-3 rounded-lg border border-primary/20 bg-primary/5 p-3">
                 <p className="text-xs font-semibold text-primary">Novo pedido #1048 recebido</p>
-                <p className="text-xs text-text-muted">R$ 54,80 • Pix confirmado instantâneo</p>
+                <p className="text-xs text-text-muted">R$ 54,80 • Pix direto na sua chave</p>
               </div>
             </Card>
           </div>
