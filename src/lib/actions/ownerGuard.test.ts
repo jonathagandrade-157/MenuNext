@@ -37,6 +37,7 @@ const OWNER_ONLY: Record<string, { exempt: string[] }> = {
   "products.ts": { exempt: ["toggleProductAvailableAction"] },
   "promotions.ts": { exempt: [] },
   "supportMerchant.ts": { exempt: [] },
+  "stock.ts": { exempt: [] },
 };
 
 /** Arquivos sem guarda de OWNER por escolha — cada um com o motivo. */
