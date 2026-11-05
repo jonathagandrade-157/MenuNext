@@ -73,3 +73,7 @@ Documentação relacionada: [reconciliação do histórico de migrations](docs/m
 - `src/components/scaffold` — placeholder usado nas rotas ainda não implementadas visualmente.
 - `supabase/migrations` — schema do banco (ver seção acima).
 - `design-reference/stitch` — export original do Stitch, preservado como referência visual (ver `design-reference/README.md` para o mapa tela → rota).
+
+### Ferramentas de backup (preparadas, sem execucao automatica)
+
+Ver [scripts/backup/README.md](scripts/backup/README.md). A publicacao dos scripts nao aprova o backup de producao nem aplica migrations. O exemplo de workflow fica fora de `.github/workflows` e nao executa sozinho.

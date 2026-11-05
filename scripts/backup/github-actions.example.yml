@@ -1,0 +1,63 @@
+# EXEMPLO de agendamento do backup. NÃO está em .github/workflows de propósito: não roda sozinho.
+# Antes de usar: (1) aprovar RPO/RTO e provedores; (2) criar os segredos abaixo no repositório;
+# (3) validar com UM exercício de restauração real (ver scripts/backup/README.md); (4) só então copiar para .github/workflows/.
+#
+# Segredos necessários (Settings > Secrets and variables > Actions) — nenhum valor vai neste arquivo:
+#   BACKUP_DATABASE_URL     conexão do banco (papel só de leitura)
+#   BACKUP_SUPABASE_URL, BACKUP_SUPABASE_SERVICE_ROLE_KEY
+#   BACKUP_GPG_PUBLIC_KEY   chave PÚBLICA exportada com --armor (a privada NUNCA entra aqui)
+#   BACKUP_GPG_RECIPIENT    ID/e-mail da chave
+#   BACKUP_HEARTBEAT_URL    URL do monitor
+#   RCLONE_CONFIG_BACKUP_*  credenciais de ESCRITA do armazenamento externo (remoto "backup")
+name: Backup MenuNext
+on:
+  schedule:
+    - cron: "15 6 * * *" # 03:15 em Brasília
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: backup
+  cancel-in-progress: false
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Instalar cliente PostgreSQL 17
+        run: |
+          sudo sh -c 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+          wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc >/dev/null
+          sudo apt-get update -qq && sudo apt-get install -y -qq postgresql-client-17 rclone
+      - name: Importar a chave PÚBLICA
+        env:
+          KEY: ${{ secrets.BACKUP_GPG_PUBLIC_KEY }}
+        run: printf '%s' "$KEY" | gpg --batch --import
+      - name: Backup do banco
+        env:
+          DATABASE_URL: ${{ secrets.BACKUP_DATABASE_URL }}
+          BACKUP_GPG_RECIPIENT: ${{ secrets.BACKUP_GPG_RECIPIENT }}
+          BACKUP_DIR: ${{ runner.temp }}/backups
+          BACKUP_HEARTBEAT_URL: ${{ secrets.BACKUP_HEARTBEAT_URL }}
+        run: node scripts/backup/backup-db.mjs
+      - name: Backup do Storage
+        env:
+          SUPABASE_URL: ${{ secrets.BACKUP_SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.BACKUP_SUPABASE_SERVICE_ROLE_KEY }}
+          BACKUP_GPG_RECIPIENT: ${{ secrets.BACKUP_GPG_RECIPIENT }}
+          BACKUP_DIR: ${{ runner.temp }}/backups
+          BACKUP_HEARTBEAT_URL: ${{ secrets.BACKUP_HEARTBEAT_URL }}
+        run: node scripts/backup/backup-storage.mjs
+      - name: Conferir integridade antes de enviar
+        run: |
+          for m in "${{ runner.temp }}"/backups/*.manifest.json; do
+            node scripts/backup/verify-backup.mjs --dir "${{ runner.temp }}/backups" --manifest "$(basename "$m")"
+          done
+      - name: Enviar ao armazenamento externo (somente arquivos cifrados)
+        env:
+          RCLONE_CONFIG_BACKUP_TYPE: ${{ secrets.RCLONE_CONFIG_BACKUP_TYPE }}
+        run: rclone copy "${{ runner.temp }}/backups" backup:menunext-backups --include "*.gpg" --include "*.manifest.json"
