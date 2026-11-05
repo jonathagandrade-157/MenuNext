@@ -20,9 +20,12 @@ const TYPES = { ".webp": "image/webp", ".jpg": "image/jpeg", ".jpeg": "image/jpe
 
 /** Só localhost, ou um projeto de teste confirmado e fora da lista de protegidos (produção). */
 export function assertStorageTarget(baseUrl, { allowRemoteRef, protectedRefs = [] } = {}) {
+  let url;
   let host;
-  try { host = new URL(baseUrl).hostname.toLowerCase(); } catch { throw new Error("URL de destino inválida"); }
+  try { url = new URL(baseUrl); host = url.hostname.replace(/^\[|\]$/g, "").toLowerCase(); } catch { throw new Error("URL de destino inválida"); }
+  if (url.username || url.password || url.search || url.hash || url.pathname !== "/" || !["http:", "https:"].includes(url.protocol)) throw new Error("Recusado: use somente a origem HTTP(S), sem credenciais, caminho ou parametros.");
   if (host === "localhost" || host === "127.0.0.1" || host === "::1" || host.endsWith(".localhost")) return { local: true };
+  if (url.protocol !== "https:" || url.port) throw new Error("Recusado: o Storage remoto exige HTTPS na porta padrao.");
   const m = /^([a-z0-9]{20})\.supabase\.co$/.exec(host);
   if (!m) throw new Error("Recusado: o destino precisa ser localhost ou um projeto *.supabase.co de TESTE.");
   const ref = m[1];

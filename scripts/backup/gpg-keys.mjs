@@ -69,7 +69,7 @@ export async function listKeys({ home, gpgBin = "gpg" } = {}) {
 }
 
 export async function generateKey({ home, uid, algo = "rsa4096", expire = "3y", promptForPassphrase = true, gpgBin = "gpg" }) {
-  await fs.mkdir(home, { recursive: true });
+  await fs.mkdir(home, { recursive: true, mode: 0o700 });
   const b = await base(home, gpgBin);
   if (promptForPassphrase) return interactive([...b, "--quick-generate-key", uid, algo, "encr", expire], gpgBin);
   // SOMENTE para testes automatizados com chaves descartáveis, sem proteção
@@ -80,7 +80,7 @@ export async function exportKeys({ home, outDir, promptForPassphrase = true, gpg
   assertSafeExportDir(outDir, safetyOptions);
   const keys = (await listKeys({ home, gpgBin })).filter((k) => k.fingerprint);
   if (keys.length < KEY_ROLES.length) throw new Error("as duas chaves ainda não existem (rode init).");
-  await fs.mkdir(outDir, { recursive: true });
+  await fs.mkdir(outDir, { recursive: true, mode: 0o700 });
   const b = await base(home, gpgBin);
   const written = [];
   for (const k of keys) {
@@ -119,7 +119,7 @@ export async function recoveryTest({ home, keysDir, promptForPassphrase = true, 
 
     const isolated = async (name, secretFile) => {
       const iso = path.join(root, `chaveiro-${name}`);
-      await fs.mkdir(iso, { recursive: true });
+      await fs.mkdir(iso, { recursive: true, mode: 0o700 });
       const b = await base(iso, gpgBin);
       if (secretFile) await gpg([...b, "--import", await gpgPath(gpgBin, secretFile)], gpgBin);
       return { iso, b };

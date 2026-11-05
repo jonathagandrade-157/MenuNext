@@ -26,7 +26,7 @@ const READ_ONLY_OPTIONS = "-c default_transaction_read_only=on";
 /** Interpreta a linha da sonda (source-role-probe.sql). Privilégio mínimo = lê tudo (RLS ignorada) e não escreve em nada. */
 export function evaluateSourceRole(line) {
   const f = String(line ?? "").trim().split("|");
-  if (f.length !== 9) return { ok: false, role: "?", problems: ["resposta da sonda do papel em formato inesperado"] };
+  if (f.length !== 9 || !f[0] || !f.slice(1, 6).every((v) => /^(t|f)$/.test(v)) || !/^(on|off)$/.test(f[6]) || !f.slice(7).every((v) => /^\d+$/.test(v))) return { ok: false, role: "?", problems: ["resposta da sonda do papel em formato inesperado"] };
   const [role, superuser, createRole, createDb, replication, bypassRls, readOnly, writableTables, createSchemas] = f;
   const problems = [];
   if (superuser === "t") problems.push("é superusuário");

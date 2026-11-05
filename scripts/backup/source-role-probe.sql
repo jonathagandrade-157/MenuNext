@@ -15,7 +15,7 @@ select
      join pg_namespace n on n.oid = c.relnamespace
     where n.nspname = any (string_to_array(:'schemas', ','))
       and c.relkind in ('r', 'p')
-      and has_table_privilege(r.rolname, c.oid, 'INSERT,UPDATE,DELETE')),
+      and has_table_privilege(r.rolname, c.oid, 'INSERT,UPDATE,DELETE,TRUNCATE,REFERENCES,TRIGGER,MAINTAIN')),
   (select count(*)
      from pg_namespace n
     where n.nspname = any (string_to_array(:'schemas', ','))

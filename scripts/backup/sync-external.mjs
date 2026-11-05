@@ -59,7 +59,8 @@ export async function syncExternal({ srcDir, destDir, now = new Date(), retentio
       result.failed.push({ name, reason: redact(error instanceof Error ? error.message : error) });
     }
   }
-  if (!dryRun) {
+  // Preserve as copias existentes quando qualquer arquivo da rodada falhar.
+  if (!dryRun && result.failed.length === 0) {
     for (const prefix of [DB_PREFIX, STORAGE_PREFIX]) {
       const { remove } = await pruneDir(destDir, prefix, now, retention);
       result.pruned.push(...remove);
