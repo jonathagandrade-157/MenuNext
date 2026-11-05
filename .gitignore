@@ -51,3 +51,6 @@ MenuNext-privado/
 *.dump
 *.asc
 .gnupg/
+
+# estado temporario do Supabase CLI
+/supabase/.temp/
