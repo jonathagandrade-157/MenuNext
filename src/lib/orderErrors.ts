@@ -11,6 +11,12 @@ export function friendlyOrderError(message: string): string {
   if (normalized.includes("not_authenticated") || normalized.includes("not_authorized")) {
     return "Você não tem permissão para registrar vendas de balcão. Faça login novamente.";
   }
+  if (normalized.includes("order_rate_limited")) {
+    return "Recebemos muitos pedidos em pouco tempo. Aguarde alguns minutos e tente novamente.";
+  }
+  if (normalized.includes("checkout_unavailable")) {
+    return "O pedido online está indisponível no momento. Tente novamente em instantes.";
+  }
   if (normalized.includes("restaurant_not_found")) return "Esta loja não está disponível no momento.";
   if (normalized.includes("restaurant_unavailable")) {
     return "Esta loja está pausada ou fechada no momento e não está aceitando pedidos.";

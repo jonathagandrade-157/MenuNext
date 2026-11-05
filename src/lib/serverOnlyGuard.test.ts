@@ -77,6 +77,7 @@ describe("credenciais de servidor da cobrança", () => {
       "app/api/webhooks/mercadopago/route.ts",
       "lib/actions/subscription.ts",
       "lib/billingConfig.ts",
+      "lib/publicRpc.ts", // checkout público e cadastro: RPCs que só o servidor executa (migration 20261027020000)
       "lib/rateLimit.ts", // contador de tentativas: chama só a função rate_limit_hit (service_role)
     ]);
   });

@@ -1,7 +1,7 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
 import { checkIpRateLimit } from "@/lib/rateLimit";
+import { callPublicRpc } from "@/lib/publicRpc";
 
 export type PromotionPreview = { name: string; discountAmount: number } | null;
 
@@ -11,11 +11,14 @@ export type PromotionPreview = { name: string; discountAmount: number } | null;
  * "sem promoção" (a prévia nunca bloqueia o pedido).
  */
 export async function previewPromotionAction(slug: string, subtotal: number): Promise<PromotionPreview> {
+  if (typeof slug !== "string" || slug.length === 0 || slug.length > 80) return null;
   if (!Number.isFinite(subtotal) || subtotal < 0) return null;
   const limit = await checkIpRateLimit("previa-promocao:ip", { limit: 60, windowSeconds: 60 });
   if (!limit.allowed) return null;
-  const supabase = await createClient();
-  const { data, error } = await supabase.rpc("preview_promotion", { p_slug: slug, p_subtotal: subtotal });
+  const { data, error } = await callPublicRpc<{ name: string; discount_amount: string | number }[]>("preview_promotion", {
+    p_slug: slug,
+    p_subtotal: subtotal,
+  });
   if (error) return null;
   const row = data?.[0];
   return row ? { name: String(row.name), discountAmount: Number(row.discount_amount) } : null;
