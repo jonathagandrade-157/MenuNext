@@ -18,11 +18,9 @@ function SubmitButton() {
 }
 
 /**
- * Formulário "Convidar membro" (JON-27). Resend ainda sem domínio
- * verificado, então nenhum e-mail é enviado de verdade — ao criar o
- * convite, a própria tela mostra o link para o dono copiar e compartilhar
- * manualmente (WhatsApp, etc.). Plugamos o envio via Resend depois, sem
- * mudar esse formulário.
+ * Formulário "Convidar membro" (JON-27). Quando o envio de e-mail está configurado no servidor, o
+ * convite também segue por e-mail; em qualquer caso a tela mostra o link para o dono copiar e compartilhar à mão
+ * (WhatsApp, etc.), e diz com clareza se o e-mail saiu ou não.
  */
 export function InviteFormFields({ onDone }: { onDone: () => void }) {
   const [state, formAction] = useActionState(createInviteAction, initialInviteState);
@@ -31,7 +29,11 @@ export function InviteFormFields({ onDone }: { onDone: () => void }) {
     return (
       <div className="space-y-4">
         <p className="text-body-md text-text-muted">
-          Convite criado! Copie o link abaixo e envie para a pessoa (WhatsApp, e-mail, etc.). Ele expira em 7 dias.
+          {state.emailStatus === "sent"
+            ? "Convite criado e enviado por e-mail. Se a pessoa não receber, copie o link abaixo e envie por outro canal. Ele expira em 7 dias."
+            : state.emailStatus === "failed"
+              ? "Convite criado, mas o e-mail não pôde ser enviado agora. Copie o link abaixo e envie para a pessoa (WhatsApp, etc.). Ele expira em 7 dias."
+              : "Convite criado! Copie o link abaixo e envie para a pessoa (WhatsApp, e-mail, etc.). Ele expira em 7 dias."}
         </p>
         <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-subdued px-3 py-2.5">
           <p className="min-w-0 flex-1 truncate text-body-md font-medium text-graphite">{state.inviteUrl}</p>
