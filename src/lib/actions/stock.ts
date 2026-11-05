@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { requireOwnerAction } from "@/lib/tenant";
 import { friendlyStockError, isUuid, parseStockInteger, validateStockMovement } from "@/lib/stock";
+import { isMissingRpc } from "@/lib/rpcErrors";
 
 export type StockActionResult = { ok: true } | { ok: false; error: string };
 
@@ -45,6 +46,20 @@ export async function setStockThresholdAction(productId: string, rawThreshold: s
   const { error } = await supabase.rpc("stock_set_threshold", { p_product_id: productId, p_threshold: threshold.value });
   if (error) return { ok: false, error: friendlyStockError(error.message) };
 
+  revalidatePath(STOCK_PATH);
+  return { ok: true };
+}
+
+/**
+ * Liga/desliga a baixa automática do estoque pelos pedidos (padrão: desligada). Só OWNER. Vale daqui para a frente:
+ * pedidos já feitos não são baixados retroativamente. Sem a migration de integração o recurso fica indisponível.
+ */
+export async function setStockAutoDeductAction(enabled: boolean): Promise<StockActionResult> {
+  const { supabase } = await requireOwnerAction();
+  if (typeof enabled !== "boolean") return { ok: false, error: "Valor inválido." };
+  const { error } = await supabase.rpc("stock_set_auto_deduct", { p_enabled: enabled });
+  if (isMissingRpc(error)) return { ok: false, error: "A baixa automática ainda não está disponível neste ambiente." };
+  if (error) return { ok: false, error: friendlyStockError(error.message) };
   revalidatePath(STOCK_PATH);
   return { ok: true };
 }

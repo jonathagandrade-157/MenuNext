@@ -1,19 +1,24 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { isMissingRpc } from "./rpcErrors";
 
 /**
  * Estoque (controle interno do lojista). O saldo é gravado só pelas RPCs stock_record_movement/stock_set_threshold
  * (OWNER) e NÃO baixa sozinho com as vendas nem bloqueia pedidos. Aqui ficam as regras puras (validação, status,
  * ordenação) e a leitura; a escrita está em src/lib/actions/stock.ts.
  */
-export type StockMovementKind = "entry" | "exit" | "loss" | "adjustment";
+export type StockMovementKind = "entry" | "exit" | "loss" | "adjustment" | "sale" | "sale_reversal";
+/** Tipos que o OWNER registra à mão (venda/estorno só nascem dos pedidos). */
+export type ManualStockKind = "entry" | "exit" | "loss" | "adjustment";
 
-export const STOCK_KINDS: StockMovementKind[] = ["entry", "exit", "loss", "adjustment"];
+export const STOCK_KINDS: ManualStockKind[] = ["entry", "exit", "loss", "adjustment"];
 
 export const STOCK_KIND_LABELS: Record<StockMovementKind, string> = {
   entry: "Entrada",
   exit: "Saída",
   loss: "Perda",
   adjustment: "Ajuste (contagem)",
+  sale: "Venda",
+  sale_reversal: "Estorno de pedido",
 };
 
 export const STOCK_MAX_QUANTITY = 1_000_000;
@@ -46,10 +51,10 @@ export function parseStockInteger(raw: unknown, allowZero: boolean): StockValida
   return { ok: true, value };
 }
 
-export type StockMovementInput = { kind: StockMovementKind; quantity: number; note: string | null };
+export type StockMovementInput = { kind: ManualStockKind; quantity: number; note: string | null };
 
 export function validateStockMovement(kind: unknown, rawQuantity: unknown, rawNote: unknown): StockValidation<StockMovementInput> {
-  if (typeof kind !== "string" || !STOCK_KINDS.includes(kind as StockMovementKind)) {
+  if (typeof kind !== "string" || !STOCK_KINDS.includes(kind as ManualStockKind)) {
     return { ok: false, error: "Escolha o tipo da movimentação." };
   }
   const quantity = parseStockInteger(rawQuantity, kind === "adjustment");
@@ -58,7 +63,7 @@ export function validateStockMovement(kind: unknown, rawQuantity: unknown, rawNo
   if (note.length > STOCK_NOTE_MAX_LENGTH) {
     return { ok: false, error: `A observação deve ter até ${STOCK_NOTE_MAX_LENGTH} caracteres.` };
   }
-  return { ok: true, value: { kind: kind as StockMovementKind, quantity: quantity.value, note: note || null } };
+  return { ok: true, value: { kind: kind as ManualStockKind, quantity: quantity.value, note: note || null } };
 }
 
 /** IDs do Supabase são UUID; recusa qualquer outra coisa antes de chamar o banco. */
@@ -137,7 +142,8 @@ export type StockMovementRow = {
   createdAt: string;
 };
 
-export type StockOverview = { rows: StockRow[]; movements: StockMovementRow[] };
+/** autoDeduct: null = recurso indisponível (migration de integração não aplicada). */
+export type StockOverview = { rows: StockRow[]; movements: StockMovementRow[]; autoDeduct: boolean | null };
 
 const RECENT_MOVEMENTS = 30;
 
@@ -159,7 +165,16 @@ export async function getStockOverview(supabase: SupabaseClient, restaurantId: s
 
   const productList = (products.data ?? []) as ProductLite[];
   const names = new Map(productList.map((p) => [p.id, p.name]));
+  // Configuração da baixa automática: se a tabela ainda não existe, o interruptor fica oculto.
+  const settings = await supabase.from("stock_settings").select("auto_deduct").eq("restaurant_id", restaurantId).maybeSingle();
+  let autoDeduct: boolean | null = null;
+  if (settings.error) {
+    if (!isMissingRpc(settings.error)) throw settings.error;
+  } else {
+    autoDeduct = Boolean(settings.data?.auto_deduct);
+  }
   return {
+    autoDeduct,
     rows: buildStockRows(productList, (items.data ?? []) as ItemLite[]),
     movements: ((movements.data ?? []) as Record<string, unknown>[]).map((m) => ({
       id: String(m.id),

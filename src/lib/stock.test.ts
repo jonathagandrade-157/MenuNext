@@ -108,3 +108,33 @@ describe("friendlyStockError", () => {
     expect(friendlyStockError('duplicate key value violates unique constraint "x"')).toBe("Não foi possível concluir agora. Tente novamente.");
   });
 });
+
+describe("integração com pedidos (rótulos e recurso opcional)", () => {
+  it("venda e estorno têm rótulo, mas não são tipos manuais", async () => {
+    const { STOCK_KIND_LABELS, validateStockMovement } = await import("./stock");
+    expect(STOCK_KIND_LABELS.sale).toBe("Venda");
+    expect(STOCK_KIND_LABELS.sale_reversal).toBe("Estorno de pedido");
+    expect(validateStockMovement("sale", "1", "").ok).toBe(false);
+    expect(validateStockMovement("sale_reversal", "1", "").ok).toBe(false);
+  });
+  it("getStockOverview esconde o interruptor sem a migration e propaga outros erros", async () => {
+    const { getStockOverview } = await import("./stock");
+    const make = (settingsError: unknown, settingsData: unknown = null) => ({
+      from: (table: string) => {
+        const result =
+          table === "stock_settings"
+            ? { data: settingsData, error: settingsError }
+            : { data: [], error: null };
+        const chain: Record<string, unknown> = {};
+        for (const m of ["select", "eq", "order", "limit"]) chain[m] = () => chain;
+        chain.maybeSingle = async () => result;
+        chain.then = (resolve: (v: unknown) => void) => resolve(result);
+        return chain;
+      },
+    }) as never;
+    expect((await getStockOverview(make({ code: "PGRST205", message: "x" }), "r")).autoDeduct).toBeNull();
+    expect((await getStockOverview(make(null, { auto_deduct: true }), "r")).autoDeduct).toBe(true);
+    expect((await getStockOverview(make(null, null), "r")).autoDeduct).toBe(false);
+    await expect(getStockOverview(make({ code: "XX000", message: "boom" }), "r")).rejects.toBeTruthy();
+  });
+});
