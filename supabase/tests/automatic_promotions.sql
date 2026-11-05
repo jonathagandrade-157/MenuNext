@@ -55,17 +55,19 @@ begin
     fails := fails || '_promotion_best exposta'::text;
   end if;
   total := total + 1;
-  if not (has_function_privilege('anon', 'public.preview_promotion(text,numeric)', 'EXECUTE')
-          and has_function_privilege('authenticated', 'public.preview_promotion(text,numeric)', 'EXECUTE')) then
-    fails := fails || 'preview_promotion deveria ser publica'::text;
+  if has_function_privilege('anon', 'public.preview_promotion(text,numeric)', 'EXECUTE')
+     or has_function_privilege('authenticated', 'public.preview_promotion(text,numeric)', 'EXECUTE')
+     or not has_function_privilege('service_role', 'public.preview_promotion(text,numeric)', 'EXECUTE') then
+    fails := fails || 'preview_promotion deveria ser executavel so pelo servidor (service_role)'::text;
   end if;
   total := total + 1;
   select count(*) into n from pg_proc where pronamespace = 'public'::regnamespace and proname = 'create_order';
   if n <> 1 then fails := fails || format('create_order deveria ter 1 assinatura (n=%s)', n); end if;
   total := total + 1;
-  if not (has_function_privilege('anon', 'public.create_order(text,text,text,text,text,jsonb,text,text,text,text,text,text,text,text,text,numeric,text,numeric,text)', 'EXECUTE')
-          and has_function_privilege('authenticated', 'public.create_order(text,text,text,text,text,jsonb,text,text,text,text,text,text,text,text,text,numeric,text,numeric,text)', 'EXECUTE')) then
-    fails := fails || 'create_order perdeu o EXECUTE de anon/authenticated'::text;
+  if has_function_privilege('anon', 'public.create_order(text,text,text,text,text,jsonb,text,text,text,text,text,text,text,text,text,numeric,text,numeric,text)', 'EXECUTE')
+     or has_function_privilege('authenticated', 'public.create_order(text,text,text,text,text,jsonb,text,text,text,text,text,text,text,text,text,numeric,text,numeric,text)', 'EXECUTE')
+     or not has_function_privilege('service_role', 'public.create_order(text,text,text,text,text,jsonb,text,text,text,text,text,text,text,text,text,numeric,text,numeric,text)', 'EXECUTE') then
+    fails := fails || 'create_order deveria ser executavel so pelo servidor (service_role)'::text;
   end if;
   total := total + 1;
   if has_table_privilege('anon', 'public.promotions', 'SELECT') then fails := fails || 'anon le a tabela promotions'::text; end if;
@@ -234,27 +236,27 @@ begin
   -- ---------- 4) preview publico ----------
   insert into public.promotions (restaurant_id, name, discount_type, discount_value) values (r_a, 'Preview 10', 'percent', 10);
   insert into public.promotions (restaurant_id, name, discount_type, discount_value) values (r_b, 'Preview B', 'percent', 50);
-  set local role anon;
+  set local role service_role;
   select * into b from public.preview_promotion(slug_a, 80);
   reset role;
   total := total + 1;
   if b.name is distinct from 'Preview 10' or b.discount_amount <> 8 then fails := fails || format('preview anon inesperado (%s / %s)', b.name, b.discount_amount); end if;
-  set local role anon;
+  set local role service_role;
   select count(*) into n from public.preview_promotion('nao-existe-xyz', 80);
   reset role;
   total := total + 1;
   if n <> 0 then fails := fails || 'preview de loja inexistente devolveu linha'::text; end if;
-  set local role anon;
+  set local role service_role;
   select count(*) into n from public.preview_promotion('pr-loja-b', 80);  -- loja B nao publicada
   reset role;
   total := total + 1;
   if n <> 0 then fails := fails || 'preview de loja nao publicada devolveu linha'::text; end if;
-  set local role anon;
+  set local role service_role;
   select count(*) into n from public.preview_promotion(slug_a, null);
   reset role;
   total := total + 1;
   if n <> 0 then fails := fails || 'preview com subtotal nulo devolveu linha'::text; end if;
-  set local role anon;
+  set local role service_role;
   select count(*) into n from public.preview_promotion(slug_a, -5);
   reset role;
   total := total + 1;
@@ -267,7 +269,7 @@ begin
   insert into public.coupons (restaurant_id, code, discount_type, discount_value) values (r_a, 'CUPOM10', 'percent', 10);
 
   -- 5a) sem nenhuma promocao: pedido identico ao de antes (80, sem desconto, sem promocao)
-  set local role anon;
+  set local role service_role;
   perform * from public.create_order(slug_a, 'Cliente', '11988887777', 'pickup', 'cash', items_a::jsonb, 'pr-a1');
   reset role;
   select * into o from public.orders where restaurant_id = r_a and idempotency_key = 'pr-a1';
@@ -278,7 +280,7 @@ begin
 
   -- 5b) promocao 10%% aplicada sozinha (anon, retirada)
   insert into public.promotions (restaurant_id, name, discount_type, discount_value) values (r_a, 'Dez por cento', 'percent', 10) returning id into promo_a;
-  set local role anon;
+  set local role service_role;
   perform * from public.create_order(slug_a, 'Cliente', '11988887777', 'pickup', 'cash', items_a::jsonb, 'pr-b1');
   reset role;
   select * into o from public.orders where restaurant_id = r_a and idempotency_key = 'pr-b1';
@@ -291,7 +293,7 @@ begin
   if n <> 1 then fails := fails || 'itens do pedido alterados'::text; end if;
 
   -- 5c) cupom maior (50%%) vence a promocao e consome 1 uso
-  set local role anon;
+  set local role service_role;
   perform * from public.create_order(slug_a, 'Cliente', '11988887777', 'pickup', 'cash', items_a::jsonb, 'pr-c1', null, null, null, null, null, null, null, null, null, null, null, 'CUPOM50');
   reset role;
   select * into o from public.orders where restaurant_id = r_a and idempotency_key = 'pr-c1';
@@ -303,7 +305,7 @@ begin
   if (select uses_count from public.coupons where id = coupon_a) <> 1 then fails := fails || '5c: uso do cupom vencedor nao foi consumido'::text; end if;
 
   -- 5d) promocao maior (10%%) vence cupom menor (5%%): cupom NAO consome uso e nao fica no pedido
-  set local role anon;
+  set local role service_role;
   perform * from public.create_order(slug_a, 'Cliente', '11988887777', 'pickup', 'cash', items_a::jsonb, 'pr-d1', null, null, null, null, null, null, null, null, null, null, null, 'CUPOM5');
   reset role;
   select * into o from public.orders where restaurant_id = r_a and idempotency_key = 'pr-d1';
@@ -315,7 +317,7 @@ begin
   if (select uses_count from public.coupons where restaurant_id = r_a and code = 'CUPOM5') <> 0 then fails := fails || '5d: cupom perdedor consumiu um uso'::text; end if;
 
   -- 5e) empate (cupom 10%% = promocao 10%%): fica com o cupom e consome o uso
-  set local role anon;
+  set local role service_role;
   perform * from public.create_order(slug_a, 'Cliente', '11988887777', 'pickup', 'cash', items_a::jsonb, 'pr-e1', null, null, null, null, null, null, null, null, null, null, null, 'CUPOM10');
   reset role;
   select * into o from public.orders where restaurant_id = r_a and idempotency_key = 'pr-e1';
@@ -327,7 +329,7 @@ begin
   if (select uses_count from public.coupons where restaurant_id = r_a and code = 'CUPOM10') <> 1 then fails := fails || '5e: uso do cupom empatado nao foi consumido'::text; end if;
 
   -- 5f) cupom invalido continua dando erro mesmo havendo promocao
-  set local role anon;
+  set local role service_role;
   begin
     perform * from public.create_order(slug_a, 'Cliente', '11988887777', 'pickup', 'cash', items_a::jsonb, 'pr-f1', null, null, null, null, null, null, null, null, null, null, null, 'NAOEXISTE');
     err := 'ok';
@@ -340,7 +342,7 @@ begin
 
   -- 5g) idempotencia: repetir a chave devolve o mesmo pedido, sem novo desconto nem novo pedido
   select count(*) into n from public.orders where restaurant_id = r_a;
-  set local role anon;
+  set local role service_role;
   perform * from public.create_order(slug_a, 'Cliente', '11988887777', 'pickup', 'cash', items_a::jsonb, 'pr-b1');
   reset role;
   total := total + 1;
@@ -348,7 +350,7 @@ begin
 
   -- 5h) minimo da promocao: abaixo do minimo nao desconta
   update public.promotions set min_order_value = 100 where id = promo_a;
-  set local role anon;
+  set local role service_role;
   perform * from public.create_order(slug_a, 'Cliente', '11988887777', 'pickup', 'cash', items_a::jsonb, 'pr-h1');
   reset role;
   select * into o from public.orders where restaurant_id = r_a and idempotency_key = 'pr-h1';
@@ -358,7 +360,7 @@ begin
   -- 5i) promocao de outra loja nao vale na loja A; desligada tambem nao
   update public.promotions set min_order_value = null, is_active = false where id = promo_a;
   insert into public.promotions (restaurant_id, name, discount_type, discount_value) values (r_b, 'Promo da B', 'percent', 90);
-  set local role anon;
+  set local role service_role;
   perform * from public.create_order(slug_a, 'Cliente', '11988887777', 'pickup', 'cash', items_a::jsonb, 'pr-i1');
   reset role;
   select * into o from public.orders where restaurant_id = r_a and idempotency_key = 'pr-i1';
@@ -369,7 +371,7 @@ begin
   update public.promotions set is_active = true where id = promo_a;
   perform set_config('request.jwt.claims', json_build_object('sub', u_staff_a, 'role', 'authenticated')::text, true);
   set local role authenticated;
-  perform * from public.create_order(slug_a, 'Balcao', '11966665555', 'counter', 'cash', items_a::jsonb, 'pr-j1');
+  perform * from public.create_counter_order(slug_a, 'Balcao', '11966665555', 'cash', items_a::jsonb, 'pr-j1');
   reset role;
   select * into o from public.orders where restaurant_id = r_a and idempotency_key = 'pr-j1';
   total := total + 1;
