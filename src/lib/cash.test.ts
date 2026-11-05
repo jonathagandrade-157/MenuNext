@@ -128,3 +128,32 @@ describe("changeToGiveBack", () => {
     expect(changeToGiveBack(10, 9.7)).toBe(0.3);
   });
 });
+
+describe("movimentações do caixa", () => {
+  it("valida tipo, valor e motivo", async () => {
+    const { validateCashMovement } = await import("./cash");
+    expect(validateCashMovement("supply", 20, " troco ")).toEqual({ ok: true, value: { kind: "supply", amount: 20, reason: "troco" } });
+    expect(validateCashMovement("withdrawal", 10.005, "x")).toMatchObject({ ok: true });
+    for (const [k, a, r] of [["x", 5, "a"], ["supply", 0, "a"], ["supply", -1, "a"], ["supply", null, "a"], ["supply", NaN, "a"], ["supply", 1e9, "a"], ["supply", 5, "  "], ["supply", 5, "x".repeat(201)]] as const) {
+      expect(validateCashMovement(k, a, r).ok, `${k}/${a}/${r.length}`).toBe(false);
+    }
+  });
+  it("reconhece função ausente (migration não aplicada) e traduz erros", async () => {
+    const { isMissingRpc, friendlyCashError } = await import("./cash");
+    expect(isMissingRpc({ code: "PGRST202", message: "x" })).toBe(true);
+    expect(isMissingRpc({ code: "42883" })).toBe(true);
+    expect(isMissingRpc({ message: "Could not find the function public.cash_movements_list" })).toBe(true);
+    expect(isMissingRpc({ code: "42501", message: "permission denied" })).toBe(false);
+    expect(isMissingRpc(null)).toBe(false);
+    expect(friendlyCashError("insufficient_cash")).toMatch(/maior que o dinheiro/);
+  });
+  it("getCashMovements: esconde o recurso sem a migration e propaga outros erros", async () => {
+    const { getCashMovements } = await import("./cash");
+    const fake = (error: unknown, data: unknown = null) => ({ rpc: async () => ({ data, error }) }) as never;
+    expect(await getCashMovements(fake({ code: "PGRST202", message: "x" }))).toEqual({ available: false, rows: [] });
+    await expect(getCashMovements(fake({ code: "XX000", message: "boom" }))).rejects.toBeTruthy();
+    const ok = await getCashMovements(fake(null, [{ id: "1", kind: "withdrawal", amount: "12.5", reason: "cofre", created_by_name: "Ana", created_at: "2026-11-05T12:00:00Z" }]));
+    expect(ok.available).toBe(true);
+    expect(ok.rows[0]).toMatchObject({ kind: "withdrawal", amount: 12.5, reason: "cofre" });
+  });
+});
