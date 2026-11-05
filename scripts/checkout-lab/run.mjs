@@ -14,9 +14,12 @@ const data = path.join(dir, "pgdata");
 const env = {
   ...process.env,
   PGHOST: "127.0.0.1", PGPORT: "55432", PGUSER: "postgres", PGDATABASE: "postgres",
-  PGPASSWORD: "", PGSERVICE: "", PGSERVICEFILE: "/dev/null", PGSSLMODE: "disable",
+  PGPASSWORD: "", PGSSLMODE: "disable",
   PGOPTIONS: "-c request.jwt.claims={}",
 };
+delete env.PGSERVICE;
+delete env.PGSERVICEFILE;
+delete env.PGPASSFILE;
 const run = (name, args) => execFileSync(tool(name), args, { env, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
 const sql = (source) => run("psql", ["-X", "-v", "ON_ERROR_STOP=1", "-c", source]);
 const file = (name) => run("psql", ["-X", "-v", "ON_ERROR_STOP=1", "-f", name]);
