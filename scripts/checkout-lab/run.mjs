@@ -77,23 +77,31 @@ try {
     stages += 1;
   }
 
-  let total = 0;
   // Todas as suites de supabase/tests rodam (isolamento entre lojas, privilegios, storage, cobranca, checkout...).
+  let seeded = false;
+  const runSuites = (names) => {
+    let sum = 0;
+    for (const name of names) {
+      // tenant_isolation.sql precisa de lojas e usuarios pre-existentes (em producao ja existem); aqui sao sinteticos.
+      if (name === "tenant_isolation.sql" && !seeded) {
+        file(path.join(here, "seed-tenants.sql"));
+        seeded = true;
+      }
+      const result = spawnSync(tool("psql"), ["-X", "-v", "ON_ERROR_STOP=1", "-f", path.join(root, "supabase/tests", name)], { env, encoding: "utf8" });
+      const output = `${result.stdout || ""}\n${result.stderr || ""}`;
+      // Estas suites encerram por RAISE EXCEPTION para desfazer TODOS os dados sinteticos.
+      const match = /ERROR:\s+RESULTADO: OK \| (\d+) verificacoes/.exec(output);
+      if (result.status !== 3 || !match || output.includes("RESULTADO: FALHOU")) {
+        throw new Error(`${name}: ${output.slice(-5000)}`);
+      }
+      sum += Number(match[1]);
+      console.log(`${name}: OK | ${match[1]} verificacoes (rollback)`);
+    }
+    return sum;
+  };
   const suites = fs.readdirSync(path.join(root, "supabase/tests")).filter((f) => f.endsWith(".sql")).sort();
   if (suites.length === 0) throw new Error("nenhuma suite SQL encontrada");
-  for (const name of suites) {
-    // tenant_isolation.sql precisa de lojas e usuarios pre-existentes (em producao ja existem); aqui sao sinteticos.
-    if (name === "tenant_isolation.sql") file(path.join(here, "seed-tenants.sql"));
-    const result = spawnSync(tool("psql"), ["-X", "-v", "ON_ERROR_STOP=1", "-f", path.join(root, "supabase/tests", name)], { env, encoding: "utf8" });
-    const output = `${result.stdout || ""}\n${result.stderr || ""}`;
-    // Estas suites encerram por RAISE EXCEPTION para desfazer TODOS os dados sinteticos.
-    const match = /ERROR:\s+RESULTADO: OK \| (\d+) verificacoes/.exec(output);
-    if (result.status !== 3 || !match || output.includes("RESULTADO: FALHOU")) {
-      throw new Error(`${name}: ${output.slice(-5000)}`);
-    }
-    total += Number(match[1]);
-    console.log(`${name}: OK | ${match[1]} verificacoes (rollback)`);
-  }
+  const total = runSuites(suites);
   // Concorrencia real (varias sessoes psql ao mesmo tempo), quando o laboratorio traz esse cenario.
   const concurrencyFile = path.join(here, "concurrency.mjs");
   if (fs.existsSync(concurrencyFile)) {
@@ -113,6 +121,12 @@ try {
         ),
       );
     for (const line of await runConcurrency({ sql, parallel })) console.log(`CONCORRENCIA: ${line}`);
+  }
+  // Rollback das migrations novas (quando o repositorio traz supabase/rollback): desfaz, confere residuos e reroda o legado.
+  const rollbackFile = path.join(here, "rollback.mjs");
+  if (fs.existsSync(rollbackFile) && fs.existsSync(path.join(root, "supabase/rollback"))) {
+    const { runRollback } = await import(rollbackFile);
+    for (const line of runRollback({ root, sql, file, suites: (names) => runSuites(names.filter((n) => suites.includes(n))) })) console.log(`ROLLBACK: ${line}`);
   }
   console.log(`CHECKOUT SQL: OK | ${total} verificacoes | ${stages} etapa(s) de privilegios`);
 } catch (error) {
