@@ -30,6 +30,7 @@ const SERVER_ONLY_MODULES = [
   "supabase/admin",
   "lib/asaas",
   "lib/mercadopago",
+  "lib/email",
   "billingConfig",
   "billingReconcile",
   "asaasWebhookHandler",
@@ -60,13 +61,18 @@ describe("credenciais de servidor da cobrança", () => {
     expect(users).toEqual(["lib/mercadopago.ts"]);
   });
 
+  it("a chave do Resend só é lida em src/lib/email.ts", () => {
+    const users = prod.filter((f) => read(f).includes("RESEND_API_KEY")).map(rel);
+    expect(users).toEqual(["lib/email.ts"]);
+  });
+
   it("o CRON_SECRET só é lido na rota agendada", () => {
     const users = prod.filter((f) => read(f).includes("process.env.CRON_SECRET")).map(rel);
     expect(users).toEqual(["app/api/cron/billing-reconcile/route.ts"]);
   });
 
   it("nenhuma credencial de servidor ganha o prefixo NEXT_PUBLIC_", () => {
-    const offenders = all.filter((f) => /NEXT_PUBLIC_(SUPABASE_SERVICE|SERVICE_ROLE|ASAAS|MERCADOPAGO|CRON)/.test(read(f))).map(rel);
+    const offenders = all.filter((f) => /NEXT_PUBLIC_(SUPABASE_SERVICE|SERVICE_ROLE|ASAAS|MERCADOPAGO|CRON|RESEND|EMAIL_FROM)/.test(read(f))).map(rel);
     expect(offenders).toEqual([]);
   });
 
