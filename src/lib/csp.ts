@@ -30,10 +30,13 @@ export function generateNonce(): string {
   return btoa(crypto.randomUUID());
 }
 
-export function buildContentSecurityPolicy(options: { supabaseUrl?: string; isDev?: boolean; nonce?: string } = {}): string {
+export function buildContentSecurityPolicy(options: { supabaseUrl?: string; isDev?: boolean; nonce?: string; turnstile?: boolean } = {}): string {
   const supabaseHost = hostOf(options.supabaseUrl);
   const supabaseHttp = supabaseHost ? [`https://${supabaseHost}`] : ["https://*.supabase.co"];
   const supabaseWs = supabaseHost ? [`wss://${supabaseHost}`] : ["wss://*.supabase.co"];
+
+  // Cloudflare Turnstile (anti-robô): só libera a origem quando a verificação está ligada.
+  const turnstile = options.turnstile ? ["https://challenges.cloudflare.com"] : [];
 
   const directives: Record<string, string[]> = {
     "default-src": ["'self'"],
@@ -42,6 +45,7 @@ export function buildContentSecurityPolicy(options: { supabaseUrl?: string; isDe
       "'self'",
       ...(options.nonce ? [`'nonce-${options.nonce}'`, "'strict-dynamic'"] : ["'unsafe-inline'"]),
       ...(options.isDev ? ["'unsafe-eval'"] : []),
+      ...turnstile,
     ],
     "style-src": ["'self'", "'unsafe-inline'"],
     "img-src": ["'self'", "data:", "blob:", ...supabaseHttp],
@@ -54,7 +58,9 @@ export function buildContentSecurityPolicy(options: { supabaseUrl?: string; isDe
       "https://*.ingest.sentry.io",
       "https://*.ingest.us.sentry.io",
       "https://*.ingest.de.sentry.io",
+      ...turnstile,
     ],
+    ...(turnstile.length ? { "frame-src": turnstile } : {}),
     "worker-src": ["'self'", "blob:"],
     "manifest-src": ["'self'"],
     "media-src": ["'self'", "data:", "blob:", ...supabaseHttp],
