@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState, useTransition } from "react";
 import { Search } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
@@ -109,7 +110,8 @@ export function EstoqueClient({ rows, movements, autoDeduct }: { rows: StockRow[
       <div>
         <h1 className="text-headline-lg text-graphite">Estoque</h1>
         <p className="mt-0.5 text-body-md text-text-muted">
-          Registre entradas, saídas, perdas e contagens e receba o alerta de estoque baixo.
+          Registre entradas, saídas, perdas e contagens e receba o alerta de estoque baixo.{" "}
+          <Link href="/painel/estoque/relatorio" className="font-semibold text-primary hover:underline">Ver relatório do período</Link>
         </p>
       </div>
 
