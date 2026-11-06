@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { describeCashDifference, formatCashDateTime, type CashDifference, type CashHistoryRow } from "@/lib/cash";
 import { formatCurrencyBRL } from "@/lib/store";
 
@@ -26,6 +27,7 @@ export function CashHistory({ rows }: { rows: CashHistoryRow[] }) {
                   {formatCashDateTime(row.openedAt)}
                   {row.closedAt ? ` → ${formatCashDateTime(row.closedAt)}` : ""}
                 </p>
+                <Link href={`/painel/caixa?sessao=${row.id}`} className="text-label-md text-primary hover:underline">Ver vendas e movimentações</Link>
                 <p className="text-body-sm text-text-muted">
                   {row.closedAt ? `Aberto por ${row.openedByName}, fechado por ${row.closedByName ?? "—"}` : `Aberto por ${row.openedByName} · em andamento`}
                   {" · "}
