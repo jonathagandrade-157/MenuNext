@@ -223,3 +223,75 @@ export function changeToGiveBack(received: number | null, total: number): number
   const cents = Math.round((received - total) * 100);
   return cents >= 0 ? cents / 100 : null;
 }
+
+// ---------------------------------------------------------------------------
+// Vendas de uma sessão de caixa — migration 20261106000000_cash_session_sales
+// ---------------------------------------------------------------------------
+export type CashSale = {
+  orderId: string;
+  orderNumber: number;
+  createdAt: string;
+  paymentMethod: "cash" | "pix" | "card";
+  status: string;
+  total: number;
+};
+
+export function parseCashSale(row: Row): CashSale {
+  const method = row.payment_method === "pix" || row.payment_method === "card" ? row.payment_method : "cash";
+  return {
+    orderId: String(row.order_id),
+    orderNumber: num(row.order_number),
+    createdAt: String(row.created_at),
+    paymentMethod: method,
+    status: String(row.status ?? ""),
+    total: num(row.total),
+  };
+}
+
+export type CashSalesBreakdown = {
+  orders: number;
+  cancelled: number;
+  total: number;
+  byPayment: Record<"cash" | "pix" | "card", { orders: number; total: number }>;
+};
+
+const cents = (n: number) => Math.round(n * 100);
+
+/** Resumo da sessão: canceladas não entram nos totais (mesma regra de _cash_totals). Soma em centavos. */
+export function summarizeCashSales(sales: CashSale[]): CashSalesBreakdown {
+  const byPayment = { cash: { orders: 0, total: 0 }, pix: { orders: 0, total: 0 }, card: { orders: 0, total: 0 } };
+  let totalCents = 0;
+  let orders = 0;
+  let cancelled = 0;
+  const cents_by = { cash: 0, pix: 0, card: 0 };
+  for (const s of sales) {
+    if (s.status === "cancelled") {
+      cancelled += 1;
+      continue;
+    }
+    orders += 1;
+    totalCents += cents(s.total);
+    cents_by[s.paymentMethod] += cents(s.total);
+    byPayment[s.paymentMethod].orders += 1;
+  }
+  for (const k of ["cash", "pix", "card"] as const) byPayment[k].total = cents_by[k] / 100;
+  return { orders, cancelled, total: totalCents / 100, byPayment };
+}
+
+export type CashSalesResult = { available: boolean; sales: CashSale[] };
+
+/** Vendas da sessão aberta (sessionId nulo) ou de uma sessão fechada (só OWNER). Sem a migration: available=false. */
+export async function getCashSessionSales(supabase: SupabaseClient, sessionId: string | null = null): Promise<CashSalesResult> {
+  const { data, error } = await supabase.rpc("cash_session_sales", { p_session: sessionId });
+  if (isMissingRpc(error)) return { available: false, sales: [] };
+  if (error) throw error;
+  return { available: true, sales: ((data as Row[] | null) ?? []).map(parseCashSale) };
+}
+
+/** Movimentações de uma sessão específica (só OWNER; a RPC devolve vazio aos demais). */
+export async function getCashMovementsForSession(supabase: SupabaseClient, sessionId: string): Promise<CashMovementsResult> {
+  const { data, error } = await supabase.rpc("cash_movements_list", { p_session: sessionId });
+  if (isMissingRpc(error)) return { available: false, rows: [] };
+  if (error) throw error;
+  return { available: true, rows: ((data as Row[] | null) ?? []).map(parseCashMovement) };
+}
