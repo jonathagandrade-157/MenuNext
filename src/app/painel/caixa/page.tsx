@@ -2,10 +2,11 @@ import { redirect } from "next/navigation";
 import { getAuthedUser, getMyMembership, getMyRestaurant } from "@/lib/tenant";
 import { getPublicCategoriesWithProducts } from "@/lib/store";
 import { getPublicAssetUrl } from "@/lib/storage/assets";
-import { getCashHistory, getCashMovements, getCurrentCashSession } from "@/lib/cash";
+import { getCashHistory, getCashMovements, getCashMovementsForSession, getCashSessionSales, getCurrentCashSession } from "@/lib/cash";
 import { CaixaClient } from "@/components/painel/caixa/CaixaClient";
 import { CashSessionBar } from "@/components/painel/caixa/CashSessionBar";
 import { CashHistory } from "@/components/painel/caixa/CashHistory";
+import { CashSessionDetail } from "@/components/painel/caixa/CashSessionDetail";
 import { CashMovements } from "@/components/painel/caixa/CashMovements";
 
 // Frente de Caixa / PDV real (decisão tomada com o usuário): pedidos de
@@ -15,7 +16,10 @@ import { CashMovements } from "@/components/painel/caixa/CashMovements";
 // Acessível a STAFF (operacional, mesmo grupo de Pedidos/KDS/Cardápio no
 // layout do painel — não é ownerOnly). Abrir/fechar o caixa também é do STAFF;
 // o histórico de diferenças de caixa é só do OWNER (cash_history devolve vazio aos demais).
-export default async function CaixaPage() {
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export default async function CaixaPage(props: PageProps<"/painel/caixa">) {
+  const params = await props.searchParams;
   const { supabase, user } = await getAuthedUser();
   if (!user) redirect("/cadastro");
 
@@ -29,6 +33,12 @@ export default async function CaixaPage() {
     getMyMembership(supabase, restaurant.id),
   ]);
   const history = membership?.role === "OWNER" ? await getCashHistory(supabase, 15) : [];
+  // Detalhe de uma sessão do histórico: só OWNER (as RPCs devolvem vazio aos demais) e só se o id está no histórico.
+  const wanted = typeof params.sessao === "string" && UUID.test(params.sessao) ? params.sessao : null;
+  const detailRow = membership?.role === "OWNER" && wanted ? history.find((h) => h.id === wanted) ?? null : null;
+  const detail = detailRow
+    ? { sales: await getCashSessionSales(supabase, detailRow.id), movements: await getCashMovementsForSession(supabase, detailRow.id) }
+    : null;
   const movements = cashSession ? await getCashMovements(supabase) : { available: false, rows: [] };
 
   return (
@@ -51,6 +61,10 @@ export default async function CaixaPage() {
         paymentCard={restaurant.payment_card}
         cashOpen={cashSession !== null}
       />
+
+      {detailRow && detail?.sales.available && (
+        <CashSessionDetail session={detailRow} sales={detail.sales.sales} movements={detail.movements.rows} />
+      )}
 
       <CashHistory rows={history} />
     </div>
