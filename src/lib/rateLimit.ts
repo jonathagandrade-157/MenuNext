@@ -56,7 +56,8 @@ export async function checkRateLimit(scope: string, identifier: string, rule: Ra
 
 /** Atalho: limita pelo IP de quem chamou. */
 export async function checkIpRateLimit(scope: string, rule: RateLimitRule): Promise<RateLimitResult> {
-  return checkRateLimit(scope, await getClientIp(), rule);
+  // o IP vira hash antes de ir para o balde (o contador guarda o balde em texto; ele expira em 1 dia)
+  return checkRateLimit(scope, hashIdentifier(await getClientIp()), rule);
 }
 
 /** Mensagem para o usuário, em minutos arredondados para cima ("1 minuto", "5 minutos"). */

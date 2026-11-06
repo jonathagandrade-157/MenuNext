@@ -36,6 +36,9 @@ const OWNER_ONLY: Record<string, { exempt: string[] }> = {
   "pagamentos.ts": { exempt: [] },
   "products.ts": { exempt: ["toggleProductAvailableAction"] },
   "promotions.ts": { exempt: [] },
+  "supportMerchant.ts": { exempt: [] },
+  "stock.ts": { exempt: [] },
+  "variants.ts": { exempt: ["toggleVariantAvailableAction"] },
 };
 
 /** Arquivos sem guarda de OWNER por escolha — cada um com o motivo. */
@@ -54,6 +57,7 @@ const OTHER_GUARDS: Record<string, string> = {
   "promotionPreview.ts": "prévia pública da promoção no checkout: preview_promotion só lê e não revela nada além do desconto",
   "pendingPayment.ts": "retomar pagamento: billing_pending_subscription só devolve a assinatura pendente do OWNER da loja",
   "plans.ts": "planos: is_platform_admin",
+  "supportMaster.ts": "atendimento da plataforma: requireMasterPage + is_platform_admin nas RPCs",
   "subscription.ts": "assinatura: a RPC billing/start_restaurant_subscription exige OWNER",
 };
 

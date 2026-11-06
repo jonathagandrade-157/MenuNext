@@ -112,10 +112,10 @@ returns text language sql as $$
                              'asaas', p_sub, p_cus, p_pay, p_status, p_deleted, p_val, p_due))
 $$;
 
--- Pedido anônimo no checkout público.
+-- Pedido do checkout público: chega pelo SERVIDOR do app (create_order só é executável por service_role).
 create or replace function pg_temp._order(p_slug text, p_prod uuid, p_key text) returns text
 language sql as $$
-  select pg_temp._run(null, format('select count(*)::text from public.create_order(%L, %L, %L, %L, %L, %L::jsonb, %L)',
+  select pg_temp._svc(format('select count(*)::text from public.create_order(%L, %L, %L, %L, %L, %L::jsonb, %L)',
     p_slug, 'Cliente', '11999999999', 'pickup', 'cash',
     jsonb_build_array(jsonb_build_object('product_id', p_prod, 'quantity', 1))::text, p_key))
 $$;
@@ -767,7 +767,8 @@ begin
   perform pg_temp._ck('S12 a RPC publica da loja e as tabelas de cobranca continuam isoladas do checkout (anon sem privilegio)',
     not has_table_privilege('anon', 'public.billing_subscriptions', 'SELECT')
     and not has_table_privilege('anon', 'public.billing_payments', 'SELECT')
-    and has_function_privilege('anon', 'public.create_order(text,text,text,text,text,jsonb,text,text,text,text,text,text,text,text,text,numeric,text,numeric,text)', 'EXECUTE'));
+    and not has_function_privilege('anon', 'public.create_order(text,text,text,text,text,jsonb,text,text,text,text,text,text,text,text,text,numeric,text,numeric,text)', 'EXECUTE')
+    and has_function_privilege('service_role', 'public.create_order(text,text,text,text,text,jsonb,text,text,text,text,text,text,text,text,text,numeric,text,numeric,text)', 'EXECUTE'));
 
   -- ============================================================
   -- S8 — catálogo e restrições do banco; cortesia e métrica

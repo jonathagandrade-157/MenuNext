@@ -31,7 +31,9 @@ const ALL_NAV_GROUPS: NavGroup[] = [
     items: [
       { href: "/painel/categorias", label: "Categorias", icon: "categorias", ownerOnly: true },
       { href: "/painel/produtos", label: "Produtos", icon: "produtos" },
+      { href: "/painel/estoque", label: "Estoque", icon: "estoque", ownerOnly: true },
       { href: "/painel/adicionais", label: "Adicionais", icon: "adicionais" },
+      { href: "/painel/variantes", label: "Variantes", icon: "variantes", ownerOnly: true },
       { href: "/painel/combos", label: "Combos", icon: "combos", ownerOnly: true },
     ],
   },
@@ -57,6 +59,7 @@ const ALL_NAV_GROUPS: NavGroup[] = [
       { href: "/painel/usuarios", label: "Usuários", icon: "usuarios", ownerOnly: true },
       { href: "/painel/configuracoes", label: "Configurações", icon: "configuracoes", ownerOnly: true },
       { href: "/painel/plano", label: "Plano", icon: "plano", ownerOnly: true },
+      { href: "/painel/suporte", label: "Suporte", icon: "suporte", ownerOnly: true },
       { href: "/painel/ajuda", label: "Ajuda", icon: "ajuda" },
     ],
   },

@@ -1,5 +1,5 @@
 // PostgreSQL nativo DESCARTAVEL na nuvem. Sem Docker, WSL, credenciais ou conexao com Supabase.
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFileSync, spawn, spawnSync } from "node:child_process";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
@@ -93,6 +93,26 @@ try {
     }
     total += Number(match[1]);
     console.log(`${name}: OK | ${match[1]} verificacoes (rollback)`);
+  }
+  // Concorrencia real (varias sessoes psql ao mesmo tempo), quando o laboratorio traz esse cenario.
+  const concurrencyFile = path.join(here, "concurrency.mjs");
+  if (fs.existsSync(concurrencyFile)) {
+    const { runConcurrency } = await import(concurrencyFile);
+    const parallel = (queries) =>
+      Promise.all(
+        queries.map(
+          (query) =>
+            new Promise((resolve, reject) => {
+              const child = spawn(tool("psql"), ["-X", "-At", "-v", "ON_ERROR_STOP=1", "-c", query], { env });
+              let out = "";
+              let err = "";
+              child.stdout.on("data", (d) => (out += d));
+              child.stderr.on("data", (d) => (err += d));
+              child.on("close", (code) => (code === 0 ? resolve(out.trim()) : reject(new Error(`sessao concorrente falhou: ${err.slice(-500)}`))));
+            }),
+        ),
+      );
+    for (const line of await runConcurrency({ sql, parallel })) console.log(`CONCORRENCIA: ${line}`);
   }
   console.log(`CHECKOUT SQL: OK | ${total} verificacoes | ${stages} etapa(s) de privilegios`);
 } catch (error) {
