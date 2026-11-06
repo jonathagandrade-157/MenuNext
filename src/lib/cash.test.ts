@@ -157,3 +157,21 @@ describe("movimentações do caixa", () => {
     expect(ok.rows[0]).toMatchObject({ kind: "withdrawal", amount: 12.5, reason: "cofre" });
   });
 });
+
+describe("vendas da sessão de caixa", () => {
+  it("summarizeCashSales ignora canceladas e soma em centavos", async () => {
+    const { summarizeCashSales } = await import("./cash");
+    const sale = (orderNumber: number, paymentMethod: "cash" | "pix" | "card", total: number, status = "received") => ({ orderId: String(orderNumber), orderNumber, createdAt: "2026-11-05T12:00:00Z", paymentMethod, status, total });
+    const r = summarizeCashSales([sale(1, "cash", 0.1), sale(2, "cash", 0.2), sale(3, "pix", 20), sale(4, "card", 99, "cancelled"), sale(5, "card", 10.5, "picked_up")]);
+    expect(r).toEqual({ orders: 4, cancelled: 1, total: 30.8, byPayment: { cash: { orders: 2, total: 0.3 }, pix: { orders: 1, total: 20 }, card: { orders: 1, total: 10.5 } } });
+    expect(summarizeCashSales([]).total).toBe(0);
+  });
+  it("getCashSessionSales: indisponível sem a migration, propaga outros erros, converte linhas", async () => {
+    const { getCashSessionSales } = await import("./cash");
+    const fake = (error: unknown, data: unknown = null) => ({ rpc: async () => ({ data, error }) }) as never;
+    expect(await getCashSessionSales(fake({ code: "PGRST202", message: "x" }))).toEqual({ available: false, sales: [] });
+    await expect(getCashSessionSales(fake({ code: "XX000", message: "boom" }))).rejects.toBeTruthy();
+    const ok = await getCashSessionSales(fake(null, [{ order_id: "o", order_number: 7, created_at: "2026-11-05T12:00:00Z", payment_method: "pix", status: "received", total: "12.5" }]));
+    expect(ok.sales[0]).toMatchObject({ orderNumber: 7, paymentMethod: "pix", total: 12.5 });
+  });
+});
