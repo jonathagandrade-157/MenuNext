@@ -17,6 +17,10 @@ import {
 } from "@/lib/orders";
 import { playNewOrderChime } from "@/lib/sound";
 import {
+  loadNotifyPref, notifySupport, saveNotifyPref, shouldNotify, showOrderNotification,
+  type NotifiableOrder, type NotifySupport,
+} from "@/lib/browserNotify";
+import {
   POLL_WHILE_DISCONNECTED_MS, claimNotification, connectionFromChannelStatus, countPendingOrders, planResync, shouldResync, titleWithPending,
   type ConnectionState,
 } from "@/lib/orderSync";
@@ -107,12 +111,42 @@ export function KanbanBoard({
     ordersRef.current = orders;
   }, [orders]);
   const lastResyncRef = useRef<number | null>(null);
+  // Aviso do navegador (opcional, desligado por padrão; preferência só neste navegador).
+  const [browserNotify, setBrowserNotify] = useState(false);
+  const [notifyState, setNotifyState] = useState<NotifySupport>("unsupported");
+  const browserNotifyRef = useRef(false);
+  useEffect(() => {
+    browserNotifyRef.current = browserNotify;
+  }, [browserNotify]);
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- preferência e permissão só existem no navegador
+    setNotifyState(notifySupport());
+    setBrowserNotify(loadNotifyPref());
+  }, []);
+  async function toggleBrowserNotify() {
+    if (browserNotify) {
+      setBrowserNotify(false);
+      saveNotifyPref(false);
+      return;
+    }
+    // O pedido de permissão só funciona dentro de um clique.
+    const permission = notifySupport() === "granted" ? "granted" : await Notification.requestPermission();
+    setNotifyState(notifySupport());
+    if (permission === "granted") {
+      setBrowserNotify(true);
+      saveNotifyPref(true);
+    }
+  }
   const [connection, setConnection] = useState<ConnectionState>("connecting");
 
-  const highlightNew = useCallback((ids: string[]) => {
-    if (ids.length === 0) return;
+  const highlightNew = useCallback((newOrders: NotifiableOrder[]) => {
+    if (newOrders.length === 0) return;
+    const ids = newOrders.map((o) => o.id);
     setNewOrderIds((prev) => new Set([...prev, ...ids]));
     if (soundEnabledRef.current) playNewOrderChime();
+    if (shouldNotify({ enabled: browserNotifyRef.current, support: notifySupport(), hidden: document.visibilityState === "hidden" })) {
+      showOrderNotification(newOrders);
+    }
     setTimeout(() => {
       setNewOrderIds((prev) => {
         const next = new Set(prev);
@@ -130,7 +164,7 @@ export function KanbanBoard({
       const fetched = await getActiveOrdersForKanban(supabaseRef.current, restaurantId);
       const plan = planResync(ordersRef.current, fetched, notifiedRef.current);
       setOrders(plan.orders);
-      highlightNew(plan.newOrderIds);
+      highlightNew(plan.orders.filter((o) => plan.newOrderIds.includes(o.id)));
     } catch {
       // Falha de rede: o estado atual da tela é mantido e a próxima tentativa (reconexão/poll) corrige.
     }
@@ -162,7 +196,7 @@ export function KanbanBoard({
           }
           const loaded = full;
           setOrders((prev) => (prev.some((o) => o.id === loaded.id) ? prev : [...prev, loaded]));
-          highlightNew([loaded.id]);
+          highlightNew([loaded]);
         }
       )
       .on(
@@ -329,6 +363,21 @@ export function KanbanBoard({
           {soundEnabled ? <Volume2 className="h-4 w-4" aria-hidden /> : <VolumeX className="h-4 w-4" aria-hidden />}
           {soundEnabled ? "Som ativado" : "Som desativado"}
         </button>
+        {notifyState !== "unsupported" && (
+          <button
+            type="button"
+            onClick={() => void toggleBrowserNotify()}
+            disabled={notifyState === "denied"}
+            title={notifyState === "denied" ? "Notificações bloqueadas no navegador. Libere nas configurações do site." : "Avisar pelo navegador quando esta aba estiver em segundo plano"}
+            aria-pressed={browserNotify}
+            className={`flex h-10 shrink-0 items-center gap-1.5 rounded-xl px-3 text-label-md transition-colors ${
+              browserNotify ? "bg-surface-card text-graphite shadow-card hover:bg-surface-subdued" : "bg-surface-subdued text-text-muted"
+            } disabled:cursor-not-allowed disabled:opacity-60`}
+          >
+            <BellRing className="h-4 w-4" aria-hidden />
+            {notifyState === "denied" ? "Aviso bloqueado" : browserNotify ? "Aviso no navegador ligado" : "Avisar no navegador"}
+          </button>
+        )}
         <span
           role="status"
           aria-live="polite"
