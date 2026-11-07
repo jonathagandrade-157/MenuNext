@@ -71,3 +71,27 @@ export async function extendTrialAction(
   revalidatePath("/master/restaurantes");
   return { status: "success" };
 }
+
+export type RequireAal2Result = { ok: true } | { ok: false; error: string };
+
+function friendlyAal2Error(message: string): string {
+  const m = message.toLowerCase();
+  if (m.includes("aal2_required")) return "Faça a verificação em duas etapas em /master-mfa nesta sessão antes de alterar esta opção.";
+  if (m.includes("not_authorized")) return "Você não tem permissão para esta ação.";
+  if (m.includes("could not find the function") || m.includes("pgrst202")) return "Esta opção ainda não está disponível neste ambiente (migration não aplicada).";
+  return "Não foi possível concluir agora. Tente novamente.";
+}
+
+/**
+ * Liga/desliga a exigência de segundo fator (AAL2) NO BANCO para o administrador da plataforma
+ * (migration 20261107000000_platform_admin_require_aal2). A RPC só aceita quem está em AAL2 nesta sessão —
+ * quem liga acabou de provar que o segundo fator funciona (anti-trancamento).
+ */
+export async function setRequireAal2Action(enabled: boolean): Promise<RequireAal2Result> {
+  const { supabase } = await requireMasterPage();
+  if (typeof enabled !== "boolean") return { ok: false, error: "Valor inválido." };
+  const { error } = await supabase.rpc("platform_set_require_aal2", { p_enabled: enabled });
+  if (error) return { ok: false, error: friendlyAal2Error(error.message) };
+  revalidatePath("/master/configuracoes");
+  return { ok: true };
+}

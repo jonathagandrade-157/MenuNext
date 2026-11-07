@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
-import { getAuthedUser, isPlatformAdmin, resolvePostAuthPath } from "@/lib/tenant";
+import { getAuthedUser, resolveMasterAccess, resolvePostAuthPath } from "@/lib/tenant";
 import { assertMasterNetwork } from "@/lib/masterGuard";
 import { MasterMfaClient } from "@/components/master/MasterMfaClient";
 
@@ -11,7 +11,7 @@ export default async function MasterMfaPage() {
   await assertMasterNetwork();
   const { supabase, user } = await getAuthedUser();
   if (!user) redirect("/cadastro?mode=login&next=%2Fmaster");
-  if (!(await isPlatformAdmin(supabase))) redirect(await resolvePostAuthPath(supabase));
+  if ((await resolveMasterAccess(supabase)) === "not_admin") redirect(await resolvePostAuthPath(supabase));
   const { data } = await supabase.auth.mfa.getAuthenticatorAssuranceLevel();
   if (data?.currentLevel === "aal2") redirect("/master");
   return <MasterMfaClient />;
