@@ -2,6 +2,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { assertMasterMfa, assertMasterNetwork } from "@/lib/masterGuard";
+import { isMissingRpc } from "@/lib/rpcErrors";
+import { MASTER_MFA_PATH } from "@/lib/masterAccess";
 import { parseAccessState, type AccessState } from "@/lib/accessState";
 import type { PixKeyType } from "@/lib/pix";
 
@@ -179,6 +181,23 @@ export async function isPlatformAdmin(supabase: SupabaseClient): Promise<boolean
   return data === true;
 }
 
+export type MasterAccess = "not_admin" | "mfa_required" | "admin";
+
+/**
+ * Situação do usuário atual diante do Master, decidida PELO BANCO (platform_admin_state): "mfa_required" é o
+ * administrador em AAL1 quando a exigência de segundo fator está ligada no banco (migration
+ * 20261107000000_platform_admin_require_aal2) — o app o manda para a tela de segundo fator em vez de tratá-lo como
+ * "não administrador". Se a migration ainda não existe, cai no is_platform_admin() original.
+ */
+export async function resolveMasterAccess(supabase: SupabaseClient): Promise<MasterAccess> {
+  const { data, error } = await supabase.rpc("platform_admin_state");
+  if (error) {
+    if (!isMissingRpc(error)) throw error;
+    return (await isPlatformAdmin(supabase)) ? "admin" : "not_admin";
+  }
+  return data === "admin" || data === "mfa_required" ? data : "not_admin";
+}
+
 /** Guarda de acesso para páginas de /master (defesa em profundidade — o
  * layout já bloqueia, mas cada página segue o mesmo padrão de re-checar
  * usado nas páginas OWNER-only de /painel, ver requireOwnerPage). */
@@ -188,11 +207,22 @@ export async function requireMasterPage(): Promise<{ supabase: SupabaseClient }>
   const { supabase, user } = await getAuthedUser();
   if (!user) redirect("/cadastro");
 
-  const isAdmin = await isPlatformAdmin(supabase);
-  if (!isAdmin) redirect(await resolvePostAuthPath(supabase));
+  const access = await resolveMasterAccess(supabase);
+  if (access === "not_admin") redirect(await resolvePostAuthPath(supabase));
+  if (access === "mfa_required") redirect(MASTER_MFA_PATH); // exigência de AAL2 ligada no banco
   await assertMasterMfa(supabase); // segundo fator quando MASTER_REQUIRE_MFA=true
 
   return { supabase };
+}
+
+/** Estado da exigência de AAL2 no banco: null = recurso indisponível (migration não aplicada). */
+export async function getPlatformRequireAal2(supabase: SupabaseClient): Promise<boolean | null> {
+  const { data, error } = await supabase.rpc("platform_get_require_aal2");
+  if (error) {
+    if (isMissingRpc(error)) return null;
+    throw error;
+  }
+  return data === true;
 }
 
 export type PlatformSettings = {

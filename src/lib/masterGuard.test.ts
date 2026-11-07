@@ -114,7 +114,7 @@ describe("cobertura estática: nada do Master fica sem proteção", () => {
         if (e.isDirectory()) walk(full);
         else if (/\.(ts|tsx)$/.test(e.name) && !/\.test\./.test(e.name)) {
           const rel = path.relative(ROOT, full).replaceAll("\\", "/");
-          if (/isPlatformAdmin\(|rpc\(\s*["']is_platform_admin/.test(fs.readFileSync(full, "utf8"))) offenders.push(rel);
+          if (/isPlatformAdmin\(|resolveMasterAccess\(|rpc\(\s*["'](is_platform_admin|platform_admin_state)/.test(fs.readFileSync(full, "utf8"))) offenders.push(rel);
         }
       }
     };
