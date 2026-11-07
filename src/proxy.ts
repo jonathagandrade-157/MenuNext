@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { buildContentSecurityPolicy, generateNonce } from "@/lib/csp";
 import { turnstileEnabled } from "@/lib/turnstile";
+import { evaluateMasterNetwork, isMasterPath, MASTER_RESPONSE_HEADERS, masterProxyHops, masterRequestHost, pickMasterClientIp } from "@/lib/masterAccess";
 
 const PROTECTED_PREFIXES = ["/painel", "/onboarding", "/master"];
 
@@ -18,6 +19,16 @@ function isProtectedPath(pathname: string) {
  * mecanismo único de autorização.
  */
 export async function proxy(request: NextRequest) {
+  // Isolamento do Master: fora do domínio/IP permitidos o caminho responde 404 sem tocar em sessão nem banco.
+  const masterRoute = isMasterPath(request.nextUrl.pathname);
+  if (masterRoute) {
+    const decision = evaluateMasterNetwork({
+      host: masterRequestHost(request.headers),
+      ip: pickMasterClientIp(request.headers.get("x-forwarded-for"), masterProxyHops()),
+    });
+    if (!decision.allowed) return new NextResponse("Not Found", { status: 404, headers: MASTER_RESPONSE_HEADERS });
+  }
+
   // Content-Security-Policy por requisição. Produção: vale de verdade e com nonce de script (o Next lê o nonce
   // do cabeçalho da REQUISIÇÃO e o aplica sozinho a todos os scripts da página). Desenvolvimento: só relatório,
   // sem nonce (o recarregamento ao vivo usa conexões que a política bloquearia).
@@ -78,6 +89,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(redirectUrl);
   }
 
+  if (masterRoute) for (const [k, v] of Object.entries(MASTER_RESPONSE_HEADERS)) response.headers.set(k, v);
   return response;
 }
 
