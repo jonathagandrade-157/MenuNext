@@ -2,10 +2,11 @@ import { redirect } from "next/navigation";
 import { getAuthedUser, getMyMembership, getMyRestaurant } from "@/lib/tenant";
 import { getPublicCategoriesWithProducts } from "@/lib/store";
 import { getPublicAssetUrl } from "@/lib/storage/assets";
-import { getCashHistory, getCurrentCashSession } from "@/lib/cash";
+import { getCashHistory, getCashMovements, getCurrentCashSession } from "@/lib/cash";
 import { CaixaClient } from "@/components/painel/caixa/CaixaClient";
 import { CashSessionBar } from "@/components/painel/caixa/CashSessionBar";
 import { CashHistory } from "@/components/painel/caixa/CashHistory";
+import { CashMovements } from "@/components/painel/caixa/CashMovements";
 
 // Frente de Caixa / PDV real (decisão tomada com o usuário): pedidos de
 // balcão usam fulfillment_type='counter' (novo), reaproveitando
@@ -28,6 +29,7 @@ export default async function CaixaPage() {
     getMyMembership(supabase, restaurant.id),
   ]);
   const history = membership?.role === "OWNER" ? await getCashHistory(supabase, 15) : [];
+  const movements = cashSession ? await getCashMovements(supabase) : { available: false, rows: [] };
 
   return (
     <div className="mx-auto max-w-6xl space-y-6 px-4 py-6 sm:px-6 sm:py-8">
@@ -39,6 +41,8 @@ export default async function CaixaPage() {
       </div>
 
       <CashSessionBar session={cashSession} />
+
+      {cashSession && movements.available && <CashMovements rows={movements.rows} />}
 
       <CaixaClient
         categories={categories}
