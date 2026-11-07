@@ -6,6 +6,13 @@ import type { PublicCategoryWithProducts, PublicCombo, PublicProduct } from "@/l
 import { StoreComboCard } from "./StoreComboCard";
 import { StoreProductCard } from "./StoreProductCard";
 
+/** Preço e disponibilidade do card: com variantes, "a partir de" o menor preço disponível; todas desligadas = indisponível. */
+function productCardPricing(product: PublicProduct): { price: number; isAvailable: boolean; fromPrice: boolean } {
+  if (product.variantFromPrice === undefined) return { price: product.price, isAvailable: product.is_available, fromPrice: false };
+  if (product.variantFromPrice === null) return { price: product.price, isAvailable: false, fromPrice: false };
+  return { price: product.variantFromPrice, isAvailable: product.is_available, fromPrice: true };
+}
+
 /** Cardápio público: busca por nome/descrição, atalhos de categoria com a
  * seção visível em destaque e as seções de combos e produtos. Só filtra o que
  * já veio do servidor — nenhum dado novo. */
@@ -133,9 +140,8 @@ export function StoreCatalog({
                 href={`/loja/${slug}/produto/${product.id}`}
                 name={product.name}
                 description={product.description}
-                price={product.price}
+                {...productCardPricing(product)}
                 imageUrl={product.imageUrl}
-                isAvailable={product.is_available}
               />
             ))}
           </div>
@@ -163,9 +169,8 @@ export function StoreCatalog({
                 href={`/loja/${slug}/produto/${product.id}`}
                 name={product.name}
                 description={product.description}
-                price={product.price}
+                {...productCardPricing(product)}
                 imageUrl={product.imageUrl}
-                isAvailable={product.is_available}
               />
             ))}
           </div>

@@ -13,6 +13,7 @@ export function StoreProductCard({
   price,
   imageUrl,
   isAvailable,
+  fromPrice = false,
 }: {
   href: string;
   name: string;
@@ -20,6 +21,8 @@ export function StoreProductCard({
   price: number;
   imageUrl: string | null;
   isAvailable: boolean;
+  /** Produto com variantes: o preço é o menor entre as variantes disponíveis ("a partir de"). */
+  fromPrice?: boolean;
 }) {
   return (
     <Link
@@ -32,7 +35,10 @@ export function StoreProductCard({
           {description && <p className="mt-0.5 line-clamp-2 text-body-sm text-text-muted">{description}</p>}
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-body-md font-bold text-graphite">{formatCurrencyBRL(price)}</span>
+          <span className="text-body-md font-bold text-graphite">
+            {fromPrice && <span className="text-body-sm font-medium text-text-muted">a partir de </span>}
+            {formatCurrencyBRL(price)}
+          </span>
           {!isAvailable && <span className="rounded-full bg-red/10 px-2 py-0.5 text-label-sm text-red">Indisponível</span>}
         </div>
       </div>

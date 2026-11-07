@@ -9,6 +9,12 @@
  */
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import {
+  getProductVariantsForStore,
+  getStoreVariants,
+  variantFromPrice,
+  type PublicVariant,
+} from "./storeVariants";
 import type {
   Addon,
   AddonGroup,
@@ -68,7 +74,8 @@ export async function getPublicRestaurantBySlug(
   } as PublicRestaurant;
 }
 
-export type PublicProduct = Product & { imageUrl: string | null };
+/** variantFromPrice: menor preço entre as variantes disponíveis ("a partir de"); null em produto sem variantes. */
+export type PublicProduct = Product & { imageUrl: string | null; variantFromPrice?: number | null };
 export type PublicCategoryWithProducts = {
   id: string;
   name: string;
@@ -96,6 +103,12 @@ export async function getPublicCategoriesWithProducts(
     .order("display_order");
   if (error) throw error;
 
+  // Variantes: consulta separada e tolerante (banco sem a migration = cardápio de sempre).
+  const fromPrice = new Map<string, number | null>();
+  for (const [productId, list] of groupVariantsByProduct(await getStoreVariants(supabase, restaurantId))) {
+    fromPrice.set(productId, variantFromPrice(list));
+  }
+
   return (data ?? []).map((category) => {
     const products = ((category.products ?? []) as (Product & { product_images: ProductImage[] })[])
       .slice()
@@ -109,6 +122,7 @@ export async function getPublicCategoriesWithProducts(
           // A loja pública nunca expõe custo (ele vive em product_costs, só para membros).
           cost: null,
           imageUrl: cover ? getImageUrl(cover.storage_path) : null,
+          ...(fromPrice.has(product.id) ? { variantFromPrice: fromPrice.get(product.id) ?? null } : {}),
         } as PublicProduct;
       });
     return {
@@ -149,12 +163,20 @@ export async function getPublicCombosWithItems(
   })) as PublicCombo[];
 }
 
+function groupVariantsByProduct(variants: PublicVariant[]): Map<string, PublicVariant[]> {
+  const map = new Map<string, PublicVariant[]>();
+  for (const v of variants) map.set(v.productId, [...(map.get(v.productId) ?? []), v]);
+  return map;
+}
+
 export type PublicProductImage = { url: string; display_order: number };
 export type PublicProductAddonGroup = AddonGroupWithAddons;
 
 export type PublicProductDetail = Product & {
   images: PublicProductImage[];
   addonGroups: PublicProductAddonGroup[];
+  /** Vazio em produto sem variantes (ou banco sem a migration). Inclui as desligadas, para a UI marcar. */
+  variants: PublicVariant[];
 };
 
 /**
@@ -209,12 +231,15 @@ export async function getPublicProductDetail(
         .sort((a, b) => a.display_order - b.display_order),
     }));
 
+  const variants = await getProductVariantsForStore(supabase, restaurantId, productId);
+
   return {
     ...product,
     price: Number(product.price),
     cost: null,
     images,
     addonGroups,
+    variants,
   } as PublicProductDetail;
 }
 
