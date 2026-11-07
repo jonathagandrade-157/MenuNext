@@ -19,9 +19,12 @@ export function PedidosTabs({
   initialHistoryOrders,
   initialSelectedOrderId = null,
   storeName = null,
+  storeSlug = null,
 }: {
   restaurantId: string;
   storeName?: string | null;
+  /** Slug da loja: link de acompanhamento na mensagem de WhatsApp. */
+  storeSlug?: string | null;
   initialActiveOrders: OrderWithItems[];
   initialHistoryOrders: OrderWithItems[];
   initialSelectedOrderId?: string | null;
@@ -54,9 +57,14 @@ export function PedidosTabs({
 
       <div className="min-h-0 flex-1">
         {view === "kanban" ? (
-          <KanbanBoard restaurantId={restaurantId} initialOrders={initialActiveOrders} storeName={storeName} />
+          <KanbanBoard restaurantId={restaurantId} initialOrders={initialActiveOrders} storeName={storeName} storeSlug={storeSlug} />
         ) : (
-          <OrderHistoryView initialOrders={initialHistoryOrders} initialSelectedOrderId={initialSelectedOrderId} />
+          <OrderHistoryView
+            initialOrders={initialHistoryOrders}
+            initialSelectedOrderId={initialSelectedOrderId}
+            storeName={storeName}
+            storeSlug={storeSlug}
+          />
         )}
       </div>
     </div>

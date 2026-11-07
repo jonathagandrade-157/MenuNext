@@ -42,9 +42,13 @@ function periodStartDate(period: PeriodFilter): Date | null {
 export function OrderHistoryView({
   initialOrders,
   initialSelectedOrderId = null,
+  storeName = null,
+  storeSlug = null,
 }: {
   initialOrders: OrderWithItems[];
   initialSelectedOrderId?: string | null;
+  storeName?: string | null;
+  storeSlug?: string | null;
 }) {
   const [orders, setOrders] = useState<OrderWithItems[]>(initialOrders);
   const [tab, setTab] = useState<OrderHistoryTabId>("all");
@@ -207,6 +211,8 @@ export function OrderHistoryView({
 
       <OrderDetailModal
         order={selectedOrder}
+        storeName={storeName}
+        storeSlug={storeSlug}
         isAdvancing={advancingId === selectedOrder?.id}
         isCancelling={cancellingId === selectedOrder?.id}
         onClose={() => setSelectedOrderId(null)}
