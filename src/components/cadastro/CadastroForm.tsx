@@ -5,6 +5,7 @@ import { useActionState, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { Button } from "@/components/ui/Button";
 import { signInAction, signUpAction } from "@/lib/actions/auth";
+import { TurnstileWidget } from "@/components/security/TurnstileWidget";
 import { initialAuthState } from "@/lib/form-state";
 import { maskDocument } from "@/lib/document";
 import { PASSWORD_MIN_LENGTH } from "@/lib/password";
@@ -70,6 +71,7 @@ export function CadastroForm({
 
           {signInState.status === "error" && <ErrorMessage message={signInState.message} />}
 
+          <TurnstileWidget action="login" resetKey={signInState} />
           <SubmitButton label="Entrar" />
         </form>
 
@@ -151,6 +153,7 @@ export function CadastroForm({
 
         {signUpState.status === "error" && <ErrorMessage message={signUpState.message} />}
 
+        <TurnstileWidget action="cadastro" resetKey={signUpState} />
         <SubmitButton label="Começar 30 dias grátis" />
 
         <p className="text-center text-body-sm text-text-muted">

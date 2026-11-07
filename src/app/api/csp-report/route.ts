@@ -1,4 +1,5 @@
 import { summarizeCspReport } from "@/lib/csp";
+import { readBodyLimited } from "@/lib/readBodyLimited";
 
 /**
  * Recebe os avisos de violação da Content-Security-Policy (modo só relatório). Público por natureza (é o
@@ -9,8 +10,8 @@ const MAX_BODY_BYTES = 8 * 1024;
 
 export async function POST(request: Request) {
   try {
-    const text = await request.text();
-    if (text.length > 0 && text.length <= MAX_BODY_BYTES) {
+    const text = await readBodyLimited(request, MAX_BODY_BYTES);
+    if (text && text.length > 0) {
       const summary = summarizeCspReport(JSON.parse(text));
       if (summary) {
         console.warn(`[csp] ${summary.directive} bloquearia ${summary.blocked || "(inline)"} em ${summary.page}${summary.source ? ` (origem ${summary.source})` : ""}`);

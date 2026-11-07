@@ -1,3 +1,4 @@
+import { assertMasterMfa, assertMasterNetwork } from "@/lib/masterGuard";
 import { redirect } from "next/navigation";
 import { PanelSidebar, type NavGroup } from "@/components/layout/PanelSidebar";
 import { getAuthedUser, isPlatformAdmin, resolvePostAuthPath } from "@/lib/tenant";
@@ -32,11 +33,13 @@ export default async function MasterLayout({ children }: { children: React.React
   // exige profiles.is_master = true (via RPC is_platform_admin, SECURITY
   // DEFINER). Quem não é admin da plataforma é mandado de volta para o
   // destino normal pós-login, sem ver nem o esqueleto do /master.
+  await assertMasterNetwork(); // MASTER_HOST / MASTER_ALLOWED_IPS: fora da rede permitida, 404
   const { supabase, user } = await getAuthedUser();
   if (!user) redirect("/cadastro");
 
   const isAdmin = await isPlatformAdmin(supabase);
   if (!isAdmin) redirect(await resolvePostAuthPath(supabase));
+  await assertMasterMfa(supabase); // MASTER_REQUIRE_MFA=true: exige o segundo fator
 
   return (
     <div className="flex min-h-screen flex-col bg-surface lg:flex-row">
