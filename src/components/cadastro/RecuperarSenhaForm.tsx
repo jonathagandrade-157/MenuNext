@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useActionState } from "react";
+import { TurnstileWidget } from "@/components/security/TurnstileWidget";
 import { ErrorMessage, Field, SubmitButton } from "@/components/cadastro/CadastroForm";
 import { requestPasswordResetAction } from "@/lib/actions/passwordReset";
 import { initialPasswordResetState } from "@/lib/form-state";
@@ -42,6 +43,7 @@ export function RecuperarSenhaForm({ linkExpired }: { linkExpired: boolean }) {
       <form action={formAction} className="space-y-4">
         <Field label="E-mail" name="email" type="email" autoComplete="email" required />
         {state.status === "error" && <ErrorMessage message={state.message} />}
+        <TurnstileWidget action="recuperar" resetKey={state} />
         <SubmitButton label="Enviar link de redefinição" />
       </form>
 

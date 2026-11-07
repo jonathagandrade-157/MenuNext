@@ -1,6 +1,9 @@
 import { createHash } from "node:crypto";
 import { headers } from "next/headers";
 import { createAdminClient, isAdminConfigured } from "@/lib/supabase/admin";
+import { pickClientIp } from "@/lib/clientIp";
+
+export { pickClientIp };
 
 /**
  * Limite de tentativas por IP / conta (login, cadastro, pedidos da loja pública, cupons, cálculo de frete).
@@ -11,16 +14,6 @@ import { createAdminClient, isAdminConfigured } from "@/lib/supabase/admin";
 
 export type RateLimitRule = { limit: number; windowSeconds: number };
 export type RateLimitResult = { allowed: boolean; retryAfterSeconds: number };
-
-const MAX_IP_LENGTH = 64;
-
-/** IP do cliente a partir dos cabeçalhos. Na Vercel o x-forwarded-for é definido pela própria plataforma
- * (o primeiro item é o cliente); IPv4/IPv6 só com os caracteres esperados, senão "unknown". */
-export function pickClientIp(forwardedFor: string | null, realIp: string | null): string {
-  const candidate = (forwardedFor?.split(",")[0] ?? realIp ?? "").trim();
-  if (candidate.length === 0 || candidate.length > MAX_IP_LENGTH) return "unknown";
-  return /^[0-9a-fA-F:.]+$/.test(candidate) ? candidate.toLowerCase() : "unknown";
-}
 
 export async function getClientIp(): Promise<string> {
   const h = await headers();
