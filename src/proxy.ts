@@ -1,8 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { buildContentSecurityPolicy, generateNonce } from "@/lib/csp";
-import { pickClientIp } from "@/lib/clientIp";
-import { evaluateMasterNetwork, isMasterPath, MASTER_RESPONSE_HEADERS } from "@/lib/masterAccess";
+import { evaluateMasterNetwork, isMasterPath, MASTER_RESPONSE_HEADERS, masterProxyHops, masterRequestHost, pickMasterClientIp } from "@/lib/masterAccess";
 
 const PROTECTED_PREFIXES = ["/painel", "/onboarding", "/master"];
 
@@ -23,8 +22,8 @@ export async function proxy(request: NextRequest) {
   const masterRoute = isMasterPath(request.nextUrl.pathname);
   if (masterRoute) {
     const decision = evaluateMasterNetwork({
-      host: request.headers.get("x-forwarded-host") ?? request.headers.get("host"),
-      ip: pickClientIp(request.headers.get("x-forwarded-for"), request.headers.get("x-real-ip")),
+      host: masterRequestHost(request.headers),
+      ip: pickMasterClientIp(request.headers.get("x-forwarded-for"), masterProxyHops()),
     });
     if (!decision.allowed) return new NextResponse("Not Found", { status: 404, headers: MASTER_RESPONSE_HEADERS });
   }

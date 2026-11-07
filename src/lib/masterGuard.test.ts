@@ -28,13 +28,39 @@ describe("assertMasterNetwork", () => {
   it("host e IP fora da política viram 404", async () => {
     vi.stubEnv("MASTER_HOST", "master.exemplo.com");
     vi.stubEnv("MASTER_ALLOWED_IPS", "203.0.113.7");
-    h.headers.set("x-forwarded-host", "master.exemplo.com");
+    h.headers.set("host", "master.exemplo.com");
     h.headers.set("x-forwarded-for", "203.0.113.7");
     await expect(assertMasterNetwork()).resolves.toBeUndefined();
     h.headers.set("x-forwarded-for", "198.51.100.1");
     await expect(assertMasterNetwork()).rejects.toThrow("NOT_FOUND");
     h.headers.set("x-forwarded-for", "203.0.113.7");
-    h.headers.set("x-forwarded-host", "loja.exemplo.com");
+    h.headers.set("host", "loja.exemplo.com");
+    await expect(assertMasterNetwork()).rejects.toThrow("NOT_FOUND");
+  });
+  it("cabeçalhos falsificados pelo cliente NÃO abrem o Master", async () => {
+    vi.stubEnv("MASTER_HOST", "master.exemplo.com");
+    vi.stubEnv("MASTER_ALLOWED_IPS", "203.0.113.7");
+    // Host real é o da loja; o cliente escreve X-Forwarded-Host e a 1ª entrada do X-Forwarded-For
+    h.headers.set("host", "loja.exemplo.com");
+    h.headers.set("x-forwarded-host", "master.exemplo.com");
+    h.headers.set("x-forwarded-for", "203.0.113.7, 198.51.100.50");
+    await expect(assertMasterNetwork()).rejects.toThrow("NOT_FOUND");
+    // Host certo, mas o IP que o proxy de borda viu (entrada da direita) não está na lista
+    h.headers.set("host", "master.exemplo.com");
+    await expect(assertMasterNetwork()).rejects.toThrow("NOT_FOUND");
+    // Host certo e IP real (direita) na lista: passa, mesmo com lixo falsificado à esquerda
+    h.headers.set("x-forwarded-for", "9.9.9.9, 203.0.113.7");
+    await expect(assertMasterNetwork()).resolves.toBeUndefined();
+  });
+  it("MASTER_PROXY_HOPS considera um proxy extra à frente", async () => {
+    vi.stubEnv("MASTER_ALLOWED_IPS", "203.0.113.7");
+    vi.stubEnv("MASTER_PROXY_HOPS", "2");
+    h.headers.set("x-forwarded-for", "203.0.113.7, 198.51.100.50");
+    await expect(assertMasterNetwork()).resolves.toBeUndefined();
+  });
+  it("X-Real-IP falsificado, sem X-Forwarded-For, não abre o Master", async () => {
+    vi.stubEnv("MASTER_ALLOWED_IPS", "203.0.113.7");
+    h.headers.set("x-real-ip", "203.0.113.7");
     await expect(assertMasterNetwork()).rejects.toThrow("NOT_FOUND");
   });
   it("cabeçalho de IP com lixo equivale a desconhecido e é negado quando há lista", async () => {

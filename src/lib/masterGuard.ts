@@ -1,8 +1,7 @@
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { pickClientIp } from "@/lib/clientIp";
-import { evaluateMasterNetwork, MASTER_MFA_PATH, masterMfaRequired } from "@/lib/masterAccess";
+import { evaluateMasterNetwork, MASTER_MFA_PATH, masterMfaRequired, masterProxyHops, masterRequestHost, pickMasterClientIp } from "@/lib/masterAccess";
 
 /**
  * Defesa em profundidade do isolamento do Master (o proxy já nega na borda; isto repete a decisão dentro de cada
@@ -11,8 +10,8 @@ import { evaluateMasterNetwork, MASTER_MFA_PATH, masterMfaRequired } from "@/lib
 export async function assertMasterNetwork(): Promise<void> {
   const h = await headers();
   const decision = evaluateMasterNetwork({
-    host: h.get("x-forwarded-host") ?? h.get("host"),
-    ip: pickClientIp(h.get("x-forwarded-for"), h.get("x-real-ip")),
+    host: masterRequestHost(h),
+    ip: pickMasterClientIp(h.get("x-forwarded-for"), masterProxyHops()),
   });
   if (!decision.allowed) notFound();
 }
