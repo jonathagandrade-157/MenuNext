@@ -175,6 +175,8 @@ export type Order = {
   out_for_delivery_at: string | null;
   delivered_at: string | null;
   picked_up_at: string | null;
+  /** Pix automático confirmado (migration 20261108010000). Ausente em banco sem a migration. */
+  paid_at?: string | null;
   created_at: string;
   updated_at: string;
 };

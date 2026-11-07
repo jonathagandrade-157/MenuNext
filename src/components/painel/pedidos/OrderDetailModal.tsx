@@ -299,6 +299,7 @@ export function OrderDetailModal({
               <span className="text-right font-semibold text-graphite">
                 {PAYMENT_METHOD_LABELS[order.payment_method]}
                 {order.payment_method === "cash" && order.change_for !== null && ` (troco para ${formatCurrencyBRL(order.change_for)})`}
+                {order.paid_at && <span className="ml-1.5 rounded-full bg-emerald/10 px-2 py-0.5 text-label-sm text-emerald">Pago</span>}
               </span>
             </div>
           </section>
