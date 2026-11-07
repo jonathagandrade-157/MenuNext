@@ -5,7 +5,7 @@
 --
 -- Regras testadas: OWNER cria/edita/apaga na própria loja; STAFF só liga/desliga disponibilidade; outra loja,
 -- estranho e visitante nada; nomes únicos por produto, sem diferença de caixa (testado em ASCII: o laboratório usa locale C, onde lower() não trata acentos); preço e nome validados; limite de 20;
--- leitura só de membros; sem escrita direta; cascata ao apagar o produto; create_order e preço do produto intactos.
+-- leitura de membros (visitante só de loja publicada); sem escrita direta; cascata ao apagar o produto; create_order e preço do produto intactos.
 
 create or replace function pg_temp._runas(p_role text, p_uid uuid, p_stmt text) returns text
 language plpgsql as $$
@@ -53,7 +53,8 @@ begin
   total := total + 1;
   if not exists (select 1 from pg_class where oid = 'public.product_variants'::regclass and relrowsecurity) then fails := fails || 'product_variants sem RLS'::text; end if;
   total := total + 1;
-  if has_table_privilege('anon','public.product_variants','SELECT') or has_table_privilege('authenticated','public.product_variants','INSERT')
+  -- anon SELECT: a loja publica le as variantes desde 20261108000000 (a RLS restringe a loja publicada; ver order_item_variants.sql)
+  if has_table_privilege('anon','public.product_variants','INSERT') or has_table_privilege('authenticated','public.product_variants','INSERT')
      or has_table_privilege('authenticated','public.product_variants','UPDATE') or has_table_privilege('authenticated','public.product_variants','DELETE')
      or not has_table_privilege('authenticated','public.product_variants','SELECT') then
     fails := fails || 'privilegios de tabela incorretos'::text;
@@ -160,9 +161,10 @@ begin
   res := pg_temp._runas('authenticated', u_stranger, 'select count(*)::text from public.product_variants');
   total := total + 1;
   if res <> '0' then fails := fails || format('estranho leu variantes (%s)', res); end if;
+  -- lojas deste teste NAO estao publicadas: o visitante nao ve nada (a leitura publica de loja publicada e testada em order_item_variants.sql)
   res := pg_temp._runas('anon', null, 'select count(*)::text from public.product_variants');
   total := total + 1;
-  if res not ilike '%permission denied%' then fails := fails || format('visitante leu variantes (%s)', res); end if;
+  if res <> '0' then fails := fails || format('visitante leu variantes de loja nao publicada (%s)', res); end if;
 
   -- ---------- 6) sem escrita direta ----------
   res := pg_temp._runas('authenticated', u_owner_a, format('update public.product_variants set price = 1 where id = %L returning 1', v1));
