@@ -13,6 +13,7 @@ export const CHECKOUT_LIMITS = {
   itemObservation: 200,
   idempotencyKey: 100,
   couponCode: 64,
+  captchaToken: 2048,
   itemLines: 100,
   addonsPerLine: 50,
   idLength: 64,
@@ -47,6 +48,7 @@ export function isValidOrderShape(input: unknown): boolean {
   if (typeof input.customerPhone !== "string" || input.customerPhone.length > L.phone) return false;
   if (typeof input.idempotencyKey !== "string" || input.idempotencyKey.length === 0 || input.idempotencyKey.length > L.idempotencyKey) return false;
   if (!text(input.observation, L.observation) || !text(input.couponCode, L.couponCode)) return false;
+  if (!text(input.captchaToken, L.captchaToken)) return false;
   if (input.changeFor !== null && input.changeFor !== undefined && (typeof input.changeFor !== "number" || !Number.isFinite(input.changeFor))) return false;
   if (typeof input.paymentMethod !== "string") return false;
   if (input.delivery !== null && input.delivery !== undefined) {

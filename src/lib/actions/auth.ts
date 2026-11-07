@@ -9,6 +9,7 @@ import { PASSWORD_MIN_LENGTH, validatePassword } from "@/lib/password";
 import { safeNextPath } from "@/lib/safeRedirect";
 import { checkIpRateLimit, checkRateLimit, hashIdentifier, tooManyAttemptsMessage } from "@/lib/rateLimit";
 import { callPublicRpc } from "@/lib/publicRpc";
+import { humanCheckError } from "@/lib/humanCheck";
 
 function friendlyAuthError(message: string): string {
   const normalized = message.toLowerCase();
@@ -68,6 +69,8 @@ export async function signUpAction(
   // Freia criação de contas em massa (cada conta ganha um teste grátis de 30 dias).
   const signupLimit = await checkIpRateLimit("cadastro:ip", { limit: 5, windowSeconds: 600 });
   if (!signupLimit.allowed) return { status: "error", message: tooManyAttemptsMessage(signupLimit.retryAfterSeconds) };
+  const signupHuman = await humanCheckError(formData, "cadastro");
+  if (signupHuman) return { status: "error", message: signupHuman };
 
   if (!storeName) return { status: "error", message: "Informe o nome da sua loja." };
   if (!name) return { status: "error", message: "Informe seu nome." };
@@ -153,6 +156,8 @@ export async function signInAction(
   // Freia adivinhação de senha: por IP (1 pessoa tentando muitas contas) e por conta (muitos IPs numa conta).
   const byIp = await checkIpRateLimit("login:ip", { limit: 10, windowSeconds: 60 });
   if (!byIp.allowed) return { status: "error", message: tooManyAttemptsMessage(byIp.retryAfterSeconds) };
+  const loginHuman = await humanCheckError(formData, "login");
+  if (loginHuman) return { status: "error", message: loginHuman };
   const byAccount = await checkRateLimit("login:conta", hashIdentifier(email), { limit: 10, windowSeconds: 600 });
   if (!byAccount.allowed) return { status: "error", message: tooManyAttemptsMessage(byAccount.retryAfterSeconds) };
 

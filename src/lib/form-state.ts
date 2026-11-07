@@ -64,7 +64,14 @@ export const initialAparenciaState: AparenciaActionState = { status: "idle" };
 // mostrar o botão "Copiar link" — não dá pra enviar e-mail de verdade ainda
 // (Resend sem domínio verificado), então o link é a única forma de
 // compartilhar o convite.
-export type InviteActionState = { status: "idle" | "success" | "error"; message?: string; inviteUrl?: string };
+/** "sent" = e-mail aceito pelo provedor; "failed" = provedor recusou/indisponível; "off" = envio não configurado. */
+export type InviteEmailStatus = "sent" | "failed" | "off";
+export type InviteActionState = {
+  status: "idle" | "success" | "error";
+  message?: string;
+  inviteUrl?: string;
+  emailStatus?: InviteEmailStatus;
+};
 export const initialInviteState: InviteActionState = { status: "idle" };
 
 // Configurações da plataforma (/master/configuracoes) — mesmo formato de
