@@ -1,5 +1,6 @@
 "use server";
 
+import { humanCheckError } from "@/lib/humanCheck";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
@@ -33,6 +34,8 @@ export async function requestPasswordResetAction(
 
   const byIp = await checkIpRateLimit("recuperar:ip", { limit: 5, windowSeconds: 600 });
   if (!byIp.allowed) return { status: "error", message: tooManyAttemptsMessage(byIp.retryAfterSeconds) };
+  const human = await humanCheckError(formData, "recuperar");
+  if (human) return { status: "error", message: human };
   const byEmail = await checkRateLimit("recuperar:conta", hashIdentifier(email), { limit: 3, windowSeconds: 600 });
   if (!byEmail.allowed) return { status: "error", message: tooManyAttemptsMessage(byEmail.retryAfterSeconds) };
 

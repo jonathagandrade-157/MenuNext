@@ -66,13 +66,19 @@ describe("credenciais de servidor da cobrança", () => {
     expect(users).toEqual(["lib/email.ts"]);
   });
 
+  it("o segredo do Turnstile só é lido em src/lib/turnstile.ts", () => {
+    // LEITURA do segredo (env.TURNSTILE_SECRET_KEY / env["TURNSTILE_SECRET_KEY"]); mensagens que apenas citam o nome não contam.
+    const users = prod.filter((f) => /env(\.|\[["'])TURNSTILE_SECRET_KEY/.test(read(f))).map(rel);
+    expect(users).toEqual(["lib/turnstile.ts"]);
+  });
+
   it("o CRON_SECRET só é lido na rota agendada", () => {
     const users = prod.filter((f) => read(f).includes("process.env.CRON_SECRET")).map(rel);
     expect(users).toEqual(["app/api/cron/billing-reconcile/route.ts"]);
   });
 
   it("nenhuma credencial de servidor ganha o prefixo NEXT_PUBLIC_", () => {
-    const offenders = all.filter((f) => /NEXT_PUBLIC_(SUPABASE_SERVICE|SERVICE_ROLE|ASAAS|MERCADOPAGO|CRON|RESEND|EMAIL_FROM)/.test(read(f))).map(rel);
+    const offenders = all.filter((f) => /NEXT_PUBLIC_(SUPABASE_SERVICE|SERVICE_ROLE|ASAAS|MERCADOPAGO|TURNSTILE_SECRET|CRON|RESEND|EMAIL_FROM)/.test(read(f))).map(rel);
     expect(offenders).toEqual([]);
   });
 

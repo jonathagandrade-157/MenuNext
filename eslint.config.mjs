@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Verificações manuais em navegador real (Playwright é dependência externa, instalada à parte).
+    "scripts/turnstile-browser/**",
   ]),
 ]);
 

@@ -1,6 +1,7 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { createServerClient } from "@supabase/ssr";
 import { buildContentSecurityPolicy, generateNonce } from "@/lib/csp";
+import { turnstileEnabled } from "@/lib/turnstile";
 import { evaluateMasterNetwork, isMasterPath, MASTER_RESPONSE_HEADERS, masterProxyHops, masterRequestHost, pickMasterClientIp } from "@/lib/masterAccess";
 
 const PROTECTED_PREFIXES = ["/painel", "/onboarding", "/master"];
@@ -33,7 +34,7 @@ export async function proxy(request: NextRequest) {
   // sem nonce (o recarregamento ao vivo usa conexões que a política bloquearia).
   const isProd = process.env.NODE_ENV === "production";
   const nonce = isProd ? generateNonce() : undefined;
-  const csp = buildContentSecurityPolicy({ supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL, isDev: !isProd, nonce });
+  const csp = buildContentSecurityPolicy({ supabaseUrl: process.env.NEXT_PUBLIC_SUPABASE_URL, isDev: !isProd, nonce, turnstile: turnstileEnabled() });
   const cspHeaderName = isProd ? "Content-Security-Policy" : "Content-Security-Policy-Report-Only";
 
   // Rede de segurança do e-mail de redefinição de senha: se o endereço de retorno não estiver na lista permitida do
