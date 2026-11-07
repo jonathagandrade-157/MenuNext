@@ -3,7 +3,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 const h = vi.hoisted(() => ({ host: "loja.exemplo.com" as string | null }));
 vi.mock("next/headers", () => ({ headers: async () => ({ get: (k: string) => (k.toLowerCase() === "host" ? h.host : null) }) }));
 vi.mock("@/lib/rateLimit", () => ({ getClientIp: async () => "203.0.113.7" }));
-import { humanCheckError } from "./humanCheck";
+import { humanCheckError, humanTokenError } from "./humanCheck";
 
 afterEach(() => {
   vi.unstubAllEnvs();
@@ -70,5 +70,29 @@ describe("humanCheckError", () => {
     expect(await humanCheckError(form("usado"), "login")).toMatch(/expirou ou já foi usada/);
     vi.stubGlobal("fetch", vi.fn().mockRejectedValue(new Error("rede")));
     expect(await humanCheckError(form("x"), "login")).toMatch(/Tente novamente em instantes/);
+  });
+});
+
+describe("humanTokenError (checkout, sem <form action>)", () => {
+  it("desligado: não bloqueia, mesmo sem token", async () => {
+    expect(await humanTokenError(undefined, "pedido")).toBeNull();
+  });
+  it("ligado: exige a ação 'pedido' — token gerado para o login não vale no checkout", async () => {
+    on();
+    cloudflare({ success: true, hostname: "loja.exemplo.com", action: "login" }, { success: true, hostname: "loja.exemplo.com", action: "pedido" });
+    expect(await humanTokenError("do-login", "pedido")).toMatch(/não é um robô/);
+    expect(await humanTokenError("do-pedido", "pedido")).toBeNull();
+  });
+  it("ligado: token ausente ou de tipo errado bloqueia sem chamar a Cloudflare", async () => {
+    on();
+    const f = cloudflare();
+    for (const t of [undefined, null, "", 42, {}]) expect(await humanTokenError(t, "pedido"), String(t)).toMatch(/não é um robô/);
+    expect(f).not.toHaveBeenCalled();
+  });
+  it("ligado: token reutilizado (a Cloudflare responde timeout-or-duplicate) é recusado como expirado", async () => {
+    on();
+    cloudflare({ success: true, hostname: "loja.exemplo.com", action: "pedido" }, { success: false, "error-codes": ["timeout-or-duplicate"] });
+    expect(await humanTokenError("mesmo-token", "pedido")).toBeNull();
+    expect(await humanTokenError("mesmo-token", "pedido")).toMatch(/expirou ou já foi usada/);
   });
 });

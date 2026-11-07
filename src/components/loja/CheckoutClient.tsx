@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useBag } from "@/contexts/BagContext";
 import { submitOrderAction } from "@/lib/actions/orders";
+import { TurnstileWidget } from "@/components/security/TurnstileWidget";
 import { getDeliveryQuoteAction } from "@/lib/actions/delivery-quote";
 import { validateCouponAction } from "@/lib/actions/couponValidate";
 import { previewPromotionAction, type PromotionPreview } from "@/lib/actions/promotionPreview";
@@ -106,6 +107,11 @@ export function CheckoutClient({
   const [redirecting, setRedirecting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [idempotencyKey, setIdempotencyKey] = useState<string | null>(null);
+  // Anti-robô (Turnstile): só existe quando a chave pública está configurada. Token de uso único: a cada tentativa o
+  // widget é reiniciado e o botão espera o token novo.
+  const captchaOn = Boolean(process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [captchaAttempt, setCaptchaAttempt] = useState(0);
 
   // Cupom de desconto (área "Marketing" do redesign) — preview sem efeito
   // colateral via validate_coupon (não incrementa uses_count; só
@@ -270,6 +276,7 @@ export function CheckoutClient({
     paymentMethod !== null &&
     items.length > 0 &&
     !loading &&
+    (!captchaOn || captchaToken !== null) &&
     (!needsDeliveryQuote || (quote !== null && !quoteError && !quoteLoading));
 
   async function handleSubmit() {
@@ -302,6 +309,8 @@ export function CheckoutClient({
     const observationValidation = validateCheckoutObservation(observation);
     if (!observationValidation.ok) return setErrorMessage(observationValidation.error);
 
+    if (captchaOn && !captchaToken) return setErrorMessage("Aguarde a verificação de segurança terminar e tente de novo.");
+
     setLoading(true);
     const result = await submitOrderAction({
       slug,
@@ -315,7 +324,9 @@ export function CheckoutClient({
       items: buildOrderItemsPayload(items),
       idempotencyKey,
       couponCode: couponApplied?.code ?? null,
+      captchaToken: captchaOn ? captchaToken : null,
     });
+    if (captchaOn) setCaptchaAttempt((n) => n + 1); // o token foi gasto (com sucesso ou não): pede outro
 
     if (result.status === "error") {
       setErrorMessage(result.message);
@@ -337,7 +348,7 @@ export function CheckoutClient({
   if (items.length === 0) return null;
 
   return (
-    <div className="pb-32">
+    <div className={captchaOn ? "pb-52" : "pb-32"}>
       <div className="sticky top-0 z-20 flex items-center gap-2 border-b border-border bg-surface-card/95 px-3.5 py-3 backdrop-blur-md">
         <button
           type="button"
@@ -634,13 +645,14 @@ export function CheckoutClient({
       <div className="fixed inset-x-0 bottom-0 z-30 flex justify-center border-t border-border bg-surface-card px-3.5 py-3 shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
         <div className="w-full max-w-3xl space-y-2 lg:max-w-5xl">
           {errorMessage && <p className="text-center text-xs font-semibold text-red">{errorMessage}</p>}
+          {captchaOn && <TurnstileWidget action="pedido" resetKey={captchaAttempt} onToken={setCaptchaToken} />}
           <button
             type="button"
             disabled={!canSubmit}
             onClick={handleSubmit}
             className="flex h-12 w-full items-center justify-center rounded-xl bg-primary md:ml-auto md:w-96 px-4 text-sm font-bold text-white shadow-[0_8px_20px_-4px_rgba(171,47,0,0.35)] transition-all hover:bg-primary-container disabled:cursor-not-allowed disabled:opacity-50"
           >
-            {loading ? "Enviando pedido..." : `Finalizar pedido · ${formatCurrencyBRL(total)}`}
+            {loading ? "Enviando pedido..." : captchaOn && !captchaToken ? "Verificando segurança..." : `Finalizar pedido · ${formatCurrencyBRL(total)}`}
           </button>
         </div>
       </div>

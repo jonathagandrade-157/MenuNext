@@ -16,10 +16,10 @@ async function allowedHostnames(): Promise<string[]> {
 }
 
 /**
- * Para Server Actions com FormData: devolve a mensagem de erro (ou null se passou / se a verificação está desligada).
- * `action` precisa ser o mesmo valor passado ao <TurnstileWidget action=...> do formulário.
+ * Núcleo: confere um token já extraído. `action` precisa ser o mesmo valor passado ao <TurnstileWidget action=...>.
+ * Devolve a mensagem de erro (ou null se passou / se a verificação está desligada).
  */
-export async function humanCheckError(formData: FormData, action: string): Promise<string | null> {
+export async function humanTokenError(token: unknown, action: string): Promise<string | null> {
   if (!turnstileEnabled()) {
     if (turnstilePartiallyConfigured() && !warnedPartial) {
       warnedPartial = true;
@@ -27,9 +27,11 @@ export async function humanCheckError(formData: FormData, action: string): Promi
     }
     return null;
   }
-  const result = await verifyHuman(formData.get(TURNSTILE_FIELD), await getClientIp(), process.env, fetch, {
-    action,
-    hostnames: await allowedHostnames(),
-  });
+  const result = await verifyHuman(token, await getClientIp(), process.env, fetch, { action, hostnames: await allowedHostnames() });
   return result.ok ? null : humanCheckMessage(result.reason);
+}
+
+/** Para Server Actions chamadas por <form action> (o widget grava o token no campo `cf-turnstile-response`). */
+export async function humanCheckError(formData: FormData, action: string): Promise<string | null> {
+  return humanTokenError(formData.get(TURNSTILE_FIELD), action);
 }
