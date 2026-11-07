@@ -67,7 +67,8 @@ describe("credenciais de servidor da cobrança", () => {
   });
 
   it("o segredo do Turnstile só é lido em src/lib/turnstile.ts", () => {
-    const users = prod.filter((f) => read(f).includes("TURNSTILE_SECRET_KEY")).map(rel);
+    // LEITURA do segredo (env.TURNSTILE_SECRET_KEY / env["TURNSTILE_SECRET_KEY"]); mensagens que apenas citam o nome não contam.
+    const users = prod.filter((f) => /env(\.|\[["'])TURNSTILE_SECRET_KEY/.test(read(f))).map(rel);
     expect(users).toEqual(["lib/turnstile.ts"]);
   });
 
