@@ -69,5 +69,5 @@ export default async function ProdutoPublicoPage({ params }: PageProps<"/loja/[s
           ? "Esta loja está fechada no momento. Volte durante o horário de funcionamento para adicionar itens."
           : null;
 
-  return <ProductDetailClient product={product} canAddToBag={canAddToBag} unavailableReason={unavailableReason} />;
+  return <ProductDetailClient slug={slug} product={product} canAddToBag={canAddToBag} unavailableReason={unavailableReason} />;
 }
