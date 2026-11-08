@@ -1,0 +1,23 @@
+[
+  {
+    "key": "ownerA",
+    "id": "00000000-0000-4000-8000-00000000a001",
+    "email": "owner-a@stack.test",
+    "name": "Dona A",
+    "termsVersion": "21 de outubro de 2026"
+  },
+  {
+    "key": "staffA",
+    "id": "00000000-0000-4000-8000-00000000a002",
+    "email": "staff-a@stack.test",
+    "name": "Equipe A",
+    "termsVersion": "21 de outubro de 2026"
+  },
+  {
+    "key": "ownerB",
+    "id": "00000000-0000-4000-8000-00000000b001",
+    "email": "owner-b@stack.test",
+    "name": "Dono B",
+    "termsVersion": "21 de outubro de 2026"
+  }
+]

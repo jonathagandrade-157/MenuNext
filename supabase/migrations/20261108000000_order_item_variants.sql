@@ -35,6 +35,22 @@ create policy product_variants_select_public on public.product_variants
   using (public.is_restaurant_publicly_visible(restaurant_id));
 
 -- ============================================================
+-- 2b. sinal de compatibilidade para o aplicativo: a loja/PDV só mostram variantes quando esta função existe,
+--     ou seja, quando create_order já cobra a variante. Sem ela (banco só com 20261105040000, ou depois do
+--     rollback), o app esconde as variantes e o pedido segue pelo preço do produto — nunca mostra uma opção
+--     que o pedido ignoraria.
+-- ============================================================
+create or replace function public.order_variants_supported()
+returns boolean
+language sql
+immutable
+set search_path to 'public'
+as $$ select true $$;
+
+revoke all on function public.order_variants_supported() from public;
+grant execute on function public.order_variants_supported() to anon, authenticated;
+
+-- ============================================================
 -- 3. create_order
 -- ============================================================
 do $patch$

@@ -102,6 +102,11 @@ begin
     fails := fails || 'create_order perdeu o EXECUTE de anon/authenticated'::text;
   end if;
 
+  total := total + 1;
+  if not (has_function_privilege('anon', 'public.order_variants_supported()', 'EXECUTE') and public.order_variants_supported()) then
+    fails := fails || 'order_variants_supported ausente ou sem EXECUTE para anon'::text;
+  end if;
+
   -- ---------- 1) leitura publica ----------
   res := pg_temp._runas('anon', null, format('select count(*)::text from public.product_variants where product_id = %L', pizza));
   total := total + 1;

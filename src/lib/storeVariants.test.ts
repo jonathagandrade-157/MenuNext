@@ -105,15 +105,21 @@ describe("mensagens de erro de variante (create_order)", () => {
 });
 
 /** Cliente falso: devolve o resultado configurado e registra os filtros aplicados. */
-function fakeClient(result: { data: unknown; error: { code?: string; message?: string } | null }) {
-  const calls: { table: string; filters: [string, unknown][] } = { table: "", filters: [] };
+function fakeClient(
+  result: { data: unknown; error: { code?: string; message?: string } | null },
+  supported: { data: unknown; error: { code?: string; message?: string } | null } = { data: true, error: null }
+) {
+  const calls: { table: string; filters: [string, unknown][]; rpc: string[] } = { table: "", filters: [], rpc: [] };
   const builder = {
     select: () => builder,
     eq: (col: string, val: unknown) => { calls.filters.push([col, val]); return builder; },
     order: () => builder,
     limit: () => Promise.resolve(result),
   };
-  const client = { from: (t: string) => { calls.table = t; return builder; } } as unknown as SupabaseClient;
+  const client = {
+    from: (t: string) => { calls.table = t; return builder; },
+    rpc: (fn: string) => { calls.rpc.push(fn); return Promise.resolve(supported); },
+  } as unknown as SupabaseClient;
   return { client, calls };
 }
 
@@ -134,6 +140,22 @@ describe("leitura das variantes na loja", () => {
       expect(await getProductVariantsForStore(fakeClient({ data: null, error }).client, "r1", "p1")).toEqual([]);
       expect(await getStoreVariants(fakeClient({ data: null, error }).client, "r1")).toEqual([]);
     }
+  });
+  it("sem o sinal de compatibilidade (create_order antigo / só a migration do cadastro / rollback): nunca mostra variantes", async () => {
+    const rows = { data: [{ id: "m", product_id: "p1", name: "Média", price: 55.5, is_available: true }], error: null };
+    for (const supported of [
+      { data: null, error: { code: "PGRST202", message: "Could not find the function public.order_variants_supported" } },
+      { data: false, error: null },
+      { data: null, error: { code: "57014", message: "timeout" } },
+    ]) {
+      const a = fakeClient(rows, supported);
+      expect(await getProductVariantsForStore(a.client, "r1", "p1")).toEqual([]);
+      expect(a.calls.table).toBe(""); // nem chega a ler a tabela
+      expect(await getStoreVariants(fakeClient(rows, supported).client, "r1")).toEqual([]);
+    }
+    const ok = fakeClient(rows);
+    expect(await getStoreVariants(ok.client, "r1")).toHaveLength(1);
+    expect(ok.calls.rpc).toEqual(["order_variants_supported"]);
   });
   it("outros erros não são engolidos", async () => {
     await expect(getStoreVariants(fakeClient({ data: null, error: { code: "57014", message: "timeout" } }).client, "r1")).rejects.toBeTruthy();

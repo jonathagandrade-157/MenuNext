@@ -74,7 +74,8 @@ export async function getPublicRestaurantBySlug(
   } as PublicRestaurant;
 }
 
-/** variantFromPrice: menor preço entre as variantes disponíveis ("a partir de"); null em produto sem variantes. */
+/** variantFromPrice: ausente = produto sem variantes; número = menor preço entre as disponíveis ("a partir de");
+ * null = tem variantes, mas todas desligadas (produto indisponível). */
 export type PublicProduct = Product & { imageUrl: string | null; variantFromPrice?: number | null };
 export type PublicCategoryWithProducts = {
   id: string;

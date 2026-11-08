@@ -10,9 +10,10 @@ import { isMissingRpc } from "./rpcErrors";
  *   * produto sem variantes segue exatamente como antes (preço do produto, payload sem variant_id).
  * O preço calculado aqui é só visual: create_order recalcula tudo a partir do banco.
  *
- * Banco sem as migrations de variantes: a leitura devolve lista vazia (a loja funciona como antes).
- * As duas migrations (20261105040000 e 20261108000000) precisam ser aplicadas JUNTAS: com só a primeira,
- * membros logados veriam variantes que o create_order antigo ignoraria.
+ * Compatibilidade de implantação: a loja e o PDV só mostram variantes quando o banco responde
+ * order_variants_supported() = true (criada pela MESMA migration que ensina create_order a cobrar a variante).
+ * Banco sem as migrations, só com 20261105040000, ou depois do rollback: lista vazia — o cardápio e o pedido
+ * seguem pelo preço do produto e nunca aparece uma opção que o pedido ignoraria.
  */
 export type PublicVariant = { id: string; productId: string; name: string; price: number; isAvailable: boolean };
 
@@ -33,12 +34,23 @@ function isVariantsUnavailable(error: { code?: string; message?: string } | null
 
 const SELECT = "id, product_id, name, price, is_available, display_order";
 
+/** true só quando create_order já cobra a variante (migration 20261108000000). Qualquer erro = false. */
+export async function orderVariantsSupported(supabase: SupabaseClient): Promise<boolean> {
+  try {
+    const { data, error } = await supabase.rpc("order_variants_supported");
+    return !error && data === true;
+  } catch {
+    return false;
+  }
+}
+
 /** Variantes de UM produto, sempre amarradas à loja do slug (nunca só por id). */
 export async function getProductVariantsForStore(
   supabase: SupabaseClient,
   restaurantId: string,
   productId: string
 ): Promise<PublicVariant[]> {
+  if (!(await orderVariantsSupported(supabase))) return [];
   const { data, error } = await supabase
     .from("product_variants")
     .select(SELECT)
@@ -53,6 +65,7 @@ export async function getProductVariantsForStore(
 
 /** Todas as variantes da loja (para o "a partir de" do cardápio). */
 export async function getStoreVariants(supabase: SupabaseClient, restaurantId: string): Promise<PublicVariant[]> {
+  if (!(await orderVariantsSupported(supabase))) return [];
   const { data, error } = await supabase
     .from("product_variants")
     .select(SELECT)

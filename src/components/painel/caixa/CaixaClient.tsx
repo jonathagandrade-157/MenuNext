@@ -367,7 +367,7 @@ export function CaixaClient({
                   <button
                     key={product.id}
                     type="button"
-                    disabled={!product.is_available}
+                    disabled={!product.is_available || product.variantFromPrice === null}
                     onClick={() => openProductPicker(product.id)}
                     className="flex flex-col items-stretch gap-2 rounded-xl border border-border bg-surface-card p-2.5 text-left transition-colors hover:border-primary hover:bg-primary/5 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
                   >
@@ -384,7 +384,7 @@ export function CaixaClient({
                       {product.variantFromPrice != null && <span className="text-[11px] font-medium">a partir de </span>}
                       {formatCurrencyBRL(product.variantFromPrice ?? product.price)}
                     </span>
-                    {!product.is_available && <span className="text-[11px] font-semibold text-red">Indisponível</span>}
+                    {(!product.is_available || product.variantFromPrice === null) && <span className="text-[11px] font-semibold text-red">Indisponível</span>}
                   </button>
                 ))}
               </div>

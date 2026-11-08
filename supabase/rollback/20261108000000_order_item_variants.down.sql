@@ -35,6 +35,7 @@ begin
 end
 $patch$;
 
+drop function if exists public.order_variants_supported();
 drop policy if exists product_variants_select_public on public.product_variants;
 revoke select on public.product_variants from anon;
 alter table public.order_items drop column if exists variant_name;
