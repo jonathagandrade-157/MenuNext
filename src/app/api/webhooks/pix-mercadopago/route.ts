@@ -13,11 +13,16 @@ export async function POST(request: Request) {
   const enabled = getPixAutoConfig() !== null;
   const rawBody = enabled ? (await request.text()).slice(0, PIX_WEBHOOK_MAX_BODY + 1) : "";
   const result = await handlePixWebhook(
-    { rawBody, searchParams: new URL(request.url).searchParams },
+    {
+      rawBody,
+      searchParams: new URL(request.url).searchParams,
+      xSignature: request.headers.get("x-signature"),
+      xRequestId: request.headers.get("x-request-id"),
+    },
     {
       enabled,
       rateLimited: async () => !(await checkIpRateLimit("pix-webhook:ip", { limit: 120, windowSeconds: 60 })).allowed,
-      sync: (id) => syncPixCharge({ providerPaymentId: id }, 2),
+      sync: (id, signature) => syncPixCharge({ providerPaymentId: id, signature }, 2),
     }
   );
   return NextResponse.json(result.body, { status: result.status });

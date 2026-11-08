@@ -4,7 +4,7 @@ import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
-import { deletePixTokenAction, savePixTokenAction, setPixAutoEnabledAction } from "@/lib/actions/pixSettings";
+import { deletePixTokenAction, savePixTokenAction, savePixWebhookSecretAction, setPixAutoEnabledAction } from "@/lib/actions/pixSettings";
 import type { PixSettingsStatus } from "@/lib/pixCharge";
 
 /**
@@ -14,6 +14,7 @@ import type { PixSettingsStatus } from "@/lib/pixCharge";
 export function PixAutoCard({ status }: { status: PixSettingsStatus }) {
   const router = useRouter();
   const [token, setToken] = useState("");
+  const [webhookSecret, setWebhookSecret] = useState("");
   const [message, setMessage] = useState<{ kind: "ok" | "error"; text: string } | null>(null);
   const [pending, startTransition] = useTransition();
 
@@ -23,6 +24,7 @@ export function PixAutoCard({ status }: { status: PixSettingsStatus }) {
       const result = await action();
       if (result.ok) {
         setToken("");
+        setWebhookSecret("");
         setMessage({ kind: "ok", text: okText });
         router.refresh();
       } else {
@@ -91,6 +93,45 @@ export function PixAutoCard({ status }: { status: PixSettingsStatus }) {
               </Button>
             )}
           </div>
+
+          {status.configured && (
+            <div className="space-y-2 border-t border-border pt-4">
+              <p className="text-body-md text-graphite">
+                <strong>Assinatura secreta de webhooks</strong> (recomendado) ·{" "}
+                <span className={status.webhookSecretConfigured ? "text-emerald" : "text-text-muted"}>
+                  {status.webhookSecretConfigured ? "configurada" : "não configurada"}
+                </span>
+              </p>
+              <p className="text-body-sm text-text-muted">
+                Mercado Pago → sua aplicação → Webhooks → Configurar notificações: cadastre a URL de avisos do MenuNext,
+                marque o evento <em>Pagamentos</em> e cole aqui a assinatura secreta exibida. Com ela, avisos falsos são
+                recusados. Sem ela o pagamento continua sendo conferido direto no Mercado Pago antes de valer.
+              </p>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <input
+                  type="password"
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={webhookSecret}
+                  onChange={(e) => setWebhookSecret(e.target.value)}
+                  aria-label="Assinatura secreta de webhooks"
+                  className="h-10 w-full rounded-xl border border-border bg-surface px-3 font-mono text-body-md text-graphite focus:border-primary focus:outline-none focus:ring-[3px] focus:ring-primary/15"
+                />
+                <Button
+                  variant="secondary"
+                  onClick={() => run(() => savePixWebhookSecretAction(webhookSecret), "Assinatura secreta salva.")}
+                  disabled={pending || !webhookSecret.trim()}
+                >
+                  Salvar assinatura
+                </Button>
+                {status.webhookSecretConfigured && (
+                  <Button variant="ghost" onClick={() => run(() => savePixWebhookSecretAction(""), "Assinatura secreta removida.")} disabled={pending}>
+                    Remover
+                  </Button>
+                )}
+              </div>
+            </div>
+          )}
 
           {message && (
             <p className={`text-body-sm font-semibold ${message.kind === "ok" ? "text-emerald" : "text-red"}`} role="status">

@@ -1,9 +1,13 @@
+import { createHmac } from "node:crypto";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { openSecret, parseEncryptionKey, sealSecret } from "./secretBox";
 import {
   createMercadoPagoPixPayment,
   extractWebhookPaymentId,
+  getMercadoPagoAccountId,
+  isDefinitiveFailure,
+  isPlausibleWebhookSecret,
   getPixAutoConfig,
   isPlausibleMercadoPagoToken,
   mapMercadoPagoStatus,
@@ -13,6 +17,7 @@ import {
 } from "./pixAuto";
 import { ensurePixCharge, syncPixCharge } from "./pixAutoService";
 import { handlePixWebhook } from "./pixWebhookHandler";
+import { describePanelPixStatus } from "./pixCharge";
 
 const KEY_B64 = Buffer.alloc(32, 7).toString("base64");
 const KEY = parseEncryptionKey(KEY_B64)!;
@@ -99,7 +104,9 @@ describe("leitura da resposta do Mercado Pago", () => {
       id: 5466310457, status: "pending", transaction_amount: 80, external_reference: PUB, payment_method_id: "pix",
       date_of_expiration: "2026-11-07T20:00:00.000-03:00", point_of_interaction: { transaction_data: { qr_code: QR } },
     });
-    expect(p).toEqual({ id: "5466310457", status: "pending", amount: 80, externalReference: PUB, qrCode: QR, expiresAt: "2026-11-07T20:00:00.000-03:00" });
+    expect(p).toEqual({ id: "5466310457", status: "pending", amount: 80, externalReference: PUB, qrCode: QR, expiresAt: "2026-11-07T20:00:00.000-03:00", currency: null, collectorId: null });
+    expect(parseMercadoPagoPayment({ id: 1, currency_id: "BRL", collector_id: 777 })).toMatchObject({ currency: "BRL", collectorId: "777" });
+    expect(parseMercadoPagoPayment({ id: 1, collector: { id: "888" } })).toMatchObject({ collectorId: "888" });
     expect(parseMercadoPagoPayment({ id: "abc" })).toBeNull();
     expect(parseMercadoPagoPayment({ id: 1, payment_method_id: "visa" })).toBeNull();
     expect(parseMercadoPagoPayment(null)).toBeNull();
@@ -139,7 +146,8 @@ describe("chamada ao Mercado Pago", () => {
 // ---------------------------------------------------------------------------
 // Serviço: banco e Mercado Pago falsos
 // ---------------------------------------------------------------------------
-function fakeAdmin(handlers: Record<string, (args: Record<string, unknown>) => { data?: unknown; error?: { message: string } | null }>) {
+type Handler = (args: Record<string, unknown>) => { data?: unknown; error?: { message: string } | null };
+function fakeAdmin(handlers: Record<string, Handler>) {
   const calls: { fn: string; args: Record<string, unknown> }[] = [];
   const admin = {
     rpc: async (fn: string, args: Record<string, unknown>) => {
@@ -154,39 +162,83 @@ function fakeAdmin(handlers: Record<string, (args: Record<string, unknown>) => {
 }
 const config = { encryptionKey: KEY, payerEmail: "pagamentos@menunext.test", webhookUrl: null };
 const RID = "rest-1";
+const COLLECTOR = "777";
 const sealed = sealSecret(TOKEN, RID, KEY);
-const ctx = { order_id: "o1", restaurant_id: RID, order_number: 7, total: "80.00", restaurant_name: "Loja", token_ciphertext: sealed, has_charge: false };
-const mpPayment = (over: Record<string, unknown> = {}) =>
-  new Response(JSON.stringify({ id: 555, status: "pending", transaction_amount: 80, external_reference: PUB, payment_method_id: "pix", date_of_expiration: "2026-11-07T23:00:00.000Z", point_of_interaction: { transaction_data: { qr_code: QR } }, ...over }), { status: 200 });
+const WH_SECRET = "segredo-do-webhook-da-loja-0123456789";
+const sealedWh = sealSecret(WH_SECRET, `${RID}:webhook`, KEY);
+const begin = (over: Record<string, unknown> = {}) => ({
+  charge_id: "c1", restaurant_id: RID, order_number: 7, amount: "80.00", restaurant_name: "Loja",
+  token_ciphertext: sealed, collector_id: COLLECTOR, attempts: 1, ...over,
+});
+const mpPayment = (over: Record<string, unknown> = {}, status = 200) =>
+  new Response(JSON.stringify({
+    id: 555, status: "pending", transaction_amount: 80, external_reference: PUB, payment_method_id: "pix", currency_id: "BRL",
+    collector_id: 777, date_of_expiration: "2026-11-07T23:00:00.000Z", point_of_interaction: { transaction_data: { qr_code: QR } }, ...over,
+  }), { status });
 
-describe("ensurePixCharge", () => {
+describe("ensurePixCharge (reserva -> Mercado Pago -> registro)", () => {
   it("sem configuração no servidor: não chama banco nem Mercado Pago", async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
     expect(await ensurePixCharge("loja", PUB)).toBe("unavailable");
     expect(fetchMock).not.toHaveBeenCalled();
   });
-  it("loja desligada / pedido não Pix (sem contexto): nada é criado", async () => {
+  it("sem reserva (loja desligada, já criada ou tentativa em andamento): não chama o Mercado Pago", async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
-    const { admin } = fakeAdmin({ pix_charge_context_backend: () => ({ data: [] }) });
-    expect(await ensurePixCharge("loja", PUB, { admin, config })).toBe("unavailable");
+    const { admin } = fakeAdmin({ pix_charge_begin_backend: () => ({ data: [] }) });
+    expect(await ensurePixCharge("loja", PUB, { admin, config })).toBe("busy");
     expect(fetchMock).not.toHaveBeenCalled();
   });
-  it("cria com o total DO BANCO e registra o copia e cola", async () => {
+  it("cria com o valor RESERVADO pelo banco e registra o copia e cola", async () => {
     const fetchMock = vi.fn(async () => mpPayment());
     vi.stubGlobal("fetch", fetchMock);
-    const { admin, calls } = fakeAdmin({ pix_charge_context_backend: () => ({ data: [ctx] }), pix_charge_register_backend: () => ({ data: "c1" }) });
+    const { admin, calls } = fakeAdmin({ pix_charge_begin_backend: () => ({ data: [begin()] }), pix_charge_register_backend: () => ({ data: "pending" }) });
     expect(await ensurePixCharge("loja", PUB, { admin, config, now: () => new Date("2026-11-07T22:30:00.000Z") })).toBe("created");
-    const body = JSON.parse(String((fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1].body));
-    expect(body.transaction_amount).toBe(80);
-    expect(body.date_of_expiration).toBe("2026-11-07T23:00:00.000Z");
-    expect(calls.find((c) => c.fn === "pix_charge_register_backend")?.args).toEqual({ p_order: "o1", p_provider_payment_id: "555", p_amount: 80, p_qr_code: QR, p_expires_at: "2026-11-07T23:00:00.000Z" });
+    const [, init] = fetchMock.mock.calls[0] as unknown as [string, RequestInit];
+    expect(JSON.parse(String(init.body)).transaction_amount).toBe(80);
+    expect((init.headers as Record<string, string>)["X-Idempotency-Key"]).toBe(`menunext-pix-${PUB}`);
+    expect(calls.find((c) => c.fn === "pix_charge_register_backend")?.args).toEqual({ p_charge: "c1", p_provider_payment_id: "555", p_amount: 80, p_qr_code: QR, p_expires_at: "2026-11-07T23:00:00.000Z" });
   });
-  it("resposta com valor ou referência diferente não é registrada", async () => {
-    for (const over of [{ transaction_amount: 79.99 }, { external_reference: "outro" }, { point_of_interaction: {} }]) {
+  it("resposta INDEFINIDA (rede, 5xx, 429, corpo ilegível): fica 'creating', nunca falha nem libera a chave comum", async () => {
+    const cases: (() => Promise<Response>)[] = [
+      async () => { throw new Error("timeout"); },
+      async () => new Response(JSON.stringify({ message: "boom" }), { status: 502 }),
+      async () => new Response(JSON.stringify({ message: "slow down" }), { status: 429 }),
+      async () => new Response("<html>", { status: 200 }),
+    ];
+    for (const impl of cases) {
+      vi.stubGlobal("fetch", vi.fn(impl));
+      const { admin, calls } = fakeAdmin({ pix_charge_begin_backend: () => ({ data: [begin()] }) });
+      expect(await ensurePixCharge("loja", PUB, { admin, config })).toBe("creating");
+      expect(calls.some((c) => c.fn === "pix_charge_fail_backend" || c.fn === "pix_charge_register_backend")).toBe(false);
+    }
+  });
+  it("retomada usa a MESMA chave de idempotência (o Mercado Pago devolve o mesmo pagamento)", async () => {
+    const fetchMock = vi.fn(async () => mpPayment());
+    vi.stubGlobal("fetch", fetchMock);
+    const { admin } = fakeAdmin({ pix_charge_begin_backend: () => ({ data: [begin({ attempts: 3 })] }), pix_charge_register_backend: () => ({ data: "pending" }) });
+    expect(await ensurePixCharge("loja", PUB, { admin, config })).toBe("created");
+    expect(((fetchMock.mock.calls[0] as unknown as [string, RequestInit])[1].headers as Record<string, string>)["X-Idempotency-Key"]).toBe(`menunext-pix-${PUB}`);
+  });
+  it("muitas tentativas indefinidas: desiste ('failed'); nenhum QR foi mostrado ao cliente", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => { throw new Error("offline"); }));
+    const { admin, calls } = fakeAdmin({ pix_charge_begin_backend: () => ({ data: [begin({ attempts: 6 })] }), pix_charge_fail_backend: () => ({}) });
+    expect(await ensurePixCharge("loja", PUB, { admin, config })).toBe("failed");
+    expect(calls.find((c) => c.fn === "pix_charge_fail_backend")?.args).toEqual({ p_charge: "c1", p_reason: "provider_unavailable" });
+  });
+  it("recusa DEFINITIVA (401/400): 'failed' na hora", async () => {
+    for (const status of [400, 401, 403]) {
+      vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ message: "no" }), { status })));
+      const { admin, calls } = fakeAdmin({ pix_charge_begin_backend: () => ({ data: [begin()] }), pix_charge_fail_backend: () => ({}) });
+      expect(await ensurePixCharge("loja", PUB, { admin, config })).toBe("failed");
+      expect(calls.find((c) => c.fn === "pix_charge_fail_backend")?.args.p_reason).toBe("provider_rejected");
+    }
+  });
+  it("resposta com valor, referência, moeda ou conta recebedora diferente nunca vira QR", async () => {
+    for (const over of [{ transaction_amount: 79.99 }, { external_reference: "outro" }, { point_of_interaction: {} }, { currency_id: "USD" }, { collector_id: 999 }]) {
       vi.stubGlobal("fetch", vi.fn(async () => mpPayment(over)));
-      const { admin, calls } = fakeAdmin({ pix_charge_context_backend: () => ({ data: [ctx] }), pix_charge_register_backend: () => ({ data: "c1" }) });
+      const { admin, calls } = fakeAdmin({ pix_charge_begin_backend: () => ({ data: [begin()] }), pix_charge_fail_backend: () => ({}), pix_charge_register_backend: () => ({ data: "pending" }) });
       expect(await ensurePixCharge("loja", PUB, { admin, config })).toBe("failed");
       expect(calls.some((c) => c.fn === "pix_charge_register_backend")).toBe(false);
     }
@@ -194,33 +246,26 @@ describe("ensurePixCharge", () => {
   it("token cifrado de outra loja (ou chave trocada) não é usado", async () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
-    const { admin } = fakeAdmin({ pix_charge_context_backend: () => ({ data: [{ ...ctx, restaurant_id: "rest-2" }] }) });
+    const { admin } = fakeAdmin({ pix_charge_begin_backend: () => ({ data: [begin({ restaurant_id: "rest-2" })] }), pix_charge_fail_backend: () => ({}) });
     expect(await ensurePixCharge("loja", PUB, { admin, config })).toBe("failed");
     expect(fetchMock).not.toHaveBeenCalled();
-  });
-  it("já existe cobrança: não cria outra", async () => {
-    const fetchMock = vi.fn();
-    vi.stubGlobal("fetch", fetchMock);
-    const { admin } = fakeAdmin({ pix_charge_context_backend: () => ({ data: [{ ...ctx, has_charge: true }] }) });
-    expect(await ensurePixCharge("loja", PUB, { admin, config })).toBe("exists");
-    expect(fetchMock).not.toHaveBeenCalled();
-  });
-  it("Mercado Pago fora do ar: falha sem lançar", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => { throw new Error("offline"); }));
-    const { admin } = fakeAdmin({ pix_charge_context_backend: () => ({ data: [ctx] }) });
-    expect(await ensurePixCharge("loja", PUB, { admin, config })).toBe("failed");
   });
 });
 
 describe("syncPixCharge", () => {
-  const row = { charge_id: "c1", restaurant_id: RID, provider_payment_id: "555", status: "pending", amount: "80.00", order_public_id: PUB, token_ciphertext: sealed };
-  it("consulta o Mercado Pago e aplica o que ELE disse (valor e referência de lá)", async () => {
+  const row = (over: Record<string, unknown> = {}) => ({
+    charge_id: "c1", restaurant_id: RID, provider_payment_id: "555", status: "pending", amount: "80.00", collector_id: COLLECTOR,
+    order_public_id: PUB, token_ciphertext: sealed, webhook_secret_ciphertext: null, ...over,
+  });
+  it("consulta o Mercado Pago e aplica o que ELE disse (valor, moeda, conta, referência de lá)", async () => {
     const fetchMock = vi.fn(async () => mpPayment({ status: "approved" }));
     vi.stubGlobal("fetch", fetchMock);
-    const { admin, calls } = fakeAdmin({ pix_charge_for_sync_backend: () => ({ data: [row] }), pix_charge_apply_backend: () => ({ data: "approved" }) });
+    const { admin, calls } = fakeAdmin({ pix_charge_for_sync_backend: () => ({ data: [row()] }), pix_charge_apply_backend: () => ({ data: "approved" }) });
     expect(await syncPixCharge({ providerPaymentId: "555" }, 2, { admin, config })).toEqual({ status: "approved" });
     expect((fetchMock.mock.calls[0] as unknown as [string])[0]).toBe("https://api.mercadopago.com/v1/payments/555");
-    expect(calls.find((c) => c.fn === "pix_charge_apply_backend")?.args).toEqual({ p_provider_payment_id: "555", p_status: "approved", p_amount: 80, p_external_reference: PUB });
+    expect(calls.find((c) => c.fn === "pix_charge_apply_backend")?.args).toEqual({
+      p_provider_payment_id: "555", p_status: "approved", p_amount: 80, p_external_reference: PUB, p_currency: "BRL", p_collector_id: "777",
+    });
   });
   it("consulta recente (throttle) ou cobrança desconhecida: não chama o Mercado Pago", async () => {
     const fetchMock = vi.fn();
@@ -231,14 +276,46 @@ describe("syncPixCharge", () => {
   });
   it("resposta de OUTRO pagamento não é aplicada", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => mpPayment({ id: 999, status: "approved" })));
-    const { admin, calls } = fakeAdmin({ pix_charge_for_sync_backend: () => ({ data: [row] }), pix_charge_apply_backend: () => ({ data: "approved" }) });
+    const { admin, calls } = fakeAdmin({ pix_charge_for_sync_backend: () => ({ data: [row()] }), pix_charge_apply_backend: () => ({ data: "approved" }) });
     expect(await syncPixCharge({ providerPaymentId: "555" }, 0, { admin, config })).toEqual({ status: "failed" });
     expect(calls.some((c) => c.fn === "pix_charge_apply_backend")).toBe(false);
   });
   it("banco recusa (payment_mismatch): falha sem lançar", async () => {
-    vi.stubGlobal("fetch", vi.fn(async () => mpPayment({ status: "approved", transaction_amount: 1 })));
-    const { admin } = fakeAdmin({ pix_charge_for_sync_backend: () => ({ data: [row] }), pix_charge_apply_backend: () => ({ error: { message: "payment_mismatch" } }) });
+    vi.stubGlobal("fetch", vi.fn(async () => mpPayment({ status: "approved", collector_id: 1 })));
+    const { admin } = fakeAdmin({ pix_charge_for_sync_backend: () => ({ data: [row()] }), pix_charge_apply_backend: () => ({ error: { message: "payment_mismatch" } }) });
     expect(await syncPixCharge({ providerPaymentId: "555" }, 0, { admin, config })).toEqual({ status: "failed" });
+  });
+
+  // assinatura conforme a documentação do Mercado Pago: HMAC-SHA256(segredo, "id:<data.id>;request-id:<x-request-id>;ts:<ts>;")
+  const sign = (secret: string, dataId: string, requestId: string, ts: string) =>
+    `ts=${ts},v1=${createHmac("sha256", secret).update(`id:${dataId};request-id:${requestId};ts:${ts};`).digest("hex")}`;
+  it("loja com assinatura secreta: aviso com x-signature válido é processado", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => mpPayment({ status: "approved" })));
+    const { admin } = fakeAdmin({ pix_charge_for_sync_backend: () => ({ data: [row({ webhook_secret_ciphertext: sealedWh })] }), pix_charge_apply_backend: () => ({ data: "approved" }) });
+    const signature = { xSignature: sign(WH_SECRET, "555", "req-1", "1762550000"), xRequestId: "req-1", dataId: "555" };
+    expect(await syncPixCharge({ providerPaymentId: "555", signature }, 0, { admin, config })).toEqual({ status: "approved" });
+  });
+  it("loja com assinatura secreta: aviso sem assinatura, com assinatura errada ou de outra notificação é recusado SEM consultar", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    const bad = [
+      undefined,
+      { xSignature: null, xRequestId: "req-1", dataId: "555" },
+      { xSignature: sign("outro-segredo-qualquer-0123456789", "555", "req-1", "1"), xRequestId: "req-1", dataId: "555" },
+      { xSignature: sign(WH_SECRET, "555", "req-1", "1"), xRequestId: "req-2", dataId: "555" },
+      { xSignature: sign(WH_SECRET, "556", "req-1", "1"), xRequestId: "req-1", dataId: "555" },
+    ];
+    for (const signature of bad) {
+      const { admin, calls } = fakeAdmin({ pix_charge_for_sync_backend: () => ({ data: [row({ webhook_secret_ciphertext: sealedWh })] }) });
+      expect(await syncPixCharge({ providerPaymentId: "555", signature }, 0, { admin, config })).toEqual({ status: "unauthorized" });
+      expect(calls.some((c) => c.fn === "pix_charge_apply_backend")).toBe(false);
+    }
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+  it("segredo cifrado de outra loja não valida a assinatura", async () => {
+    const { admin } = fakeAdmin({ pix_charge_for_sync_backend: () => ({ data: [row({ webhook_secret_ciphertext: sealSecret(WH_SECRET, "rest-2:webhook", KEY) })] }) });
+    const signature = { xSignature: sign(WH_SECRET, "555", "req-1", "1"), xRequestId: "req-1", dataId: "555" };
+    expect(await syncPixCharge({ providerPaymentId: "555", signature }, 0, { admin, config })).toEqual({ status: "unauthorized" });
   });
 });
 
@@ -246,24 +323,59 @@ describe("webhook do Pix automático", () => {
   const deps = (over: Partial<Parameters<typeof handlePixWebhook>[1]> = {}) => ({
     enabled: true, rateLimited: async () => false, sync: vi.fn(async () => ({ status: "approved" })), ...over,
   });
-  const params = new URLSearchParams();
+  const input = (rawBody: string, query = "") => ({ rawBody, searchParams: new URLSearchParams(query), xSignature: "ts=1,v1=ab", xRequestId: "req-9" });
   it("desligado: 404 sem consultar nada", async () => {
     const d = deps({ enabled: false });
-    expect((await handlePixWebhook({ rawBody: "{}", searchParams: params }, d)).status).toBe(404);
+    expect((await handlePixWebhook(input("{}"), d)).status).toBe(404);
     expect(d.sync).not.toHaveBeenCalled();
   });
-  it("aviso válido só dispara a consulta (o corpo não aprova nada)", async () => {
+  it("aviso válido só dispara a consulta (o corpo não aprova nada) e repassa a assinatura", async () => {
     const d = deps();
-    const r = await handlePixWebhook({ rawBody: JSON.stringify({ type: "payment", data: { id: "555" }, status: "approved" }), searchParams: params }, d);
+    const r = await handlePixWebhook(input(JSON.stringify({ type: "payment", data: { id: "555" }, status: "approved" }), "data.id=555&type=payment"), d);
     expect(r).toEqual({ status: 200, body: { result: "ok" } });
-    expect(d.sync).toHaveBeenCalledWith("555");
+    expect(d.sync).toHaveBeenCalledWith("555", { xSignature: "ts=1,v1=ab", xRequestId: "req-9", dataId: "555" });
+  });
+  it("assinatura inválida = 401; falha transitória = 500 (o Mercado Pago reenvia)", async () => {
+    expect((await handlePixWebhook(input("", "data.id=555&type=payment"), deps({ sync: vi.fn(async () => ({ status: "unauthorized" })) }))).status).toBe(401);
+    expect((await handlePixWebhook(input("", "data.id=555&type=payment"), deps({ sync: vi.fn(async () => ({ status: "failed" })) }))).status).toBe(500);
   });
   it("corpo inválido, grande demais, sem id ou limitado por IP", async () => {
-    expect((await handlePixWebhook({ rawBody: "{", searchParams: params }, deps())).status).toBe(400);
-    expect((await handlePixWebhook({ rawBody: "x".repeat(9000), searchParams: params }, deps())).status).toBe(413);
+    expect((await handlePixWebhook(input("{"), deps())).status).toBe(400);
+    expect((await handlePixWebhook(input("x".repeat(9000)), deps())).status).toBe(413);
     const d = deps();
-    expect(await handlePixWebhook({ rawBody: JSON.stringify({ type: "payment", data: {} }), searchParams: params }, d)).toEqual({ status: 200, body: { result: "ignored" } });
+    expect(await handlePixWebhook(input(JSON.stringify({ type: "payment", data: {} })), d)).toEqual({ status: 200, body: { result: "ignored" } });
     expect(d.sync).not.toHaveBeenCalled();
-    expect((await handlePixWebhook({ rawBody: "{}", searchParams: params }, deps({ rateLimited: async () => true }))).status).toBe(429);
+    expect((await handlePixWebhook(input("{}"), deps({ rateLimited: async () => true }))).status).toBe(429);
+  });
+});
+
+describe("conta do token e falhas definitivas", () => {
+  it("GET /users/me devolve a conta recebedora", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ id: 777, nickname: "LOJA" }), { status: 200 })));
+    expect(await getMercadoPagoAccountId(TOKEN)).toEqual({ ok: true, collectorId: "777" });
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify({ message: "invalid token" }), { status: 401 })));
+    expect(await getMercadoPagoAccountId(TOKEN)).toMatchObject({ ok: false, httpStatus: 401 });
+  });
+  it("classifica definitiva x indefinida", () => {
+    expect(isDefinitiveFailure({ ok: false, reason: "request_failed", httpStatus: 400 })).toBe(true);
+    expect(isDefinitiveFailure({ ok: false, reason: "request_failed", httpStatus: 401 })).toBe(true);
+    for (const f of [{ httpStatus: 500 }, { httpStatus: 429 }, { httpStatus: 408 }, { httpStatus: 409 }, {}]) {
+      expect(isDefinitiveFailure({ ok: false, reason: "request_failed", ...f })).toBe(false);
+    }
+    expect(isDefinitiveFailure({ ok: false, reason: "invalid_response", httpStatus: 400 })).toBe(false);
+  });
+  it("assinatura secreta: formato plausível", () => {
+    expect(isPlausibleWebhookSecret(WH_SECRET)).toBe(true);
+    expect(isPlausibleWebhookSecret("curto")).toBe(false);
+    expect(isPlausibleWebhookSecret("com espaço no meio 0123456789")).toBe(false);
+  });
+});
+
+describe("linha do painel", () => {
+  it("só 'approved' dispensa conferência; o resto pede extrato quando o cliente pode ter pago pela chave", () => {
+    expect(describePanelPixStatus("approved").tone).toBe("success");
+    expect(describePanelPixStatus("pending").tone).toBe("info");
+    expect(describePanelPixStatus("creating").tone).toBe("info");
+    for (const s of ["failed", "cancelled", "expired", null]) expect(describePanelPixStatus(s).text).toMatch(/confir[ae].*extrato/);
   });
 });

@@ -3,7 +3,7 @@
 import { checkIpRateLimit } from "@/lib/rateLimit";
 import { createClient } from "@/lib/supabase/server";
 import { PIX_SYNC_MIN_INTERVAL_SECONDS } from "@/lib/pixAuto";
-import { syncPixCharge } from "@/lib/pixAutoService";
+import { ensurePixCharge, syncPixCharge } from "@/lib/pixAutoService";
 import { readOrderPixCharge, type PublicPixCharge } from "@/lib/pixCharge";
 
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -17,8 +17,13 @@ export async function refreshOrderPixAction(slug: string, publicId: string): Pro
   if (typeof slug !== "string" || slug.length === 0 || slug.length > 80 || typeof publicId !== "string" || !UUID.test(publicId)) {
     return null;
   }
-  const limit = await checkIpRateLimit("pix-status:ip", { limit: 40, windowSeconds: 300 });
-  if (limit.allowed) await syncPixCharge({ slug, publicId }, PIX_SYNC_MIN_INTERVAL_SECONDS);
   const supabase = await createClient();
+  const current = await readOrderPixCharge(supabase, slug, publicId);
+  if (!current || (current.status !== "creating" && current.status !== "pending")) return current;
+  const limit = await checkIpRateLimit("pix-status:ip", { limit: 40, windowSeconds: 300 });
+  if (!limit.allowed) return current;
+  // gerando: retoma a criação (mesma idempotência no Mercado Pago); pendente: consulta o pagamento lá
+  if (current.status === "creating") await ensurePixCharge(slug, publicId);
+  else await syncPixCharge({ slug, publicId }, PIX_SYNC_MIN_INTERVAL_SECONDS);
   return readOrderPixCharge(supabase, slug, publicId);
 }

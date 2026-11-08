@@ -83,6 +83,10 @@ export type MercadoPagoPixPayment = {
   externalReference: string | null;
   qrCode: string | null;
   expiresAt: string | null;
+  /** Moeda (o banco só aprova BRL). */
+  currency: string | null;
+  /** Conta que RECEBE o pagamento (o banco só aprova se for a conta da loja). */
+  collectorId: string | null;
 };
 
 /** Lê só os campos de que dependemos; resposta fora do formato = null (nada é gravado). */
@@ -102,6 +106,8 @@ export function parseMercadoPagoPayment(body: unknown): MercadoPagoPixPayment | 
     externalReference: typeof b.external_reference === "string" ? b.external_reference : null,
     qrCode: typeof qr === "string" && qr.length >= 20 && qr.length <= 1000 ? qr : null,
     expiresAt: typeof b.date_of_expiration === "string" ? b.date_of_expiration : null,
+    currency: typeof b.currency_id === "string" ? b.currency_id : null,
+    collectorId: idString(b.collector_id ?? (b.collector as { id?: unknown } | undefined)?.id),
   };
 }
 
@@ -110,9 +116,25 @@ export function pixExpiration(now: Date, minutes = PIX_CHARGE_TTL_MINUTES): stri
   return new Date(now.getTime() + minutes * 60_000).toISOString();
 }
 
-export type PixApiResult = { ok: true; payment: MercadoPagoPixPayment } | { ok: false; reason: "request_failed" | "invalid_response"; httpStatus?: number };
+function idString(value: unknown): string | null {
+  const id = typeof value === "number" ? String(value) : typeof value === "string" ? value : "";
+  return /^[0-9]{1,20}$/.test(id) ? id : null;
+}
 
-async function mpCall(token: string, path: string, init: RequestInit): Promise<PixApiResult> {
+export type PixApiFailure = { ok: false; reason: "request_failed" | "invalid_response"; httpStatus?: number };
+export type PixApiResult = { ok: true; payment: MercadoPagoPixPayment } | PixApiFailure;
+
+/**
+ * Falha DEFINITIVA (o Mercado Pago recusou o pedido: credencial inválida, dados recusados) x INDEFINIDA (rede,
+ * tempo esgotado, 5xx, 429, resposta ilegível: a cobrança pode ter sido criada). Só a definitiva libera a chave
+ * Pix comum; a indefinida é tentada de novo com a mesma chave de idempotência.
+ */
+export function isDefinitiveFailure(failure: PixApiFailure): boolean {
+  const status = failure.httpStatus;
+  return failure.reason === "request_failed" && status !== undefined && status >= 400 && status < 500 && status !== 408 && status !== 409 && status !== 429;
+}
+
+async function mpFetch(token: string, path: string, init: RequestInit): Promise<{ ok: true; body: unknown } | PixApiFailure> {
   let response: Response;
   try {
     response = await fetch(
@@ -133,8 +155,27 @@ async function mpCall(token: string, path: string, init: RequestInit): Promise<P
     return { ok: false, reason: "invalid_response", httpStatus: response.status };
   }
   if (!response.ok) return { ok: false, reason: "request_failed", httpStatus: response.status };
-  const payment = parseMercadoPagoPayment(body);
-  return payment ? { ok: true, payment } : { ok: false, reason: "invalid_response", httpStatus: response.status };
+  return { ok: true, body };
+}
+
+async function mpCall(token: string, path: string, init: RequestInit): Promise<PixApiResult> {
+  const r = await mpFetch(token, path, init);
+  if (!r.ok) return r;
+  const payment = parseMercadoPagoPayment(r.body);
+  return payment ? { ok: true, payment } : { ok: false, reason: "invalid_response" };
+}
+
+/** Conta dona do token (GET /users/me): confere que o token funciona e dá o id da conta recebedora. */
+export async function getMercadoPagoAccountId(token: string): Promise<{ ok: true; collectorId: string } | PixApiFailure> {
+  const r = await mpFetch(token, "/users/me", { method: "GET" });
+  if (!r.ok) return r;
+  const id = idString((r.body as { id?: unknown } | null)?.id);
+  return id ? { ok: true, collectorId: id } : { ok: false, reason: "invalid_response" };
+}
+
+/** Segredo de webhooks da aplicação (painel do Mercado Pago > Webhooks): texto curto, sem espaços. */
+export function isPlausibleWebhookSecret(secret: string): boolean {
+  return /^[A-Za-z0-9_-]{16,200}$/.test(secret);
 }
 
 /** Cria a cobrança Pix. A chave de idempotência é o id público do pedido: repetir nunca cria duas cobranças. */
