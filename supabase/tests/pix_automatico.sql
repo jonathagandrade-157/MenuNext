@@ -293,9 +293,11 @@ begin
   if res is distinct from 'approved|sem-qr' then fails := fails || format('pago ainda mostra o copia-e-cola (%s)', res); end if;
   res := pg_temp._runas('service_role', null, format('select count(*)::text from public.pix_charge_begin_backend(%L, %L, 0)', slug_a, pub1))
       || pg_temp._runas('service_role', null, format('select count(*)::text from public.pix_charge_for_sync_backend(null, %L, %L, 0)', slug_a, pub1))
-      || pg_temp._runas('service_role', null, 'select count(*)::text from public.pix_charge_for_sync_backend(''5551'', null, null, 0)');
+      || pg_temp._runas('service_role', null, 'select status from public.pix_charge_for_sync_backend(''5551'', null, null, 0)');
   total := total + 1;
-  if res <> '000' then fails := fails || format('pedido pago ainda reservado/consultado (%s)', res); end if;
+  -- pago: não é reservado nem consultado pela página; pelo id do provedor (webhook) volta como 'approved' para a
+  -- assinatura ser conferida e o app responder sem consultar o provedor
+  if res <> '00approved' then fails := fails || format('pedido pago: reserva/consulta (%s)', res); end if;
 
   -- ---------- 8) expiração, aprovação atrasada e recusa definitiva ----------
   pub2 := pg_temp._pix_order(slug_a, prod_a, 1, 'pix-2');

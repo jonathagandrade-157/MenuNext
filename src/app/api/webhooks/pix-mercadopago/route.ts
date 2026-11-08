@@ -22,7 +22,8 @@ export async function POST(request: Request) {
     {
       enabled,
       rateLimited: async () => !(await checkIpRateLimit("pix-webhook:ip", { limit: 120, windowSeconds: 60 })).allowed,
-      sync: (id, signature) => syncPixCharge({ providerPaymentId: id, signature }, 2),
+      // sem intervalo mínimo: um aviso de aprovação nunca pode ser descartado (o limite por IP continua valendo)
+      sync: (id, signature) => syncPixCharge({ providerPaymentId: id, signature }, 0),
     }
   );
   return NextResponse.json(result.body, { status: result.status });

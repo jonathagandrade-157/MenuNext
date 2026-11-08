@@ -312,6 +312,16 @@ describe("syncPixCharge", () => {
     }
     expect(fetchMock).not.toHaveBeenCalled();
   });
+  it("cobrança já paga: aviso duplicado com assinatura válida responde 'approved' SEM consultar; assinatura falsa continua 401", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    const paid = row({ status: "approved", webhook_secret_ciphertext: sealedWh });
+    const good = { xSignature: sign(WH_SECRET, "555", "req-1", "1"), xRequestId: "req-1", dataId: "555" };
+    const forged = { xSignature: sign("segredo-falso-de-alguem-0123456789", "555", "req-1", "1"), xRequestId: "req-1", dataId: "555" };
+    expect(await syncPixCharge({ providerPaymentId: "555", signature: good }, 0, { admin: fakeAdmin({ pix_charge_for_sync_backend: () => ({ data: [paid] }) }).admin, config })).toEqual({ status: "approved" });
+    expect(await syncPixCharge({ providerPaymentId: "555", signature: forged }, 0, { admin: fakeAdmin({ pix_charge_for_sync_backend: () => ({ data: [paid] }) }).admin, config })).toEqual({ status: "unauthorized" });
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
   it("segredo cifrado de outra loja não valida a assinatura", async () => {
     const { admin } = fakeAdmin({ pix_charge_for_sync_backend: () => ({ data: [row({ webhook_secret_ciphertext: sealSecret(WH_SECRET, "rest-2:webhook", KEY) })] }) });
     const signature = { xSignature: sign(WH_SECRET, "555", "req-1", "1"), xRequestId: "req-1", dataId: "555" };

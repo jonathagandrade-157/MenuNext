@@ -20,6 +20,17 @@ const webhook = (id, headers = {}) => fetch(`${APP}/api/webhooks/pix-mercadopago
   method: "POST", headers: { "content-type": "application/json", ...headers }, body: JSON.stringify({ type: "payment", action: "payment.updated", data: { id: String(id) } }),
 });
 
+// preenche de novo até o botão habilitar (em `next dev` a página pode hidratar depois do primeiro preenchimento)
+async function fillUntilEnabled(page, input, value, button) {
+  for (let i = 0; i < 40; i++) {
+    await input.fill("");
+    await input.fill(value);
+    if (await button.isEnabled()) return;
+    await page.waitForTimeout(500);
+  }
+  throw new Error("botão não habilitou");
+}
+
 async function pixOrder(page, name) {
   await page.goto(`${APP}/loja/${SLUG}`, { waitUntil: "networkidle" });
   await page.locator("a", { hasText: "Suco de Laranja" }).first().click();
@@ -51,16 +62,19 @@ async function pixOrder(page, name) {
   await op.goto(`${APP}/painel/pagamentos`, { waitUntil: "networkidle" });
   check("painel: cartão do Pix automático aparece com o servidor configurado", await op.getByText("Pix automático (Mercado Pago)").isVisible());
   const tokenInput = op.getByPlaceholder("APP_USR-...");
-  await tokenInput.fill("TEST-recusado-abcdefghijklmnopqrstuvwxyz");
-  await op.getByRole("button", { name: "Salvar token" }).click();
-  check("painel: token recusado pelo provedor não é salvo", await op.getByText(/recusou este token/).first().isVisible({ timeout: 20000 }).catch(() => false) && sql("select count(*) from public.restaurant_pix_settings") === "0");
-  await tokenInput.fill(TOKEN);
-  await op.getByRole("button", { name: "Salvar token" }).click();
+  const saveToken = op.getByRole("button", { name: "Salvar token" });
+  await fillUntilEnabled(op, tokenInput, "TEST-recusado-abcdefghijklmnopqrstuvwxyz", saveToken);
+  await saveToken.click();
+  const refused = await op.getByText(/recusou este token/).first().waitFor({ timeout: 20000 }).then(() => true).catch(() => false);
+  check("painel: token recusado pelo provedor não é salvo", refused && sql("select count(*) from public.restaurant_pix_settings") === "0");
+  await fillUntilEnabled(op, tokenInput, TOKEN, saveToken);
+  await saveToken.click();
   await op.getByText(/Token salvo/).waitFor({ timeout: 20000 });
   const saved = sql("select collector_id || '|' || token_hint || '|' || enabled || '|' || (position('TEST-sim' in token_ciphertext) = 0) from public.restaurant_pix_settings");
   check("painel: token salvo cifrado, conta recebedora lida da API, nasce desligado", saved === "777|0123|false|true", saved);
-  await op.getByLabel("Assinatura secreta de webhooks").fill(WH_SECRET);
-  await op.getByRole("button", { name: "Salvar assinatura" }).click();
+  const saveSecret = op.getByRole("button", { name: "Salvar assinatura" });
+  await fillUntilEnabled(op, op.getByLabel("Assinatura secreta de webhooks"), WH_SECRET, saveSecret);
+  await saveSecret.click();
   await op.getByText(/Assinatura secreta salva/).waitFor({ timeout: 20000 });
   await op.getByRole("button", { name: "Ligar Pix automático" }).click();
   await op.getByText(/Pix automático ligado/).waitFor({ timeout: 20000 });
@@ -73,7 +87,7 @@ async function pixOrder(page, name) {
   const customer = await (await browser.newContext({ viewport: { width: 420, height: 900 } })).newPage();
   const pub1 = await pixOrder(customer, "Cliente Pix");
   await customer.getByText(/Aguardando pagamento/).waitFor({ timeout: 30000 });
-  check("cliente: QR dinâmico e copia e cola; chave Pix comum NÃO aparece", (await customer.getByRole("img", { name: "QR Code Pix do pedido" }).count()) === 1 && !(await customer.content()).includes("pix@stack.test"));
+  check("cliente: QR dinâmico e copia e cola; chave Pix comum NÃO aparece", (await customer.getByRole("img", { name: "QR Code Pix do pedido" }).count()) === 1 && !(await customer.innerText("body")).includes("pix@stack.test"));
   const charge1 = sql(`select c.status || '|' || c.amount || '|' || o.total || '|' || c.provider_payment_id from public.order_pix_charges c join public.orders o on o.id = c.order_id where o.public_id = '${pub1}'`);
   const [, amount1, total1, payId1] = charge1.split("|");
   check("cobrança com o total calculado pelo servidor", charge1.startsWith("pending|") && amount1 === total1, charge1);
@@ -82,7 +96,8 @@ async function pixOrder(page, name) {
   // ---------------- 3) webhook: assinatura, consulta ao provedor, confirmação ----------------
   let r = await webhook(payId1);
   check("webhook sem assinatura (loja com segredo) = 401", r.status === 401);
-  r = await webhook(payId1, { "x-signature": sign(payId1, "req-1", "1762560000").replace(/v1=./, "v1=0"), "x-request-id": "req-1" });
+  const tampered = sign(payId1, "req-1", "1762560000").replace(/.$/, (c) => (c === "0" ? "1" : "0"));
+  r = await webhook(payId1, { "x-signature": tampered, "x-request-id": "req-1" });
   check("webhook com assinatura adulterada = 401", r.status === 401);
   r = await webhook(payId1, { "x-signature": sign(payId1, "req-2", "1762560001"), "x-request-id": "req-2" });
   check("webhook assinado, pagamento ainda pendente no provedor: nada muda", r.status === 200 && sql(`select status from public.order_pix_charges where provider_payment_id = '${payId1}'`) === "pending");
@@ -106,8 +121,9 @@ async function pixOrder(page, name) {
   await sim("/__sim/mode/undefined-once");
   const c2 = await (await browser.newContext({ viewport: { width: 420, height: 900 } })).newPage();
   const pub2 = await pixOrder(c2, "Cliente Indefinido");
-  const generating = await c2.getByText(/Gerando o QR Code Pix/).isVisible().catch(() => false);
-  check("resposta indefinida: página mostra 'gerando' e NÃO mostra a chave Pix comum", generating && !(await c2.content()).includes("pix@stack.test"));
+  await c2.getByText(/Gerando o QR Code Pix|Aguardando pagamento/).first().waitFor({ timeout: 30000 });
+  const text2 = await c2.innerText("body");
+  check("resposta indefinida: página mostra 'gerando' e NÃO mostra a chave Pix comum", /Gerando o QR Code Pix/.test(text2) && !text2.includes("pix@stack.test"), text2.replace(/\s+/g, " ").slice(0, 160));
   await c2.getByText(/Aguardando pagamento/).waitFor({ timeout: 60000 });
   const state = await sim("/__sim/state", "GET");
   const created2 = state.payments.filter((p) => p.external_reference === pub2).length;
@@ -118,7 +134,7 @@ async function pixOrder(page, name) {
   const c3 = await (await browser.newContext({ viewport: { width: 420, height: 900 } })).newPage();
   const pub3 = await pixOrder(c3, "Cliente Recusado");
   await c3.getByText(/confere esse pagamento manualmente/).waitFor({ timeout: 30000 });
-  check("recusa definitiva: chave Pix comum com aviso de conferência manual", (await c3.content()).includes("pix@stack.test") && sql(`select status from public.order_pix_charges c join public.orders o on o.id = c.order_id where o.public_id = '${pub3}'`) === "failed");
+  check("recusa definitiva: chave Pix comum com aviso de conferência manual", (await c3.innerText("body")).includes("pix@stack.test") && sql(`select c.status from public.order_pix_charges c join public.orders o on o.id = c.order_id where o.public_id = '${pub3}'`) === "failed");
   await c3.screenshot({ path: `${SHOTS}/pix-5-recusado.png`, fullPage: true });
   const orderId3 = sql(`select id from public.orders where public_id = '${pub3}'`);
   await op.goto(`${APP}/painel/pedidos?order=${orderId3}`, { waitUntil: "networkidle" });
@@ -129,7 +145,7 @@ async function pixOrder(page, name) {
   const c4 = await (await browser.newContext({ viewport: { width: 420, height: 900 } })).newPage();
   const pub4 = await pixOrder(c4, "Cliente Conta Errada");
   await c4.getByText(/confere esse pagamento manualmente/).waitFor({ timeout: 30000 });
-  check("cobrança criada em OUTRA conta: descartada (sem QR)", sql(`select status || ':' || failure_reason from public.order_pix_charges c join public.orders o on o.id = c.order_id where o.public_id = '${pub4}'`) === "failed:provider_mismatch");
+  check("cobrança criada em OUTRA conta: descartada (sem QR)", sql(`select c.status || ':' || c.failure_reason from public.order_pix_charges c join public.orders o on o.id = c.order_id where o.public_id = '${pub4}'`) === "failed:provider_mismatch");
   await sim("/__sim/mode/ok");
 
   await browser.close();

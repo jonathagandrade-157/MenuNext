@@ -149,6 +149,8 @@ export async function syncPixCharge(
       const sig = target.signature;
       if (!secret || !sig || !verifyMercadoPagoSignature({ ...sig, secret })) return { status: "unauthorized" };
     }
+    // já paga: pago é final, não há o que consultar (aviso duplicado/atrasado)
+    if (row.status === "approved") return { status: "approved" };
 
     const token = openSecret(row.token_ciphertext, tokenContext(row.restaurant_id), d.config.encryptionKey);
     if (!token) return { status: "failed" };

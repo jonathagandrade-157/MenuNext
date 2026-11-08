@@ -298,8 +298,10 @@ begin
 end;
 $$;
 
--- Cobrança + credenciais para consultar o Mercado Pago. Pelo id do provedor (webhook: também cobranças já
--- canceladas/expiradas, para aprovação atrasada) ou pelo pedido (página: só pendente). Throttle opcional.
+-- Cobrança + credenciais para consultar o Mercado Pago. Pelo id do provedor (webhook: QUALQUER status, para a
+-- assinatura ser sempre conferida e a aprovação atrasada de cobrança cancelada/expirada valer; o app não consulta
+-- o provedor para cobrança já paga) ou pelo pedido (página: só pendente, com throttle).
+-- O throttle só se aplica com p_min_interval_seconds > 0 (página); o webhook usa 0 e nunca é descartado.
 create or replace function public.pix_charge_for_sync_backend(
   p_provider_payment_id text, p_slug text, p_public_id uuid, p_min_interval_seconds integer)
 returns table (charge_id uuid, restaurant_id uuid, provider_payment_id text, status text, amount numeric,
@@ -312,8 +314,7 @@ declare
   v_id uuid;
 begin
   if p_provider_payment_id is not null then
-    select c.id into v_id from public.order_pix_charges c
-     where c.provider_payment_id = p_provider_payment_id and c.status in ('pending', 'cancelled', 'expired');
+    select c.id into v_id from public.order_pix_charges c where c.provider_payment_id = p_provider_payment_id;
   else
     select c.id into v_id
       from public.order_pix_charges c
