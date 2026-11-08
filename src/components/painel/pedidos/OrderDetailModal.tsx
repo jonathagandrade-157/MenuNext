@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { Bike, Info, MapPin, MessageCircle, Printer, ShoppingBag, StickyNote, Store } from "lucide-react";
 import { Drawer } from "@/components/ui/Drawer";
 import { StatusBadge } from "@/components/ui/Badge";
 import { FULFILLMENT_TYPE_LABELS, PAYMENT_METHOD_LABELS } from "@/lib/checkout";
 import { buildOrderTicketHtml } from "@/lib/orderTicket";
 import { discountLabel } from "@/lib/promotions";
+import { buildOrderNoticeText, buildTrackingUrl, buildWhatsAppLink } from "@/lib/whatsappNotify";
 import {
   CANCEL_REASONS,
   ORDER_STATUS_ACTION_LABEL,
@@ -33,6 +34,8 @@ function printOrderTicket(order: OrderWithItems, storeName: string | null) {
   document.body.appendChild(frame);
 }
 
+const subscribeNoop = () => () => {};
+
 const SectionTitle = ({ children }: { children: React.ReactNode }) => (
   <h3 className="mb-2 text-label-sm uppercase tracking-wider text-text-muted">{children}</h3>
 );
@@ -49,6 +52,7 @@ export function OrderDetailModal({
   onAdvance,
   onCancel,
   storeName = null,
+  storeSlug = null,
 }: {
   order: OrderWithItems | null;
   isAdvancing: boolean;
@@ -58,7 +62,11 @@ export function OrderDetailModal({
   onCancel: (reason: string) => void;
   /** Nome da loja na comanda impressa (opcional). */
   storeName?: string | null;
+  /** Slug da loja: link de acompanhamento na mensagem de WhatsApp (opcional). */
+  storeSlug?: string | null;
 }) {
+  // origin só existe no navegador; no servidor fica vazio (sem link de acompanhamento) — sem divergência de hidratação.
+  const origin = useSyncExternalStore(subscribeNoop, () => window.location.origin, () => "");
   const [cancelPanelOpen, setCancelPanelOpen] = useState(false);
   const [cancelReason, setCancelReason] = useState<CancelReasonValue>(CANCEL_REASONS[0].value);
   const [cancelOtherText, setCancelOtherText] = useState("");
@@ -66,6 +74,20 @@ export function OrderDetailModal({
   const nextStatus = order ? getNextOrderStatus(order.status, order.fulfillment_type) : null;
   const actionLabel = nextStatus ? ORDER_STATUS_ACTION_LABEL[nextStatus] : null;
   const canCancel = order ? !isTerminalOrderStatus(order.status, order.fulfillment_type) : false;
+
+  // Aviso ao cliente: só abre o WhatsApp com a mensagem do status atual — quem envia é a pessoa no painel.
+  const noticeText = order
+    ? buildOrderNoticeText({
+        status: order.status,
+        fulfillmentType: order.fulfillment_type,
+        customerName: order.customer_name,
+        storeName,
+        orderNumber: order.order_number,
+        total: order.total,
+        trackingUrl: buildTrackingUrl(origin, storeSlug, order.public_id),
+      })
+    : "";
+  const whatsappLink = order ? buildWhatsAppLink(order.customer_phone, noticeText) : null;
 
   function handleClose() {
     setCancelPanelOpen(false);
@@ -188,16 +210,24 @@ export function OrderDetailModal({
                 <p className="truncate text-headline-sm text-graphite">{order.customer_name}</p>
                 <p className="text-body-sm text-text-muted">{order.customer_phone}</p>
               </div>
-              <a
-                href={`https://wa.me/55${order.customer_phone.replace(/\D/g, "")}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg bg-emerald/10 px-3 text-label-md font-bold text-emerald transition-colors hover:bg-emerald/15"
-              >
-                <MessageCircle className="h-4 w-4" aria-hidden />
-                WhatsApp
-              </a>
+              {whatsappLink && (
+                <a
+                  href={whatsappLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="Abre o WhatsApp com a mensagem pronta; revise e envie."
+                  className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-lg bg-emerald/10 px-3 text-label-md font-bold text-emerald transition-colors hover:bg-emerald/15"
+                >
+                  <MessageCircle className="h-4 w-4" aria-hidden />
+                  Avisar no WhatsApp
+                </a>
+              )}
             </div>
+            {whatsappLink && (
+              <p className="mt-1.5 whitespace-pre-line text-body-sm text-text-muted">
+                <span className="font-semibold">Mensagem:</span> {noticeText}
+              </p>
+            )}
           </section>
 
           <section>
