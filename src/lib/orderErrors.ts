@@ -36,6 +36,16 @@ export function friendlyOrderError(message: string): string {
   if (normalized.includes("product_unavailable")) {
     return "Um dos produtos da sua sacola ficou indisponível. Revise a sacola.";
   }
+  // variantes (migration 20261108000000): variant_required antes de variant_* genérico
+  if (normalized.includes("variant_required")) {
+    return "Um produto da sua sacola agora tem opções (tamanho/versão). Remova o item e adicione de novo escolhendo a opção.";
+  }
+  if (normalized.includes("variant_not_found")) {
+    return "Uma opção (tamanho/versão) escolhida não existe mais. Remova o item e adicione de novo.";
+  }
+  if (normalized.includes("variant_unavailable")) {
+    return "Uma opção (tamanho/versão) escolhida ficou indisponível. Revise a sacola.";
+  }
   if (normalized.includes("addon_not_linked_to_product") || normalized.includes("addon_not_found")) {
     return "Um dos adicionais escolhidos não é mais válido. Revise a sacola.";
   }

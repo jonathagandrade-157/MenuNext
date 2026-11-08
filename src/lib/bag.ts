@@ -35,6 +35,10 @@ export type BagSelectedAddon = { groupId: string; addonId: string; name: string;
 export type BagItem = {
   key: string;
   productId: string;
+  /** Variante escolhida (ex.: tamanho). Ausente/null em produto sem variantes e em sacolas antigas. */
+  variantId?: string | null;
+  variantName?: string | null;
+  /** Nome exibido; com variante já vem "Produto — Variante" (igual ao que create_order grava). */
   name: string;
   basePrice: number;
   imageUrl: string | null;
@@ -106,9 +110,16 @@ export function calculateItemSubtotal(basePrice: number, selectedAddons: { price
  * coexistirem como linhas separadas); a mesma combinação exata gera a
  * mesma chave (para permitir somar quantidade em vez de duplicar linha).
  */
-export function buildBagItemKey(productId: string, selectedAddonIds: string[], observation: string): string {
+export function buildBagItemKey(
+  productId: string,
+  selectedAddonIds: string[],
+  observation: string,
+  variantId: string | null = null
+): string {
   const sortedAddonIds = [...selectedAddonIds].sort();
-  return `${productId}::${sortedAddonIds.join(",")}::${observation.trim()}`;
+  // Sem variante a chave é a mesma de sempre (sacolas salvas continuam somando na mesma linha).
+  const base = variantId ? `${productId}@${variantId}` : productId;
+  return `${base}::${sortedAddonIds.join(",")}::${observation.trim()}`;
 }
 
 export function createBagItem(params: {
@@ -119,17 +130,22 @@ export function createBagItem(params: {
   quantity: number;
   observation: string;
   selectedAddons: BagSelectedAddon[];
+  /** Variante escolhida: basePrice deve ser o preço DELA; o nome vira "Produto — Variante". */
+  variant?: { id: string; name: string } | null;
 }): BagItem {
   const { productId, name, basePrice, imageUrl, quantity, observation, selectedAddons } = params;
+  const variant = params.variant ?? null;
   const trimmedObservation = observation.trim();
   return {
     key: buildBagItemKey(
       productId,
       selectedAddons.map((a) => a.addonId),
-      trimmedObservation
+      trimmedObservation,
+      variant?.id ?? null
     ),
     productId,
-    name,
+    ...(variant ? { variantId: variant.id, variantName: variant.name } : {}),
+    name: variant ? `${name} — ${variant.name}` : name,
     basePrice,
     imageUrl,
     quantity,

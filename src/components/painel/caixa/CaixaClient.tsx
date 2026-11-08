@@ -32,6 +32,8 @@ import {
 import type { PromotionPreview } from "@/lib/actions/promotionPreview";
 import { pickBestDiscount } from "@/lib/promotions";
 import { StoreAddonGroupSelector } from "@/components/loja/StoreAddonGroupSelector";
+import { StoreVariantSelector } from "@/components/loja/StoreVariantSelector";
+import { defaultVariantId, resolveVariantChoice } from "@/lib/storeVariants";
 
 /**
  * Frente de Caixa / PDV real (decisão tomada com o usuário): venda de
@@ -79,6 +81,7 @@ export function CaixaClient({
   const [pickingLoading, setPickingLoading] = useState(false);
   const [pickingError, setPickingError] = useState<string | null>(null);
   const [selections, setSelections] = useState<Record<string, string[]>>({});
+  const [pickedVariantId, setPickedVariantId] = useState<string | null>(null);
   const [itemQuantity, setItemQuantity] = useState(1);
   const [itemObservation, setItemObservation] = useState("");
 
@@ -136,6 +139,7 @@ export function CaixaClient({
     setPickedProduct(null);
     setPickingError(null);
     setSelections({});
+    setPickedVariantId(null);
     setItemQuantity(1);
     setItemObservation("");
     setPickingLoading(true);
@@ -146,6 +150,7 @@ export function CaixaClient({
       return;
     }
     setPickedProduct(result.product);
+    setPickedVariantId(defaultVariantId(result.product.variants));
   }
 
   function closeProductPicker() {
@@ -170,10 +175,20 @@ export function CaixaClient({
     ? validateAllGroupsSelection(pickedProduct.addonGroups, selections)
     : ({ ok: true } as const);
   const quantityValidation = validateBagItemQuantity(itemQuantity);
-  const itemSubtotal = pickedProduct ? calculateItemSubtotal(pickedProduct.price, selectedAddons, itemQuantity) : 0;
+  // Com variante, o preço base é o dela (create_order cobra o mesmo, a partir do banco).
+  const variantChoice = pickedProduct
+    ? resolveVariantChoice(pickedProduct.variants, pickedVariantId)
+    : ({ ok: true, variant: null } as const);
+  const pickedVariant = variantChoice.ok ? variantChoice.variant : null;
+  const pickedBasePrice = pickedVariant ? pickedVariant.price : (pickedProduct?.price ?? 0);
+  const itemSubtotal = pickedProduct ? calculateItemSubtotal(pickedBasePrice, selectedAddons, itemQuantity) : 0;
 
   function handleConfirmAddItem() {
     if (!pickedProduct) return;
+    if (!variantChoice.ok) {
+      setPickingError(variantChoice.error);
+      return;
+    }
     if (!groupsValidation.ok) {
       setPickingError(groupsValidation.error);
       return;
@@ -185,11 +200,12 @@ export function CaixaClient({
     const item = createBagItem({
       productId: pickedProduct.id,
       name: pickedProduct.name,
-      basePrice: pickedProduct.price,
+      basePrice: pickedBasePrice,
       imageUrl: pickedProduct.images[0]?.url ?? null,
       quantity: itemQuantity,
       observation: itemObservation,
       selectedAddons,
+      variant: pickedVariant ? { id: pickedVariant.id, name: pickedVariant.name } : null,
     });
     setCart((prev) => [...prev, item]);
     closeProductPicker();
@@ -351,7 +367,7 @@ export function CaixaClient({
                   <button
                     key={product.id}
                     type="button"
-                    disabled={!product.is_available}
+                    disabled={!product.is_available || product.variantFromPrice === null}
                     onClick={() => openProductPicker(product.id)}
                     className="flex flex-col items-stretch gap-2 rounded-xl border border-border bg-surface-card p-2.5 text-left transition-colors hover:border-primary hover:bg-primary/5 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
                   >
@@ -364,8 +380,11 @@ export function CaixaClient({
                       )}
                     </span>
                     <span className="line-clamp-2 text-body-md font-bold text-graphite">{product.name}</span>
-                    <span className="text-label-md text-primary">{formatCurrencyBRL(product.price)}</span>
-                    {!product.is_available && <span className="text-[11px] font-semibold text-red">Indisponível</span>}
+                    <span className="text-label-md text-primary">
+                      {product.variantFromPrice != null && <span className="text-[11px] font-medium">a partir de </span>}
+                      {formatCurrencyBRL(product.variantFromPrice ?? product.price)}
+                    </span>
+                    {(!product.is_available || product.variantFromPrice === null) && <span className="text-[11px] font-semibold text-red">Indisponível</span>}
                   </button>
                 ))}
               </div>
@@ -559,7 +578,14 @@ export function CaixaClient({
         {pickedProduct && (
           <div className="space-y-4">
             {pickedProduct.description && <p className="text-body-md text-text-muted">{pickedProduct.description}</p>}
-            <p className="text-headline-sm text-graphite">{formatCurrencyBRL(pickedProduct.price)}</p>
+            <p className="text-headline-sm text-graphite">{formatCurrencyBRL(pickedBasePrice)}</p>
+
+            <StoreVariantSelector
+              productId={pickedProduct.id}
+              variants={pickedProduct.variants}
+              selectedId={pickedVariantId}
+              onChange={setPickedVariantId}
+            />
 
             {pickedProduct.addonGroups.length > 0 && (
               <div className="space-y-4">

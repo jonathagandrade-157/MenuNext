@@ -126,6 +126,8 @@ export type CreateOrderItemPayload = {
   quantity: number;
   observation: string | null;
   addon_ids: string[];
+  /** Só presente quando o item tem variante; produto sem variantes manda o mesmo payload de sempre. */
+  variant_id?: string;
 };
 
 export function buildOrderItemsPayload(items: BagItem[]): CreateOrderItemPayload[] {
@@ -134,6 +136,7 @@ export function buildOrderItemsPayload(items: BagItem[]): CreateOrderItemPayload
     quantity: item.quantity,
     observation: item.observation || null,
     addon_ids: item.selectedAddons.map((addon) => addon.addonId),
+    ...(item.variantId ? { variant_id: item.variantId } : {}),
   }));
 }
 

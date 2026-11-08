@@ -36,6 +36,7 @@ export default async function Page(props: PageProps<"/painel/pedidos">) {
         initialHistoryOrders={initialHistoryOrders}
         initialSelectedOrderId={initialSelectedOrderId}
         storeName={restaurant.name}
+        storeSlug={restaurant.slug}
       />
     </div>
   );

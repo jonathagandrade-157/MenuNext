@@ -40,8 +40,8 @@ export function VariantesClient({ products, variants }: { products: ProductLite[
   return (
     <div className="space-y-4">
       <Card className="border-amber/30 bg-amber/5 p-4 text-body-md text-graphite">
-        Por enquanto as variantes ficam só no cadastro: <strong>ainda não aparecem na loja nem no pedido do cliente</strong>, que segue
-        pelo preço do produto.
+        Produto com variantes: o cliente (e o caixa) <strong>precisa escolher uma opção</strong> e paga o preço dela. Variante
+        desligada não pode ser escolhida. Produto sem variantes continua pelo preço do produto.
       </Card>
 
       <label className="block space-y-1">

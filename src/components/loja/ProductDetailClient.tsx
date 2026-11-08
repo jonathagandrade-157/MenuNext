@@ -14,6 +14,8 @@ import {
 } from "@/lib/bag";
 import { formatCurrencyBRL, type PublicProductDetail } from "@/lib/store";
 import { StoreAddonGroupSelector } from "./StoreAddonGroupSelector";
+import { StoreVariantSelector } from "./StoreVariantSelector";
+import { allVariantsUnavailable, defaultVariantId, resolveVariantChoice, variantFromPrice } from "@/lib/storeVariants";
 
 function ImagePlaceholderIcon() {
   return (
@@ -38,6 +40,7 @@ export function ProductDetailClient({
   const { addItem } = useBag();
 
   const [selections, setSelections] = useState<Record<string, string[]>>({});
+  const [variantId, setVariantId] = useState<string | null>(() => defaultVariantId(product.variants));
   const [quantity, setQuantity] = useState(1);
   const [observation, setObservation] = useState("");
   const [activeImage, setActiveImage] = useState(0);
@@ -79,9 +82,16 @@ export function ProductDetailClient({
 
   const groupsValidation = validateAllGroupsSelection(product.addonGroups, selections);
   const quantityValidation = validateBagItemQuantity(quantity);
-  const canSubmit = canAddToBag && product.is_available && groupsValidation.ok && quantityValidation.ok;
+  const variantChoice = resolveVariantChoice(product.variants, variantId);
+  const noVariantAvailable = allVariantsUnavailable(product.variants);
+  const canSubmit =
+    canAddToBag && product.is_available && !noVariantAvailable && variantChoice.ok && groupsValidation.ok && quantityValidation.ok;
 
-  const subtotal = calculateItemSubtotal(product.price, selectedAddons, quantity);
+  // Com variante, o preço base é o DELA (create_order cobra o mesmo, a partir do banco).
+  const chosenVariant = variantChoice.ok ? variantChoice.variant : null;
+  const basePrice = chosenVariant ? chosenVariant.price : product.price;
+  const fromPrice = variantFromPrice(product.variants);
+  const subtotal = calculateItemSubtotal(basePrice, selectedAddons, quantity);
   const cover = product.images[activeImage] ?? product.images[0];
 
   function handleAddToBag() {
@@ -90,8 +100,12 @@ export function ProductDetailClient({
       setSubmitError(unavailableReason ?? "Não é possível adicionar itens agora.");
       return;
     }
-    if (!product.is_available) {
+    if (!product.is_available || noVariantAvailable) {
       setSubmitError("Este produto está indisponível no momento.");
+      return;
+    }
+    if (!variantChoice.ok) {
+      setSubmitError(variantChoice.error);
       return;
     }
     if (!groupsValidation.ok) {
@@ -106,11 +120,12 @@ export function ProductDetailClient({
     const item = createBagItem({
       productId: product.id,
       name: product.name,
-      basePrice: product.price,
+      basePrice,
       imageUrl: product.images[0]?.url ?? null,
       quantity,
       observation,
       selectedAddons,
+      variant: chosenVariant ? { id: chosenVariant.id, name: chosenVariant.name } : null,
     });
     addItem(item);
     router.back();
@@ -185,14 +200,20 @@ export function ProductDetailClient({
         <div>
           <div className="flex items-start justify-between gap-2">
             <h1 className="text-headline-md text-graphite">{product.name}</h1>
-            {!product.is_available && (
+            {(!product.is_available || noVariantAvailable) && (
               <span className="shrink-0 rounded-full bg-red/10 px-2.5 py-1 text-[11px] font-bold text-red">
                 Indisponível
               </span>
             )}
           </div>
           {product.description && <p className="mt-1 text-sm text-text-muted">{product.description}</p>}
-          <p className="mt-2 text-xl font-black text-graphite">{formatCurrencyBRL(product.price)}</p>
+          <p className="mt-2 text-xl font-black text-graphite">
+            {chosenVariant
+              ? formatCurrencyBRL(chosenVariant.price)
+              : fromPrice !== null
+                ? `a partir de ${formatCurrencyBRL(fromPrice)}`
+                : formatCurrencyBRL(product.price)}
+          </p>
         </div>
 
         {!canAddToBag && unavailableReason && (
@@ -200,6 +221,13 @@ export function ProductDetailClient({
             {unavailableReason}
           </div>
         )}
+
+        <StoreVariantSelector
+          productId={product.id}
+          variants={product.variants}
+          selectedId={variantId}
+          onChange={setVariantId}
+        />
 
         {product.addonGroups.length > 0 && (
           <div className="space-y-4">

@@ -1,6 +1,7 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
+import { assertMasterMfa, assertMasterNetwork } from "@/lib/masterGuard";
 import { parseAccessState, type AccessState } from "@/lib/accessState";
 import type { PixKeyType } from "@/lib/pix";
 
@@ -182,11 +183,14 @@ export async function isPlatformAdmin(supabase: SupabaseClient): Promise<boolean
  * layout já bloqueia, mas cada página segue o mesmo padrão de re-checar
  * usado nas páginas OWNER-only de /painel, ver requireOwnerPage). */
 export async function requireMasterPage(): Promise<{ supabase: SupabaseClient }> {
+  // Isolamento (MASTER_HOST / MASTER_ALLOWED_IPS): fora da rede permitida o Master responde 404.
+  await assertMasterNetwork();
   const { supabase, user } = await getAuthedUser();
   if (!user) redirect("/cadastro");
 
   const isAdmin = await isPlatformAdmin(supabase);
   if (!isAdmin) redirect(await resolvePostAuthPath(supabase));
+  await assertMasterMfa(supabase); // segundo fator quando MASTER_REQUIRE_MFA=true
 
   return { supabase };
 }

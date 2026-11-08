@@ -2,8 +2,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { isMissingRpc } from "./rpcErrors";
 
 /**
- * Variantes de produto (ex.: Pequena/Média/Grande). ESCOPO ATUAL: só o cadastro no painel. A loja pública e o
- * checkout ainda NÃO usam variantes (o pedido segue pelo preço do produto). Escrita só pelas RPCs product_variant_*.
+ * Variantes de produto (ex.: Pequena/Média/Grande) — cadastro no painel. Escrita só pelas RPCs product_variant_*.
+ * Loja, sacola e PDV: ver storeVariants.ts (create_order cobra o preço da variante — migration 20261108000000).
  */
 export const VARIANT_NAME_MAX = 60;
 export const VARIANT_MAX_PER_PRODUCT = 20;
