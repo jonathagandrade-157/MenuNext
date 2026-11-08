@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BagProvider } from "@/contexts/BagContext";
+import { StoreNavigationTracker } from "@/components/loja/StoreNavigationTracker";
 import { createClient } from "@/lib/supabase/server";
 import { getPublicAssetUrl } from "@/lib/storage/assets";
 import type { PublicRestaurant } from "@/lib/store";
@@ -54,6 +55,7 @@ export default async function LojaPublicaLayout({ children, params }: LayoutProp
   return (
     <div className="min-h-screen bg-surface-subdued md:flex md:justify-center md:py-8">
       <div className="min-h-screen w-full bg-surface-card md:min-h-[calc(100vh-4rem)] md:max-w-3xl lg:max-w-5xl md:rounded-2xl md:border md:border-border md:shadow-[var(--shadow-modal)]">
+        <StoreNavigationTracker slug={slug} />
         <BagProvider slug={slug}>{children}</BagProvider>
       </div>
     </div>
