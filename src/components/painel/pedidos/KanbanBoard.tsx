@@ -56,9 +56,12 @@ export function KanbanBoard({
   showElapsedTime = false,
   targetPrepMinutes = null,
   storeName = null,
+  storeSlug = null,
 }: {
   restaurantId: string;
   initialOrders: OrderWithItems[];
+  /** Slug da loja: link de acompanhamento na mensagem de WhatsApp. */
+  storeSlug?: string | null;
   /** Subconjunto de colunas a exibir — default são as 5 do Kanban
    * operacional; o KDS (JON-23, /painel/kds) passa KDS_COLUMNS. */
   columns?: typeof KANBAN_COLUMNS;
@@ -442,6 +445,7 @@ export function KanbanBoard({
       <OrderDetailModal
         order={selectedOrder}
         storeName={storeName}
+        storeSlug={storeSlug}
         isAdvancing={advancingId === selectedOrder?.id}
         isCancelling={cancellingId === selectedOrder?.id}
         onClose={() => setSelectedOrderId(null)}
