@@ -31,6 +31,7 @@ const ALL_NAV_GROUPS: NavGroup[] = [
     items: [
       { href: "/painel/categorias", label: "Categorias", icon: "categorias", ownerOnly: true },
       { href: "/painel/produtos", label: "Produtos", icon: "produtos" },
+      { href: "/painel/estoque", label: "Estoque", icon: "estoque", ownerOnly: true },
       { href: "/painel/adicionais", label: "Adicionais", icon: "adicionais" },
       { href: "/painel/combos", label: "Combos", icon: "combos", ownerOnly: true },
     ],
