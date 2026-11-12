@@ -1,7 +1,8 @@
 import { assertMasterMfa, assertMasterNetwork } from "@/lib/masterGuard";
 import { redirect } from "next/navigation";
 import { PanelSidebar, type NavGroup } from "@/components/layout/PanelSidebar";
-import { getAuthedUser, isPlatformAdmin, resolvePostAuthPath } from "@/lib/tenant";
+import { getAuthedUser, resolveMasterAccess, resolvePostAuthPath } from "@/lib/tenant";
+import { MASTER_MFA_PATH } from "@/lib/masterAccess";
 
 const NAV_GROUPS: NavGroup[] = [
   {
@@ -37,8 +38,9 @@ export default async function MasterLayout({ children }: { children: React.React
   const { supabase, user } = await getAuthedUser();
   if (!user) redirect("/cadastro");
 
-  const isAdmin = await isPlatformAdmin(supabase);
-  if (!isAdmin) redirect(await resolvePostAuthPath(supabase));
+  const access = await resolveMasterAccess(supabase);
+  if (access === "not_admin") redirect(await resolvePostAuthPath(supabase));
+  if (access === "mfa_required") redirect(MASTER_MFA_PATH); // exigência de AAL2 ligada no banco
   await assertMasterMfa(supabase); // MASTER_REQUIRE_MFA=true: exige o segundo fator
 
   return (
