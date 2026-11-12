@@ -90,7 +90,10 @@ export function OrderCard({
         )}
 
         <div className="mt-2 flex items-center justify-between border-t border-border pt-2">
-          <span className="text-[11px] font-medium text-text-muted">{PAYMENT_METHOD_LABELS[order.payment_method]}</span>
+          <span className="text-[11px] font-medium text-text-muted">
+            {PAYMENT_METHOD_LABELS[order.payment_method]}
+            {order.paid_at && <span className="ml-1 font-bold text-emerald">· Pago</span>}
+          </span>
           <span className="text-body-lg font-bold text-graphite">{formatCurrencyBRL(order.total)}</span>
         </div>
       </button>

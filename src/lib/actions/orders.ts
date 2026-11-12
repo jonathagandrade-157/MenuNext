@@ -7,6 +7,7 @@ import type { Order } from "@/lib/orders";
 import { friendlyOrderError } from "@/lib/orderErrors";
 import { resolveDeliveryDistanceForOrder } from "@/lib/actions/delivery-quote";
 import { checkIpRateLimit, tooManyAttemptsMessage } from "@/lib/rateLimit";
+import { ensurePixCharge } from "@/lib/pixAutoService";
 
 export type SubmitOrderDeliveryInput = {
   zip: string;
@@ -93,6 +94,10 @@ export async function submitOrderAction(input: SubmitOrderInput): Promise<Submit
   if (!row) {
     return { status: "error", message: "Não foi possível finalizar o pedido. Seus itens continuam na sacola. Tente novamente." };
   }
+
+  // Pix automático (desligado por padrão): cria a cobrança dinâmica. Nunca falha o pedido — sem ela, a página
+  // do pedido mostra a chave Pix estática, como sempre. Sem a configuração no servidor, não faz nenhuma chamada.
+  if (input.paymentMethod === "pix") await ensurePixCharge(input.slug, row.public_id);
 
   return { status: "success", publicId: row.public_id, orderNumber: row.order_number };
 }

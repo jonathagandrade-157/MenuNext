@@ -34,6 +34,7 @@ const OWNER_ONLY: Record<string, { exempt: string[] }> = {
   "informacoes.ts": { exempt: [] },
   "onboarding.ts": { exempt: ["checkSlugAvailability", "savePasso1Action"] },
   "pagamentos.ts": { exempt: [] },
+  "pixSettings.ts": { exempt: [] },
   "products.ts": { exempt: ["toggleProductAvailableAction"] },
   "promotions.ts": { exempt: [] },
 };
@@ -54,6 +55,8 @@ const OTHER_GUARDS: Record<string, string> = {
   "promotionPreview.ts": "prévia pública da promoção no checkout: preview_promotion só lê e não revela nada além do desconto",
   "pendingPayment.ts": "retomar pagamento: billing_pending_subscription só devolve a assinatura pendente do OWNER da loja",
   "plans.ts": "planos: is_platform_admin",
+  "pixPanel.ts": "status do Pix automático no detalhe do pedido: só leitura, a RLS de order_pix_charges entrega só a membros da loja",
+  "pixPublic.ts": "status público do Pix do próprio pedido: o public_id é a autorização, limitado por IP, só lê e sincroniza com o Mercado Pago",
   "subscription.ts": "assinatura: a RPC billing/start_restaurant_subscription exige OWNER",
 };
 

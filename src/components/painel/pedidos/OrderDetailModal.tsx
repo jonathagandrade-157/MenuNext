@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { Bike, Info, MapPin, MessageCircle, Printer, ShoppingBag, StickyNote, Store } from "lucide-react";
 import { Drawer } from "@/components/ui/Drawer";
 import { StatusBadge } from "@/components/ui/Badge";
@@ -8,6 +8,8 @@ import { FULFILLMENT_TYPE_LABELS, PAYMENT_METHOD_LABELS } from "@/lib/checkout";
 import { buildOrderTicketHtml } from "@/lib/orderTicket";
 import { discountLabel } from "@/lib/promotions";
 import { buildOrderNoticeText, buildTrackingUrl, buildWhatsAppLink } from "@/lib/whatsappNotify";
+import { getOrderPixStatusAction } from "@/lib/actions/pixPanel";
+import { describePanelPixStatus } from "@/lib/pixCharge";
 import {
   CANCEL_REASONS,
   ORDER_STATUS_ACTION_LABEL,
@@ -88,6 +90,22 @@ export function OrderDetailModal({
       })
     : "";
   const whatsappLink = order ? buildWhatsAppLink(order.customer_phone, noticeText) : null;
+
+  // Pix: situação da cobrança automática (se houver). Sem ela, o pagamento pela chave da loja é conferido à mão.
+  const pixOrderId = order?.payment_method === "pix" ? order.id : null;
+  const pixPaidAt = order?.paid_at ?? null;
+  const [pixInfo, setPixInfo] = useState<{ orderId: string; status: string | null } | null>(null);
+  useEffect(() => {
+    if (!pixOrderId) return;
+    let alive = true;
+    getOrderPixStatusAction(pixOrderId)
+      .then((r) => alive && setPixInfo({ orderId: pixOrderId, status: r?.status ?? null }))
+      .catch(() => alive && setPixInfo({ orderId: pixOrderId, status: null }));
+    return () => {
+      alive = false;
+    };
+  }, [pixOrderId, pixPaidAt]);
+  const pixLine = pixOrderId && pixInfo?.orderId === pixOrderId ? describePanelPixStatus(pixInfo.status) : null;
 
   function handleClose() {
     setCancelPanelOpen(false);
@@ -329,8 +347,19 @@ export function OrderDetailModal({
               <span className="text-right font-semibold text-graphite">
                 {PAYMENT_METHOD_LABELS[order.payment_method]}
                 {order.payment_method === "cash" && order.change_for !== null && ` (troco para ${formatCurrencyBRL(order.change_for)})`}
+                {order.paid_at && <span className="ml-1.5 rounded-full bg-emerald/10 px-2 py-0.5 text-label-sm text-emerald">Pago</span>}
               </span>
             </div>
+            {pixLine && (
+              <p
+                role="status"
+                className={`mt-1 rounded-lg px-2.5 py-1.5 text-body-sm ${
+                  pixLine.tone === "success" ? "bg-emerald/10 text-emerald" : pixLine.tone === "warning" ? "bg-amber/10 text-graphite" : "bg-surface-subdued text-text-muted"
+                }`}
+              >
+                {pixLine.text}
+              </p>
+            )}
           </section>
         </>
       )}

@@ -35,6 +35,10 @@ const SERVER_ONLY_MODULES = [
   "billingReconcile",
   "asaasWebhookHandler",
   "mercadopagoWebhookHandler",
+  "secretBox",
+  "pixAutoService",
+  "pixWebhookHandler",
+  "lib/pixAuto",
 ];
 
 const importsModule = (source: string, modulePath: string) =>
@@ -72,13 +76,18 @@ describe("credenciais de servidor da cobrança", () => {
     expect(users).toEqual(["lib/turnstile.ts"]);
   });
 
+  it("a chave de cifra dos tokens de pagamento só é lida em src/lib/secretBox.ts", () => {
+    const users = prod.filter((f) => read(f).includes("process.env.PAYMENTS_ENCRYPTION_KEY")).map(rel);
+    expect(users).toEqual(["lib/secretBox.ts"]);
+  });
+
   it("o CRON_SECRET só é lido na rota agendada", () => {
     const users = prod.filter((f) => read(f).includes("process.env.CRON_SECRET")).map(rel);
     expect(users).toEqual(["app/api/cron/billing-reconcile/route.ts"]);
   });
 
   it("nenhuma credencial de servidor ganha o prefixo NEXT_PUBLIC_", () => {
-    const offenders = all.filter((f) => /NEXT_PUBLIC_(SUPABASE_SERVICE|SERVICE_ROLE|ASAAS|MERCADOPAGO|TURNSTILE_SECRET|CRON|RESEND|EMAIL_FROM)/.test(read(f))).map(rel);
+    const offenders = all.filter((f) => /NEXT_PUBLIC_(SUPABASE_SERVICE|SERVICE_ROLE|ASAAS|MERCADOPAGO|TURNSTILE_SECRET|CRON|RESEND|EMAIL_FROM|PAYMENTS|PIX_)/.test(read(f))).map(rel);
     expect(offenders).toEqual([]);
   });
 
@@ -89,6 +98,8 @@ describe("credenciais de servidor da cobrança", () => {
       "app/api/webhooks/mercadopago/route.ts",
       "lib/actions/subscription.ts",
       "lib/billingConfig.ts",
+      "lib/pixAuto.ts", // Pix automático: só confere se a service_role existe (isAdminConfigured)
+      "lib/pixAutoService.ts", // Pix automático: só as RPCs pix_*_backend (service_role)
       "lib/rateLimit.ts", // contador de tentativas: chama só a função rate_limit_hit (service_role)
     ]);
   });
@@ -129,6 +140,14 @@ describe("credenciais de servidor da cobrança", () => {
       "app/api/webhooks/asaas/route.ts",
       "app/api/webhooks/mercadopago/route.ts",
       "app/api/cron/billing-reconcile/route.ts",
+      "lib/secretBox.ts",
+      "lib/pixAuto.ts",
+      "lib/pixAutoService.ts",
+      "lib/pixWebhookHandler.ts",
+      "lib/pixCharge.ts",
+      "lib/actions/pixSettings.ts",
+      "lib/actions/pixPublic.ts",
+      "app/api/webhooks/pix-mercadopago/route.ts",
     ];
     for (const file of billingFiles) {
       expect(read(path.join(SRC, file)), file).not.toMatch(/console\.(log|error|warn|info|debug)/);
@@ -142,6 +161,10 @@ describe("credenciais de servidor da cobrança", () => {
       "app/api/cron/billing-reconcile/route.ts",
       "lib/asaasWebhookHandler.ts",
       "lib/mercadopagoWebhookHandler.ts",
+      "app/api/webhooks/pix-mercadopago/route.ts",
+      "lib/pixWebhookHandler.ts",
+      "lib/pixAutoService.ts",
+      "lib/actions/pixPublic.ts",
     ]) {
       const body = read(path.join(SRC, file));
       expect(body, file).not.toMatch(/(error|err)\.message\s*[,}\])]/);

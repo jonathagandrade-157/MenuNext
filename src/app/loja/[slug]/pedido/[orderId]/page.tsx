@@ -9,6 +9,9 @@ import { CopyButton } from "@/components/loja/CopyButton";
 import { OrderStatusBadgeLive } from "@/components/loja/OrderStatusBadge";
 import { StoreNotFound } from "@/components/loja/StoreNotFound";
 import { discountLabel } from "@/lib/promotions";
+import { PixChargePanel } from "@/components/loja/PixChargePanel";
+import { readOrderPixCharge } from "@/lib/pixCharge";
+import { generatePixQrCodeDataUrl } from "@/lib/qrcode";
 
 const FULFILLMENT_LABEL: Record<string, string> = { delivery: "Entrega", pickup: "Retirada", counter: "Balcão" };
 
@@ -37,6 +40,11 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/pedido/[o
       </div>
     );
   }
+
+  // Pix automático (desligado por padrão): só existe cobrança se a loja ligou o recurso. Sem ela, chave estática.
+  const pixCharge = order.payment_method === "pix" ? await readOrderPixCharge(supabase, slug, order.public_id) : null;
+  const pixQrDataUrl =
+    pixCharge?.status === "pending" && pixCharge.qrCode ? await generatePixQrCodeDataUrl(pixCharge.qrCode).catch(() => null) : null;
 
   return (
     <div className="pb-10">
@@ -125,7 +133,16 @@ export default async function Page({ params }: PageProps<"/loja/[slug]/pedido/[o
           {order.payment_method === "cash" && order.change_for !== null && (
             <p className="text-sm text-text-muted">Troco para {formatCurrencyBRL(order.change_for)}</p>
           )}
-          {order.payment_method === "pix" && order.pix_key && (
+          {pixCharge && (
+            <PixChargePanel
+              slug={slug}
+              publicId={order.public_id}
+              initial={pixCharge}
+              qrDataUrl={pixQrDataUrl}
+              fallbackPixKey={order.pix_key}
+            />
+          )}
+          {order.payment_method === "pix" && !pixCharge && order.pix_key && (
             <div className="flex items-center justify-between gap-2 rounded-xl bg-surface-subdued px-3 py-2">
               <span className="truncate text-sm font-semibold text-graphite">{order.pix_key}</span>
               <CopyButton value={order.pix_key} label="Copiar chave" copiedLabel="Chave copiada!" />
