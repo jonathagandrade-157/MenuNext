@@ -120,7 +120,68 @@ export function friendlyCashError(message: string): string {
   if (m.includes("cash_not_open")) return "O caixa não está aberto.";
   if (m.includes("invalid_amount")) return "Informe um valor válido, entre R$ 0,00 e R$ 99.999.999,99.";
   if (m.includes("not_authorized")) return "Você não tem acesso ao caixa desta loja.";
+  if (m.includes("insufficient_cash")) return "A sangria é maior que o dinheiro disponível no caixa.";
+  if (m.includes("invalid_reason")) return "Informe o motivo (até 200 caracteres).";
+  if (m.includes("invalid_kind")) return "Tipo de movimentação inválido.";
   return "Não foi possível concluir agora. Tente novamente.";
+}
+
+// ---------------------------------------------------------------------------
+// Movimentações do caixa (suprimento / sangria) — migration 20261105010000_cash_movements
+// ---------------------------------------------------------------------------
+export type CashMovementKind = "supply" | "withdrawal";
+export const CASH_MOVEMENT_LABELS: Record<CashMovementKind, string> = { supply: "Suprimento", withdrawal: "Sangria" };
+export const CASH_REASON_MAX_LENGTH = 200;
+
+export type CashMovement = {
+  id: string;
+  kind: CashMovementKind;
+  amount: number;
+  reason: string;
+  createdByName: string;
+  createdAt: string;
+};
+
+export function parseCashMovement(row: Row): CashMovement {
+  return {
+    id: String(row.id),
+    kind: row.kind === "withdrawal" ? "withdrawal" : "supply",
+    amount: num(row.amount),
+    reason: String(row.reason ?? ""),
+    createdByName: String(row.created_by_name ?? ""),
+    createdAt: String(row.created_at),
+  };
+}
+
+export type CashMovementInput = { kind: CashMovementKind; amount: number; reason: string };
+
+export function validateCashMovement(kind: unknown, rawAmount: number | null, rawReason: unknown): { ok: true; value: CashMovementInput } | { ok: false; error: string } {
+  if (kind !== "supply" && kind !== "withdrawal") return { ok: false, error: "Escolha suprimento ou sangria." };
+  if (rawAmount === null || !Number.isFinite(rawAmount) || rawAmount <= 0) return { ok: false, error: "Informe um valor maior que zero." };
+  if (rawAmount > 99999999.99) return { ok: false, error: "Valor alto demais." };
+  const reason = typeof rawReason === "string" ? rawReason.trim() : "";
+  if (!reason) return { ok: false, error: "Informe o motivo." };
+  if (reason.length > CASH_REASON_MAX_LENGTH) return { ok: false, error: `O motivo deve ter até ${CASH_REASON_MAX_LENGTH} caracteres.` };
+  return { ok: true, value: { kind, amount: Math.round(rawAmount * 100) / 100, reason } };
+}
+
+/** True quando o erro significa "a função não existe neste banco" (migration ainda não aplicada). */
+export function isMissingRpc(error: { code?: string; message?: string } | null): boolean {
+  if (!error) return false;
+  return error.code === "PGRST202" || error.code === "42883" || /could not find the function|does not exist/i.test(error.message ?? "");
+}
+
+export type CashMovementsResult = { available: boolean; rows: CashMovement[] };
+
+/**
+ * Movimentações da sessão aberta. Se a migration ainda não foi aplicada, devolve available=false e a tela esconde o
+ * recurso (o resto do caixa funciona normalmente). Qualquer outro erro é propagado.
+ */
+export async function getCashMovements(supabase: SupabaseClient): Promise<CashMovementsResult> {
+  const { data, error } = await supabase.rpc("cash_movements_list");
+  if (isMissingRpc(error)) return { available: false, rows: [] };
+  if (error) throw error;
+  return { available: true, rows: ((data as Row[] | null) ?? []).map(parseCashMovement) };
 }
 
 export type CashAmountValidation = { ok: true; value: number } | { ok: false; error: string };
