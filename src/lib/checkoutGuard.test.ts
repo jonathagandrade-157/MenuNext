@@ -109,9 +109,6 @@ describe("enforceLimits", () => {
 describe("as quatro funções protegidas só são chamadas pelo caminho do servidor", () => {
   const SRC = path.resolve(__dirname, "..");
   const PROTECTED = ["create_order", "validate_coupon", "preview_promotion", "is_document_eligible"];
-  // PDV legado: segue chamando as RPCs com a sessão do membro enquanto a migration 20261027020000 não existe.
-  // A PR do PDV (create_counter_order) remove esta exceção, e só depois a migration 2 pode ser aplicada.
-  const LEGACY_COUNTER_PATH = "lib/actions/counterOrders.ts";
 
   function walk(dir: string, files: string[] = []): string[] {
     for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -125,7 +122,6 @@ describe("as quatro funções protegidas só são chamadas pelo caminho do servi
   it("nenhum código chama .rpc() direto nelas (nem o navegador): tudo passa por callPublicRpc", () => {
     const offenders: string[] = [];
     for (const file of walk(SRC)) {
-      if (path.relative(SRC, file) === LEGACY_COUNTER_PATH) continue;
       const source = fs.readFileSync(file, "utf8");
       for (const fn of PROTECTED) {
         if (new RegExp(`\\.rpc\\(\\s*["'\`]${fn}["'\`]`).test(source)) offenders.push(`${path.relative(SRC, file)} -> ${fn}`);
