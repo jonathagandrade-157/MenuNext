@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useStoreBack } from "@/lib/useStoreBack";
 import { useBag } from "@/contexts/BagContext";
 import {
   BAG_ITEM_OBSERVATION_MAX_LENGTH,
@@ -26,15 +26,18 @@ function ImagePlaceholderIcon() {
 }
 
 export function ProductDetailClient({
+  slug,
   product,
   canAddToBag,
   unavailableReason,
 }: {
+  slug: string;
   product: PublicProductDetail;
   canAddToBag: boolean;
   unavailableReason: string | null;
 }) {
-  const router = useRouter();
+  // Voltar/Adicionar: histórico só se o cliente já navegou na loja; quem veio por link vai para o cardápio
+  const goBack = useStoreBack(slug);
   const { addItem } = useBag();
 
   const [selections, setSelections] = useState<Record<string, string[]>>({});
@@ -113,7 +116,7 @@ export function ProductDetailClient({
       selectedAddons,
     });
     addItem(item);
-    router.back();
+    goBack();
   }
 
   return (
@@ -121,7 +124,7 @@ export function ProductDetailClient({
       <div className="sticky top-0 z-20 flex items-center gap-2 bg-surface-card/95 px-3.5 py-3 backdrop-blur-md">
         <button
           type="button"
-          onClick={() => router.back()}
+          onClick={goBack}
           aria-label="Voltar"
           className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-graphite hover:bg-surface-subdued"
         >
