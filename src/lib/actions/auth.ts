@@ -8,6 +8,7 @@ import { LEGAL_LAST_UPDATED } from "@/lib/legal";
 import { PASSWORD_MIN_LENGTH, validatePassword } from "@/lib/password";
 import { safeNextPath } from "@/lib/safeRedirect";
 import { checkIpRateLimit, checkRateLimit, hashIdentifier, tooManyAttemptsMessage } from "@/lib/rateLimit";
+import { callPublicRpc } from "@/lib/publicRpc";
 import { humanCheckError } from "@/lib/humanCheck";
 
 function friendlyAuthError(message: string): string {
@@ -95,7 +96,9 @@ export async function signUpAction(
   // criar a conta. Não é a garantia de concorrência — essa é o UNIQUE
   // constraint em profiles.document, verificado de novo dentro do trigger
   // que roda durante o signUp() logo abaixo.
-  const { data: eligible, error: eligibilityError } = await supabase.rpc("is_document_eligible", {
+  // is_document_eligible só é executável pelo servidor (migration 20261027020000): o visitante não consulta
+  // CPF/CNPJ direto pela API. Se a consulta falhar, o cadastro segue e o gatilho do banco decide.
+  const { data: eligible, error: eligibilityError } = await callPublicRpc<boolean>("is_document_eligible", {
     p_document: document,
   });
   if (!eligibilityError && eligible === false) {

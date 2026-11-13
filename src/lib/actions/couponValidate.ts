@@ -1,7 +1,9 @@
 "use server";
 
-import { createClient } from "@/lib/supabase/server";
 import { checkIpRateLimit, tooManyAttemptsMessage } from "@/lib/rateLimit";
+import { buildCouponLimits, enforceLimits } from "@/lib/checkoutGuard";
+import { callPublicRpc } from "@/lib/publicRpc";
+import { isValidCouponRequest } from "@/lib/checkoutInput";
 
 export type ValidateCouponResult =
   | { status: "success"; code: string; discountType: "percent" | "fixed"; discountValue: number; discountAmount: number }
@@ -25,13 +27,18 @@ function friendlyCouponValidationError(message: string): string {
  * decide de fato se o cupom é aplicado.
  */
 export async function validateCouponAction(slug: string, code: string, subtotal: number): Promise<ValidateCouponResult> {
+  if (!isValidCouponRequest(slug, code, subtotal)) return { status: "error", message: "Cupom não encontrado." };
   // Evita adivinhar códigos de cupom por tentativa e erro: 20 por minuto por IP.
   const limit = await checkIpRateLimit("cupom:ip", { limit: 20, windowSeconds: 60 });
   if (!limit.allowed) return { status: "error", message: tooManyAttemptsMessage(limit.retryAfterSeconds) };
 
-  const supabase = await createClient();
+  // Limite por loja: quem tenta adivinhar códigos de várias origens também esbarra aqui.
+  const storeLimit = await enforceLimits(buildCouponLimits({ slug }));
+  if (!storeLimit.allowed) return { status: "error", message: tooManyAttemptsMessage(storeLimit.retryAfterSeconds) };
 
-  const { data, error } = await supabase.rpc("validate_coupon", { p_slug: slug, p_code: code, p_subtotal: subtotal });
+  const { data, error } = await callPublicRpc<
+    { code: string; discount_type: "percent" | "fixed"; discount_value: string | number; discount_amount: string | number }[]
+  >("validate_coupon", { p_slug: slug, p_code: code, p_subtotal: subtotal });
   if (error) return { status: "error", message: friendlyCouponValidationError(error.message) };
 
   const row = data?.[0];

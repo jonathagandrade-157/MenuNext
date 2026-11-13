@@ -25,7 +25,8 @@ Ver `.env.example` (todas comentadas). Só as duas do Supabase são obrigatória
 - `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` — projeto Supabase.
 - `GOOGLE_MAPS_GEOCODING_API_KEY` — opcional; sem ela o frete "Por KM" fica indisponível e a taxa fixa continua funcionando.
 - `ASAAS_API_KEY` e `ASAAS_ENV` (`sandbox` por padrão, ou `production`) — opcionais; sem a chave, "Assinar plano" mostra um aviso em vez de fingir sucesso. Nunca prefixar com `NEXT_PUBLIC_`.
-- `SUPABASE_SERVICE_ROLE_KEY` e `CRON_SECRET` — só para a cobrança (registro da assinatura provada na API do Asaas e reconciliação diária). Sem elas a cobrança fica desligada. Servidor apenas: nunca prefixar com `NEXT_PUBLIC_`, nunca commitar.
+- `SUPABASE_SERVICE_ROLE_KEY` — **obrigatória para o pedido online.** O checkout público, a validação de cupom, a prévia de promoção e a pré-checagem de CPF/CNPJ do cadastro passam pelo servidor do app (que aplica os limites de tentativas) e **falham fechado** sem esta chave ("O pedido online está indisponível"; no cadastro a pré-checagem é pulada e o banco decide). Confirme que ela está definida no ambiente **antes** de implantar. Também serve à cobrança e ao contador de tentativas. Servidor apenas: nunca prefixar com `NEXT_PUBLIC_`, nunca commitar.
+- `CRON_SECRET` — só para a reconciliação diária da cobrança. Sem ele a cobrança fica desligada.
 
 ### Cobrança (Asaas)
 
