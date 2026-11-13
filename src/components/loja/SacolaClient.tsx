@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useStoreBack } from "@/lib/useStoreBack";
 import { ArrowLeft, Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 import { useBag } from "@/contexts/BagContext";
 import { BAG_ITEM_QUANTITY_MAX, validateBagItemQuantity } from "@/lib/bag";
@@ -9,6 +10,7 @@ import { formatCurrencyBRL } from "@/lib/store";
 
 export function SacolaClient({ slug, canCheckout, unavailableReason }: { slug: string; canCheckout: boolean; unavailableReason: string | null }) {
   const router = useRouter();
+  const goBack = useStoreBack(slug);
   const { items, removeItem, updateItemQuantity, clearBag, totalItemCount, totalPrice } = useBag();
 
   if (items.length === 0) {
@@ -31,7 +33,7 @@ export function SacolaClient({ slug, canCheckout, unavailableReason }: { slug: s
       <div className="sticky top-0 z-20 flex items-center gap-2 border-b border-border bg-surface-card/95 px-3.5 py-3 backdrop-blur-md">
         <button
           type="button"
-          onClick={() => router.back()}
+          onClick={goBack}
           aria-label="Voltar"
           className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-graphite hover:bg-surface-subdued"
         >

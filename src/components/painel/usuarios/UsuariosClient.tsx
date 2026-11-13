@@ -10,6 +10,7 @@ import { Modal } from "@/components/ui/Modal";
 import { CopyLinkButton } from "@/components/onboarding/CopyLinkButton";
 import { removeMemberAction, resendInviteAction, revokeInviteAction } from "@/lib/actions/invites";
 import type { RestaurantInvite, RestaurantMember } from "@/lib/tenant";
+import type { InviteEmailStatus } from "@/lib/form-state";
 import { InviteFormFields } from "./InviteFormFields";
 import { AuditList } from "@/components/audit/AuditList";
 import type { AuditEntry } from "@/lib/audit";
@@ -64,6 +65,7 @@ export function UsuariosClient({
   const [removing, setRemoving] = useState<RestaurantMember | null>(null);
   const [removeError, setRemoveError] = useState<string | null>(null);
   const [resendUrl, setResendUrl] = useState<string | null>(null);
+  const [resendEmailStatus, setResendEmailStatus] = useState<InviteEmailStatus | undefined>(undefined);
   const [resendError, setResendError] = useState<string | null>(null);
   const [pendingId, setPendingId] = useState<string | null>(null);
   const [search, setSearch] = useState("");
@@ -122,6 +124,7 @@ export function UsuariosClient({
         setResendError(result.error ?? "Não foi possível reenviar o convite.");
         return;
       }
+      setResendEmailStatus(result.emailStatus);
       setResendUrl(result.inviteUrl ?? null);
     });
   }
@@ -393,7 +396,13 @@ export function UsuariosClient({
 
       <Modal open={resendUrl !== null} onClose={() => setResendUrl(null)} title="Convite reenviado">
         <div className="space-y-4">
-          <p className="text-body-md text-text-muted">Novo link gerado (o anterior parou de funcionar). Copie e compartilhe:</p>
+          <p className="text-body-md text-text-muted">
+            {resendEmailStatus === "sent"
+              ? "Novo link gerado e enviado por e-mail (o anterior parou de funcionar). Se preferir, copie e compartilhe também:"
+              : resendEmailStatus === "failed"
+                ? "Novo link gerado (o anterior parou de funcionar), mas o e-mail não pôde ser enviado agora. Copie e compartilhe:"
+                : "Novo link gerado (o anterior parou de funcionar). Copie e compartilhe:"}
+          </p>
           <div className="flex items-center gap-2 rounded-lg border border-border bg-surface-subdued px-3 py-2.5">
             <p className="min-w-0 flex-1 truncate text-body-md font-medium text-graphite">{resendUrl}</p>
           </div>
