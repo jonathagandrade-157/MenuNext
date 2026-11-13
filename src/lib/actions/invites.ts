@@ -6,13 +6,15 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/server";
 import { getMyRestaurant, getMyMembership, type RestaurantInvite } from "@/lib/tenant";
 import { getRequestOrigin } from "@/lib/site-url";
-import type { InviteActionState } from "@/lib/form-state";
+import type { InviteActionState, InviteEmailStatus } from "@/lib/form-state";
+import { sendEmail } from "@/lib/email";
+import { buildInviteEmail } from "@/lib/inviteEmail";
 
 export type { InviteActionState };
 
 const USUARIOS_PATH = "/painel/usuarios";
 
-async function requireOwner(): Promise<{ supabase: SupabaseClient }> {
+async function requireOwner(): Promise<{ supabase: SupabaseClient; restaurantName: string }> {
   const supabase = await createClient();
   const {
     data: { user },
@@ -25,7 +27,19 @@ async function requireOwner(): Promise<{ supabase: SupabaseClient }> {
   const membership = await getMyMembership(supabase, restaurant.id);
   if (membership?.role !== "OWNER") redirect(USUARIOS_PATH);
 
-  return { supabase };
+  return { supabase, restaurantName: restaurant.name };
+}
+
+/**
+ * Envia o convite por e-mail quando o provedor de e-mail está configurado (ver src/lib/email.ts). Falha NUNCA derruba o
+ * convite: o link continua sendo devolvido para o dono copiar e compartilhar à mão.
+ */
+async function emailInvite(to: string, restaurantName: string, inviteUrl: string): Promise<InviteEmailStatus> {
+  const message = buildInviteEmail({ to, restaurantName, inviteUrl });
+  if (!message) return "failed";
+  const result = await sendEmail(message);
+  if (result.ok) return "sent";
+  return result.reason === "not_configured" ? "off" : "failed";
 }
 
 function friendlyInviteError(message: string): string {
@@ -48,15 +62,15 @@ export async function buildInviteUrl(token: string): Promise<string> {
 
 // ---------------------------------------------------------------------------
 // Criar convite — via RPC create_restaurant_invite (deriva o restaurante do
-// próprio OWNER logado, checado de novo dentro da RPC). Nenhum e-mail é
-// enviado (Resend sem domínio verificado ainda) — o link volta no estado de
-// sucesso para o dono copiar.
+// próprio OWNER logado, checado de novo dentro da RPC). Se o envio de e-mail
+// estiver configurado, o convite também segue por e-mail; de qualquer forma o
+// link volta no estado de sucesso para o dono copiar.
 // ---------------------------------------------------------------------------
 export async function createInviteAction(
   _prev: InviteActionState,
   formData: FormData
 ): Promise<InviteActionState> {
-  const { supabase } = await requireOwner();
+  const { supabase, restaurantName } = await requireOwner();
 
   const email = String(formData.get("email") ?? "").trim().toLowerCase();
   if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
@@ -68,9 +82,10 @@ export async function createInviteAction(
   if (error) return { status: "error", message: friendlyInviteError(error.message) };
 
   const inviteUrl = await buildInviteUrl((invite as RestaurantInvite).token);
+  const emailStatus = await emailInvite(email, restaurantName, inviteUrl);
 
   revalidatePath(USUARIOS_PATH);
-  return { status: "success", inviteUrl };
+  return { status: "success", inviteUrl, emailStatus };
 }
 
 // ---------------------------------------------------------------------------
@@ -91,16 +106,19 @@ export async function revokeInviteAction(inviteId: string): Promise<{ ok: boolea
 // uma segunda). Útil tanto para "esqueci de copiar o link" quanto para um
 // convite que passou dos 7 dias sem ser aceito.
 // ---------------------------------------------------------------------------
-export async function resendInviteAction(inviteId: string): Promise<{ ok: boolean; error?: string; inviteUrl?: string }> {
-  const { supabase } = await requireOwner();
+export async function resendInviteAction(
+  inviteId: string,
+): Promise<{ ok: boolean; error?: string; inviteUrl?: string; emailStatus?: InviteEmailStatus }> {
+  const { supabase, restaurantName } = await requireOwner();
 
   const { data: invite, error } = await supabase.rpc("resend_restaurant_invite", { p_invite_id: inviteId });
   if (error) return { ok: false, error: friendlyInviteError(error.message) };
 
   const inviteUrl = await buildInviteUrl((invite as RestaurantInvite).token);
+  const emailStatus = await emailInvite((invite as RestaurantInvite).email, restaurantName, inviteUrl);
 
   revalidatePath(USUARIOS_PATH);
-  return { ok: true, inviteUrl };
+  return { ok: true, inviteUrl, emailStatus };
 }
 
 function friendlyAcceptError(message: string): string {

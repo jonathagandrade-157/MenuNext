@@ -1,7 +1,9 @@
 # Checkout em PostgreSQL 17 descartavel
 
 `node scripts/checkout-lab/run.mjs` cria um cluster vazio, aplica as migrations do repositorio e executa as suites SQL
-de `supabase/tests` que existirem (promocoes, caixa, protecao do checkout, limites, OWNER/STAFF) com dados sinteticos.
+de `supabase/tests` (todas as que existirem: isolamento entre lojas, privilegios de tabela, storage, cobranca, promocoes, caixa,
+limites, OWNER/STAFF, checkout...) com dados sinteticos. `tenant_isolation.sql` exige lojas pre-existentes; o runner as
+semeia com `seed-tenants.sql` so no banco descartavel.
 Quando as migrations `20261027010000` e `20261027020000` existirem no repositorio, cada uma e aplicada separadamente e os
 privilegios de `create_order`/`create_counter_order` sao conferidos entre elas; sem elas, confere so o estado atual
 (`create_order` executavel por anon/authenticated).

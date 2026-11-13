@@ -8,6 +8,7 @@ const h = vi.hoisted(() => ({
   ipLimit: vi.fn(),
   storeLimit: vi.fn(),
   revalidate: vi.fn(),
+  human: vi.fn(),
 }));
 
 vi.mock("next/cache", () => ({ revalidatePath: h.revalidate }));
@@ -17,6 +18,7 @@ vi.mock("next/navigation", () => ({
   },
 }));
 vi.mock("@/lib/publicRpc", () => ({ callPublicRpc: h.publicRpc }));
+vi.mock("@/lib/humanCheck", () => ({ humanTokenError: h.human }));
 vi.mock("@/lib/rateLimit", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/rateLimit")>()),
   checkIpRateLimit: h.ipLimit,
@@ -58,6 +60,45 @@ beforeEach(() => {
   h.sessionRpc.mockReset();
   h.ipLimit.mockReset().mockResolvedValue({ allowed: true, retryAfterSeconds: 0 });
   h.storeLimit.mockReset().mockResolvedValue({ allowed: true, retryAfterSeconds: 0 });
+  h.human.mockReset().mockResolvedValue(null);
+});
+
+describe("submitOrderAction — desafio anti-robô (Turnstile)", () => {
+  it("repassa o token e a ação 'pedido' à verificação; passando, cria o pedido normalmente", async () => {
+    h.publicRpc.mockResolvedValue({ data: [{ public_id: "pub-1", order_number: 7 }], error: null });
+    const result = await submitOrderAction({ ...order, captchaToken: "tok-123" });
+    expect(result.status).toBe("success");
+    expect(h.human).toHaveBeenCalledWith("tok-123", "pedido");
+  });
+  it("verificação negada: o pedido NÃO é criado, os limites de loja/telefone NÃO são gastos e o banco não é tocado", async () => {
+    h.human.mockResolvedValue("Confirme que você não é um robô e tente novamente.");
+    const result = await submitOrderAction({ ...order, captchaToken: "ruim" });
+    expect(result).toEqual({ status: "error", message: "Confirme que você não é um robô e tente novamente." });
+    expect(h.storeLimit).not.toHaveBeenCalled();
+    expect(h.publicRpc).not.toHaveBeenCalled();
+  });
+  it("token ausente chega à verificação como ausente (quem decide é o servidor, nunca o cliente)", async () => {
+    h.human.mockResolvedValue("Confirme que você não é um robô e tente novamente.");
+    const result = await submitOrderAction(order);
+    expect(h.human).toHaveBeenCalledWith(undefined, "pedido");
+    expect(result.status).toBe("error");
+    expect(h.publicRpc).not.toHaveBeenCalled();
+  });
+  it("ordem: o limite por IP vem ANTES do desafio (robô insistente é freado sem gastar chamadas à Cloudflare)", async () => {
+    h.ipLimit.mockResolvedValue({ allowed: false, retryAfterSeconds: 60 });
+    const result = await submitOrderAction({ ...order, captchaToken: "tok" });
+    expect(result.status).toBe("error");
+    expect(h.human).not.toHaveBeenCalled();
+  });
+  it("corpo forjado com captchaToken de tipo errado ou gigante é recusado antes de qualquer limite, desafio ou banco", async () => {
+    for (const captchaToken of [123, {}, "x".repeat(2049)]) {
+      const result = await submitOrderAction({ ...order, captchaToken } as unknown as SubmitOrderInput);
+      expect(result.status, String(captchaToken).slice(0, 8)).toBe("error");
+    }
+    expect(h.ipLimit).not.toHaveBeenCalled();
+    expect(h.human).not.toHaveBeenCalled();
+    expect(h.publicRpc).not.toHaveBeenCalled();
+  });
 });
 
 describe("submitOrderAction (checkout público)", () => {

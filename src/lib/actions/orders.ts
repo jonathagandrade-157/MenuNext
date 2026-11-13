@@ -10,6 +10,7 @@ import { checkIpRateLimit, getClientIp, tooManyAttemptsMessage } from "@/lib/rat
 import { ORDER_LIMITS, buildOrderLimits, enforceLimits } from "@/lib/checkoutGuard";
 import { callPublicRpc } from "@/lib/publicRpc";
 import { isValidOrderShape } from "@/lib/checkoutInput";
+import { humanTokenError } from "@/lib/humanCheck";
 
 export type SubmitOrderDeliveryInput = {
   zip: string;
@@ -34,6 +35,8 @@ export type SubmitOrderInput = {
   items: CreateOrderItemPayload[];
   idempotencyKey: string;
   couponCode: string | null;
+  /** Token do desafio anti-robô (Turnstile). Obrigatório só quando a verificação está ligada no servidor. */
+  captchaToken?: string | null;
 };
 
 export type SubmitOrderResult =
@@ -61,6 +64,12 @@ export async function submitOrderAction(input: SubmitOrderInput): Promise<Submit
   // Freia pedidos falsos em massa por IP (cliente real faz 1 ou 2; limites em ORDER_LIMITS).
   const limit = await checkIpRateLimit("pedido:ip", ORDER_LIMITS.ip);
   if (!limit.allowed) return { status: "error", message: tooManyAttemptsMessage(limit.retryAfterSeconds) };
+
+  // Anti-robô (desligado sem as chaves do Turnstile): ANTES dos limites por loja/telefone e de qualquer chamada ao
+  // banco, para robô sem token não gastar limite de loja nem tocar create_order. Token é de uso único; o cliente
+  // gera outro a cada tentativa.
+  const human = await humanTokenError(input.captchaToken, "pedido");
+  if (human) return { status: "error", message: human };
 
   // Limites por loja, por IP + loja e por telefone (o por IP acima já passou). create_order só é executável pelo
   // servidor (migration 20261027020000): este é o ÚNICO caminho público até ela, então estes limites não se contornam.
