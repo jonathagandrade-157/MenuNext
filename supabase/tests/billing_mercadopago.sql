@@ -123,11 +123,17 @@ declare
   sa uuid[]; sb uuid[]; sc uuid[]; sd uuid[]; se uuid[]; sf uuid[]; sg uuid[]; sh uuid[]; si uuid[];
   u_staff uuid := gen_random_uuid(); u_master uuid := gen_random_uuid();
   r text; r2 text; v_id text; v_id2 text; h1 text;
+  v_cancel_due date; v_cancel_period_end timestamptz;
   fails text[] := '{}'; total int := 0;
 begin
   -- Regra de escrita deste arquivo: toda chamada que GRAVA e a leitura do estado
   -- ficam em instrucoes separadas (a leitura na mesma expressao enxergaria o banco
   -- de ANTES da gravacao). Por isso cada chamada vai para uma variavel primeiro.
+
+  -- Mantem o periodo deste cenario no futuro para testar o acesso durante o mes
+  -- ja pago sem depender da data em que a suite for executada.
+  v_cancel_due := current_date + 30;
+  v_cancel_period_end := ((v_cancel_due + interval '1 month')::timestamp at time zone 'America/Sao_Paulo');
 
   -- ---------- setup (como dono do banco) ----------
   insert into auth.users (id, email, raw_user_meta_data) values
@@ -338,14 +344,14 @@ begin
 
   r := pg_temp._subscribe_mp(se[1], v_plan, 'MPpre00000000E1');
   v_id := (select id::text from public.billing_subscriptions where restaurant_id = se[2]);
-  h1 := pg_temp._mp('mp:e-1', 'authorized_payment', 'MPpre00000000E1', v_id, v_id, null, '9201', 'processed/approved', 49.90, '2026-10-10');
+  h1 := pg_temp._mp('mp:e-1', 'authorized_payment', 'MPpre00000000E1', v_id, v_id, null, '9201', 'processed/approved', 49.90, v_cancel_due);
   perform pg_temp._ck('M4 loja E paga e liberada', r = 'OK' and h1 = 'applied' and public._restaurant_access_state(se[2]) is null);
   h1 := pg_temp._mp('mp:e-2', 'preapproval', 'MPpre00000000E1', v_id, v_id, 'paused', null, null, null);
   perform pg_temp._ck('M4 assinatura PAUSADA no Mercado Pago nao cancela por si so', h1 = 'ignored'
     and (select status = 'active' from public.billing_subscriptions where provider_subscription_id = 'MPpre00000000E1'));
   h1 := pg_temp._mp('mp:e-3', 'preapproval', 'MPpre00000000E1', v_id, v_id, 'cancelled', null, null, null);
   perform pg_temp._ck('M4 assinatura CANCELADA: status cancelled, periodo ja pago preservado', h1 = 'cancelled'
-    and (select status = 'cancelled' and cancelled_at is not null and current_period_end = timestamptz '2026-11-10 00:00:00-03'
+    and (select status = 'cancelled' and cancelled_at is not null and current_period_end = v_cancel_period_end
            from public.billing_subscriptions where provider_subscription_id = 'MPpre00000000E1')
     and public._restaurant_access_state(se[2]) is null);
   h1 := pg_temp._mp('mp:e-4', 'preapproval', 'MPpre00000000E1', v_id, v_id, 'cancelled', null, null, null);
